@@ -1,0 +1,22 @@
+.card {
+    background-color: var(--mantine-color-body);
+}
+
+.avatar {
+    border: rem(2px) solid var(--mantine-color-body);
+}
+
+.editAvatar {
+    border: rem(2px) solid var(--mantine-color-body);
+    margin-top: -30px;
+    background-color: var(--mantine-color-white);
+    height: 30px;
+    width: 30px;
+    z-index: 100;
+}
+
+.headerSection {
+
+    /*this your primary color*/
+    background: var(--mantine-color-body) linear-gradient(var(--mantine-color-blue-light), transparent);
+}
