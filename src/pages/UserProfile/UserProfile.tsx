@@ -11,9 +11,9 @@ export const UserProfile = () => {
   const [editing, setEditing] = useState(false)
   const [apiError, setApiError] = useState<string>()
 
-    useEffect(() => {
-        currentUser().then(resolvedUser => setCurrentUser(resolvedUser))
-    }, [])
+  useEffect(() => {
+    currentUser().then(resolvedUser => setCurrentUser(resolvedUser))
+  }, [])
 
 
   const form = useForm({
@@ -58,10 +58,9 @@ export const UserProfile = () => {
       </Card>);
   } else {
 
+    // @ts-expect-error WIP: Declare Form type
     const updateProfile = (values) => {
-
-      // account.updateName(values.name).then ( success => console.log("Name updated", success))
-
+      console.log("Updating user profile with values =>", values)
     }
 
     return (
@@ -80,13 +79,13 @@ export const UserProfile = () => {
 
             <div style={{marginTop: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
               <div style={{backgroundColor: 'pink', margin: 'auto'}}>
-                <Button  type={"submit"}>
+                <Button type={"submit"}>
                   Update
                 </Button>
               </div>
 
               <div style={{margin: 'auto'}}>
-                <Button  type={"button"} bg={"gray"}
+                <Button type={"button"} bg={"gray"}
                         onClick={() => setEditing(false)}>
                   Cancel
                 </Button>

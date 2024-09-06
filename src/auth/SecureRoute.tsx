@@ -5,20 +5,19 @@ import {currentUser} from "../lib/auth.ts";
 
 // @ts-expect-error What is even type?
 export const SecureRoute = ({children}) => {
-    const navigate = useNavigate()
-    const [allowChildren, setAllowChildren] = useState(false)
-    useEffect(() => {
-        currentUser().then(
-            (user) => {
-                console.log("Currently logged in user is ", user.email)
-                setAllowChildren(true)
-            }
-        ).catch(() => {
-            setAllowChildren(false)
-            navigate("/login")
-        })
-    }, [navigate])
+  const navigate = useNavigate()
+  const [allowChildren, setAllowChildren] = useState(false)
+  useEffect(() => {
+    currentUser().then(
+      () => {
+        setAllowChildren(true)
+      }
+    ).catch(() => {
+      setAllowChildren(false)
+      navigate("/login")
+    })
+  }, [navigate])
 
-    return (allowChildren ? children : null)
+  return (allowChildren ? children : null)
 
 }

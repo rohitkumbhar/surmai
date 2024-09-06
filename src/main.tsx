@@ -4,7 +4,6 @@ import './index.css'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import App from "./App.tsx";
 import {SecureRoute} from "./auth/SecureRoute.tsx";
-import {AuthProvider} from "./auth/AuthProvider.tsx";
 import '@mantine/core/styles.css';
 
 import {createTheme, MantineProvider} from '@mantine/core';
@@ -76,7 +75,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <MantineProvider theme={theme}>
-      <AuthProvider><RouterProvider router={router}/></AuthProvider>
+      <RouterProvider router={router}/>
     </MantineProvider>
   </React.StrictMode>,
 )
