@@ -5,6 +5,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import App from "./App.tsx";
 import {SecureRoute} from "./auth/SecureRoute.tsx";
 import '@mantine/core/styles.css';
+import '@mantine/dates/styles.css';
 
 import {createTheme, MantineProvider} from '@mantine/core';
 import {SignIn} from "./pages/SignIn/SignIn.tsx";
