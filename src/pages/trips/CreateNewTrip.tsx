@@ -44,7 +44,6 @@ export const CreateNewTrip = () => {
         placeholder="Pick date"
         key={form.key('endDate')} {...form.getInputProps('endDate')}
 
-
       />
 
       <Button fullWidth mt="xl" type={"submit"}>

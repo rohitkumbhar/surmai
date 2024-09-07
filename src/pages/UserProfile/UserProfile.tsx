@@ -96,9 +96,6 @@ export const UserProfile = () => {
 
         </Paper>
       </Container>
-
     )
   }
-
-
 }
