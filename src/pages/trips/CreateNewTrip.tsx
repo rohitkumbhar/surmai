@@ -77,8 +77,9 @@ export const CreateNewTrip = () => {
 
                 <TagsInput label="Destinations"
                            key={form.key('destinations')} {...form.getInputProps('destinations')}
+                           acceptValueOnBlur
                            description={"Enter the destinations in this trip e.g. San Jose, Guanacaste"}
-                           placeholder="Enter names" />
+                           placeholder="Enter names"/>
 
                 <Group w={"100%"} grow>
                   <DatePickerInput
@@ -99,8 +100,9 @@ export const CreateNewTrip = () => {
 
                 <TagsInput label="Accompanying travellers"
                            key={form.key('participants')} {...form.getInputProps('participants')}
+                           acceptValueOnBlur
                            description={"Enter the names of friends or family joining you on this trip. Multiple names can be separated by a comma"}
-                           placeholder="Enter names" />
+                           placeholder="Enter names"/>
 
 
               </Stack>

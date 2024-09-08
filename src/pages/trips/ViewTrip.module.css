@@ -27,6 +27,6 @@
     &[data-active] {
         background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
         border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-7));
-        border-bottom-color: transparent;
+        /*border-bottom-color: transparent;*/
     }
 }

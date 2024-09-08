@@ -21,3 +21,7 @@ export const createTrip = (values: CreateTripFormData) => {
     }
   )
 }
+
+export const getTrip = (tripId: string) => {
+
+}
