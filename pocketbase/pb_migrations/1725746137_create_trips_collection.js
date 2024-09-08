@@ -93,11 +93,11 @@ migrate((db) => {
       }
     ],
     indexes: [],
-    listRule: null,
-    viewRule: null,
-    createRule: null,
-    updateRule: null,
-    deleteRule: null,
+    listRule: "ownerId = @request.auth.id",
+    viewRule: "ownerId = @request.auth.id",
+    createRule: "",
+    updateRule: "ownerId = @request.auth.id",
+    deleteRule: "ownerId = @request.auth.id",
     options: {}
   }
   const dao = new Dao(db);
