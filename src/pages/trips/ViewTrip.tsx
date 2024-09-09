@@ -1,5 +1,5 @@
 import {useParams} from "react-router-dom";
-import {Container, rem, Tabs} from "@mantine/core";
+import {Container, Group, rem, Tabs, Text} from "@mantine/core";
 import classes from './ViewTrip.module.css';
 import {
   Icon24Hours,
@@ -9,19 +9,33 @@ import {
   IconPlane,
   IconReportMoney
 } from "@tabler/icons-react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {Trip} from "../../types/trips.ts";
+import {getTrip} from "../../lib";
+import {Header} from "../../components/nav/Header.tsx";
 
 export const ViewTrip = () => {
 
-  const { tripId } = useParams();
+  const {tripId} = useParams();
+  const [trip, setTrip] = useState<Trip>()
   useEffect(() => {
+    if (tripId) {
+      getTrip(tripId).then(resolvedTrip => {
+        setTrip(resolvedTrip)
+      });
+    }
+  }, [tripId])
 
-  },[tripId])
 
-
-  const iconStyle = { width: rem(20), height: rem(20) };
+  const iconStyle = {width: rem(20), height: rem(20)};
   return (
-    <Container size="lg">
+    <Container py={"xl"} size="lg">
+     <Header>
+       <Group>
+         <Text size={"xl"} px={"md"}>{trip?.name}</Text>
+         <Text size={"sm"} c={"dimmed"}>{trip?.description}</Text>
+       </Group>
+     </Header>
       <Tabs
         defaultValue="basic"
         variant="outline"
@@ -32,33 +46,33 @@ export const ViewTrip = () => {
         }}
       >
         <Tabs.List>
-          <Tabs.Tab value={"basic"} key={"basic"} leftSection={<IconBaseline style={iconStyle} />}>
+          <Tabs.Tab value={"basic"} key={"basic"} leftSection={<IconBaseline style={iconStyle}/>}>
             Basic
           </Tabs.Tab>
 
-          <Tabs.Tab value={"transportation"} key={"transportation"} leftSection={<IconPlane style={iconStyle} />}>
+          <Tabs.Tab value={"transportation"} key={"transportation"} leftSection={<IconPlane style={iconStyle}/>}>
             Transportation
           </Tabs.Tab>
 
-          <Tabs.Tab value={"lodging"} key={"lodging"} leftSection={<IconBuildingCottage style={iconStyle} />}>
+          <Tabs.Tab value={"lodging"} key={"lodging"} leftSection={<IconBuildingCottage style={iconStyle}/>}>
             Lodging
           </Tabs.Tab>
 
-          <Tabs.Tab value={"itinerary"} key={"itinerary"} leftSection={<Icon24Hours style={iconStyle} />}>
+          <Tabs.Tab value={"itinerary"} key={"itinerary"} leftSection={<Icon24Hours style={iconStyle}/>}>
             Itinerary
           </Tabs.Tab>
 
-          <Tabs.Tab value={"cost"} key={"cost"} leftSection={<IconReportMoney style={iconStyle} />}>
+          <Tabs.Tab value={"cost"} key={"cost"} leftSection={<IconReportMoney style={iconStyle}/>}>
             Cost
           </Tabs.Tab>
 
-          <Tabs.Tab value={"notes"} key={"notes"} leftSection={<IconNote style={iconStyle} />}>
+          <Tabs.Tab value={"notes"} key={"notes"} leftSection={<IconNote style={iconStyle}/>}>
             Notes
           </Tabs.Tab>
 
         </Tabs.List>
         <Tabs.Panel value={"basic"}>
-          Basic Settings
+          {trip?.name}
         </Tabs.Panel>
 
         <Tabs.Panel value={"transportation"}>

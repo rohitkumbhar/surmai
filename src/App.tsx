@@ -19,6 +19,7 @@ function App() {
       <AppShell.Header>
         <Group h="100%">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm"/>
+          <div id={"app-header"} />
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>

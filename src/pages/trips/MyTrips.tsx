@@ -20,28 +20,35 @@ import {useDisclosure} from "@mantine/hooks";
 export const MyTrips = () => {
 
   const navigate = useNavigate();
-  const [visible, { toggle }] = useDisclosure(true);
+  const [visible, {close}] = useDisclosure(true);
   const [trips, setTrips] = useState<Trip[]>([])
   useEffect(() => {
     listTrips().then(myTrips => {
       setTrips(myTrips);
-      toggle();
+      close();
     })
-  }, [])
+  }, [close])
 
   const cards = trips.map((trip) => (
     <Card key={trip.name} p="md" radius="md" component="a" href="#" className={classes.card} onClick={(event) => {
-      navigate("/trips/foo")
+      navigate(`/trips/${trip.id}`)
       event.preventDefault()
     }}>
       <AspectRatio ratio={1920 / 1080}>
         {trip.coverImage && <Image src={trip.coverImage}/>}
-        {!trip.coverImage && <ActionIcon variant="subtle" bd={"solid 1px light-blue"} aria-label="Settings" style={{height: '100%'}}>
-          <IconPhoto stroke={1.5}/>
-        </ActionIcon>}
+        {!trip.coverImage &&
+            <ActionIcon variant="subtle" bd={"solid 1px blue"} aria-label="Settings" style={{height: '100%'}}>
+                <IconPhoto stroke={1.5}/>
+            </ActionIcon>}
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-        {new Date(Date.parse(trip.startDate.toString())).toLocaleDateString()}
+        {new Date(Date.parse(trip.startDate.toString())).toLocaleDateString(
+          'en-us',
+          {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
       </Text>
       <Text className={classes.title} mt={5}>
         {trip.name}
@@ -73,9 +80,9 @@ export const MyTrips = () => {
         My Trips
       </Text>
       <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>{[createNew]}</SimpleGrid>
-      <Divider />
+      <Divider/>
       <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>
-        <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+        <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>
         {cards}
       </SimpleGrid>
     </Container>
