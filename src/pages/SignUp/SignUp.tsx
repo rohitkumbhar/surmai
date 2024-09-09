@@ -2,7 +2,7 @@ import {Button, Container, Notification, Paper, PasswordInput, Text, TextInput} 
 import {useForm} from "@mantine/form";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {createUserWithPassword} from "../../lib/auth.ts";
+import {createUserWithPassword} from "../../lib";
 
 export const SignUp = () => {
 

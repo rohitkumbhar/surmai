@@ -1,4 +1,4 @@
-export type CreateTripFormData = {
+export type Trip = {
   name: string,
   description?: string,
   startDate: Date,

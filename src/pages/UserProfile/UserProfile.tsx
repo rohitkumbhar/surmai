@@ -3,7 +3,7 @@ import classes from './UserProfile.module.css';
 import {useEffect, useState} from "react";
 import {useForm} from "@mantine/form";
 import {User} from "../../types/auth.ts";
-import {currentUser} from "../../lib/auth.ts";
+import {currentUser} from "../../lib";
 
 export const UserProfile = () => {
 

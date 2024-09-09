@@ -1,7 +1,7 @@
 import {Avatar, Group, Menu, rem, UnstyledButton} from '@mantine/core';
 import {IconLogout, IconSettings} from '@tabler/icons-react';
 import {Link, useNavigate} from "react-router-dom";
-import {currentUser, logoutCurrentUser} from "../../lib/auth.ts";
+import {currentUser, logoutCurrentUser} from "../../lib";
 import {useEffect, useState} from "react";
 import {User} from "../../types/auth.ts";
 

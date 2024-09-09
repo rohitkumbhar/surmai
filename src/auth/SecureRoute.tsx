@@ -1,6 +1,6 @@
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {currentUser} from "../lib/auth.ts";
+import {currentUser} from "../lib";
 
 
 // @ts-expect-error What is even type?

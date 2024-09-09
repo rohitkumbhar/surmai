@@ -2,8 +2,8 @@ import {Accordion, Button, Container, Group, rem, Stack, TagsInput, Text, Textar
 import {useForm} from "@mantine/form";
 import {DatePickerInput} from '@mantine/dates';
 import {IconInfoSquare} from "@tabler/icons-react";
-import {CreateTripFormData} from "../../types/trips.ts";
-import {createTrip} from "../../lib/pocketbase/trips.ts";
+import {Trip} from "../../types/trips.ts";
+import {createTrip} from "../../lib";
 import {useNavigate} from "react-router-dom";
 
 
@@ -33,7 +33,7 @@ export const CreateNewTrip = () => {
       </Text>
 
 
-      <form onSubmit={form.onSubmit((values: CreateTripFormData) => {
+      <form onSubmit={form.onSubmit((values: Trip) => {
         createTrip(values).then(trip => {
           console.log("Created Trip =>", trip)
           navigate(`/trips/${trip.id}`)

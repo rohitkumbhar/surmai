@@ -3,7 +3,7 @@ import classes from './SignIn.module.css';
 import {Link, useNavigate} from "react-router-dom";
 import {useForm} from "@mantine/form";
 import {useState} from "react";
-import {authWithUsernameAndPassword} from "../../lib/auth.ts";
+import {authWithUsernameAndPassword} from "../../lib";
 
 export const SignIn = () => {
 

@@ -1,52 +1,50 @@
-import {ActionIcon, AspectRatio, Card, Container, Image, SimpleGrid, Text} from '@mantine/core';
+import {
+  ActionIcon,
+  AspectRatio,
+  Card,
+  Container,
+  Divider,
+  Image,
+  LoadingOverlay,
+  SimpleGrid,
+  Text
+} from '@mantine/core';
 import classes from './MyTrips.module.css';
-import {IconPlus,} from '@tabler/icons-react';
+import {IconPhoto, IconPlus,} from '@tabler/icons-react';
 import {useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {Trip} from "../../types/trips.ts";
+import {listTrips} from "../../lib";
+import {useDisclosure} from "@mantine/hooks";
 
 export const MyTrips = () => {
 
   const navigate = useNavigate();
+  const [visible, { toggle }] = useDisclosure(true);
+  const [trips, setTrips] = useState<Trip[]>([])
+  useEffect(() => {
+    listTrips().then(myTrips => {
+      setTrips(myTrips);
+      toggle();
+    })
+  }, [])
 
-  const mockdata = [
-    {
-      title: 'Top 10 places to visit in Norway this summer',
-      image:
-        'https://images.unsplash.com/photo-1527004013197-933c4bb611b3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80',
-      date: 'August 18, 2022',
-    },
-    {
-      title: 'Best forests to visit in North America',
-      image:
-        'https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80',
-      date: 'August 27, 2022',
-    },
-    {
-      title: 'Hawaii beaches review: better than you think',
-      image:
-        'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80',
-      date: 'September 9, 2022',
-    },
-    {
-      title: 'Mountains at night: 12 best locations to enjoy the view',
-      image:
-        'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=720&q=80',
-      date: 'September 12, 2022',
-    },
-  ];
-
-  const cards = mockdata.map((article) => (
-    <Card key={article.title} p="md" radius="md" component="a" href="#" className={classes.card} onClick={(event) => {
+  const cards = trips.map((trip) => (
+    <Card key={trip.name} p="md" radius="md" component="a" href="#" className={classes.card} onClick={(event) => {
       navigate("/trips/foo")
       event.preventDefault()
     }}>
       <AspectRatio ratio={1920 / 1080}>
-        <Image src={article.image}/>
+        {trip.coverImage && <Image src={trip.coverImage}/>}
+        {!trip.coverImage && <ActionIcon variant="subtle" bd={"solid 1px light-blue"} aria-label="Settings" style={{height: '100%'}}>
+          <IconPhoto stroke={1.5}/>
+        </ActionIcon>}
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-        {article.date}
+        {new Date(Date.parse(trip.startDate.toString())).toLocaleDateString()}
       </Text>
       <Text className={classes.title} mt={5}>
-        {article.title}
+        {trip.name}
       </Text>
     </Card>
   ));
@@ -74,7 +72,12 @@ export const MyTrips = () => {
       <Text size="xl" tt="uppercase" fw={700} mt="md" mb="md">
         My Trips
       </Text>
-      <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>{[createNew, ...cards]}</SimpleGrid>
+      <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>{[createNew]}</SimpleGrid>
+      <Divider />
+      <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>
+        <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+        {cards}
+      </SimpleGrid>
     </Container>
   );
 }

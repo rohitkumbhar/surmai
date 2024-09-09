@@ -1,8 +1,8 @@
 import {pb} from "./pocketbase.ts";
-import {CreateTripFormData} from "../../types/trips.ts";
+import {Trip} from "../../types/trips.ts";
 import {currentUser} from "./auth.ts";
 
-export const createTrip = (values: CreateTripFormData) => {
+export const createTrip = (values: Trip) => {
 
   return currentUser().then(
     user => {
@@ -23,5 +23,11 @@ export const createTrip = (values: CreateTripFormData) => {
 }
 
 export const getTrip = (tripId: string) => {
+  return pb.collection('trips').getOne(tripId);
+}
 
+export const listTrips = () : Promise<Trip[]> => {
+  return pb.collection('trips').getFullList({
+    sort: '-created',
+  });
 }

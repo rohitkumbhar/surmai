@@ -3,7 +3,7 @@ import {useEffect, useState} from 'react';
 import {Avatar, Group, Menu, rem, Text, UnstyledButton,} from '@mantine/core';
 import {IconChevronRight, IconLogout, IconSettings,} from '@tabler/icons-react';
 import {Link, useNavigate} from "react-router-dom";
-import {currentUser, logoutCurrentUser} from "../../lib/auth.ts";
+import {currentUser, logoutCurrentUser} from "../../lib";
 import {User} from "../../types/auth.ts";
 
 export const UserInfo = () => {
