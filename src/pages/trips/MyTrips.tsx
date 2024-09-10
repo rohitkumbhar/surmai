@@ -12,22 +12,29 @@ import {
 import classes from './MyTrips.module.css';
 import {IconPhoto, IconPlus,} from '@tabler/icons-react';
 import {useNavigate} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {Trip} from "../../types/trips.ts";
 import {listTrips} from "../../lib";
 import {useDisclosure} from "@mantine/hooks";
+import {useQuery} from "@tanstack/react-query";
 
 export const MyTrips = () => {
 
   const navigate = useNavigate();
-  const [visible, {close}] = useDisclosure(true);
-  const [trips, setTrips] = useState<Trip[]>([])
-  useEffect(() => {
-    listTrips().then(myTrips => {
-      setTrips(myTrips);
-      close();
-    })
-  }, [close])
+  const [visible, ] = useDisclosure(true);
+  // const [trips, setTrips] = useState<Trip[]>([])
+
+  const {isPending, isError, data, error} = useQuery({
+    queryKey: ['todos'],
+    queryFn: listTrips,
+  })
+
+
+
+  if (isPending) {
+    return <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>
+  }
+
+
+  const trips = data;
 
   const cards = trips.map((trip) => (
     <Card key={trip.name} p="md" radius="md" component="a" href="#" className={classes.card} onClick={(event) => {
@@ -37,9 +44,9 @@ export const MyTrips = () => {
       <AspectRatio ratio={1920 / 1080}>
         {trip.coverImage && <Image src={trip.coverImage}/>}
         {!trip.coverImage &&
-            <ActionIcon variant="subtle" bd={"solid 1px blue"} aria-label="Settings" style={{height: '100%'}}>
-                <IconPhoto stroke={1.5}/>
-            </ActionIcon>}
+          <ActionIcon variant="subtle" bd={"solid 1px blue"} aria-label="Settings" style={{height: '100%'}}>
+            <IconPhoto stroke={1.5}/>
+          </ActionIcon>}
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
         {new Date(Date.parse(trip.startDate.toString())).toLocaleDateString(
@@ -82,7 +89,6 @@ export const MyTrips = () => {
       <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>{[createNew]}</SimpleGrid>
       <Divider/>
       <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>
-        <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>
         {cards}
       </SimpleGrid>
     </Container>

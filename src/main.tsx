@@ -16,6 +16,7 @@ import {CreateNewTrip} from "./pages/trips/CreateNewTrip.tsx";
 import {ViewTrip} from "./pages/trips/ViewTrip.tsx";
 import {EditTrip} from "./pages/trips/EditTrip.tsx";
 import {TripsContainer} from "./pages/trips/TripsContainer.tsx";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 const theme = createTheme({
   colors: {
@@ -50,14 +51,15 @@ const router = createBrowserRouter([
       ...pages,
       {
         path: "/",
-        element: <MyTrips/>},
+        element: <MyTrips/>
+      },
       {
         path: "/trips",
         element: <TripsContainer/>,
         children: [
           {path: "", element: <MyTrips/>},
           {path: "/trips/create", element: <CreateNewTrip/>},
-          {path: ":tripId", element: <ViewTrip />},
+          {path: ":tripId", element: <ViewTrip/>},
           {path: ":tripId/edit", element: <EditTrip/>},
         ]
       },
@@ -73,10 +75,14 @@ const router = createBrowserRouter([
   }
 ]);
 
+const queryClient = new QueryClient()
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <MantineProvider theme={theme}>
-      <RouterProvider router={router}/>
-    </MantineProvider>
+    <QueryClientProvider client={queryClient}>
+      <MantineProvider theme={theme}>
+        <RouterProvider router={router}/>
+      </MantineProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 )
