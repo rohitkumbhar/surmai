@@ -19,6 +19,7 @@ import {TripsContainer} from "./pages/trips/TripsContainer.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 const theme = createTheme({
+  fontFamily: 'Lato, Verdana, sans-serif',
   colors: {
     deepBlue: [
       '#eef3ff',

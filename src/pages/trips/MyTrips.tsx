@@ -13,30 +13,26 @@ import classes from './MyTrips.module.css';
 import {IconPhoto, IconPlus,} from '@tabler/icons-react';
 import {useNavigate} from "react-router-dom";
 import {listTrips} from "../../lib";
-import {useDisclosure} from "@mantine/hooks";
 import {useQuery} from "@tanstack/react-query";
+import {Trip} from "../../types/trips.ts";
 
 export const MyTrips = () => {
 
   const navigate = useNavigate();
-  const [visible, ] = useDisclosure(true);
-  // const [trips, setTrips] = useState<Trip[]>([])
-
-  const {isPending, isError, data, error} = useQuery({
+  const {isPending, isError, data, error} = useQuery<Trip[]>({
     queryKey: ['todos'],
     queryFn: listTrips,
   })
 
-
-
   if (isPending) {
-    return <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>
+    return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>
   }
 
+  if(isError) {
+    throw new Error(error.message)
+  }
 
-  const trips = data;
-
-  const cards = trips.map((trip) => (
+  const cards = data.map((trip) => (
     <Card key={trip.name} p="md" radius="md" component="a" href="#" className={classes.card} onClick={(event) => {
       navigate(`/trips/${trip.id}`)
       event.preventDefault()

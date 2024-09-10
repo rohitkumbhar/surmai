@@ -13,6 +13,7 @@ import {useEffect, useState} from "react";
 import {Trip} from "../../types/trips.ts";
 import {getTrip} from "../../lib";
 import {Header} from "../../components/nav/Header.tsx";
+import {BasicInfo} from "../../components/trip/BasicInfo.tsx";
 
 export const ViewTrip = () => {
 
@@ -72,7 +73,7 @@ export const ViewTrip = () => {
 
         </Tabs.List>
         <Tabs.Panel value={"basic"}>
-          {trip?.name}
+          {trip && <BasicInfo trip={trip} />}
         </Tabs.Panel>
 
         <Tabs.Panel value={"transportation"}>

@@ -2,9 +2,9 @@ import {Accordion, Button, Container, Group, rem, Stack, TagsInput, Text, Textar
 import {useForm} from "@mantine/form";
 import {DatePickerInput} from '@mantine/dates';
 import {IconInfoSquare} from "@tabler/icons-react";
-import {Trip} from "../../types/trips.ts";
 import {createTrip} from "../../lib";
 import {useNavigate} from "react-router-dom";
+import {CreateTripForm} from "../../types/trips.ts";
 
 
 export const CreateNewTrip = () => {
@@ -15,8 +15,7 @@ export const CreateNewTrip = () => {
     initialValues: {
       name: '',
       description: undefined,
-      startDate: new Date(),
-      endDate: undefined,
+      dateRange: [null, null],
       destinations: [],
       participants: []
     },
@@ -33,12 +32,10 @@ export const CreateNewTrip = () => {
       </Text>
 
 
-      <form onSubmit={form.onSubmit((values: Trip) => {
-        createTrip(values).then(trip => {
-          console.log("Created Trip =>", trip)
+      <form onSubmit={form.onSubmit((values) => {
+        createTrip(values as unknown as CreateTripForm).then(trip => {
           navigate(`/trips/${trip.id}`)
         })
-
       })}>
 
         <Accordion chevronPosition="right" variant="contained" value="basic_info">
@@ -81,22 +78,13 @@ export const CreateNewTrip = () => {
                            description={"Enter the destinations in this trip e.g. San Jose, Guanacaste"}
                            placeholder="Enter names"/>
 
-                <Group w={"100%"} grow>
-                  <DatePickerInput
-                    label="Start Date"
-                    description={"Select the date of your departure"}
-                    placeholder="Pick date"
-                    key={form.key('startDate')} {...form.getInputProps('startDate')}
-                  />
-
-                  <DatePickerInput
-                    label="End Date"
-                    description={"Select the date of your return"}
-                    placeholder="Pick date"
-                    key={form.key('endDate')} {...form.getInputProps('endDate')}
-
-                  />
-                </Group>
+                <DatePickerInput
+                  type="range"
+                  label="Trip Dates"
+                  description={"Select the start and end dates of your trip"}
+                  placeholder="Pick date"
+                  key={form.key('dateRange')} {...form.getInputProps('dateRange')}
+                />
 
                 <TagsInput label="Accompanying travellers"
                            key={form.key('participants')} {...form.getInputProps('participants')}
