@@ -7,7 +7,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
   return (
     <Menu
       transitionProps={{transition: 'pop-top-right'}}
-      position="top-end"
+      position="bottom-end"
       width={150}
       withinPortal
 
