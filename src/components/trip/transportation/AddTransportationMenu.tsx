@@ -1,5 +1,5 @@
 import {Button, Menu, rem} from '@mantine/core';
-import {IconBus, IconCar, IconChevronDown, IconPlane, IconShip,} from '@tabler/icons-react';
+import {IconBus, IconCar, IconChevronDown, IconPlane, IconShip, IconTrain,} from '@tabler/icons-react';
 
 
 
@@ -51,7 +51,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
         </Menu.Item>
         <Menu.Item
           onClick={() => {
-            setSelectedOption('road')
+            setSelectedOption('car')
           }}
           leftSection={
             <IconCar
@@ -73,7 +73,20 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
             />
           }
         >
-          Boat ride
+          Boat
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => {
+            setSelectedOption('train')
+          }}
+          leftSection={
+            <IconTrain
+              style={{width: rem(16), height: rem(16)}}
+              stroke={1.5}
+            />
+          }
+        >
+          Train
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

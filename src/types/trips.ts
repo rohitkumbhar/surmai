@@ -17,3 +17,17 @@ export type CreateTripForm = {
   participants?: string[]
   destinations?: string[]
 }
+
+export type Transportation = {
+  type: string,
+  origin: string,
+  destination: string,
+  cost: {
+    value: number,
+    currency: string
+  },
+  departureTime: Date | string | null,
+  arrivalTime: Date | string | null,
+  trip: string,
+  metadata: { [key: string]: any }
+}

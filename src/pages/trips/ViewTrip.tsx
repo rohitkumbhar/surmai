@@ -1,26 +1,16 @@
 import {useParams} from "react-router-dom";
 import {Accordion, Container, Group, LoadingOverlay, rem, Text} from "@mantine/core";
-import {
-  IconBed,
-  IconBuilding,
-  IconBuildingAirport,
-  IconBuildingBurjAlArab, IconBuildingCastle,
-  IconHotelService,
-  IconInfoSquare,
-  IconPlane
-} from "@tabler/icons-react";
+import {IconBed, IconInfoSquare, IconPlane} from "@tabler/icons-react";
 import {Trip} from "../../types/trips.ts";
 import {formatDate, getTrip} from "../../lib";
 import {Header} from "../../components/nav/Header.tsx";
 import {BasicInfo} from "../../components/trip/BasicInfo.tsx";
 import {useQuery} from "@tanstack/react-query";
-import {Transportation} from "../../components/trip/Transportation.tsx";
+import {Transportation} from "../../components/trip/transportation/Transportation.tsx";
 
 export const ViewTrip = () => {
 
   const {tripId} = useParams();
-  // const [trip, setTrip] = useState<Trip>()
-
   const {isPending, isError, data, error, refetch} = useQuery<Trip>({
     queryKey: ['trip', tripId],
     queryFn: () => getTrip(tripId || ''),
@@ -34,12 +24,7 @@ export const ViewTrip = () => {
   if (isError) {
     throw new Error(error.message)
   }
-
-
   const trip = data;
-
-
-  const iconStyle = {width: rem(20), height: rem(20)};
   return (
     <Container py={"xl"} size="lg">
       <Header>
@@ -79,7 +64,7 @@ export const ViewTrip = () => {
           }>
             <Group wrap="nowrap">
               <div>
-                <Text>{"Transportation Information"}</Text>
+                <Text>{"Transportation"}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
                   {"View and edit your transportation arrangements for this trip"}
                 </Text>
@@ -99,7 +84,7 @@ export const ViewTrip = () => {
           }>
             <Group wrap="nowrap">
               <div>
-                <Text>{"Lodging Information"}</Text>
+                <Text>{"Lodging"}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
                   {"View and edit your lodging arrangements for this trip"}
                 </Text>
@@ -107,7 +92,7 @@ export const ViewTrip = () => {
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <Transportation trip={trip} refetch={refetch}/>
+            <Transportation trip={trip}/>
           </Accordion.Panel>
         </Accordion.Item>
 
