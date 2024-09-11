@@ -1,15 +1,47 @@
 import {Trip} from "../../types/trips.ts";
-import {Button, Container, Flex, Group, Stack, Text, Title} from "@mantine/core";
+import {Avatar, Button, Container, Divider, Flex, Group, Paper, Stack, Text, Title} from "@mantine/core";
 import {QueryObserverResult, RefetchOptions, Register} from "@tanstack/react-query";
 import {useState} from "react";
 import {useForm} from "@mantine/form";
 import {EditTripBasicForm} from "./EditTripBasicForm.tsx";
 import {updateTrip} from "../../lib/pocketbase/trips.ts";
+import {formatDate} from "../../lib";
+import {IconPhoto} from "@tabler/icons-react";
 
 const BasicInfoView = ({trip}: { trip: Trip }) => {
   return (<Stack gap={"md"}>
     <Title order={1}>{trip.name}</Title>
-    <Text>{trip.description}</Text>
+    <Title order={4} fw={400}> {trip.description}</Title>
+    <Text size={"sm"}>{formatDate(trip.startDate.toString())} - {formatDate(trip.endDate.toString())}</Text>
+
+    <Divider />
+    <Text mt={"md"}>Visiting</Text>
+    <Group>
+      {(trip.destinations || []).map(p => {
+        return (
+          <Group wrap={"nowrap"}>
+          <Paper  shadow="sm" radius="sm" p="xl" bg={"var(--mantine-color-blue-0)"}>
+            <IconPhoto />
+            <Text>{p.name}</Text>
+          </Paper>
+        </Group>)
+      })}
+    </Group>
+    <Divider />
+    <Text mt={"md"}>Going With</Text>
+    <Group>
+      {(trip.participants || []).map(p => {
+        return (<Group wrap={"nowrap"}>
+          <Avatar key={p.name} name={p.name} color="initials"/>
+          <div>
+            <Text fz="lg" fw={500}>
+              {p.name}
+            </Text>
+          </div>
+        </Group>)
+      })}
+    </Group>
+
   </Stack>)
 }
 
