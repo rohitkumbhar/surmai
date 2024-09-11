@@ -12,7 +12,7 @@ import {
 import classes from './MyTrips.module.css';
 import {IconPhoto, IconPlus,} from '@tabler/icons-react';
 import {useNavigate} from "react-router-dom";
-import {listTrips} from "../../lib";
+import {formatDate, listTrips} from "../../lib";
 import {useQuery} from "@tanstack/react-query";
 import {Trip} from "../../types/trips.ts";
 
@@ -20,7 +20,7 @@ export const MyTrips = () => {
 
   const navigate = useNavigate();
   const {isPending, isError, data, error} = useQuery<Trip[]>({
-    queryKey: ['todos'],
+    queryKey: ['my_trips'],
     queryFn: listTrips,
   })
 
@@ -45,13 +45,7 @@ export const MyTrips = () => {
           </ActionIcon>}
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-        {new Date(Date.parse(trip.startDate.toString())).toLocaleDateString(
-          'en-us',
-          {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-          })}
+        {formatDate(trip.startDate.toString())}
       </Text>
       <Text className={classes.title} mt={5}>
         {trip.name}

@@ -31,3 +31,7 @@ export const listTrips = (): Promise<Trip[]> => {
     sort: '-created',
   });
 }
+
+export const updateTrip = (tripId: string, data: {[key: string]: any}) => {
+  return pb.collection('trips').update(tripId, data);
+}

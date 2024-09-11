@@ -1,9 +1,9 @@
 export type Trip = {
-  id?: string,
+  id: string,
   name: string,
   description?: string,
   startDate: Date,
-  endDate?: Date
+  endDate: Date
   coverImage?: string
   participants?: string[]
   destinations?: string[]
