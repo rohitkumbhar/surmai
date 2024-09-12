@@ -1,9 +1,10 @@
-import {Button, Group, rem, Stack, TextInput, Title} from "@mantine/core";
+import {Button, FileButton, Group, rem, Stack, TextInput, Text, Title} from "@mantine/core";
 import {DateTimePicker} from "@mantine/dates";
-import {Trip} from "../../../types/trips.ts";
+import {Transportation, Trip} from "../../../types/trips.ts";
 import {useForm} from "@mantine/form";
 import {CurrencyInput} from "../../util/CurrencyInput.tsx";
-import {addFlight} from "../../../lib/pocketbase/trips.ts";
+import {addFlight, saveTransportationAttachments} from "../../../lib/pocketbase/trips.ts";
+import {useState} from "react";
 
 export const AddFlightForm = ({trip, onSuccess, onCancel}: {
   trip: Trip,
@@ -11,6 +12,8 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
   onCancel: () => void
 }) => {
 
+
+  const [files, setFiles] = useState<File[]>([]);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -29,8 +32,14 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
   })
 
   const handleFormSubmit = (values) => {
-    addFlight(trip.id, values).then(() => {
-        onSuccess();
+    addFlight(trip.id, values).then((result: Transportation) => {
+        if (files.length > 0) {
+          saveTransportationAttachments(result.id, files).then(() => {
+            onSuccess()
+          });
+        } else {
+          onSuccess();
+        }
       }
     )
   }
@@ -69,6 +78,30 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
             />
           </Group>
           <Group>
+
+
+            <Stack>
+              <Group>
+                <Text>Attachments
+                  <Text size={"xs"} c={"dimmed"}>Upload any related documents for this flight e.g. confirmation
+                    email</Text>
+                </Text>
+              </Group>
+              <Group>
+                {files.map((file, index) => (
+                  <Text key={index}>{file.name}</Text>
+                ))}
+              </Group>
+
+              <Group>
+                <FileButton onChange={setFiles} accept="text/plain,application/pdf" form={"files"} name={"files"}
+                            multiple>
+                  {(props) => <Button {...props}>Upload</Button>}
+                </FileButton>
+              </Group>
+            </Stack>
+          </Group>
+          <Group justify={"flex-end"}>
             <Button type={"submit"} w={"min-content"}>
               Save Flight
             </Button>

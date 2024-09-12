@@ -19,6 +19,7 @@ export type CreateTripForm = {
 }
 
 export type Transportation = {
+  id: string,
   type: string,
   origin: string,
   destination: string,

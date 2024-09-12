@@ -77,3 +77,19 @@ export const addFlight = (tripId: string, data: { [key: string]: any }): Promise
   }
   return pb.collection('transportations').create(payload);
 }
+
+export const saveTransportationAttachments = (transportationId: string, files: File[]) => {
+  const formData = new FormData()
+  files.forEach(f => formData.append("files", f));
+  return pb.collection('transportations').update(transportationId, formData);
+}
+
+export const getAttachmentUrl = (record: any, fileName: string) => {
+  return pb.files.getUrl(record, fileName);
+}
+
+export const deleteTransportationAttachment = (transportationId: string, fileName: string)  => {
+  return  pb.collection("transportations").update(transportationId, {
+    'files-': [fileName]
+  })
+}

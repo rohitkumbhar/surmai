@@ -1,7 +1,11 @@
 import {
   ActionIcon,
+  Anchor,
   Avatar,
+  Badge,
+  CloseButton,
   Container,
+  Divider,
   Flex,
   Group,
   LoadingOverlay,
@@ -16,7 +20,7 @@ import {AddTransportationMenu} from "./AddTransportationMenu.tsx";
 import {useState} from "react";
 import {AddFlightForm} from "./AddFlightForm.tsx";
 import {useQuery} from "@tanstack/react-query";
-import {deleteTransportation, listTransportations} from "../../../lib/pocketbase/trips.ts";
+import {deleteTransportation, deleteTransportationAttachment, getAttachmentUrl, listTransportations} from "../../../lib";
 import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture, IconTrash} from "@tabler/icons-react";
 
 
@@ -139,7 +143,21 @@ export const Transportation = ({trip}: {
                 </Group>
 
               </Group>
-
+              {t.files?.length > 0 && <Group p={"sm"} >
+                {(t.files || []).map(f => {
+                  return (
+                    <Anchor href={getAttachmentUrl(t,f)} target={"_blank"}>
+                      <Badge variant={"transparent"} size={"lg"} bd={"1px solid #ccc"} radius={0}
+                             rightSection={<CloseButton onClick={(event) => {
+                               event.preventDefault()
+                               deleteTransportationAttachment(t.id, f).then(() => {
+                                 refetch()
+                               })
+                             }} />}>{f}</Badge>
+                    </Anchor>
+                  )
+                })}
+              </Group>}
             </Paper>
           )
         })}

@@ -1,5 +1,16 @@
 export {authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword} from './pocketbase/auth'
-export {getTrip, listTrips, createTrip} from './pocketbase/trips'
+export {
+  getTrip,
+  listTrips,
+  createTrip,
+  getAttachmentUrl,
+  saveTransportationAttachments,
+  addFlight,
+  deleteTransportation,
+  deleteTransportationAttachment,
+  listTransportations,
+  updateTrip
+} from './pocketbase/trips'
 
 
 export const formatDate = (input: string) => {
