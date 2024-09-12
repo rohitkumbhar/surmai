@@ -51,7 +51,10 @@ export const listTransportations = async (tripId: string): Promise<Transportatio
       arrivalTime: new Date(Date.parse(entry.arrivalTime))
     };
   });
+}
 
+export const deleteTransportation = (transportationId: string) => {
+  return pb.collection('transportations').delete(transportationId);
 }
 
 export const addFlight = (tripId: string, data: { [key: string]: any }): Promise<Transportation> => {

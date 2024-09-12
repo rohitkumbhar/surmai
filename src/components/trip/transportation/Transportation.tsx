@@ -1,10 +1,22 @@
-import {ActionIcon, Avatar, Container, Flex, Group, LoadingOverlay, Paper, Stack, Text, Tooltip} from "@mantine/core";
+import {
+  ActionIcon,
+  Avatar,
+  Container,
+  Flex,
+  Group,
+  LoadingOverlay,
+  Paper,
+  rem,
+  Stack,
+  Text,
+  Tooltip
+} from "@mantine/core";
 import {Trip} from "../../../types/trips.ts";
 import {AddTransportationMenu} from "./AddTransportationMenu.tsx";
 import {useState} from "react";
 import {AddFlightForm} from "./AddFlightForm.tsx";
 import {useQuery} from "@tanstack/react-query";
-import {listTransportations} from "../../../lib/pocketbase/trips.ts";
+import {deleteTransportation, listTransportations} from "../../../lib/pocketbase/trips.ts";
 import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture, IconTrash} from "@tabler/icons-react";
 
 
@@ -69,16 +81,16 @@ export const Transportation = ({trip}: {
           return (
             <Paper withBorder>
               <Group>
-                <Group justify="flex-start" p={"10px"} gap={"xl"}>
-                  <Group>
-
-                    <Tooltip label={t.metadata.airline}>
-                      <Avatar name={t.metadata.airline} color="initials" allowedInitialsColors={['blue', 'red']} radius={"1"} />
-                    </Tooltip>
-
-
-                    <IconPlaneDeparture size="1.4rem" stroke={1.5} />
-                    <Text size="md" >
+                <Group pl={"xs"}>
+                  <Tooltip label={t.metadata.airline}>
+                    <Avatar name={t.metadata.airline} size={"lg"} color="initials"
+                            allowedInitialsColors={['blue', 'red']} radius={"1"}/>
+                  </Tooltip>
+                </Group>
+                <Group justify="flex-start" p={"10px"} gap={"md"} >
+                  <Group miw={rem(150)} maw={rem(150)}>
+                    <IconPlaneDeparture size="1.4rem" stroke={1.5}/>
+                    <Text size="md">
                       {t.origin}
                       <Text size="xs" c={"dimmed"}>
                         {formatDate(t.departureTime)}
@@ -88,13 +100,10 @@ export const Transportation = ({trip}: {
                       </Text>
                     </Text>
                   </Group>
-
-
-                  <IconChevronsRight />
-
-                  <Group>
-                    <IconPlaneArrival size="1.4rem" stroke={1.5} />
-                    <Text size="md" >
+                  <IconChevronsRight/>
+                  <Group miw={rem(150)} maw={rem(150)}>
+                    <IconPlaneArrival size="1.4rem" stroke={1.5}/>
+                    <Text size="md">
                       {t.destination}
                       <Text size="xs" c={"dimmed"}>
                         {formatDate(t.arrivalTime)}
@@ -105,16 +114,31 @@ export const Transportation = ({trip}: {
                     </Text>
                   </Group>
                 </Group>
-                <Group grow align={"flex-end"} justify={"flex-end"} >
-                  <ActionIcon variant="transparent" aria-label="Delete">
-                    <Tooltip label={"Delete"}>
-                      <IconTrash style={{ width: '70%', height: '70%' }} stroke={1.5} color={"red"} />
-                    </Tooltip>
+
+                <Stack gap={"1"} pl={"md"} miw={rem(90)}>
+                  <Text fw={400} c={"dimmed"}>Flight</Text>
+                  <Text tt="uppercase">{t.metadata.flightNumber}</Text>
+                </Stack>
+
+                <Stack gap={"1"} pl={"md"} miw={rem(150)}>
+                  <Text fw={400} c={"dimmed"}>Confirmation Code</Text>
+                  <Text tt="uppercase">{t.metadata.confirmationCode}</Text>
+                </Stack>
+
+                <Stack gap={"1"} pl={"md"} miw={rem(200)}>
+                  <Text fw={400} c={"dimmed"}>Cost</Text>
+                  <Text tt="uppercase">{`${t.cost.value} ${t.cost.currency || ''}`}</Text>
+                </Stack>
+
+                <Group>
+                  <ActionIcon variant={"transparent"} c={"red"} size="1.4rem" onClick={() => {
+                    deleteTransportation(t.id).then(() => { refetch()})
+                  }}>
+                    <IconTrash />
                   </ActionIcon>
                 </Group>
+
               </Group>
-
-
 
             </Paper>
           )
