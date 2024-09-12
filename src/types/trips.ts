@@ -27,8 +27,8 @@ export type Transportation = {
     value: number,
     currency: string
   },
-  departureTime: Date | string | null,
-  arrivalTime: Date | string | null,
+  departureTime: Date,
+  arrivalTime: Date,
   trip: string,
   metadata: { [key: string]: any }
   attachments: string[]

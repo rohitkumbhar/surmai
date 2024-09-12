@@ -8,22 +8,26 @@ import {updateTrip} from "../../../lib";
 import {formatDate} from "../../../lib";
 import {IconPhoto} from "@tabler/icons-react";
 import {basicInfoFormValidation} from "./validation.ts";
+import {useTranslation} from "react-i18next";
 
 const BasicInfoView = ({trip}: { trip: Trip }) => {
+
+  const {t} = useTranslation();
+
   return (<Stack gap={"md"}>
     <Title order={1}>{trip.name}</Title>
     <Title order={4} fw={400}> {trip.description}</Title>
     <Text size={"sm"}>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</Text>
 
     <Divider/>
-    <Text mt={"md"}>Visiting</Text>
+    <Text mt={"md"}>{t('basic.visiting', 'Visiting')}</Text>
     <Group>
-      {(trip.destinations || []).map(p => {
+      {(trip.destinations || []).map(destination => {
         return (
-          <Group wrap={"nowrap"} key={p.toString()}>
+          <Group wrap={"nowrap"} key={destination.toString()}>
             <Paper shadow="sm" radius="sm" p="xl" bg={"var(--mantine-color-blue-0)"}>
               <IconPhoto/>
-              <Text>{p.name}</Text>
+              <Text>{destination.name}</Text>
             </Paper>
           </Group>)
       })}
@@ -31,12 +35,12 @@ const BasicInfoView = ({trip}: { trip: Trip }) => {
     <Divider/>
     <Text mt={"md"}>Going With</Text>
     <Group>
-      {(trip.participants || []).map(p => {
-        return (<Group wrap={"nowrap"} key={p.toString()}>
-          <Avatar key={p.name} name={p.name} color="initials"/>
+      {(trip.participants || []).map(person => {
+        return (<Group wrap={"nowrap"} key={person.toString()}>
+          <Avatar key={person.name} name={person.name} color="initials"/>
           <div>
             <Text fz="lg" fw={500}>
-              {p.name}
+              {person.name}
             </Text>
           </div>
         </Group>)

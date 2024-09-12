@@ -31,6 +31,7 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
     validate: {},
   })
 
+  // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
     addFlight(trip.id, values).then((result: Transportation) => {
         if (files.length > 0) {

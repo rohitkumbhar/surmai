@@ -17,7 +17,7 @@ import {ViewTrip} from "./pages/trips/ViewTrip.tsx";
 import {EditTrip} from "./pages/trips/EditTrip.tsx";
 import {TripsContainer} from "./pages/trips/TripsContainer.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-
+import './lib/i18n'
 const theme = createTheme({
   fontFamily: 'Lato, Verdana, sans-serif',
   colors: {

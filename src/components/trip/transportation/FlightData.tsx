@@ -17,7 +17,7 @@ import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture, IconTrash} from
 import {deleteTransportation, deleteTransportationAttachment, getAttachmentUrl} from "../../../lib";
 import {formatDate, formatTime} from "./util.ts";
 
-export const FlightData = ({trip, flight, refetch}: { trip: Trip, flight: Transportation, refetch: () => void }) => {
+export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportation, refetch: () => void }) => {
 
   return (
     <Paper withBorder>

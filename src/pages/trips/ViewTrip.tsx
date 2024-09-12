@@ -72,7 +72,7 @@ export const ViewTrip = () => {
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <TransportationPanel trip={trip} refetch={refetch}/>
+            <TransportationPanel trip={trip} />
           </Accordion.Panel>
         </Accordion.Item>
 
