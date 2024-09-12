@@ -3,7 +3,7 @@ import {DateTimePicker} from "@mantine/dates";
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {useForm} from "@mantine/form";
 import {CurrencyInput} from "../../util/CurrencyInput.tsx";
-import {addFlight, saveTransportationAttachments} from "../../../lib/pocketbase/trips.ts";
+import {addFlight, saveTransportationAttachments} from "../../../lib";
 import {useState} from "react";
 
 export const AddFlightForm = ({trip, onSuccess, onCancel}: {
@@ -82,10 +82,10 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
 
             <Stack>
               <Group>
-                <Text>Attachments
+                <Title size={"md"}>Attachments
                   <Text size={"xs"} c={"dimmed"}>Upload any related documents for this flight e.g. confirmation
                     email</Text>
-                </Text>
+                </Title>
               </Group>
               <Group>
                 {files.map((file, index) => (
@@ -94,7 +94,7 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
               </Group>
 
               <Group>
-                <FileButton onChange={setFiles} accept="text/plain,application/pdf" form={"files"} name={"files"}
+                <FileButton onChange={setFiles} accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp" form={"files"} name={"files"}
                             multiple>
                   {(props) => <Button {...props}>Upload</Button>}
                 </FileButton>
@@ -113,3 +113,4 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
       </form>
     </Stack>)
 }
+

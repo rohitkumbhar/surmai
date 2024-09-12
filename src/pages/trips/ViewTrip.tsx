@@ -4,9 +4,9 @@ import {IconBed, IconInfoSquare, IconPlane} from "@tabler/icons-react";
 import {Trip} from "../../types/trips.ts";
 import {formatDate, getTrip} from "../../lib";
 import {Header} from "../../components/nav/Header.tsx";
-import {BasicInfo} from "../../components/trip/BasicInfo.tsx";
+import {BasicInfo} from "../../components/trip/basic/BasicInfo.tsx";
 import {useQuery} from "@tanstack/react-query";
-import {Transportation} from "../../components/trip/transportation/Transportation.tsx";
+import {TransportationPanel} from "../../components/trip/transportation/TransportationPanel.tsx";
 
 export const ViewTrip = () => {
 
@@ -31,7 +31,7 @@ export const ViewTrip = () => {
         <Group>
           <Text size={"xl"} px={"md"}>{trip?.name}</Text>
           <Text size={"sm"}
-                c={"dimmed"}>{formatDate(trip.startDate.toString())} - {formatDate(trip.endDate.toString())}</Text>
+                c={"dimmed"}>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</Text>
         </Group>
       </Header>
 
@@ -72,7 +72,7 @@ export const ViewTrip = () => {
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <Transportation trip={trip} refetch={refetch}/>
+            <TransportationPanel trip={trip} refetch={refetch}/>
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -92,7 +92,7 @@ export const ViewTrip = () => {
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <Transportation trip={trip}/>
+            <TransportationPanel trip={trip}/>
           </Accordion.Panel>
         </Accordion.Item>
 

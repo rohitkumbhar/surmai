@@ -121,13 +121,21 @@ migrate((db) => {
             {
                 "system": false,
                 "id": "z9azfjnb",
-                "name": "files",
+                "name": "attachments",
                 "type": "file",
                 "required": false,
                 "presentable": false,
                 "unique": false,
                 "options": {
-                    "mimeTypes": [],
+                    "mimeTypes": [
+                        "application/pdf",
+                        "text/plain",
+                        "text/html",
+                        "image/png",
+                        "image/jpeg",
+                        "image/gif",
+                        "image/webp"
+                    ],
                     "thumbs": [],
                     "maxSelect": 99,
                     "maxSize": 5242880,

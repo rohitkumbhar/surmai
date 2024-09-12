@@ -80,7 +80,7 @@ export const addFlight = (tripId: string, data: { [key: string]: any }): Promise
 
 export const saveTransportationAttachments = (transportationId: string, files: File[]) => {
   const formData = new FormData()
-  files.forEach(f => formData.append("files", f));
+  files.forEach(f => formData.append("attachments", f));
   return pb.collection('transportations').update(transportationId, formData);
 }
 
@@ -90,6 +90,6 @@ export const getAttachmentUrl = (record: any, fileName: string) => {
 
 export const deleteTransportationAttachment = (transportationId: string, fileName: string)  => {
   return  pb.collection("transportations").update(transportationId, {
-    'files-': [fileName]
+    'attachments-': [fileName]
   })
 }

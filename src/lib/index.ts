@@ -13,7 +13,7 @@ export {
 } from './pocketbase/trips'
 
 
-export const formatDate = (input: string) => {
+export const formatDate = (input: Date | string) => {
   return new Date(Date.parse(input.toString())).toLocaleDateString('en-us', {
     year: 'numeric',
     month: 'long',

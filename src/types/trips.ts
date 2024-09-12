@@ -2,8 +2,8 @@ export type Trip = {
   id: string,
   name: string,
   description?: string,
-  startDate: Date,
-  endDate: Date
+  startDate: Date | string,
+  endDate: Date | string,
   coverImage?: string
   participants?: string[]
   destinations?: string[]
@@ -31,4 +31,5 @@ export type Transportation = {
   arrivalTime: Date | string | null,
   trip: string,
   metadata: { [key: string]: any }
+  attachments: string[]
 }

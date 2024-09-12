@@ -1,7 +1,6 @@
 import {useState} from 'react';
 import {Center, rem, Stack, Tooltip, UnstyledButton} from '@mantine/core';
-import {IconHome2, IconSettings,} from '@tabler/icons-react';
-import {MantineLogo} from '@mantinex/mantine-logo';
+import {IconFish, IconHome2, IconSettings,} from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import {UserButton} from "../user/UserButton.tsx";
 import {useNavigate} from "react-router-dom";
@@ -55,7 +54,7 @@ export function Navbar() {
   return (
     <nav className={classes.navbar}>
       <Center>
-        <MantineLogo type="mark" inverted size={30}/>
+        <IconFish color={"var(--mantine-color-white)"} size={30} />
       </Center>
 
       <div className={classes.navbarMain}>

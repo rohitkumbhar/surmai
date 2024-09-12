@@ -4,13 +4,14 @@ import {IconInfoSquare} from "@tabler/icons-react";
 import {createTrip} from "../../lib";
 import {useNavigate} from "react-router-dom";
 import {CreateTripForm} from "../../types/trips.ts";
-import {EditTripBasicForm} from "../../components/trip/EditTripBasicForm.tsx";
+import {EditTripBasicForm} from "../../components/trip/basic/EditTripBasicForm.tsx";
+import {basicInfoFormValidation} from "../../components/trip/basic/validation.ts";
 
 
 export const CreateNewTrip = () => {
 
   const navigate = useNavigate();
-  const form = useForm({
+  const form = useForm<CreateTripForm>({
     mode: 'uncontrolled',
     initialValues: {
       name: '',
@@ -20,7 +21,7 @@ export const CreateNewTrip = () => {
       participants: []
     },
 
-    validate: {},
+    validate: basicInfoFormValidation,
   });
 
 
@@ -54,7 +55,7 @@ export const CreateNewTrip = () => {
               </Group>
             </Accordion.Control>
             <Accordion.Panel>
-              <EditTripBasicForm form={form} />
+              <EditTripBasicForm form={form}/>
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>

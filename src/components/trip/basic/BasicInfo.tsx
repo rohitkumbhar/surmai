@@ -1,37 +1,38 @@
-import {Trip} from "../../types/trips.ts";
+import {CreateTripForm, Trip} from "../../../types/trips.ts";
 import {Avatar, Button, Container, Divider, Flex, Group, Paper, Stack, Text, Title} from "@mantine/core";
 import {QueryObserverResult, RefetchOptions, Register} from "@tanstack/react-query";
 import {useState} from "react";
 import {useForm} from "@mantine/form";
 import {EditTripBasicForm} from "./EditTripBasicForm.tsx";
-import {updateTrip} from "../../lib/pocketbase/trips.ts";
-import {formatDate} from "../../lib";
+import {updateTrip} from "../../../lib";
+import {formatDate} from "../../../lib";
 import {IconPhoto} from "@tabler/icons-react";
+import {basicInfoFormValidation} from "./validation.ts";
 
 const BasicInfoView = ({trip}: { trip: Trip }) => {
   return (<Stack gap={"md"}>
     <Title order={1}>{trip.name}</Title>
     <Title order={4} fw={400}> {trip.description}</Title>
-    <Text size={"sm"}>{formatDate(trip.startDate.toString())} - {formatDate(trip.endDate.toString())}</Text>
+    <Text size={"sm"}>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</Text>
 
-    <Divider />
+    <Divider/>
     <Text mt={"md"}>Visiting</Text>
     <Group>
       {(trip.destinations || []).map(p => {
         return (
-          <Group wrap={"nowrap"}>
-          <Paper  shadow="sm" radius="sm" p="xl" bg={"var(--mantine-color-blue-0)"}>
-            <IconPhoto />
-            <Text>{p.name}</Text>
-          </Paper>
-        </Group>)
+          <Group wrap={"nowrap"} key={p.toString()}>
+            <Paper shadow="sm" radius="sm" p="xl" bg={"var(--mantine-color-blue-0)"}>
+              <IconPhoto/>
+              <Text>{p.name}</Text>
+            </Paper>
+          </Group>)
       })}
     </Group>
-    <Divider />
+    <Divider/>
     <Text mt={"md"}>Going With</Text>
     <Group>
       {(trip.participants || []).map(p => {
-        return (<Group wrap={"nowrap"}>
+        return (<Group wrap={"nowrap"} key={p.toString()}>
           <Avatar key={p.name} name={p.name} color="initials"/>
           <div>
             <Text fz="lg" fw={500}>
@@ -55,7 +56,7 @@ interface EditBasicViewProps {
 
 const EditBasicView = ({trip, refetch, onSave}: EditBasicViewProps) => {
 
-  const initialValues = {
+  const initialValues: CreateTripForm = {
     name: trip.name,
     description: trip.description,
     dateRange: [new Date(Date.parse(trip.startDate.toString())), new Date(Date.parse(trip.endDate.toString()))],
@@ -63,12 +64,10 @@ const EditBasicView = ({trip, refetch, onSave}: EditBasicViewProps) => {
     participants: trip.participants?.map(item => item.name)
   };
 
-  console.log("initial values", initialValues)
-
-  const form = useForm({
+  const form = useForm<CreateTripForm>({
     mode: 'uncontrolled',
     initialValues: initialValues,
-    validate: {},
+    validate: basicInfoFormValidation,
   });
 
 
@@ -90,12 +89,9 @@ const EditBasicView = ({trip, refetch, onSave}: EditBasicViewProps) => {
         refetch()
         onSave()
       })
-      0
-      console.log("Editing with values", values)
-
     })}>
       <EditTripBasicForm form={form}/>
-      <Group>
+      <Group justify={"flex-end"}>
         <Button mt="xl" type={"submit"}>
           Save
         </Button>
@@ -119,7 +115,6 @@ export const BasicInfo = ({trip, refetch}: {
     <Container py={"xs"} size="lg">
       <Flex
         mih={50}
-
         gap="md"
         justify="flex-end"
         align="center"
@@ -128,15 +123,11 @@ export const BasicInfo = ({trip, refetch}: {
       >
         {!editMode && <Button variant="filled" onClick={() => setEditMode(true)}>Edit</Button>}
         {editMode && <Button variant="filled" onClick={() => setEditMode(false)}>Cancel</Button>}
-
         <Button variant="filled" bg={"red"}>Delete</Button>
-
       </Flex>
 
       {!editMode && <BasicInfoView trip={trip}/>}
       {editMode && <EditBasicView trip={trip} refetch={refetch} onSave={() => setEditMode(false)}/>}
-
-
     </Container>
   )
 }
