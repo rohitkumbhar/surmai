@@ -1,6 +1,6 @@
 migrate((db) => {
 
-    const collectionSchema = {
+    const collectionSchema =  {
         "name": "transportations",
         "type": "base",
         "system": false,
@@ -116,6 +116,22 @@ migrate((db) => {
                 "unique": false,
                 "options": {
                     "maxSize": 2000000
+                }
+            },
+            {
+                "system": false,
+                "id": "z9azfjnb",
+                "name": "files",
+                "type": "file",
+                "required": false,
+                "presentable": false,
+                "unique": false,
+                "options": {
+                    "mimeTypes": [],
+                    "thumbs": [],
+                    "maxSelect": 99,
+                    "maxSize": 5242880,
+                    "protected": false
                 }
             }
         ],
