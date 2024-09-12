@@ -81,7 +81,6 @@ export const Transportation = ({trip}: {
 
       <Stack mt={"sm"}>
         {data.map((t) => {
-
           return (
             <Paper withBorder>
               <Group>

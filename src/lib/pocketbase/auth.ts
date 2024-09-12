@@ -1,11 +1,23 @@
-import {pb} from "./pocketbase.ts";
+import {pb, pbAdmin} from "./pocketbase.ts";
 import {User} from "../../types/auth.ts";
 import {ClientResponseError} from "pocketbase";
 
-
 export const authWithUsernameAndPassword = async ({email, password}: { email: string, password: string }) => {
-  const result = await pb.collection("users").authWithPassword(email, password);
-  return result.record;
+
+  return pbAdmin.admins.authWithPassword(email, password)
+    .then(async adminRecord => {
+      const result = await pbAdmin.send("/impersonate", {
+        method: "POST",
+        body: {email: email},
+      });
+      pb.authStore.save(result.token, result.record)
+      return result.record
+    })
+    .catch(async error => {
+      const result = await pb.collection("users").authWithPassword(email, password);
+      return result.record;
+    })
+
 }
 
 export const currentUser = async () => {
@@ -53,5 +65,8 @@ export const createUserWithPassword = async ({email, name, password, passwordCon
         reject(messages.join("."))
       });
   })
+}
 
+export const isAdmin = () => {
+  return pbAdmin.authStore.isAdmin
 }

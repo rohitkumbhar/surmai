@@ -1,4 +1,4 @@
-export {authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword} from './pocketbase/auth'
+export {authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword, isAdmin} from './pocketbase/auth'
 export {
   getTrip,
   listTrips,

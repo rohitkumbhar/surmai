@@ -15,7 +15,6 @@ export const SignIn = () => {
         password: string;
     }) => {
         authWithUsernameAndPassword({email: values.email, password: values.password}).then((user) => {
-            console.log("user,", user)
             setApiError(undefined);
             navigate("/")
         }).catch(err => {

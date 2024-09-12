@@ -1,4 +1,4 @@
-import {Button, FileButton, Group, rem, Stack, TextInput, Text, Title} from "@mantine/core";
+import {Button, FileButton, Group, rem, Stack, Text, TextInput, Title} from "@mantine/core";
 import {DateTimePicker} from "@mantine/dates";
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {useForm} from "@mantine/form";
@@ -26,7 +26,7 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
       flightNumber: undefined,
       confirmationCode: undefined,
       cost: undefined,
-      currencyCode: undefined
+      currencyCode: 'USD'
     },
     validate: {},
   })
