@@ -11,6 +11,7 @@ ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/po
 RUN unzip /tmp/pb.zip -d /pb/
 COPY pocketbase/init.sh /pb/init.sh
 COPY pocketbase/pb_migrations /pb_migrations
+COPY pocketbase/pb_hooks /pb_hooks
 COPY dist/assets /pb_public/assets/
 COPY dist/index.html /pb_public
 
