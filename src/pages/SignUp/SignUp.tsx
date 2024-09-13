@@ -8,7 +8,6 @@ import {FancyPasswordInput} from "../../components/account/FancyPasswordInput.ts
 
 export const SignUp = () => {
 
-
   const [apiError, setApiError] = useState<string>()
   const navigate = useNavigate()
   const {t} = useTranslation()
@@ -37,19 +36,6 @@ export const SignUp = () => {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : t('account.invalid_email', 'Invalid email')),
     },
   });
-
-
-  // const strength = getStrength(form.getValues().password);
-  // const color = strength === 100 ? 'teal' : strength > 50 ? 'yellow' : 'red';
-  //
-  // const checks = passwordRequirements.map((requirement, index) => (
-  //   <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(currentPasswordValue)}/>
-  // ));
-
-  // form.watch('password', ({ previousValue, value, touched, dirty }) => {
-  //   setCurrentPasswordValue(value)
-  // })
-
 
   return (<>
     <Container size={420} my={40}>
