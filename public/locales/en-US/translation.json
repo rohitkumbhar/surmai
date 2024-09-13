@@ -6,6 +6,14 @@
   "cost": "Cost",
   "attachments": "Attachments",
   "upload": "Upload",
+  "sign_in": "Sign In",
+  "email": "Email",
+  "password": "Password",
+  "confirm_password": "Confirm Password",
+  "no_account": "Do not have an account yet?",
+  "create_account": "Create An Account",
+  "account_creation_failed": "Unable to create an account",
+  "name": "Name",
   "trip": {
     "new": "Start A New Trip"
   },
