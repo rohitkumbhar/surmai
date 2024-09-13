@@ -5,9 +5,10 @@ import {useForm} from "@mantine/form";
 import {useState} from "react";
 import {authWithUsernameAndPassword} from "../../lib";
 import {useTranslation} from "react-i18next";
+import {useDocumentTitle} from "@mantine/hooks";
 
 export const SignIn = () => {
-
+  useDocumentTitle('Surmai');
   const navigate = useNavigate()
   const {t} = useTranslation()
   const [apiError, setApiError] = useState<string>()

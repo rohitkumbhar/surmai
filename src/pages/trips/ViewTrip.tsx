@@ -8,9 +8,13 @@ import {BasicInfo} from "../../components/trip/basic/BasicInfo.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {TransportationPanel} from "../../components/trip/transportation/TransportationPanel.tsx";
 import {useTranslation} from "react-i18next";
+import {useDocumentTitle} from "@mantine/hooks";
+import {useEffect, useState} from "react";
 
 export const ViewTrip = () => {
 
+  const [docTitle, setDocTitle] = useState('Trip Details')
+  useDocumentTitle(docTitle);
   const {tripId} = useParams();
   const {t, i18n} = useTranslation()
   const {isPending, isError, data, error, refetch} = useQuery<Trip>({
@@ -18,6 +22,11 @@ export const ViewTrip = () => {
     queryFn: () => getTrip(tripId || ''),
   })
 
+  useEffect(() => {
+    if (data) {
+      setDocTitle(data.name)
+    }
+  }, [data])
 
   if (isPending) {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>

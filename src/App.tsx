@@ -1,10 +1,11 @@
 import {AppShell, Box, Burger, Group, rem} from '@mantine/core';
-import {useDisclosure} from '@mantine/hooks';
+import {useDisclosure, useDocumentTitle} from '@mantine/hooks';
 import {Outlet} from "react-router-dom";
 import {Navbar} from "./components/nav/Navbar.tsx";
 
 function App() {
   const [opened, {toggle}] = useDisclosure();
+  useDocumentTitle('Surmai');
   return (
     <AppShell
       header={{height: {base: rem('60px'), md: rem('60px'), lg: rem('60px')}}}
