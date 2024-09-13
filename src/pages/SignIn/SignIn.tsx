@@ -14,7 +14,7 @@ export const SignIn = () => {
         email: string;
         password: string;
     }) => {
-        authWithUsernameAndPassword({email: values.email, password: values.password}).then((user) => {
+        authWithUsernameAndPassword({email: values.email, password: values.password}).then(() => {
             setApiError(undefined);
             navigate("/")
         }).catch(err => {

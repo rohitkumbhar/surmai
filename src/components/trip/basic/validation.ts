@@ -1,5 +1,5 @@
 export const basicInfoFormValidation = {
-  dateRange: (value) => {
+  dateRange: (value: [Date | null, Date | null]) => {
     if (!value) {
       return "A value is required";
     }
