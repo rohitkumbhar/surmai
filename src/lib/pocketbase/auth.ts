@@ -5,7 +5,7 @@ import {ClientResponseError} from "pocketbase";
 export const authWithUsernameAndPassword = async ({email, password}: { email: string, password: string }) => {
 
   return pbAdmin.admins.authWithPassword(email, password)
-    .then(async adminRecord => {
+    .then(async () => {
       const result = await pbAdmin.send("/impersonate", {
         method: "POST",
         body: {email: email},
@@ -13,7 +13,7 @@ export const authWithUsernameAndPassword = async ({email, password}: { email: st
       pb.authStore.save(result.token, result.record)
       return result.record
     })
-    .catch(async error => {
+    .catch(async () => {
       const result = await pb.collection("users").authWithPassword(email, password);
       return result.record;
     })
@@ -33,6 +33,7 @@ export const currentUser = async () => {
 export const logoutCurrentUser = async () => {
   return new Promise<void>(resolve => {
     pb.authStore.clear();
+    pbAdmin.authStore.clear();
     resolve();
   })
 }
@@ -68,5 +69,5 @@ export const createUserWithPassword = async ({email, name, password, passwordCon
 }
 
 export const isAdmin = () => {
-  return pbAdmin.authStore.isAdmin
+  return pbAdmin.authStore.isAdmin && pbAdmin.authStore.isValid
 }

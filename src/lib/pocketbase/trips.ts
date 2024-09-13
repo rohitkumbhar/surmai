@@ -1,34 +1,31 @@
 import {pb} from "./pocketbase.ts";
-import {CreateTripForm, Transportation, Trip} from "../../types/trips.ts";
-import {currentUser} from "./auth.ts";
+import {NewTrip, Transportation, Trip, TripResponse} from "../../types/trips.ts";
 
-export const createTrip = async (values: CreateTripForm) => {
-
-  const user = await currentUser();
-  const {name, description, dateRange, participants, destinations} = values;
-  const data = {
-    "name": name,
-    "description": description,
-    "startDate": dateRange[0]?.toISOString(),
-    "endDate": dateRange[1]?.toISOString(),
-    "ownerId": user.id,
-    "participants": JSON.stringify(participants?.map(entry => {
-      return {name: entry};
-    })),
-    "destinations": JSON.stringify(destinations?.map(entry_1 => {
-      return {name: entry_1};
-    }))
-  };
+export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
 }
 
 export const getTrip = (tripId: string): Promise<Trip> => {
-  return pb.collection('trips').getOne(tripId);
+  return pb.collection('trips').getOne<TripResponse>(tripId)
+    .then((trip) => {
+      return {
+        ...trip,
+        startDate: new Date(Date.parse(trip.startDate)),
+        endDate: new Date(Date.parse(trip.endDate))
+      }
+    });
 }
 
-export const listTrips = (): Promise<Trip[]> => {
-  return pb.collection('trips').getFullList({
+export const listTrips = async (): Promise<Trip[]> => {
+  const results = await pb.collection('trips').getFullList<TripResponse>({
     sort: '-created',
+  });
+  return results.map(trip => {
+    return {
+      ...trip,
+      startDate: new Date(Date.parse(trip.startDate)),
+      endDate: new Date(Date.parse(trip.endDate))
+    };
   });
 }
 
@@ -88,8 +85,8 @@ export const getAttachmentUrl = (record: any, fileName: string) => {
   return pb.files.getUrl(record, fileName);
 }
 
-export const deleteTransportationAttachment = (transportationId: string, fileName: string)  => {
-  return  pb.collection("transportations").update(transportationId, {
+export const deleteTransportationAttachment = (transportationId: string, fileName: string) => {
+  return pb.collection("transportations").update(transportationId, {
     'attachments-': [fileName]
   })
 }

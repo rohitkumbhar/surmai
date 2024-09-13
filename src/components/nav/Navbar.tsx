@@ -11,6 +11,7 @@ interface NavbarLinkProps {
   icon: typeof IconHome2;
   label: string;
   active?: boolean;
+
   onClick?(): void;
 }
 
@@ -35,11 +36,9 @@ export function Navbar() {
 
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const links = mainNav.
-    filter(link => {
-        return link.admin ? isAdmin() : true;
-    }).
-  map((link, index) => (
+  const links = mainNav.filter(link => {
+    return link.admin ? isAdmin() : true;
+  }).map((link, index) => (
     <NavbarLink
       {...link}
       key={link.label}
@@ -54,7 +53,7 @@ export function Navbar() {
   return (
     <nav className={classes.navbar}>
       <Center>
-        <IconFish color={"var(--mantine-color-white)"} size={30} />
+        <IconFish color={"var(--mantine-color-white)"} size={30}/>
       </Center>
 
       <div className={classes.navbarMain}>

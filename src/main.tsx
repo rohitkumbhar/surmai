@@ -14,10 +14,10 @@ import {UserProfile} from "./pages/UserProfile/UserProfile.tsx";
 import {MyTrips} from "./pages/trips/MyTrips.tsx";
 import {CreateNewTrip} from "./pages/trips/CreateNewTrip.tsx";
 import {ViewTrip} from "./pages/trips/ViewTrip.tsx";
-import {EditTrip} from "./pages/trips/EditTrip.tsx";
 import {TripsContainer} from "./pages/trips/TripsContainer.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import './lib/i18n'
+
 const theme = createTheme({
   fontFamily: 'Lato, Verdana, sans-serif',
   colors: {
@@ -61,7 +61,6 @@ const router = createBrowserRouter([
           {path: "", element: <MyTrips/>},
           {path: "/trips/create", element: <CreateNewTrip/>},
           {path: ":tripId", element: <ViewTrip/>},
-          {path: ":tripId/edit", element: <EditTrip/>},
         ]
       },
       {path: "*", element: <p>Child Not Found</p>,},

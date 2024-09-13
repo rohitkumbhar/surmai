@@ -1,5 +1,42 @@
 {
+  "edit": "Edit",
+  "cancel": "Cancel",
+  "delete": "Delete",
+  "save": "Save",
+  "cost": "Cost",
+  "attachments": "Attachments",
+  "upload": "Upload",
+  "trip": {
+    "new": "Start A New Trip"
+  },
   "basic": {
-    "visiting": "Visiting"
+    "section_name": "Basic Information",
+    "section_description": "View basic information about your trip",
+    "visiting": "Visiting",
+    "with": "Going With"
+  },
+  "transportation": {
+    "section_name": "Transportation",
+    "section_description": "View and edit your transportation arrangements for this trip",
+    "add_new": "Add new",
+    "flight":"Flight",
+    "bus": "Bus",
+    "car_taxi": "Car / Taxi",
+    "boat": "Boat",
+    "train": "Train",
+    "flight_number": "Flight #",
+    "confirmation_code": "Confirmation Code",
+    "add_new_flight": "Add new flight",
+    "from": "From",
+    "departure_time": "Departure Time",
+    "to": "To",
+    "arrival_time": "Arrival Time",
+    "airline": "Airline",
+    "attachments_desc": "Upload any related documents for this flight e.g. confirmation email",
+    "save_flight": "Save Flight"
+  },
+  "lodging": {
+    "section_name": "Lodging",
+    "section_description": "View and edit your lodging arrangements for this trip"
   }
 }

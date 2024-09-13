@@ -52,11 +52,8 @@ export const TransportationPanel = ({trip}: {
         {data.map((t: Transportation) => {
           return (<Fragment key={t.id}>
             {t.type === "flight" && <FlightData refetch={refetch} trip={trip} flight={t}/>}
-          </Fragment >)
+          </Fragment>)
         })}
-
       </Stack>
-
-
     </Container>)
 }

@@ -16,8 +16,11 @@ import {
 import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture, IconTrash} from "@tabler/icons-react";
 import {deleteTransportation, deleteTransportationAttachment, getAttachmentUrl} from "../../../lib";
 import {formatDate, formatTime} from "./util.ts";
+import {useTranslation} from "react-i18next";
 
 export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportation, refetch: () => void }) => {
+
+  const { t, i18n } = useTranslation()
 
   return (
     <Paper withBorder>
@@ -34,10 +37,10 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
             <Title size="md" fw={400}>
               {flight.origin}
               <Text size="xs" c={"dimmed"}>
-                {formatDate(flight.departureTime)}
+                {formatDate(i18n.language,flight.departureTime)}
               </Text>
               <Text size="xs" c={"dimmed"}>
-                {formatTime(flight.departureTime)}
+                {formatTime(i18n.language,flight.departureTime)}
               </Text>
             </Title>
           </Group>
@@ -47,27 +50,27 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
             <Title size="md" fw={400}>
               {flight.destination}
               <Text size="xs" c={"dimmed"}>
-                {formatDate(flight.arrivalTime)}
+                {formatDate(i18n.language,flight.arrivalTime)}
               </Text>
               <Text size="xs" c={"dimmed"}>
-                {formatTime(flight.arrivalTime)}
+                {formatTime(i18n.language, flight.arrivalTime)}
               </Text>
             </Title>
           </Group>
         </Group>
 
         <Stack gap={"1"} pl={"md"} miw={rem(90)}>
-          <Text fw={400} c={"dimmed"}>Flight</Text>
+          <Text fw={400} c={"dimmed"}>{t('transportation.flight_number','Flight #')}</Text>
           <Text tt="uppercase">{flight.metadata.flightNumber}</Text>
         </Stack>
 
         <Stack gap={"1"} pl={"md"} miw={rem(150)}>
-          <Text fw={400} c={"dimmed"}>Confirmation Code</Text>
+          <Text fw={400} c={"dimmed"}>{t('transportation.confirmation_code', 'Confirmation Code')}</Text>
           <Text tt="uppercase">{flight.metadata.confirmationCode}</Text>
         </Stack>
 
         <Stack gap={"1"} pl={"md"} miw={rem(200)}>
-          <Text fw={400} c={"dimmed"}>Cost</Text>
+          <Text fw={400} c={"dimmed"}>{t('cost','Cost')}</Text>
           <Text tt="uppercase">{`${flight.cost.value} ${flight.cost.currency || ''}`}</Text>
         </Stack>
 

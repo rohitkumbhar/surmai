@@ -1,16 +1,18 @@
 import {Accordion, Button, Container, Group, rem, Text} from "@mantine/core";
 import {useForm} from "@mantine/form";
 import {IconInfoSquare} from "@tabler/icons-react";
-import {createTrip} from "../../lib";
+import {createTrip, currentUser} from "../../lib";
 import {useNavigate} from "react-router-dom";
-import {CreateTripForm} from "../../types/trips.ts";
+import {CreateTripForm, NewTrip} from "../../types/trips.ts";
 import {EditTripBasicForm} from "../../components/trip/basic/EditTripBasicForm.tsx";
 import {basicInfoFormValidation} from "../../components/trip/basic/validation.ts";
+import {useTranslation} from "react-i18next";
 
 
 export const CreateNewTrip = () => {
 
   const navigate = useNavigate();
+  const {t} = useTranslation();
   const form = useForm<CreateTripForm>({
     mode: 'uncontrolled',
     initialValues: {
@@ -20,20 +22,35 @@ export const CreateNewTrip = () => {
       destinations: [],
       participants: []
     },
-
     validate: basicInfoFormValidation,
   });
 
 
   return (
     <Container py="xl">
-
       <Text size="xl" tt="uppercase" fw={700} mt="md" mb="md">
-        Start A New Trip
+        {t('trip.new','Start A New Trip')}
       </Text>
 
-      <form onSubmit={form.onSubmit((values) => {
-        createTrip(values as unknown as CreateTripForm).then(trip => {
+      <form onSubmit={form.onSubmit(async (values) => {
+
+        const user = await currentUser();
+        const {name, description, dateRange, participants, destinations} = values;
+        const data : NewTrip = {
+          "name": name,
+          "description": description,
+          "startDate": dateRange[0] || new Date(),
+          "endDate": dateRange[1] || new Date(),
+          "ownerId": user.id,
+          "participants": participants?.map(p => {
+            return {name: p};
+          }),
+          "destinations": destinations?.map(d => {
+            return {name: d};
+          })
+        };
+
+        createTrip(data).then(trip => {
           navigate(`/trips/${trip.id}`)
         })
       })}>

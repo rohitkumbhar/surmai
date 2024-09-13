@@ -1,16 +1,17 @@
 import {Button, Menu, rem} from '@mantine/core';
 import {IconBus, IconCar, IconChevronDown, IconPlane, IconShip, IconTrain,} from '@tabler/icons-react';
+import {useTranslation} from "react-i18next";
 
 
+export const AddTransportationMenu = ({setSelectedOption}: { setSelectedOption: (val: string) => void }) => {
 
-export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption: (val: string) => void}) => {
+  const {t} = useTranslation();
   return (
     <Menu
       transitionProps={{transition: 'pop-top-right'}}
       position="bottom-end"
       width={150}
       withinPortal
-
     >
       <Menu.Target>
         <Button
@@ -19,7 +20,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
           }
           pr={12}
         >
-          Add new
+          {t('transportation.add_new', 'Add new')}
         </Button>
       </Menu.Target>
       <Menu.Dropdown>
@@ -34,7 +35,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
             />
           }
         >
-          Flight
+          {t('transportation.flight', 'Flight')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -47,7 +48,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
             />
           }
         >
-          Bus
+          {t('transportation.bus', 'Bus')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -60,7 +61,8 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
             />
           }
         >
-          Car / Taxi
+          {t('transportation.car_taxi', 'Car / Taxi')}
+
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -73,7 +75,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
             />
           }
         >
-          Boat
+          {t('transportation.boat', 'Boat')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -86,7 +88,7 @@ export const AddTransportationMenu = ({setSelectedOption} : { setSelectedOption:
             />
           }
         >
-          Train
+          {t('transportation.train', 'Train')}
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

@@ -4,27 +4,26 @@ import {QueryObserverResult, RefetchOptions, Register} from "@tanstack/react-que
 import {useState} from "react";
 import {useForm} from "@mantine/form";
 import {EditTripBasicForm} from "./EditTripBasicForm.tsx";
-import {updateTrip} from "../../../lib";
-import {formatDate} from "../../../lib";
+import {formatDate, updateTrip} from "../../../lib";
 import {IconPhoto} from "@tabler/icons-react";
 import {basicInfoFormValidation} from "./validation.ts";
 import {useTranslation} from "react-i18next";
 
 const BasicInfoView = ({trip}: { trip: Trip }) => {
 
-  const {t} = useTranslation();
+  const {t, i18n} = useTranslation();
 
   return (<Stack gap={"md"}>
     <Title order={1}>{trip.name}</Title>
     <Title order={4} fw={400}> {trip.description}</Title>
-    <Text size={"sm"}>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</Text>
+    <Text size={"sm"}>{formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}</Text>
 
     <Divider/>
     <Text mt={"md"}>{t('basic.visiting', 'Visiting')}</Text>
     <Group>
       {(trip.destinations || []).map(destination => {
         return (
-          <Group wrap={"nowrap"} key={destination.toString()}>
+          <Group wrap={"nowrap"} key={destination.name}>
             <Paper shadow="sm" radius="sm" p="xl" bg={"var(--mantine-color-blue-0)"}>
               <IconPhoto/>
               <Text>{destination.name}</Text>
@@ -33,10 +32,10 @@ const BasicInfoView = ({trip}: { trip: Trip }) => {
       })}
     </Group>
     <Divider/>
-    <Text mt={"md"}>Going With</Text>
+    <Text mt={"md"}>{t('basic.with', 'Going With')}</Text>
     <Group>
       {(trip.participants || []).map(person => {
-        return (<Group wrap={"nowrap"} key={person.toString()}>
+        return (<Group wrap={"nowrap"} key={person.name}>
           <Avatar key={person.name} name={person.name} color="initials"/>
           <div>
             <Text fz="lg" fw={500}>
@@ -60,10 +59,11 @@ interface EditBasicViewProps {
 
 const EditBasicView = ({trip, refetch, onSave}: EditBasicViewProps) => {
 
+  const {t} = useTranslation()
   const initialValues: CreateTripForm = {
     name: trip.name,
     description: trip.description,
-    dateRange: [new Date(Date.parse(trip.startDate.toString())), new Date(Date.parse(trip.endDate.toString()))],
+    dateRange: [trip.startDate, trip.endDate],
     destinations: trip.destinations?.map(item => item.name),
     participants: trip.participants?.map(item => item.name)
   };
@@ -97,13 +97,11 @@ const EditBasicView = ({trip, refetch, onSave}: EditBasicViewProps) => {
       <EditTripBasicForm form={form}/>
       <Group justify={"flex-end"}>
         <Button mt="xl" type={"submit"}>
-          Save
+          {t('save', 'Save')}
         </Button>
       </Group>
     </form>
-
   )
-
 }
 
 export const BasicInfo = ({trip, refetch}: {
@@ -114,7 +112,7 @@ export const BasicInfo = ({trip, refetch}: {
 }) => {
 
   const [editMode, setEditMode] = useState<boolean>(false);
-
+  const {t} = useTranslation();
   return (
     <Container py={"xs"} size="lg">
       <Flex
@@ -125,9 +123,9 @@ export const BasicInfo = ({trip, refetch}: {
         direction="row"
         wrap="wrap"
       >
-        {!editMode && <Button variant="filled" onClick={() => setEditMode(true)}>Edit</Button>}
-        {editMode && <Button variant="filled" onClick={() => setEditMode(false)}>Cancel</Button>}
-        <Button variant="filled" bg={"red"}>Delete</Button>
+        {!editMode && <Button variant="filled" onClick={() => setEditMode(true)}>{t('edit', 'Edit')}</Button>}
+        {editMode && <Button variant="filled" onClick={() => setEditMode(false)}>{t('cancel', 'Cancel')}</Button>}
+        <Button variant="filled" bg={"red"}>{t('delete', 'Delete')}</Button>
       </Flex>
 
       {!editMode && <BasicInfoView trip={trip}/>}

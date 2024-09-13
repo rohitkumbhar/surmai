@@ -15,10 +15,12 @@ import {useNavigate} from "react-router-dom";
 import {formatDate, listTrips} from "../../lib";
 import {useQuery} from "@tanstack/react-query";
 import {Trip} from "../../types/trips.ts";
+import {useTranslation} from "react-i18next";
 
 export const MyTrips = () => {
 
   const navigate = useNavigate();
+  const {i18n} = useTranslation()
   const {isPending, isError, data, error} = useQuery<Trip[]>({
     queryKey: ['my_trips'],
     queryFn: listTrips,
@@ -28,7 +30,7 @@ export const MyTrips = () => {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{radius: "sm", blur: 2}}/>
   }
 
-  if(isError) {
+  if (isError) {
     throw new Error(error.message)
   }
 
@@ -45,7 +47,7 @@ export const MyTrips = () => {
           </ActionIcon>}
       </AspectRatio>
       <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
-        {formatDate(trip.startDate.toString())}
+        {formatDate(i18n.language, trip.startDate)}
       </Text>
       <Text className={classes.title} mt={5}>
         {trip.name}

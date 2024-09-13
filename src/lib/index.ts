@@ -1,4 +1,6 @@
-export {authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword, isAdmin} from './pocketbase/auth'
+export {
+  authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword, isAdmin
+} from './pocketbase/auth'
 export {
   getTrip,
   listTrips,
@@ -13,8 +15,8 @@ export {
 } from './pocketbase/trips'
 
 
-export const formatDate = (input: Date | string) => {
-  return new Date(Date.parse(input.toString())).toLocaleDateString('en-us', {
+export const formatDate = (locale: string, input: Date) => {
+  return input.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric'

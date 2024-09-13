@@ -7,10 +7,12 @@ import {Header} from "../../components/nav/Header.tsx";
 import {BasicInfo} from "../../components/trip/basic/BasicInfo.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {TransportationPanel} from "../../components/trip/transportation/TransportationPanel.tsx";
+import {useTranslation} from "react-i18next";
 
 export const ViewTrip = () => {
 
   const {tripId} = useParams();
+  const {t, i18n} = useTranslation()
   const {isPending, isError, data, error, refetch} = useQuery<Trip>({
     queryKey: ['trip', tripId],
     queryFn: () => getTrip(tripId || ''),
@@ -31,7 +33,7 @@ export const ViewTrip = () => {
         <Group>
           <Text size={"xl"} px={"md"}>{trip?.name}</Text>
           <Text size={"sm"}
-                c={"dimmed"}>{formatDate(trip.startDate)} - {formatDate(trip.endDate)}</Text>
+                c={"dimmed"}>{formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}</Text>
         </Group>
       </Header>
 
@@ -44,9 +46,9 @@ export const ViewTrip = () => {
           }>
             <Group wrap="nowrap">
               <div>
-                <Text>{"Basic Information"}</Text>
+                <Text>{t('basic.section_name', 'Basic Information')}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
-                  {"View basic information about your trip"}
+                  {t('basic.section_description', 'View basic information about your trip')}
                 </Text>
               </div>
             </Group>
@@ -64,15 +66,15 @@ export const ViewTrip = () => {
           }>
             <Group wrap="nowrap">
               <div>
-                <Text>{"Transportation"}</Text>
+                <Text>{t('transportation.section_name', 'Transportation')}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
-                  {"View and edit your transportation arrangements for this trip"}
+                  {t('transportation.section_description', 'View and edit your transportation arrangements for this trip')}
                 </Text>
               </div>
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <TransportationPanel trip={trip} />
+            <TransportationPanel trip={trip}/>
           </Accordion.Panel>
         </Accordion.Item>
 
@@ -84,21 +86,18 @@ export const ViewTrip = () => {
           }>
             <Group wrap="nowrap">
               <div>
-                <Text>{"Lodging"}</Text>
+                <Text>{t('lodging.section_name', 'Lodging')}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
-                  {"View and edit your lodging arrangements for this trip"}
+                  {t('lodging.section_description', 'View and edit your lodging arrangements for this trip')}
                 </Text>
               </div>
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <TransportationPanel trip={trip}/>
+            <p>Nothing to see yet</p>
           </Accordion.Panel>
         </Accordion.Item>
-
       </Accordion>
-
-
     </Container>
   )
 }

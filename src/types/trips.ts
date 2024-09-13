@@ -1,13 +1,28 @@
+export type Participant = {
+  name: string,
+  userId?: string,
+}
+
+export type Destination = {
+  name: string,
+  category?: string,
+}
+
 export type Trip = {
   id: string,
+  ownerId: string,
   name: string,
   description?: string,
-  startDate: Date | string,
-  endDate: Date | string,
+  startDate: Date,
+  endDate: Date,
   coverImage?: string
-  participants?: string[]
-  destinations?: string[]
+  participants?: Participant[]
+  destinations?: Destination[]
 }
+
+export type NewTrip = Omit<Trip, 'id'>
+// pocketbase returns date as string
+export type TripResponse = Omit<Trip, 'startDate' | 'endDate'> & { startDate: string, endDate: string }
 
 export type CreateTripForm = {
   name: string,
