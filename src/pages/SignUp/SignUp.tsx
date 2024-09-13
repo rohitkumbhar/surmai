@@ -39,7 +39,7 @@ export const SignUp = () => {
 
   return (<>
     <Container size={420} my={40}>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-color-blue-light)">
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
 
         <Text size="lg" ta="center" mt={5}>
           {t('create_account', 'Create An Account')}

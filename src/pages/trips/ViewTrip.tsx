@@ -50,7 +50,7 @@ export const ViewTrip = () => {
         <Accordion.Item value={"basic_info"} key={"basic_info"}>
           <Accordion.Control icon={
             <IconInfoSquare
-              style={{color: 'var(--mantine-color-blue-6', width: rem(40), height: rem(40)}}
+              style={{color: 'var(--mantine-primary-color-6', width: rem(40), height: rem(40)}}
             />
           }>
             <Group wrap="nowrap">
@@ -70,7 +70,7 @@ export const ViewTrip = () => {
         <Accordion.Item value={"transportation"} key={"transportation"}>
           <Accordion.Control icon={
             <IconPlane
-              style={{color: 'var(--mantine-color-blue-6', width: rem(40), height: rem(40)}}
+              style={{color: 'var(--mantine-primary-color-6', width: rem(40), height: rem(40)}}
             />
           }>
             <Group wrap="nowrap">
@@ -90,7 +90,7 @@ export const ViewTrip = () => {
         <Accordion.Item value={"lodging"} key={"lodging"}>
           <Accordion.Control icon={
             <IconBed
-              style={{color: 'var(--mantine-color-blue-6', width: rem(40), height: rem(40)}}
+              style={{color: 'var(--mantine-primary-color-6', width: rem(40), height: rem(40)}}
             />
           }>
             <Group wrap="nowrap">

@@ -21,19 +21,32 @@ import './lib/i18n'
 const theme = createTheme({
   fontFamily: 'Lato, Verdana, sans-serif',
   colors: {
-    deepBlue: [
-      '#eef3ff',
-      '#dce4f5',
-      '#b9c7e2',
-      '#94a8d0',
-      '#748dc1',
-      '#5f7cb8',
-      '#5474b4',
-      '#44639f',
-      '#39588f',
-      '#2d4b81',
+    salmon: [
+      "#f7f3f3",
+      "#e6e4e4",
+      "#cfc6c6",
+      "#b9a5a5",
+      "#a58988",
+      "#9b7776",
+      "#966d6d",
+      "#835d5d",
+      "#765252",
+      "#694545"
     ],
-  }
+    blueGray: [
+      "#f2f4f7",
+      "#e4e5e8",
+      "#c5c9d2",
+      "#a3abbc",
+      "#8792a9",
+      "#75829e",
+      "#6b7a99",
+      "#5b6886",
+      "#4f5c78",
+      "#41506c"
+    ]
+  },
+  primaryColor:'blueGray'
 });
 
 const pages = [

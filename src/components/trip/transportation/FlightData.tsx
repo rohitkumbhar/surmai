@@ -28,7 +28,7 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
         <Group pl={"xs"}>
           <Tooltip label={flight.metadata.airline}>
             <Avatar name={flight.metadata.airline} size={"lg"} color="initials"
-                    allowedInitialsColors={['blue', 'red']} radius={"9"}/>
+                     radius={"9"}/>
           </Tooltip>
         </Group>
         <Group justify="flex-start" p={"10px"} gap={"md"}>

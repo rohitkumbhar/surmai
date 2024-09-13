@@ -24,7 +24,7 @@ const BasicInfoView = ({trip}: { trip: Trip }) => {
       {(trip.destinations || []).map(destination => {
         return (
           <Group wrap={"nowrap"} key={destination.name}>
-            <Paper shadow="sm" radius="sm" p="xl" bg={"var(--mantine-color-blue-0)"}>
+            <Paper shadow="sm" radius="sm" p="xl" bg={"var(--mantine-primary-color-0)"}>
               <IconPhoto/>
               <Text>{destination.name}</Text>
             </Paper>

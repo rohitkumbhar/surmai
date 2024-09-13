@@ -42,7 +42,7 @@ export const MyTrips = () => {
       <AspectRatio ratio={1920 / 1080}>
         {trip.coverImage && <Image src={trip.coverImage}/>}
         {!trip.coverImage &&
-          <ActionIcon variant="subtle" bd={"solid 1px blue"} aria-label="Settings" style={{height: '100%'}}>
+          <ActionIcon variant="subtle" bd={"solid 1px var(--mantine-primary-color-filled)"} aria-label="Settings" style={{height: '100%'}}>
             <IconPhoto stroke={1.5}/>
           </ActionIcon>}
       </AspectRatio>

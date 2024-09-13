@@ -66,7 +66,7 @@ export const UserProfile = () => {
     return (
 
       <Container size={420} my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-color-blue-light)">
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
           {apiError &&
               <Notification withBorder color="red" title="Unable to sign in" onClose={() => setApiError(undefined)}>
                 {apiError}

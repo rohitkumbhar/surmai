@@ -1,7 +1,7 @@
 .root {
     padding-top: rem(80px);
     padding-bottom: rem(120px);
-    background-color: var(--mantine-color-blue-filled);
+    background-color: var(--mantine-primary-color-filled);
 }
 
 .label {
@@ -10,7 +10,7 @@
     font-size: rem(220px);
     line-height: 1;
     margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
-    color: var(--mantine-color-blue-3);
+    color: var(--mantine-primary-color-3);
 
     @media (max-width: $mantine-breakpoint-sm) {
         font-size: rem(120px);
@@ -36,5 +36,5 @@
     margin: auto;
     margin-top: var(--mantine-spacing-xl);
     margin-bottom: calc(var(--mantine-spacing-xl) * 1.5);
-    color: var(--mantine-color-blue-1);
+    color: var(--mantine-primary-color-1);
 }

@@ -41,7 +41,7 @@ export const SignIn = () => {
 
   return (<div className={classes.wrapper}>
     <Container size={420} my={40}>
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-color-blue-light)">
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
 
         <Text size="lg" ta="center" mt={5}>
           {t('sign_in', 'Sign In')}
