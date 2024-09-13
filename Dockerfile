@@ -14,7 +14,7 @@ COPY pocketbase/pb_migrations /pb_migrations
 COPY pocketbase/pb_hooks /pb_hooks
 COPY dist/assets /pb_public/assets/
 COPY dist/index.html /pb_public
-COPY translations /pb_public/locales
+COPY public /pb_public/
 EXPOSE 8080
 
 # start PocketBase
