@@ -1,11 +1,13 @@
-import {Button, Container, Notification, Paper, PasswordInput, Text, TextInput} from '@mantine/core';
+import {Button, Container, Notification, Paper, Text, TextInput} from '@mantine/core';
 import {useForm} from "@mantine/form";
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {createUserWithPassword} from "../../lib";
 import {useTranslation} from "react-i18next";
+import {FancyPasswordInput} from "../../components/account/FancyPasswordInput.tsx";
 
 export const SignUp = () => {
+
 
   const [apiError, setApiError] = useState<string>()
   const navigate = useNavigate()
@@ -16,8 +18,8 @@ export const SignUp = () => {
     password: string;
     confirmPassword?: string;
   }) => {
-    const {email, password, fullName, confirmPassword} = values;
-    createUserWithPassword({email, name: fullName, password, passwordConfirm: confirmPassword || ''})
+    const {email, password, fullName} = values;
+    createUserWithPassword({email, name: fullName, password, passwordConfirm: password || ''})
       .then(() => {
         navigate("/login")
       }).catch(err => setApiError(err.message))
@@ -29,16 +31,25 @@ export const SignUp = () => {
       email: '',
       fullName: '',
       password: '',
-      confirmPassword: ''
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-      confirmPassword: (value, values) => {
-        return values.password !== value ? "Passwords do not match" : null
-      }
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : t('account.invalid_email', 'Invalid email')),
     },
   });
+
+
+  // const strength = getStrength(form.getValues().password);
+  // const color = strength === 100 ? 'teal' : strength > 50 ? 'yellow' : 'red';
+  //
+  // const checks = passwordRequirements.map((requirement, index) => (
+  //   <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(currentPasswordValue)}/>
+  // ));
+
+  // form.watch('password', ({ previousValue, value, touched, dirty }) => {
+  //   setCurrentPasswordValue(value)
+  // })
+
 
   return (<>
     <Container size={420} my={40}>
@@ -59,10 +70,11 @@ export const SignUp = () => {
                      key={form.key('fullName')} {...form.getInputProps('fullName')}/>
           <TextInput label={t('email', 'Email')} placeholder="you@domain.com" mt={"md"} required
                      key={form.key('email')} {...form.getInputProps('email')}/>
-          <PasswordInput label={t('password', 'Password')} required mt="md"
-                         key={form.key('password')} {...form.getInputProps('password')}/>
-          <PasswordInput label={t('confirm_password', "Confirm Password")} required mt="md"
-                         key={form.key('confirmPassword')} {...form.getInputProps('confirmPassword')}/>
+
+          {// @ts-expect-error rest props
+            <FancyPasswordInput fieldName={'password'} form={form} withAsterisk={true} label={t('password', 'Password')}
+                                required mt="md"/>
+          }
 
           <Button fullWidth mt="xl" type={"submit"}>
             {t('create_account', 'Create An Account')}

@@ -14,6 +14,10 @@
   "create_account": "Create An Account",
   "account_creation_failed": "Unable to create an account",
   "name": "Name",
+  "account": {
+    "password_includes_8_chars": "Includes at least 8 characters",
+    "invalid_email": "Invalid Email"
+  },
   "trip": {
     "new": "Start A New Trip"
   },
