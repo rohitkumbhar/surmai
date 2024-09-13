@@ -1,10 +1,10 @@
 migrate((db) => {
 
-  const adminEmail = process.env.TRVLG_ADMIN_EMAIL
-  const adminPassword = process.env.TRVLG_ADMIN_PASSWORD
+  const adminEmail = process.env.SURMAI_ADMIN_EMAIL
+  const adminPassword = process.env.SURMAI_ADMIN_PASSWORD
 
   if (!adminEmail || !adminPassword) {
-    const errorMessage = "Admin email and password are required. Please set the environment variables TRVLG_ADMIN_EMAIL and TRVLG_ADMIN_PASSWORD";
+    const errorMessage = "Admin email and password are required. Please set the environment variables SURMAI_ADMIN_EMAIL and SURMAI_ADMIN_PASSWORD";
     console.log(errorMessage)
     throw new Error(errorMessage)
   }
