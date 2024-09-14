@@ -1,5 +1,5 @@
 import {pb} from "./pocketbase.ts";
-import {NewTrip, Transportation, Trip, TripResponse} from "../../types/trips.ts";
+import {CreateTransportation, NewTrip, Transportation, Trip, TripResponse} from "../../types/trips.ts";
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
@@ -72,6 +72,10 @@ export const addFlight = (tripId: string, data: { [key: string]: any }): Promise
       confirmationCode: data.confirmationCode
     })
   }
+  return pb.collection('transportations').create(payload);
+}
+
+export const createTransportationEntry = (payload: CreateTransportation) => {
   return pb.collection('transportations').create(payload);
 }
 

@@ -33,7 +33,8 @@
     "add_new": "Add new",
     "flight":"Flight",
     "bus": "Bus",
-    "car_taxi": "Car / Taxi",
+    "car_taxi": "Taxi",
+    "rental_car": "Car Rental",
     "boat": "Boat",
     "train": "Train",
     "flight_number": "Flight #",
@@ -45,7 +46,16 @@
     "arrival_time": "Arrival Time",
     "airline": "Airline",
     "attachments_desc": "Upload any related documents for this flight e.g. confirmation email",
-    "save_flight": "Save Flight"
+    "save_flight": "Save Flight",
+    "add_rental_car": "Add Rental Car",
+    "rental_company": "Rental Company",
+    "pickup_time": "Pickup Time",
+    "dropOff_time": "Drop-off Time",
+    "pickup_location": "Pickup Location",
+    "dropOff_location": "DropOff Location",
+    "save_rental_car": "Save Rental Information",
+    "pickup": "Pickup",
+    "drop_off": "Drop Off"
   },
   "lodging": {
     "section_name": "Lodging",

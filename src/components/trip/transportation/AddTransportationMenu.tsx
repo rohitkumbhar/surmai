@@ -52,7 +52,7 @@ export const AddTransportationMenu = ({setSelectedOption}: { setSelectedOption: 
         </Menu.Item>
         <Menu.Item
           onClick={() => {
-            setSelectedOption('car')
+            setSelectedOption('rental_car')
           }}
           leftSection={
             <IconCar
@@ -61,7 +61,21 @@ export const AddTransportationMenu = ({setSelectedOption}: { setSelectedOption: 
             />
           }
         >
-          {t('transportation.car_taxi', 'Car / Taxi')}
+          {t('transportation.rental_car', 'Car Rental')}
+
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => {
+            setSelectedOption('taxi')
+          }}
+          leftSection={
+            <IconCar
+              style={{width: rem(16), height: rem(16)}}
+              stroke={1.5}
+            />
+          }
+        >
+          {t('transportation.car_taxi', 'Taxi')}
 
         </Menu.Item>
         <Menu.Item

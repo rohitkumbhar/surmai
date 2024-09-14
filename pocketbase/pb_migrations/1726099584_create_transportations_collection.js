@@ -17,7 +17,8 @@ migrate((db) => {
                     "maxSelect": 1,
                     "values": [
                         "flight",
-                        "car",
+                        "rental_car",
+                        "taxi",
                         "bus",
                         "boat",
                         "train"

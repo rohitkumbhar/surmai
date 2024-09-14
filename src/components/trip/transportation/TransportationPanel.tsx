@@ -6,6 +6,8 @@ import {AddFlightForm} from "./AddFlightForm.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {listTransportations} from "../../../lib";
 import {FlightData} from "./FlightData.tsx";
+import {CarRentalForm} from "./CarRentalForm.tsx";
+import {CarRentalData} from "./CarRentalData.tsx";
 
 
 export const TransportationPanel = ({trip}: {
@@ -48,10 +50,16 @@ export const TransportationPanel = ({trip}: {
         refetch()
       }}/>}
 
+      {newOption === 'rental_car' && <CarRentalForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {
+        setNewOption(undefined)
+        refetch()
+      }}/>}
+
       <Stack mt={"sm"}>
         {data.map((t: Transportation) => {
           return (<Fragment key={t.id}>
             {t.type === "flight" && <FlightData refetch={refetch} trip={trip} flight={t}/>}
+            {t.type === "rental_car" && <CarRentalData refetch={refetch} trip={trip} rental={t}/>}
           </Fragment>)
         })}
       </Stack>

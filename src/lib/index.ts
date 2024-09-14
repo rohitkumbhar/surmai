@@ -11,7 +11,8 @@ export {
   deleteTransportation,
   deleteTransportationAttachment,
   listTransportations,
-  updateTrip
+  updateTrip,
+  createTransportationEntry
 } from './pocketbase/trips'
 
 

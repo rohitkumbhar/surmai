@@ -46,5 +46,18 @@ export type Transportation = {
   arrivalTime: Date,
   trip: string,
   metadata: { [key: string]: any }
-  attachments: string[]
+  attachments?: string[]
+}
+
+export type CreateTransportation = Omit<Transportation, 'id'>;
+
+export type CarRentalFormSchema = {
+  rentalCompany?: string,
+  pickupLocation?: string,
+  dropOffLocation?: string,
+  pickupTime?: Date,
+  dropOffTime?: Date,
+  confirmationCode?: string,
+  cost?: string,
+  currencyCode: string,
 }
