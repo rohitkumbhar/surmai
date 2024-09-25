@@ -1,29 +1,23 @@
 import {Transportation, Trip} from "../../../types/trips.ts";
-import {
-  ActionIcon,
-  Anchor,
-  Avatar,
-  Badge,
-  CloseButton,
-  Group,
-  Paper,
-  rem,
-  Stack,
-  Text,
-  Title,
-  Tooltip
-} from "@mantine/core";
-import {IconCarSuv, IconChevronsRight, IconTrash} from "@tabler/icons-react";
-import {deleteTransportation, deleteTransportationAttachment, getAttachmentUrl} from "../../../lib";
+import {Avatar, Group, rem, Stack, Text, Title, Tooltip} from "@mantine/core";
+import {IconCarSuv, IconChevronsRight} from "@tabler/icons-react";
+import {deleteTransportation} from "../../../lib";
 import {formatDate, formatTime} from "./util.ts";
 import {useTranslation} from "react-i18next";
+import {Attachments} from "./Attachments.tsx";
+import {DataLine} from "../DataLine.tsx";
 
 export const CarRentalData = ({rental, refetch}: { trip: Trip, rental: Transportation, refetch: () => void }) => {
 
   const {t, i18n} = useTranslation()
 
   return (
-    <Paper withBorder>
+    <DataLine onDelete={() => {
+      deleteTransportation(rental.id).then(() => {
+        refetch()
+      })
+    }}>
+
       <Group>
         <Group pl={"xs"}>
           <Tooltip label={rental.metadata.rentalCompany}>
@@ -74,49 +68,11 @@ export const CarRentalData = ({rental, refetch}: { trip: Trip, rental: Transport
           <Text fw={400} c={"dimmed"}>{t('cost', 'Cost')}</Text>
           <Text tt="uppercase">{`${rental.cost.value} ${rental.cost.currency || ''}`}</Text>
         </Stack>
-
-        {/*<Group>
-          <ActionIcon variant={"transparent"} c={"red"} size="1.4rem" onClick={() => {
-            deleteTransportation(rental.id).then(() => {
-              refetch()
-            })
-          }}>
-            <IconTrash/>
-          </ActionIcon>
-        </Group>*/}
-
       </Group>
+
       <Group>
-
-        {rental.attachments && rental.attachments.length > 0 && <Group p={"sm"}>
-          {(rental.attachments || []).map(attachmentName => {
-            return (
-              <Anchor href={getAttachmentUrl(rental, attachmentName)} target={"_blank"} key={attachmentName}>
-                <Badge variant={"transparent"} size={"lg"} bd={"1px solid #ccc"} radius={0}
-                       rightSection={<CloseButton onClick={(event) => {
-                         event.preventDefault()
-                         deleteTransportationAttachment(rental.id, attachmentName).then(() => {
-                           refetch()
-                         })
-                       }}/>}>{attachmentName}</Badge>
-              </Anchor>
-            )
-          })}
-        </Group>}
-
-        <Group align={"flex-end"}>
-          <ActionIcon variant={"transparent"} c={"red"} size="1.4rem" onClick={() => {
-            deleteTransportation(rental.id).then(() => {
-              refetch()
-            })
-          }}>
-            <IconTrash/>
-          </ActionIcon>
-        </Group>
-
+        <Attachments transportation={rental} refetch={refetch}/>
       </Group>
-
-
-    </Paper>
+    </DataLine>
   )
 }

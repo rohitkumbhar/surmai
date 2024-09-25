@@ -1,52 +1,91 @@
 import {Button, FileButton, Group, rem, Stack, Text, TextInput, Title} from "@mantine/core";
 import {DateTimePicker} from "@mantine/dates";
-import {Transportation, Trip} from "../../../types/trips.ts";
+import {CreateTransportation, Transportation, Trip} from "../../../types/trips.ts";
 import {useForm} from "@mantine/form";
 import {CurrencyInput} from "../../util/CurrencyInput.tsx";
-import {addFlight, saveTransportationAttachments} from "../../../lib";
+import {createTransportationEntry, saveTransportationAttachments} from "../../../lib";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
+import {ContextModalProps} from "@mantine/modals";
+import {updateTransportation} from "../../../lib/pocketbase/trips.ts";
 
-export const AddFlightForm = ({trip, onSuccess, onCancel}: {
+export const FlightForm = ({context, id, innerProps}: ContextModalProps<{
   trip: Trip,
+  flight?: Transportation,
   onSuccess: () => void,
   onCancel: () => void
-}) => {
+}>) => {
+
+  const {trip, flight, onSuccess, onCancel} = innerProps;
   const {t} = useTranslation()
   const [files, setFiles] = useState<File[]>([]);
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
-      origin: undefined,
-      departureTime: undefined,
-      destination: undefined,
-      arrivalTime: undefined,
-      airline: undefined,
-      flightNumber: undefined,
-      confirmationCode: undefined,
-      cost: undefined,
-      currencyCode: 'USD'
+      origin: flight?.origin,
+      departureTime: flight?.departureTime,
+      destination: flight?.destination,
+      arrivalTime: flight?.arrivalTime,
+      airline: flight?.metadata?.airline,
+      flightNumber: flight?.metadata?.flightNumber,
+      confirmationCode: flight?.metadata?.confirmationCode,
+      cost: flight?.cost?.value,
+      currencyCode: flight?.cost?.currency || 'USD'
     },
     validate: {},
   })
 
   // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
-    addFlight(trip.id, values).then((result: Transportation) => {
+    const payload: CreateTransportation = {
+      type: 'flight',
+      origin: values.origin,
+      destination: values.destination,
+      cost: {
+        value: values.cost,
+        currency: values.currencyCode
+      },
+      departureTime: values.departureTime?.toISOString(),
+      arrivalTime: values.arrivalTime?.toISOString(),
+      trip: trip.id,
+      metadata: {
+        airline: values.airline,
+        flightNumber: values.flightNumber,
+        confirmationCode: values.confirmationCode
+      }
+    }
+
+    if (flight?.id) {
+      // Update an existing flight
+      updateTransportation(flight.id, payload).then((result) => {
         if (files.length > 0) {
           saveTransportationAttachments(result.id, files).then(() => {
             onSuccess()
-          });
+          })
         } else {
-          onSuccess();
+          onSuccess()
         }
-      }
-    )
+      }).finally(() => {
+        context.closeModal(id)
+      })
+    } else {
+      createTransportationEntry(payload).then((result: Transportation) => {
+          if (files.length > 0) {
+            saveTransportationAttachments(result.id, files).then(() => {
+              context.closeModal(id)
+              onSuccess()
+            });
+          } else {
+            context.closeModal(id)
+            onSuccess();
+          }
+        }
+      )
+    }
   }
 
   return (
     <Stack>
-      <Title order={4}>{t('add_new_flight', 'Add new flight')}</Title>
       <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
         <Stack>
           <Group>
@@ -98,16 +137,29 @@ export const AddFlightForm = ({trip, onSuccess, onCancel}: {
                             accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp"
                             form={"files"} name={"files"}
                             multiple>
-                  {(props) => <Button {...props}>{t('upload','Upload')}</Button>}
+                  {(props) => {
+                    if (flight?.id) {
+                      return (<Stack>
+                        <Text
+                          size={"xs"}>{`${flight.attachments ? flight.attachments.length : 0} existing files`}</Text>
+                        <Button {...props}>{t('upload_more', 'Upload More')}</Button>
+                      </Stack>)
+                    } else {
+                      return (<Button {...props}>{t('upload', 'Upload')}</Button>)
+                    }
+                  }}
                 </FileButton>
               </Group>
             </Stack>
           </Group>
           <Group justify={"flex-end"}>
             <Button type={"submit"} w={"min-content"}>
-              {t('transportation.save_flight','Save Flight')}
+              {t('transportation.save_flight', 'Save Flight')}
             </Button>
-            <Button type={"button"} variant={"default"} w={"min-content"} onClick={onCancel}>
+            <Button type={"button"} variant={"default"} w={"min-content"} onClick={() => {
+              context.closeModal(id)
+              onCancel()
+            }}>
               {t('cancel', "Cancel")}
             </Button>
           </Group>

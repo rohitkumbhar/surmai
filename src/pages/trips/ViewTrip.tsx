@@ -46,7 +46,7 @@ export const ViewTrip = () => {
         </Group>
       </Header>
 
-      <Accordion chevronPosition="right" variant="separated">
+      <Accordion chevronPosition="right" variant="separated" multiple={true}>
         <Accordion.Item value={"basic_info"} key={"basic_info"}>
           <Accordion.Control icon={
             <IconInfoSquare

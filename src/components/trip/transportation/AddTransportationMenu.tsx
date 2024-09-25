@@ -1,11 +1,18 @@
 import {Button, Menu, rem} from '@mantine/core';
 import {IconBus, IconCar, IconChevronDown, IconPlane, IconShip, IconTrain,} from '@tabler/icons-react';
 import {useTranslation} from "react-i18next";
+import {closeModal, openContextModal} from '@mantine/modals';
+import {Trip} from "../../../types/trips.ts";
+import {useMediaQuery} from "@mantine/hooks";
 
-
-export const AddTransportationMenu = ({setSelectedOption}: { setSelectedOption: (val: string) => void }) => {
+export const AddTransportationMenu = ({trip, refetch, setSelectedOption}: {
+  trip: Trip,
+  refetch: () => void,
+  setSelectedOption: (val: string | undefined) => void
+}) => {
 
   const {t} = useTranslation();
+  const isMobile = useMediaQuery('(max-width: 50em)');
   return (
     <Menu
       transitionProps={{transition: 'pop-top-right'}}
@@ -26,7 +33,25 @@ export const AddTransportationMenu = ({setSelectedOption}: { setSelectedOption: 
       <Menu.Dropdown>
         <Menu.Item
           onClick={() => {
-            setSelectedOption('flight')
+            openContextModal({
+              modal: 'addFlightForm',
+              title: t('transportation.add_new_flight','Add New Flight'),
+              radius: 'md',
+              withCloseButton: false,
+              fullScreen: isMobile,
+              innerProps: {
+                trip: trip,
+                onSuccess: () => {
+                  closeModal('addFlightForm')
+                  setSelectedOption(undefined)
+                  refetch()
+                },
+                onCancel: () => {
+                  closeModal('addFlightForm')
+                  setSelectedOption(undefined)
+                }
+              },
+            });
           }}
           leftSection={
             <IconPlane

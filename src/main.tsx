@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import {SecureRoute} from "./auth/SecureRoute.tsx";
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 
 import {createTheme, MantineProvider} from '@mantine/core';
 import {SignIn} from "./pages/SignIn/SignIn.tsx";
@@ -17,6 +18,9 @@ import {ViewTrip} from "./pages/trips/ViewTrip.tsx";
 import {TripsContainer} from "./pages/trips/TripsContainer.tsx";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import './lib/i18n'
+import {ModalsProvider} from "@mantine/modals";
+import {FlightForm} from "./components/trip/transportation/FlightForm.tsx";
+import {Notifications} from "@mantine/notifications";
 
 const theme = createTheme({
   fontFamily: 'Lato, Verdana, sans-serif',
@@ -46,7 +50,7 @@ const theme = createTheme({
       "#41506c"
     ]
   },
-  primaryColor:'blueGray'
+  primaryColor: 'blueGray'
 });
 
 const pages = [
@@ -90,11 +94,24 @@ const router = createBrowserRouter([
 
 const queryClient = new QueryClient()
 
+const modals = {
+  addFlightForm: FlightForm
+}
+
+declare module '@mantine/modals' {
+  export interface MantineModalsOverride {
+    modals: typeof modals;
+  }
+}
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <RouterProvider router={router}/>
+        <Notifications />
+        <ModalsProvider modals={modals}>
+          <RouterProvider router={router}/>
+        </ModalsProvider>
       </MantineProvider>
     </QueryClientProvider>
   </React.StrictMode>,

@@ -75,7 +75,13 @@ export const addFlight = (tripId: string, data: { [key: string]: any }): Promise
   return pb.collection('transportations').create(payload);
 }
 
-export const createTransportationEntry = (payload: CreateTransportation) => {
+
+export const updateTransportation = (transportationId: string, data: CreateTransportation): Promise<Transportation> => {
+  return pb.collection('transportations').update(transportationId, data);
+}
+
+
+export const createTransportationEntry = (payload: CreateTransportation): Promise<Transportation> => {
   return pb.collection('transportations').create(payload);
 }
 

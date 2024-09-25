@@ -1,34 +1,57 @@
 import {Transportation, Trip} from "../../../types/trips.ts";
-import {
-  ActionIcon,
-  Anchor,
-  Avatar,
-  Badge,
-  CloseButton,
-  Group,
-  Paper,
-  rem,
-  Stack,
-  Text,
-  Title,
-  Tooltip
-} from "@mantine/core";
-import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture, IconTrash} from "@tabler/icons-react";
-import {deleteTransportation, deleteTransportationAttachment, getAttachmentUrl} from "../../../lib";
+import {Avatar, Group, rem, Stack, Text, Title, Tooltip} from "@mantine/core";
+import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture} from "@tabler/icons-react";
+import {deleteTransportation} from "../../../lib";
 import {formatDate, formatTime} from "./util.ts";
 import {useTranslation} from "react-i18next";
+import {Attachments} from "./Attachments.tsx";
+import {DataLine} from "../DataLine.tsx";
+import {closeModal, openContextModal} from "@mantine/modals";
+import {useMediaQuery} from "@mantine/hooks";
+import {notifications} from "@mantine/notifications";
 
-export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportation, refetch: () => void }) => {
+export const FlightData = ({trip, flight, refetch}: { trip: Trip, flight: Transportation, refetch: () => void }) => {
 
-  const { t, i18n } = useTranslation()
+  const {t, i18n} = useTranslation()
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
-    <Paper withBorder>
+    <DataLine
+      onEdit={() => {
+        openContextModal({
+          modal: 'addFlightForm',
+          title: t('transportation.edit_flight', 'Edit Flight'),
+          radius: 'md',
+          withCloseButton: false,
+          fullScreen: isMobile,
+          innerProps: {
+            trip: trip,
+            flight: flight,
+            onSuccess: () => {
+              closeModal('addFlightForm')
+              refetch()
+            },
+            onCancel: () => {
+              closeModal('addFlightForm')
+            }
+          },
+        });
+      }}
+      onDelete={() => {
+        deleteTransportation(flight.id).then(() => {
+          notifications.show({
+            title: 'Flight deleted',
+            message: `Flight from ${flight.origin} to ${flight.destination} has been deleted`,
+            position: 'top-right'
+          })
+          refetch()
+        })
+      }}>
       <Group>
         <Group pl={"xs"}>
           <Tooltip label={flight.metadata.airline}>
             <Avatar name={flight.metadata.airline} size={"lg"} color="initials"
-                     radius={"9"}/>
+                    radius={"9"}/>
           </Tooltip>
         </Group>
         <Group justify="flex-start" p={"10px"} gap={"md"}>
@@ -37,10 +60,10 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
             <Title size="md" fw={400}>
               {flight.origin}
               <Text size="xs" c={"dimmed"}>
-                {formatDate(i18n.language,flight.departureTime)}
+                {formatDate(i18n.language, flight.departureTime)}
               </Text>
               <Text size="xs" c={"dimmed"}>
-                {formatTime(i18n.language,flight.departureTime)}
+                {formatTime(i18n.language, flight.departureTime)}
               </Text>
             </Title>
           </Group>
@@ -50,7 +73,7 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
             <Title size="md" fw={400}>
               {flight.destination}
               <Text size="xs" c={"dimmed"}>
-                {formatDate(i18n.language,flight.arrivalTime)}
+                {formatDate(i18n.language, flight.arrivalTime)}
               </Text>
               <Text size="xs" c={"dimmed"}>
                 {formatTime(i18n.language, flight.arrivalTime)}
@@ -60,7 +83,7 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
         </Group>
 
         <Stack gap={"1"} pl={"md"} miw={rem(90)}>
-          <Text fw={400} c={"dimmed"}>{t('transportation.flight_number','Flight #')}</Text>
+          <Text fw={400} c={"dimmed"}>{t('transportation.flight_number', 'Flight #')}</Text>
           <Text tt="uppercase">{flight.metadata.flightNumber}</Text>
         </Stack>
 
@@ -70,36 +93,12 @@ export const FlightData = ({flight, refetch}: { trip: Trip, flight: Transportati
         </Stack>
 
         <Stack gap={"1"} pl={"md"} miw={rem(200)}>
-          <Text fw={400} c={"dimmed"}>{t('cost','Cost')}</Text>
+          <Text fw={400} c={"dimmed"}>{t('cost', 'Cost')}</Text>
           <Text tt="uppercase">{`${flight.cost.value} ${flight.cost.currency || ''}`}</Text>
         </Stack>
 
-        <Group>
-          <ActionIcon variant={"transparent"} c={"red"} size="1.4rem" onClick={() => {
-            deleteTransportation(flight.id).then(() => {
-              refetch()
-            })
-          }}>
-            <IconTrash/>
-          </ActionIcon>
-        </Group>
-
       </Group>
-      {flight.attachments?.length > 0 && <Group p={"sm"}>
-        {(flight.attachments || []).map(attachmentName => {
-          return (
-            <Anchor href={getAttachmentUrl(flight, attachmentName)} target={"_blank"} key={attachmentName}>
-              <Badge variant={"transparent"} size={"lg"} bd={"1px solid #ccc"} radius={0}
-                     rightSection={<CloseButton onClick={(event) => {
-                       event.preventDefault()
-                       deleteTransportationAttachment(flight.id, attachmentName).then(() => {
-                         refetch()
-                       })
-                     }}/>}>{attachmentName}</Badge>
-            </Anchor>
-          )
-        })}
-      </Group>}
-    </Paper>
+      <Attachments transportation={flight} refetch={refetch}/>
+    </DataLine>
   )
 }

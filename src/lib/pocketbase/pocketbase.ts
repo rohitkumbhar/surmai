@@ -1,7 +1,7 @@
 import PocketBase, {LocalAuthStore} from 'pocketbase'
 
-
-const pocketBaseUrl: string = import.meta.env.VITE_POCKETBASE_ENDPOINT || window.location.href
+const isProd = import.meta.env.PROD
+const pocketBaseUrl: string = isProd ? window.location.href : import.meta.env.VITE_POCKETBASE_ENDPOINT
 
 export const pocketBaseClients = {
   user: new PocketBase(pocketBaseUrl, new LocalAuthStore("pb_user")),

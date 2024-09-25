@@ -2,7 +2,6 @@ import {Container, Flex, LoadingOverlay, Stack} from "@mantine/core";
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {AddTransportationMenu} from "./AddTransportationMenu.tsx";
 import {Fragment, useState} from "react";
-import {AddFlightForm} from "./AddFlightForm.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {listTransportations} from "../../../lib";
 import {FlightData} from "./FlightData.tsx";
@@ -40,20 +39,21 @@ export const TransportationPanel = ({trip}: {
         direction="row"
         wrap="wrap"
       >
-        {!newOption && <AddTransportationMenu setSelectedOption={(val) => {
+        {!newOption && <AddTransportationMenu trip={trip} refetch={refetch} setSelectedOption={(val) => {
           setNewOption(val)
         }}/>}
       </Flex>
 
-      {newOption === 'flight' && <AddFlightForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {
-        setNewOption(undefined)
-        refetch()
-      }}/>}
+      {/*{newOption === 'flight' && <AddFlightForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {*/}
+      {/*  setNewOption(undefined)*/}
+      {/*  refetch()*/}
+      {/*}}/>}*/}
 
-      {newOption === 'rental_car' && <CarRentalForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {
-        setNewOption(undefined)
-        refetch()
-      }}/>}
+      {newOption === 'rental_car' &&
+        <CarRentalForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {
+          setNewOption(undefined)
+          refetch()
+        }}/>}
 
       <Stack mt={"sm"}>
         {data.map((t: Transportation) => {
