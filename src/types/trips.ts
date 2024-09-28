@@ -33,15 +33,17 @@ export type CreateTripForm = {
   destinations?: string[]
 }
 
+export type Cost = {
+  value: number,
+  currency: string
+};
+
 export type Transportation = {
   id: string,
   type: string,
   origin: string,
   destination: string,
-  cost: {
-    value: number,
-    currency: string
-  },
+  cost: Cost,
   departureTime: Date,
   arrivalTime: Date,
   trip: string,
@@ -58,6 +60,17 @@ export type CarRentalFormSchema = {
   pickupTime?: Date,
   dropOffTime?: Date,
   confirmationCode?: string,
-  cost?: string,
+  cost?: number,
+  currencyCode: string,
+}
+
+export type TransportationFormSchema = {
+  provider?: string,
+  origin?: string,
+  destination?: string,
+  departureTime?: Date,
+  arrivalTime?: Date,
+  reservation?: string,
+  cost?: number,
   currencyCode: string,
 }

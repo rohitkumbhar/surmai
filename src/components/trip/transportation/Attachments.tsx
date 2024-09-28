@@ -1,5 +1,5 @@
 import {Transportation} from "../../../types/trips.ts";
-import {Anchor, Badge, CloseButton, Group, Text} from "@mantine/core";
+import {Anchor, Badge, CloseButton, Divider, Group, Text} from "@mantine/core";
 import {deleteTransportationAttachment, getAttachmentUrl} from "../../../lib";
 import {IconFile} from "@tabler/icons-react";
 import {useTranslation} from "react-i18next";
@@ -12,11 +12,13 @@ export const Attachments = ({transportation, refetch}: { transportation: Transpo
 
   return (
     <>
+      <Divider />
       {transportation.attachments && transportation.attachments.length > 0 && <Group p={"sm"}>
+
         {(transportation.attachments || []).map((attachmentName: string) => {
           return (
             <Anchor href={getAttachmentUrl(transportation, attachmentName)} target={"_blank"} key={attachmentName}>
-              <Badge variant={"transparent"} size={"xl"} bd={"1px solid #ccc"} radius={0}
+              <Badge variant={"transparent"} size={"lg"}  radius={0}
                      leftSection={<IconFile/>}
                      rightSection={<CloseButton
                        title={t('delete_attachment', 'Delete Attachment')}

@@ -1,20 +1,20 @@
-import {Container, Flex, LoadingOverlay, Stack} from "@mantine/core";
+import {Container, Flex, LoadingOverlay, Stack, Title} from "@mantine/core";
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {AddTransportationMenu} from "./AddTransportationMenu.tsx";
-import {Fragment, useState} from "react";
+import {Fragment} from "react";
 import {useQuery} from "@tanstack/react-query";
 import {listTransportations} from "../../../lib";
-import {FlightData} from "./FlightData.tsx";
-import {CarRentalForm} from "./CarRentalForm.tsx";
 import {CarRentalData} from "./CarRentalData.tsx";
+import {GenericTransportationData} from "./GenericTransportationData.tsx";
+import {useTranslation} from "react-i18next";
 
 
 export const TransportationPanel = ({trip}: {
   trip: Trip,
 }) => {
 
+  const {t} = useTranslation()
   const tripId = trip.id
-  const [newOption, setNewOption] = useState<string>()
   const {isPending, isError, data, error, refetch} = useQuery<Transportation[]>({
     queryKey: ['listTransportations', tripId],
     queryFn: () => listTransportations(tripId || ''),
@@ -39,29 +39,30 @@ export const TransportationPanel = ({trip}: {
         direction="row"
         wrap="wrap"
       >
-        {!newOption && <AddTransportationMenu trip={trip} refetch={refetch} setSelectedOption={(val) => {
-          setNewOption(val)
-        }}/>}
+        <AddTransportationMenu trip={trip} refetch={refetch} />
       </Flex>
-
-      {/*{newOption === 'flight' && <AddFlightForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {*/}
-      {/*  setNewOption(undefined)*/}
-      {/*  refetch()*/}
-      {/*}}/>}*/}
-
-      {newOption === 'rental_car' &&
-        <CarRentalForm trip={trip} onCancel={() => setNewOption(undefined)} onSuccess={() => {
-          setNewOption(undefined)
-          refetch()
-        }}/>}
-
       <Stack mt={"sm"}>
-        {data.map((t: Transportation) => {
+        <Title order={5}>{t('transportation.travel_timeline','Travel Timeline')}</Title>
+        {data.filter(t => t.type !== 'rental_car').map((t: Transportation) => {
           return (<Fragment key={t.id}>
-            {t.type === "flight" && <FlightData refetch={refetch} trip={trip} flight={t}/>}
+            {t.type === "flight" && <GenericTransportationData refetch={refetch} trip={trip} transportation={t}/>}
             {t.type === "rental_car" && <CarRentalData refetch={refetch} trip={trip} rental={t}/>}
+            {t.type === "bus" && <GenericTransportationData refetch={refetch} trip={trip} transportation={t}/>}
+            {t.type === "boat" && <GenericTransportationData refetch={refetch} trip={trip} transportation={t}/>}
+            {t.type === "train" && <GenericTransportationData refetch={refetch} trip={trip} transportation={t}/>}
+            {t.type === "car" && <GenericTransportationData refetch={refetch} trip={trip} transportation={t}/>}
           </Fragment>)
         })}
       </Stack>
+
+      <Stack mt={"sm"}>
+        <Title order={5}>{t('transportation.travel_rentals','Rentals')}</Title>
+        {data.filter(t => t.type === 'rental_car').map((t: Transportation) => {
+          return (<Fragment key={t.id}>
+            <CarRentalData refetch={refetch} trip={trip} rental={t}/>
+          </Fragment>)
+        })}
+      </Stack>
+
     </Container>)
 }

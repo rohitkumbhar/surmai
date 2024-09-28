@@ -1,30 +1,35 @@
 import {Button, FileButton, Group, rem, Stack, Text, TextInput, Title} from "@mantine/core";
 import {DateTimePicker} from "@mantine/dates";
-import {CarRentalFormSchema, CreateTransportation, Trip} from "../../../types/trips.ts";
+import {CarRentalFormSchema, CreateTransportation, Transportation, Trip} from "../../../types/trips.ts";
 import {useForm} from "@mantine/form";
 import {CurrencyInput} from "../../util/CurrencyInput.tsx";
 import {useState} from "react";
 import {useTranslation} from "react-i18next";
 import {createTransportationEntry, saveTransportationAttachments} from "../../../lib";
+import {ContextModalProps} from "@mantine/modals";
+import {updateTransportation} from "../../../lib/pocketbase/trips.ts";
 
-export const CarRentalForm = ({trip, onSuccess, onCancel}: {
+export const CarRentalForm = ({context, id, innerProps}: ContextModalProps<{
   trip: Trip,
+  carRental?: Transportation,
   onSuccess: () => void,
   onCancel: () => void
-}) => {
+}>) => {
+
+  const {trip, carRental, onSuccess, onCancel} = innerProps
   const {t} = useTranslation()
   const [files, setFiles] = useState<File[]>([]);
   const form = useForm<CarRentalFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
-      rentalCompany: undefined,
-      pickupLocation: undefined,
-      dropOffLocation: undefined,
-      pickupTime: undefined,
-      dropOffTime: undefined,
-      confirmationCode: undefined,
-      cost: undefined,
-      currencyCode: 'USD'
+      rentalCompany: carRental?.metadata?.rentalCompany,
+      pickupLocation: carRental?.origin,
+      dropOffLocation: carRental?.destination,
+      pickupTime: carRental?.departureTime,
+      dropOffTime: carRental?.arrivalTime,
+      confirmationCode: carRental?.metadata?.confirmationCode,
+      cost: carRental?.cost?.value,
+      currencyCode: carRental?.cost?.currency || 'USD'
     },
     validate: {},
   })
@@ -49,15 +54,34 @@ export const CarRentalForm = ({trip, onSuccess, onCancel}: {
       }
     }
 
-    createTransportationEntry(carRentalData).then(transportation => {
-      if (files.length > 0) {
-        saveTransportationAttachments(transportation.id, files).then(() => {
+
+    if (carRental?.id) {
+      updateTransportation(carRental.id, carRentalData).then((result) => {
+        if (files.length > 0) {
+          saveTransportationAttachments(result.id, files).then(() => {
+            onSuccess()
+          })
+        } else {
           onSuccess()
-        });
-      } else {
-        onSuccess();
-      }
-    })
+        }
+      }).finally(() => {
+        context.closeModal(id)
+      })
+    } else {
+      createTransportationEntry(carRentalData).then(transportation => {
+        if (files.length > 0) {
+          saveTransportationAttachments(transportation.id, files).then(() => {
+            onSuccess()
+          });
+        } else {
+          onSuccess();
+        }
+      }).finally(() => {
+        context.closeModal(id)
+      });
+    }
+
+
   }
 
   return (
@@ -68,6 +92,7 @@ export const CarRentalForm = ({trip, onSuccess, onCancel}: {
           <Group>
             <TextInput name={"rentalCompany"} label={t('transportation.rental_company', "Rental Company")} required
                        key={form.key('rentalCompany')} {...form.getInputProps('rentalCompany')}/>
+
             <DateTimePicker highlightToday valueFormat="DD MMM YYYY hh:mm A" name={"pickupTime"}
                             label={t('transportation.pickup_time', "Pickup Time")} clearable required
                             key={form.key('pickupTime')} {...form.getInputProps('pickupTime')} miw={rem(150)}/>
@@ -75,13 +100,6 @@ export const CarRentalForm = ({trip, onSuccess, onCancel}: {
             <DateTimePicker highlightToday valueFormat="DD MMM YYYY hh:mm A" name={"dropOffTime"}
                             label={t('transportation.dropOff_time', "Drop-off Time")} clearable required
                             key={form.key('dropOffTime')} {...form.getInputProps('dropOffTime')} miw={rem(150)}/>
-
-            <CurrencyInput
-              costKey={form.key('cost')}
-              costProps={form.getInputProps('cost')}
-              currencyCodeKey={form.key('currencyCode')}
-              currencyCodeProps={form.getInputProps('currencyCode')}
-            />
 
           </Group>
           <Group>
@@ -97,6 +115,12 @@ export const CarRentalForm = ({trip, onSuccess, onCancel}: {
           </Group>
           <Group>
             <Stack>
+              <CurrencyInput
+                costKey={form.key('cost')}
+                costProps={form.getInputProps('cost')}
+                currencyCodeKey={form.key('currencyCode')}
+                currencyCodeProps={form.getInputProps('currencyCode')}
+              />
               <Group>
                 <Title size={"md"}>{t('attachments', 'Attachments')}
                   <Text size={"xs"} c={"dimmed"}>
@@ -115,7 +139,19 @@ export const CarRentalForm = ({trip, onSuccess, onCancel}: {
                             accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp"
                             form={"files"} name={"files"}
                             multiple>
-                  {(props) => <Button {...props}>{t('upload', 'Upload')}</Button>}
+                  {(props) => {
+
+                    if (carRental?.id) {
+                      return (<Stack>
+                        <Text
+                          size={"xs"}>{`${carRental.attachments ? carRental.attachments.length : 0} existing files`}</Text>
+                        <Button {...props}>{t('upload_more', 'Upload More')}</Button>
+                      </Stack>)
+                    } else {
+                      return (<Button {...props}>{t('upload', 'Upload')}</Button>)
+                    }
+
+                  }}
                 </FileButton>
               </Group>
             </Stack>
@@ -124,7 +160,10 @@ export const CarRentalForm = ({trip, onSuccess, onCancel}: {
             <Button type={"submit"} w={"min-content"}>
               {t('save', 'Save')}
             </Button>
-            <Button type={"button"} variant={"default"} w={"min-content"} onClick={onCancel}>
+            <Button type={"button"} variant={"default"} w={"min-content"} onClick={() => {
+              context.closeModal(id)
+              onCancel()
+            }}>
               {t('cancel', "Cancel")}
             </Button>
           </Group>

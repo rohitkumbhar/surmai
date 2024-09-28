@@ -6,7 +6,7 @@ import {formatDate, formatTime} from "./util.ts";
 import {useTranslation} from "react-i18next";
 import {Attachments} from "./Attachments.tsx";
 import {DataLine} from "../DataLine.tsx";
-import {closeModal, openContextModal} from "@mantine/modals";
+import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
 import {notifications} from "@mantine/notifications";
 
@@ -38,13 +38,26 @@ export const FlightData = ({trip, flight, refetch}: { trip: Trip, flight: Transp
         });
       }}
       onDelete={() => {
-        deleteTransportation(flight.id).then(() => {
-          notifications.show({
-            title: 'Flight deleted',
-            message: `Flight from ${flight.origin} to ${flight.destination} has been deleted`,
-            position: 'top-right'
-          })
-          refetch()
+        openConfirmModal({
+          title: t('delete_flight', 'Delete Flight'),
+          confirmProps: { color: 'red' },
+          children: (
+            <Text size="sm">
+              {t('deletion_confirmation', 'This action cannot be undone.')}
+            </Text>
+          ),
+          labels: {confirm: t('delete', 'Delete'), cancel: t('cancel', 'Cancel')},
+          onCancel: () => console.log('Cancel'),
+          onConfirm: () => {
+            deleteTransportation(flight.id).then(() => {
+              notifications.show({
+                title: 'Flight deleted',
+                message: `Flight from ${flight.origin} to ${flight.destination} has been deleted`,
+                position: 'top-right'
+              })
+              refetch()
+            })
+          },
         })
       }}>
       <Group>

@@ -21,6 +21,15 @@ import './lib/i18n'
 import {ModalsProvider} from "@mantine/modals";
 import {FlightForm} from "./components/trip/transportation/FlightForm.tsx";
 import {Notifications} from "@mantine/notifications";
+import {CarRentalForm} from "./components/trip/transportation/CarRentalForm.tsx";
+import {GenericTransportationModeForm} from "./components/trip/transportation/GenericTransportationModeForm.tsx";
+
+import dayjs from "dayjs";
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
+
 
 const theme = createTheme({
   fontFamily: 'Lato, Verdana, sans-serif',
@@ -95,7 +104,9 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient()
 
 const modals = {
-  addFlightForm: FlightForm
+  addFlightForm: FlightForm,
+  carRentalForm: CarRentalForm,
+  genericTransportationForm: GenericTransportationModeForm
 }
 
 declare module '@mantine/modals' {
