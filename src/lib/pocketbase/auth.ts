@@ -71,3 +71,7 @@ export const createUserWithPassword = async ({email, name, password, passwordCon
 export const isAdmin = () => {
   return pbAdmin.authStore.isAdmin && pbAdmin.authStore.isValid
 }
+
+export const getUserByEmail = (email: string) => {
+  return pb.collection('users').getFirstListItem(`email="${email}"`);
+}

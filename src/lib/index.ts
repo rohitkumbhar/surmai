@@ -1,5 +1,5 @@
 export {
-  authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword, isAdmin
+  authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword, isAdmin, getUserByEmail
 } from './pocketbase/auth'
 export {
   getTrip,

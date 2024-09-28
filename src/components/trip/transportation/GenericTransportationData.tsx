@@ -78,15 +78,14 @@ export const GenericTransportationData = ({trip, transportation, refetch}: {
           },
         })
       }}>
-
       <Grid align={"top"} p={"xs"} grow={false}>
-        <Grid.Col span={{base: 12, sm: 1, md: 1, lg: 1}} p={"md"}>
-          <Box component="div" visibleFrom={"sm"}>
+        <Grid.Col span={{base: 12, sm: 12, md: 1, lg: 1}} p={"md"}>
+          <Box component="div" visibleFrom={"md"}>
             <Tooltip label={t(`transportation_type_${transportation.type}`, transportation.type)}>
               <TypeIcon size={"sm"} stroke={1}/>
             </Tooltip>
           </Box>
-          <Box component="div" hiddenFrom={"sm"}>
+          <Box component="div" hiddenFrom={"md"}>
             <Title size={"lg"}>{t(`transportation_type_${transportation.type}`, transportation.type)}</Title>
             <Divider mt={"5px"}/>
           </Box>
@@ -105,7 +104,7 @@ export const GenericTransportationData = ({trip, transportation, refetch}: {
         </Grid.Col>
 
         <Grid.Col span={{base: 12, sm: 2, md: 1, lg: 1}}>
-          <Center inline pt={"md"}>
+          <Center>
             <Text c={"dimmed"} size={"xs"} >
               {getTravelTime(transportation.departureTime, transportation.arrivalTime)}
             </Text>

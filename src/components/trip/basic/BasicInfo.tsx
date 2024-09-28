@@ -1,5 +1,5 @@
 import {CreateTripForm, Trip} from "../../../types/trips.ts";
-import {Avatar, Button, Container, Divider, Flex, Group, Paper, Stack, Text, Title} from "@mantine/core";
+import {Button, Container, Divider, Flex, Group, Paper, Stack, Text, Title} from "@mantine/core";
 import {QueryObserverResult, RefetchOptions, Register} from "@tanstack/react-query";
 import {useState} from "react";
 import {useForm} from "@mantine/form";
@@ -8,8 +8,9 @@ import {formatDate, updateTrip} from "../../../lib";
 import {IconPhoto} from "@tabler/icons-react";
 import {basicInfoFormValidation} from "./validation.ts";
 import {useTranslation} from "react-i18next";
+import {ParticipantData} from "./ParticipantData.tsx";
 
-const BasicInfoView = ({trip}: { trip: Trip }) => {
+const BasicInfoView = ({trip, refetch}: { trip: Trip , refetch: () => void}) => {
 
   const {t, i18n} = useTranslation();
 
@@ -34,14 +35,9 @@ const BasicInfoView = ({trip}: { trip: Trip }) => {
     <Divider/>
     <Text mt={"md"}>{t('basic.with', 'Going With')}</Text>
     <Group>
-      {(trip.participants || []).map(person => {
+      {(trip.participants || []).map((person, index) => {
         return (<Group wrap={"nowrap"} key={person.name}>
-          <Avatar key={person.name} name={person.name} color="initials"/>
-          <div>
-            <Text fz="lg" fw={500}>
-              {person.name}
-            </Text>
-          </div>
+          <ParticipantData participant={person} trip={trip} index={index} refetch={refetch} />
         </Group>)
       })}
     </Group>
@@ -128,7 +124,7 @@ export const BasicInfo = ({trip, refetch}: {
         <Button variant="filled" bg={"red"}>{t('delete', 'Delete')}</Button>
       </Flex>
 
-      {!editMode && <BasicInfoView trip={trip}/>}
+      {!editMode && <BasicInfoView trip={trip} refetch={refetch}/>}
       {editMode && <EditBasicView trip={trip} refetch={refetch} onSave={() => setEditMode(false)}/>}
     </Container>
   )

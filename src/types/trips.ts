@@ -1,6 +1,8 @@
 export type Participant = {
   name: string,
+  email?: string,
   userId?: string,
+  collaborator? : boolean
 }
 
 export type Destination = {
