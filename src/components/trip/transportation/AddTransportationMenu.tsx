@@ -32,25 +32,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
       <Menu.Dropdown>
         <Menu.Item
           onClick={() => {
-            /*openContextModal({
-              modal: 'addFlightForm',
-              title: t('transportation.add_new_flight', 'Add New Flight'),
-              radius: 'md',
-              withCloseButton: false,
-              fullScreen: isMobile,
-              innerProps: {
-                trip: trip,
-                onSuccess: () => {
-                  closeModal('addFlightForm')
-                  refetch()
-                },
-                onCancel: () => {
-                  closeModal('addFlightForm')
-                }
-              },
-            });*/
-
-            openContextModal({
+              openContextModal({
               modal: 'genericTransportationForm',
               title: t('transportation.add_new_flight', 'Add Flight'),
               radius: 'md',

@@ -27,6 +27,7 @@ import {GenericTransportationModeForm} from "./components/trip/transportation/Ge
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import {EditBasicView} from "./components/trip/basic/EditBasicView.tsx";
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
@@ -104,6 +105,7 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient()
 
 const modals = {
+  editBasicInfoForm: EditBasicView,
   addFlightForm: FlightForm,
   carRentalForm: CarRentalForm,
   genericTransportationForm: GenericTransportationModeForm
