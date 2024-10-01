@@ -21,13 +21,14 @@ import './lib/i18n'
 import {ModalsProvider} from "@mantine/modals";
 import {FlightForm} from "./components/trip/transportation/FlightForm.tsx";
 import {Notifications} from "@mantine/notifications";
-import {CarRentalForm} from "./components/trip/transportation/CarRentalForm.tsx";
-import {GenericTransportationModeForm} from "./components/trip/transportation/GenericTransportationModeForm.tsx";
+import {CarRentalForm} from "./components/trip/transportation/CarRentalForm";
+import {GenericTransportationModeForm} from "./components/trip/transportation/GenericTransportationModeForm";
 
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import {EditBasicView} from "./components/trip/basic/EditBasicView.tsx";
+import {EditBasicInfoForm} from "./components/trip/basic/EditBasicInfoForm.tsx";
+import {UploadCoverImageForm} from "./components/trip/basic/UploadCoverImageForm.tsx";
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
@@ -105,7 +106,8 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient()
 
 const modals = {
-  editBasicInfoForm: EditBasicView,
+  editBasicInfoForm: EditBasicInfoForm,
+  uploadCoverImageForm: UploadCoverImageForm,
   addFlightForm: FlightForm,
   carRentalForm: CarRentalForm,
   genericTransportationForm: GenericTransportationModeForm

@@ -1,15 +1,7 @@
 import {useTranslation} from "react-i18next";
 import {useMediaQuery} from "@mantine/hooks";
 import {Button, Menu, rem} from "@mantine/core";
-import {
-  IconChevronDown,
-  IconPencil,
-  IconPhoto,
-  IconPigMoney,
-  IconTrash,
-  IconUser,
-  IconUsers
-} from "@tabler/icons-react";
+import {IconChevronDown, IconPencil, IconPhoto, IconTrash, IconUsers} from "@tabler/icons-react";
 import {closeModal, openContextModal} from "@mantine/modals";
 import {Trip} from "../../../types/trips.ts";
 
@@ -62,21 +54,14 @@ export const BasicInfoMenu = ({trip, refetch}: {
       <Menu.Item
         onClick={() => {
           openContextModal({
-            modal: 'genericTransportationForm',
-            title: t('transportation.add_new_flight', 'Add Flight'),
+            modal: 'uploadCoverImageForm',
+            title: t('basic.add_cover_image', 'Add Cover Image'),
             radius: 'md',
             withCloseButton: false,
             fullScreen: isMobile,
             innerProps: {
-              transportationType: 'flight',
               trip: trip,
-              onSuccess: () => {
-                closeModal('genericTransportationForm')
-                refetch()
-              },
-              onCancel: () => {
-                closeModal('genericTransportationForm')
-              }
+              refetch: refetch
             },
           });
 

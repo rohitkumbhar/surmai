@@ -1,5 +1,4 @@
 import {CreateTripForm, Trip} from "../../../types/trips.ts";
-import {QueryObserverResult, RefetchOptions, Register} from "@tanstack/react-query";
 import {useTranslation} from "react-i18next";
 import {useForm} from "@mantine/form";
 import {basicInfoFormValidation} from "./validation.ts";
@@ -8,13 +7,13 @@ import {EditTripBasicForm} from "./EditTripBasicForm.tsx";
 import {Button, Group} from "@mantine/core";
 import {ContextModalProps} from "@mantine/modals";
 
-interface EditBasicViewProps {
+export const EditBasicInfoForm = ({context, id, innerProps}: ContextModalProps<{
   trip: Trip,
-  onSave: () => void
+  onSave: () => void,
+  onSuccess? : () => void,
+  onCancel? : () => void,
 }
-
-
-export const EditBasicView = ({context, id, innerProps}: ContextModalProps<EditBasicViewProps>) => {
+>) => {
 
   const {trip, onSave} = innerProps
   const {t} = useTranslation()
