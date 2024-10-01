@@ -1,7 +1,7 @@
 import {Trip} from "../../../types/trips.ts";
 import {useTranslation} from "react-i18next";
-import {Divider, Group, Paper, Stack, Text, Title} from "@mantine/core";
-import {formatDate} from "../../../lib";
+import {ActionIcon, AspectRatio, Divider, Group, Image, Paper, Stack, Text, Title} from "@mantine/core";
+import {formatDate, getAttachmentUrl} from "../../../lib";
 import {IconPhoto} from "@tabler/icons-react";
 import {ParticipantData} from "./ParticipantData.tsx";
 
@@ -10,10 +10,16 @@ export const BasicInfoView = ({trip, refetch}: { trip: Trip, refetch: () => void
   const {t, i18n} = useTranslation();
 
   return (<Stack gap={"md"}>
+    <AspectRatio ratio={1920 / 300}>
+      {trip.coverImage && <Image src={getAttachmentUrl(trip, trip.coverImage)}/>}
+      {!trip.coverImage &&
+          <ActionIcon variant="subtle" bd={"solid 1px var(--mantine-primary-color-filled)"} aria-label="Settings" style={{height: '100%'}}>
+              <IconPhoto stroke={1.5}/>
+          </ActionIcon>}
+    </AspectRatio>
     <Title order={1}>{trip.name}</Title>
     <Title order={4} fw={400}> {trip.description}</Title>
     <Text size={"sm"}>{formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}</Text>
-
     <Divider/>
     <Text mt={"md"}>{t('basic.visiting', 'Visiting')}</Text>
     <Group>

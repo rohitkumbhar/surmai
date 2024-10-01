@@ -12,7 +12,8 @@ export {
   deleteTransportationAttachment,
   listTransportations,
   updateTrip,
-  createTransportationEntry
+  createTransportationEntry,
+  uploadTripCoverImage
 } from './pocketbase/trips'
 
 

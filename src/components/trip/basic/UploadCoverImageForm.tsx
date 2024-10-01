@@ -5,6 +5,8 @@ import {IconCloudUpload, IconDownload, IconX} from '@tabler/icons-react';
 import classes from './UploadCoverImageForm.module.css';
 import {ContextModalProps} from "@mantine/modals";
 import {Trip} from "../../../types/trips.ts";
+import {useTranslation} from "react-i18next";
+import {uploadTripCoverImage} from "../../../lib";
 
 export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProps<{
   trip: Trip,
@@ -12,19 +14,25 @@ export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProp
 }>) => {
 
 
-  const {trip , refetch } = innerProps;
+  const {t} = useTranslation()
+  const {trip, refetch} = innerProps;
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
   return (
     <div className={classes.wrapper}>
       <Dropzone
+        multiple={false}
         openRef={openRef}
-        onDrop={() => {
+        onDrop={(val: File[]) => {
+          uploadTripCoverImage(trip.id, val[0]).then(() => {
+            refetch()
+            context.closeModal(id)
+          })
         }}
         className={classes.dropzone}
         radius="md"
-        accept={[MIME_TYPES.pdf]}
+        accept={[MIME_TYPES.jpeg, MIME_TYPES.png, MIME_TYPES.webp]}
         maxSize={30 * 1024 ** 2}
       >
         <div style={{pointerEvents: 'none'}}>
@@ -49,19 +57,18 @@ export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProp
           </Group>
 
           <Text ta="center" fw={700} fz="lg" mt="xl">
-            <Dropzone.Accept>Drop files here</Dropzone.Accept>
-            <Dropzone.Reject>Pdf file less than 30mb</Dropzone.Reject>
-            <Dropzone.Idle>Upload resume</Dropzone.Idle>
+            <Dropzone.Accept>{t('basic.drop_files_here', 'Drop files here')}</Dropzone.Accept>
+            <Dropzone.Reject>{t('basic.cover_image_limit', 'Image file less than 30mb')}</Dropzone.Reject>
+            <Dropzone.Idle>{t('basic.upload-cover_image', 'Upload Cover Image')}</Dropzone.Idle>
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
-            Drag&apos;n&apos;drop files here to upload. We can accept only <i>.pdf</i> files that
-            are less than 30mb in size.
+            {t('basic.upload_cover_image', 'Drag and drop an image in this area')}
           </Text>
         </div>
       </Dropzone>
 
       <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current?.()}>
-        Select files
+        {t('basic.select_cover_image', 'Upload Cover Image')}
       </Button>
     </div>
   );

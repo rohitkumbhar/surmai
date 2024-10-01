@@ -12,7 +12,7 @@ import {
 import classes from './MyTrips.module.css';
 import {IconPhoto, IconPlus,} from '@tabler/icons-react';
 import {useNavigate} from "react-router-dom";
-import {formatDate, listTrips} from "../../lib";
+import {formatDate, getAttachmentUrl, listTrips} from "../../lib";
 import {useQuery} from "@tanstack/react-query";
 import {Trip} from "../../types/trips.ts";
 import {useTranslation} from "react-i18next";
@@ -40,7 +40,7 @@ export const MyTrips = () => {
       event.preventDefault()
     }}>
       <AspectRatio ratio={1920 / 1080}>
-        {trip.coverImage && <Image src={trip.coverImage}/>}
+        {trip.coverImage && <Image src={getAttachmentUrl(trip, trip.coverImage)} alt={"Cover Image"} fit={"cover"}/>}
         {!trip.coverImage &&
           <ActionIcon variant="subtle" bd={"solid 1px var(--mantine-primary-color-filled)"} aria-label="Settings" style={{height: '100%'}}>
             <IconPhoto stroke={1.5}/>
