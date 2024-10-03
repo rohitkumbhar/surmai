@@ -2,7 +2,7 @@ import {useTranslation} from "react-i18next";
 import {useMediaQuery} from "@mantine/hooks";
 import {Button, Menu, rem, Text} from "@mantine/core";
 import {IconChevronDown, IconPencil, IconPhoto, IconTrash, IconUsers} from "@tabler/icons-react";
-import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
+import {openConfirmModal, openContextModal} from "@mantine/modals";
 import {Trip} from "../../../types/trips.ts";
 import {deleteTrip} from "../../../lib";
 import {notifications} from "@mantine/notifications";

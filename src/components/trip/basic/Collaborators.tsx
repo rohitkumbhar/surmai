@@ -1,18 +1,7 @@
 import {ContextModalProps, openConfirmModal} from "@mantine/modals";
 import {Trip} from "../../../types/trips.ts";
 import {forwardRef, useEffect, useState} from "react";
-import {
-  ActionIcon,
-  AutocompleteProps,
-  Avatar,
-  Button,
-  Combobox,
-  Container,
-  Group,
-  MultiSelect,
-  Paper,
-  Text
-} from "@mantine/core";
+import {ActionIcon, Avatar, Button, ComboboxItem, Container, Group, MultiSelect, Paper, Text} from "@mantine/core";
 import {useQuery} from "@tanstack/react-query";
 import {addCollaborators, currentUser as getCurrentUser, deleteCollaborator, listAllUsers} from "../../../lib";
 import {User} from "../../../types/auth.ts";
@@ -25,7 +14,7 @@ const UserSearch = ({trip, setNewCollaborators}: {
 }) => {
 
   const [curUser, setCurrentUser] = useState<User | undefined>()
-  const {isPending, isError, data, error} = useQuery<User[]>({
+  const {data} = useQuery<User[]>({
     queryKey: ['listAllUsers'],
     queryFn: () => listAllUsers(),
   })
@@ -34,7 +23,7 @@ const UserSearch = ({trip, setNewCollaborators}: {
     return accumulator.set(obj.id, obj);
   }, new Map<string, User>());
 
-  const renderOption: AutocompleteProps['renderOption'] = ({option}) => {
+  const renderOption = ({option}: {option: ComboboxItem}) => {
     const user = userIndex.get(option.value)
     return (
       <Group gap="sm">
@@ -64,16 +53,16 @@ const UserSearch = ({trip, setNewCollaborators}: {
   }, [])
 
 
-  const [options, setOptions] = useState<{ label: string, value: string }[]>([])
+  const [options, setOptions] = useState<ComboboxItem[]>([])
   useEffect(() => {
-    const users = data?.map(user => {
+    const opts = data?.map(user => {
       const isOwner = user.id === trip.ownerId
       const isExistingCollaborator = trip.collaborators?.find(ec => ec.id === user.id)
       const isMe = curUser?.id === user.id
       const label = `${user.name} ${isOwner ? '(Owner)' : ''}`;
-      return {value: user.id, label, disabled: (isExistingCollaborator || isMe || isOwner)};
+      return {value: user.id, label, disabled: (isExistingCollaborator || isMe || isOwner) as boolean};
     }) || []
-    setOptions(users)
+    setOptions(opts)
   }, [data, trip, curUser])
 
 
@@ -145,7 +134,7 @@ export const Collaborators = ({context, id, innerProps}: ContextModalProps<{
   const {trip, onSave} = innerProps;
   const [newCollaborators, setNewCollaborators] = useState<string[]>([])
   const saveNewCollaborators = () => {
-    addCollaborators(trip.id, newCollaborators).then(results => {
+    addCollaborators(trip.id, newCollaborators).then(() => {
       context.closeModal(id)
       onSave()
     })
