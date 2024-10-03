@@ -50,6 +50,11 @@ export const listTransportations = async (tripId: string): Promise<Transportatio
   });
 }
 
+export const deleteTrip = (tripId: string) => {
+  return pb.collection('trips').delete(tripId);
+}
+
+
 export const deleteTransportation = (transportationId: string) => {
   return pb.collection('transportations').delete(transportationId);
 }

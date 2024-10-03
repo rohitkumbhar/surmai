@@ -1,9 +1,11 @@
 import {useTranslation} from "react-i18next";
 import {useMediaQuery} from "@mantine/hooks";
-import {Button, Menu, rem} from "@mantine/core";
+import {Button, Menu, rem, Text} from "@mantine/core";
 import {IconChevronDown, IconPencil, IconPhoto, IconTrash, IconUsers} from "@tabler/icons-react";
-import {closeModal, openContextModal} from "@mantine/modals";
+import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
 import {Trip} from "../../../types/trips.ts";
+import {deleteTrip} from "../../../lib";
+import {notifications} from "@mantine/notifications";
 
 
 export const BasicInfoMenu = ({trip, refetch}: {
@@ -36,7 +38,6 @@ export const BasicInfoMenu = ({trip, refetch}: {
             innerProps: {
               trip: trip,
               onSave: () => {
-                console.log("Onsave called")
                 refetch()
               }
             },
@@ -65,7 +66,6 @@ export const BasicInfoMenu = ({trip, refetch}: {
               refetch: refetch
             },
           });
-
         }}
         leftSection={
           <IconPhoto
@@ -96,7 +96,6 @@ export const BasicInfoMenu = ({trip, refetch}: {
               }
             },
           });
-
         }}
         leftSection={
           <IconUsers
@@ -107,30 +106,35 @@ export const BasicInfoMenu = ({trip, refetch}: {
       >
         {t('basic.add_cover_image', 'Add Collaborators')}
       </Menu.Item>
-      <Menu.Divider />
+      <Menu.Divider/>
       <Menu.Item
         c={"red"}
         onClick={() => {
-          openContextModal({
-            modal: 'genericTransportationForm',
-            title: t('transportation.add_new_flight', 'Add Flight'),
-            radius: 'md',
-            withCloseButton: false,
-            fullScreen: isMobile,
-            innerProps: {
-              transportationType: 'flight',
-              trip: trip,
-              onSuccess: () => {
-                closeModal('genericTransportationForm')
-                refetch()
-              },
-              onCancel: () => {
-                closeModal('genericTransportationForm')
-              }
-            },
-          });
+          openConfirmModal({
+            title: t('delete_trip', 'Delete Trip'),
+            confirmProps: {color: 'red'},
+            children: (
+              <Text size="sm">
+                {t('deletion_confirmation', 'This action cannot be undone.')}
+              </Text>
+            ),
+            labels: {confirm: t('delete', 'Delete'), cancel: t('cancel', 'Cancel')},
+            onCancel: () => {
 
-        }}
+            },
+            onConfirm: () => {
+              deleteTrip(trip.id).then(() => {
+                notifications.show({
+                  title: 'Deleted',
+                  message: `Trip ${trip.name} has been deleted`,
+                  position: 'top-right'
+                })
+                refetch()
+              })
+            },
+          })
+        }
+        }
         leftSection={
           <IconTrash
             style={{width: rem(16), height: rem(16)}}
@@ -140,7 +144,6 @@ export const BasicInfoMenu = ({trip, refetch}: {
       >
         {t('delete', 'Delete')}
       </Menu.Item>
-
     </Menu.Dropdown>
   </Menu>)
 }
