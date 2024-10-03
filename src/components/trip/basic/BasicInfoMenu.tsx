@@ -58,6 +58,7 @@ export const BasicInfoMenu = ({trip, refetch}: {
             title: t('basic.add_cover_image', 'Add Cover Image'),
             radius: 'md',
             withCloseButton: false,
+            size: "auto",
             fullScreen: isMobile,
             innerProps: {
               trip: trip,

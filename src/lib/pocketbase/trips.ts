@@ -102,7 +102,7 @@ export const deleteTransportationAttachment = (transportationId: string, fileNam
 }
 
 
-export const uploadTripCoverImage = (tripId: string, coverImage: File) => {
+export const uploadTripCoverImage = (tripId: string, coverImage: File | Blob) => {
   const formData = new FormData()
   formData.append("coverImage", coverImage)
   return pb.collection('trips').update(tripId, formData);

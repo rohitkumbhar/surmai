@@ -1,23 +1,22 @@
-import {useRef} from 'react';
-import {Button, Group, rem, Text, useMantineTheme} from '@mantine/core';
+import {useRef, useState} from 'react';
+import {Button, Center, Group, rem, Stack, Stepper, Text, useMantineTheme} from '@mantine/core';
 import {Dropzone, MIME_TYPES} from '@mantine/dropzone';
 import {IconCloudUpload, IconDownload, IconX} from '@tabler/icons-react';
 import classes from './UploadCoverImageForm.module.css';
 import {ContextModalProps} from "@mantine/modals";
-import {Trip} from "../../../types/trips.ts";
+import {CroppedImage, Trip} from "../../../types/trips.ts";
 import {useTranslation} from "react-i18next";
 import {uploadTripCoverImage} from "../../../lib";
-
-export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProps<{
-  trip: Trip,
-  refetch: () => void
-}>) => {
+import Cropper from "react-easy-crop";
+import {getCroppedImg} from "./util.ts";
 
 
-  const {t} = useTranslation()
-  const {trip, refetch} = innerProps;
+const CoverImageDropZone = ({setUploadedFile}: { setUploadedFile: (val: File) => void }) => {
+
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
+  const {t} = useTranslation()
+
 
   return (
     <div className={classes.wrapper}>
@@ -25,10 +24,7 @@ export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProp
         multiple={false}
         openRef={openRef}
         onDrop={(val: File[]) => {
-          uploadTripCoverImage(trip.id, val[0]).then(() => {
-            refetch()
-            context.closeModal(id)
-          })
+          setUploadedFile(val[0])
         }}
         className={classes.dropzone}
         radius="md"
@@ -72,4 +68,81 @@ export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProp
       </Button>
     </div>
   );
+
+}
+
+const CropModal = ({file, onCropComplete}: {
+  file: File,
+  onCropComplete: (val: CroppedImage, val2: CroppedImage) => void
+}) => {
+  const [crop, setCrop] = useState({x: 0, y: 0})
+  return (
+    <div style={{height: '20rem', position: 'relative'}}>
+      <Cropper
+        image={URL.createObjectURL(file)}
+        crop={crop}
+        aspect={1920 / 400}
+        onCropChange={setCrop}
+        zoomWithScroll={true}
+        onCropComplete={onCropComplete}
+      />
+    </div>
+  )
+}
+
+export const UploadCoverImageForm = ({context, id, innerProps}: ContextModalProps<{
+  trip: Trip,
+  refetch: () => void
+}>) => {
+
+
+  const [uploadedFile, setUploadedFile] = useState<File | undefined>()
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CroppedImage | null>(null)
+
+  const {trip, refetch} = innerProps;
+  const [active, setActive] = useState(0);
+  const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
+
+  const uploadCoverImage = (uploadedImage: File | Blob) => {
+    uploadTripCoverImage(trip.id, uploadedImage).then(() => {
+      refetch()
+      context.closeModal(id)
+    })
+  }
+
+  const completeUpload = () => {
+
+    if (uploadedFile && croppedAreaPixels) {
+      getCroppedImg(URL.createObjectURL(uploadedFile), croppedAreaPixels).then(file => {
+        uploadCoverImage(file as File)
+      })
+    }
+  }
+
+  const onCropComplete = (_croppedArea: CroppedImage, croppedAreaPixels: CroppedImage) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }
+
+  return (
+    <Stack>
+      <Stepper active={active} onStepClick={setActive} allowNextStepsSelect={false}>
+        <Stepper.Step label="Upload Cover Image" description="Upload a cover image for your trip">
+          <CoverImageDropZone setUploadedFile={(file) => {
+            setUploadedFile(file);
+            nextStep();
+          }}/>
+        </Stepper.Step>
+        <Stepper.Step label="Crop Image" description="Crop yourt cover image show it shows up nicely on all pages">
+          {uploadedFile && <CropModal file={uploadedFile} onCropComplete={onCropComplete}/>}
+          <Center>
+            <Button w={"fit-content"} mt={"sm"} mb={"sm"} onClick={completeUpload}>Done</Button>
+          </Center>
+        </Stepper.Step>
+        <Stepper.Completed>
+          Completed, click back button to get to previous step
+        </Stepper.Completed>
+      </Stepper>
+    </Stack>
+  )
+
 }

@@ -39,7 +39,7 @@ export const MyTrips = () => {
       navigate(`/trips/${trip.id}`)
       event.preventDefault()
     }}>
-      <AspectRatio ratio={1920 / 1080}>
+      <AspectRatio ratio={1920 / 400}>
         {trip.coverImage && <Image src={getAttachmentUrl(trip, trip.coverImage)} alt={"Cover Image"} fit={"cover"}/>}
         {!trip.coverImage &&
           <ActionIcon variant="subtle" bd={"solid 1px var(--mantine-primary-color-filled)"} aria-label="Settings" style={{height: '100%'}}>
@@ -60,7 +60,7 @@ export const MyTrips = () => {
       navigate("/trips/create")
       event.preventDefault()
     }}>
-      <AspectRatio ratio={1920 / 1080}>
+      <AspectRatio ratio={1920 / 400}>
         <ActionIcon variant="filled" aria-label="Settings" style={{height: '100%'}}>
           <IconPlus stroke={1.5}/>
         </ActionIcon>
@@ -78,9 +78,9 @@ export const MyTrips = () => {
       <Text size="xl" tt="uppercase" fw={700} mt="md" mb="md">
         My Trips
       </Text>
-      <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>{[createNew]}</SimpleGrid>
+      <SimpleGrid mb={"md"} cols={{base: 1, sm: 2, md: 3}}>{[createNew]}</SimpleGrid>
       <Divider/>
-      <SimpleGrid cols={{base: 1, sm: 2, md: 3}}>
+      <SimpleGrid mt={"md"} cols={{base: 1, sm: 2, md: 3}}>
         {cards}
       </SimpleGrid>
     </Container>

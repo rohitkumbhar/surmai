@@ -10,10 +10,11 @@ export const BasicInfoView = ({trip, refetch}: { trip: Trip, refetch: () => void
   const {t, i18n} = useTranslation();
 
   return (<Stack gap={"md"}>
-    <AspectRatio ratio={1920 / 300}>
+    <AspectRatio ratio={1920 / 400}>
       {trip.coverImage && <Image src={getAttachmentUrl(trip, trip.coverImage)}/>}
       {!trip.coverImage &&
-          <ActionIcon variant="subtle" bd={"solid 1px var(--mantine-primary-color-filled)"} aria-label="Settings" style={{height: '100%'}}>
+          <ActionIcon variant="subtle" bd={"solid 1px var(--mantine-primary-color-filled)"} aria-label="Settings"
+                      style={{height: '100%'}}>
               <IconPhoto stroke={1.5}/>
           </ActionIcon>}
     </AspectRatio>

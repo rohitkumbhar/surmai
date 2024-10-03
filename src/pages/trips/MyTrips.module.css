@@ -1,4 +1,5 @@
 .card {
+    border: 1px solid var(--mantine-primary-color-light);
     transition:
             transform 150ms ease,
             box-shadow 150ms ease;

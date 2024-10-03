@@ -2,7 +2,7 @@ export type Participant = {
   name: string,
   email?: string,
   userId?: string,
-  collaborator? : boolean
+  collaborator?: boolean
 }
 
 export type Destination = {
@@ -76,3 +76,5 @@ export type TransportationFormSchema = {
   cost?: number,
   currencyCode: string,
 }
+
+export type CroppedImage = { height: number, width: number, x: number, y: number }
