@@ -1,8 +1,9 @@
+import {User} from "./auth.ts";
+
 export type Participant = {
   name: string,
   email?: string,
-  userId?: string,
-  collaborator?: boolean
+  userId?: string
 }
 
 export type Destination = {
@@ -20,11 +21,18 @@ export type Trip = {
   coverImage?: string
   participants?: Participant[]
   destinations?: Destination[]
+  collaborators?: User[]
 }
 
 export type NewTrip = Omit<Trip, 'id'>
 // pocketbase returns date as string
-export type TripResponse = Omit<Trip, 'startDate' | 'endDate'> & { startDate: string, endDate: string }
+
+export type TripResponse = Omit<Trip, 'startDate' | 'endDate'> &
+  {
+    startDate: string,
+    endDate: string,
+    expand: object
+  }
 
 export type CreateTripForm = {
   name: string,
@@ -78,3 +86,10 @@ export type TransportationFormSchema = {
 }
 
 export type CroppedImage = { height: number, width: number, x: number, y: number }
+
+
+export type Collaborator = {
+  id?: string,
+  trip: string,
+  user: string | User
+}

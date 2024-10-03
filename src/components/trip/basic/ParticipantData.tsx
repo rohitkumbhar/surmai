@@ -1,5 +1,5 @@
 import {Participant, Trip} from "../../../types/trips.ts";
-import {Avatar, Box, Checkbox, Group, Indicator, Paper, Popover, Text, TextInput} from "@mantine/core";
+import {Avatar, Box, Group, Paper, Popover, Text, TextInput} from "@mantine/core";
 import {forwardRef, useState} from "react";
 import {IconChevronDown} from "@tabler/icons-react";
 import {useForm} from "@mantine/form";
@@ -25,7 +25,6 @@ const ParticipantButton = forwardRef<HTMLDivElement, { name: string, email?: str
       </Paper>
     </div>
   )
-
 });
 
 export const ParticipantData = ({participant, trip, index, refetch}: {
@@ -35,44 +34,26 @@ export const ParticipantData = ({participant, trip, index, refetch}: {
   refetch: () => void
 }) => {
 
-  const {name, email, collaborator} = participant
+  const {name, email} = participant
   const [participantEmail, setParticipantEmail] = useState<string | undefined>(participant.email)
-  const [isCollaborator, setCollaborator] = useState<boolean | undefined>(participant.collaborator)
 
   const form = useForm<{ email?: string, collaborator?: boolean }>(
     {
       mode: 'uncontrolled',
       initialValues: {
-        email: email,
-        collaborator: collaborator
+        email: email
       },
-      validate: {
-        collaborator: (value, values) => {
-          if (value && (!values.email || values.email === '')) {
-            return "An email is required for a collaborator"
-          }
-          return null
-        }
-      }
+      validate: {}
     }
   )
 
   const handleSubmit = (values: { email?: string, collaborator?: boolean }) => {
     setParticipantEmail(values.email)
-    setCollaborator(values.collaborator)
-
     const data = {...trip}
 
     if (data.participants && data.participants[index]) {
       const updatedParticipant = data.participants[index];
-      updatedParticipant.collaborator = values.collaborator;
       updatedParticipant.email = values.email;
-
-      // getUserByEmail(values.email || '').then(user => {
-      //   console.log("User found", user)
-      // }).catch(err => {
-      //   console.log("Error", err)
-      // })
       updateTrip(trip.id, data).then(() => {
         refetch()
       })
@@ -88,9 +69,7 @@ export const ParticipantData = ({participant, trip, index, refetch}: {
     }}>
       <Popover.Target>
         <Box>
-          {isCollaborator &&
-            <Indicator position={"top-start"}><ParticipantButton name={name} email={participantEmail}/></Indicator>}
-          {!isCollaborator && <ParticipantButton name={name} email={participantEmail}/>}
+          <ParticipantButton name={name} email={participantEmail}/>
         </Box>
       </Popover.Target>
       <Popover.Dropdown>
@@ -98,13 +77,8 @@ export const ParticipantData = ({participant, trip, index, refetch}: {
           <TextInput type={"email"} label="Email" size="sm" mt="xs"
                      key={form.key('email')}
                      {...form.getInputProps('email')} />
-          <Checkbox label={"Collaborator"} size="sm" mt="sm"
-                    key={form.key('collaborator')}
-                    {...form.getInputProps('collaborator', {type: 'checkbox'})}/>
         </form>
       </Popover.Dropdown>
     </Popover>
-
-
   )
 }

@@ -79,20 +79,16 @@ export const BasicInfoMenu = ({trip, refetch}: {
       <Menu.Item
         onClick={() => {
           openContextModal({
-            modal: 'genericTransportationForm',
-            title: t('transportation.add_new_flight', 'Add Flight'),
+            modal: 'collaboratorsForm',
+            title: t('basic.add_collaborators', 'Add Collaborators'),
             radius: 'md',
             withCloseButton: false,
             fullScreen: isMobile,
+            size: "auto",
             innerProps: {
-              transportationType: 'flight',
               trip: trip,
-              onSuccess: () => {
-                closeModal('genericTransportationForm')
+              onSave: () => {
                 refetch()
-              },
-              onCancel: () => {
-                closeModal('genericTransportationForm')
               }
             },
           });

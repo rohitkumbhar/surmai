@@ -1,134 +1,136 @@
 migrate((db) => {
 
     const collectionSchema =  {
-        "name": "transportations",
-        "type": "base",
-        "system": false,
-        "schema": [
+        id: "spyilky55hlr2iv",
+        name: "transportations",
+        type: "base",
+        system: false,
+        schema: [
             {
-                "system": false,
-                "id": "csj35uwi",
-                "name": "type",
-                "type": "select",
-                "required": true,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "maxSelect": 1,
-                    "values": [
+                system: false,
+                id: "csj35uwi",
+                name: "type",
+                type: "select",
+                required: true,
+                presentable: false,
+                unique: false,
+                options: {
+                    maxSelect: 1,
+                    values: [
                         "flight",
-                        "rental_car",
-                        "taxi",
+                        "car",
                         "bus",
                         "boat",
-                        "train"
+                        "train",
+                        "rental_car",
+                        "taxi"
                     ]
                 }
             },
             {
-                "system": false,
-                "id": "nllkxdk6",
-                "name": "origin",
-                "type": "text",
-                "required": true,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "min": null,
-                    "max": null,
-                    "pattern": ""
+                system: false,
+                id: "nllkxdk6",
+                name: "origin",
+                type: "text",
+                required: true,
+                presentable: false,
+                unique: false,
+                options: {
+                    min: null,
+                    max: null,
+                    pattern: ""
                 }
             },
             {
-                "system": false,
-                "id": "erlluhto",
-                "name": "departureTime",
-                "type": "date",
-                "required": true,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "min": "",
-                    "max": ""
+                system: false,
+                id: "erlluhto",
+                name: "departureTime",
+                type: "date",
+                required: true,
+                presentable: false,
+                unique: false,
+                options: {
+                    min: "",
+                    max: ""
                 }
             },
             {
-                "system": false,
-                "id": "25gp5a75",
-                "name": "destination",
-                "type": "text",
-                "required": true,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "min": null,
-                    "max": null,
-                    "pattern": ""
+                system: false,
+                id: "25gp5a75",
+                name: "destination",
+                type: "text",
+                required: true,
+                presentable: false,
+                unique: false,
+                options: {
+                    min: null,
+                    max: null,
+                    pattern: ""
                 }
             },
             {
-                "system": false,
-                "id": "wz8b4yb1",
-                "name": "arrivalTime",
-                "type": "date",
-                "required": true,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "min": "",
-                    "max": ""
+                system: false,
+                id: "wz8b4yb1",
+                name: "arrivalTime",
+                type: "date",
+                required: true,
+                presentable: false,
+                unique: false,
+                options: {
+                    min: "",
+                    max: ""
                 }
             },
             {
-                "system": false,
-                "id": "boa3qulb",
-                "name": "metadata",
-                "type": "json",
-                "required": false,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "maxSize": 2000000
+                system: false,
+                id: "boa3qulb",
+                name: "metadata",
+                type: "json",
+                required: false,
+                presentable: false,
+                unique: false,
+                options: {
+                    maxSize: 2000000
                 }
             },
             {
-                "system": false,
-                "id": "k3d8psyv",
-                "name": "trip",
-                "type": "relation",
-                "required": true,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "collectionId": "mi831epro60nwrd",
-                    "cascadeDelete": true,
-                    "minSelect": null,
-                    "maxSelect": 1,
-                    "displayFields": null
+                system: false,
+                id: "k3d8psyv",
+                name: "trip",
+                type: "relation",
+                required: true,
+                presentable: false,
+                unique: false,
+                options: {
+                    collectionId: "mi831epro60nwrd",
+                    cascadeDelete: true,
+                    minSelect: null,
+                    maxSelect: 1,
+                    displayFields: null
                 }
             },
             {
-                "system": false,
-                "id": "xubbeoks",
-                "name": "cost",
-                "type": "json",
-                "required": false,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "maxSize": 2000000
+                system: false,
+                id: "xubbeoks",
+                name: "cost",
+                type: "json",
+                required: false,
+                presentable: false,
+                unique: false,
+                options: {
+                    maxSize: 2000000
                 }
             },
             {
-                "system": false,
-                "id": "z9azfjnb",
-                "name": "attachments",
-                "type": "file",
-                "required": false,
-                "presentable": false,
-                "unique": false,
-                "options": {
-                    "mimeTypes": [
+                system: false,
+                id: "z9azfjnb",
+                name: "attachments",
+                type: "file",
+                required: false,
+                presentable: false,
+                unique: false,
+                options: {
+                    mimeTypes: [
                         "application/pdf",
                         "text/plain",
                         "text/html",
@@ -137,22 +139,22 @@ migrate((db) => {
                         "image/gif",
                         "image/webp"
                     ],
-                    "thumbs": [],
-                    "maxSelect": 99,
-                    "maxSize": 5242880,
-                    "protected": false
+                    thumbs: [],
+                    maxSelect: 99,
+                    maxSize: 5242880,
+                    protected: false
                 }
             }
         ],
-        "indexes": [
+        indexes: [
             "CREATE INDEX `idx_trip` ON `transportations` (`trip`)"
         ],
-        "listRule": "trip.ownerId = @request.auth.id",
-        "viewRule": "trip.ownerId = @request.auth.id",
-        "createRule": "trip.ownerId = @request.auth.id",
-        "updateRule": "trip.ownerId = @request.auth.id",
-        "deleteRule": "trip.ownerId = @request.auth.id",
-        "options": {}
+        listRule: "trip.ownerId = @request.auth.id || trip.collaborators.id = @request.auth.id",
+        viewRule: "trip.ownerId = @request.auth.id || trip.collaborators.id = @request.auth.id",
+        createRule: "trip.ownerId = @request.auth.id || trip.collaborators.id = @request.auth.id",
+        updateRule: "trip.ownerId = @request.auth.id || trip.collaborators.id = @request.auth.id",
+        deleteRule: "trip.ownerId = @request.auth.id || trip.collaborators.id = @request.auth.id",
+        options: {}
     }
     const dao = new Dao(db);
     dao.saveCollection(new Collection(collectionSchema));

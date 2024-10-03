@@ -29,6 +29,7 @@ import duration from 'dayjs/plugin/duration'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {EditBasicInfoForm} from "./components/trip/basic/EditBasicInfoForm.tsx";
 import {UploadCoverImageForm} from "./components/trip/basic/UploadCoverImageForm.tsx";
+import {Collaborators} from "./components/trip/basic/Collaborators.tsx";
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
@@ -110,7 +111,8 @@ const modals = {
   uploadCoverImageForm: UploadCoverImageForm,
   addFlightForm: FlightForm,
   carRentalForm: CarRentalForm,
-  genericTransportationForm: GenericTransportationModeForm
+  genericTransportationForm: GenericTransportationModeForm,
+  collaboratorsForm: Collaborators
 }
 
 declare module '@mantine/modals' {

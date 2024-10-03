@@ -1,30 +1,35 @@
 import {pb} from "./pocketbase.ts";
-import {CreateTransportation, NewTrip, Transportation, Trip, TripResponse} from "../../types/trips.ts";
+import {Collaborator, CreateTransportation, NewTrip, Transportation, Trip, TripResponse} from "../../types/trips.ts";
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
 }
 
 export const getTrip = (tripId: string): Promise<Trip> => {
-  return pb.collection('trips').getOne<TripResponse>(tripId)
+  return pb.collection('trips').getOne<TripResponse>(tripId, { expand: 'collaborators'})
     .then((trip) => {
+      const {expand, startDate, endDate, ...rest} = trip
       return {
-        ...trip,
-        startDate: new Date(Date.parse(trip.startDate)),
-        endDate: new Date(Date.parse(trip.endDate))
-      }
+        ...rest,
+        ...expand,
+        startDate: new Date(Date.parse(startDate)),
+        endDate: new Date(Date.parse(endDate))
+      };
     });
 }
 
 export const listTrips = async (): Promise<Trip[]> => {
   const results = await pb.collection('trips').getFullList<TripResponse>({
     sort: '-created',
+    expand: 'collaborators'
   });
   return results.map(trip => {
+    const {expand, startDate, endDate, ...rest} = trip
     return {
-      ...trip,
-      startDate: new Date(Date.parse(trip.startDate)),
-      endDate: new Date(Date.parse(trip.endDate))
+      ...rest,
+      ...expand,
+      startDate: new Date(Date.parse(startDate)),
+      endDate: new Date(Date.parse(endDate))
     };
   });
 }
@@ -111,4 +116,16 @@ export const uploadTripCoverImage = (tripId: string, coverImage: File | Blob) =>
   const formData = new FormData()
   formData.append("coverImage", coverImage)
   return pb.collection('trips').update(tripId, formData);
+}
+
+export const addCollaborators = (tripId: string, userIds: string[]): Promise<Collaborator> => {
+  return pb.collection('trips').update(tripId, {
+    'collaborators+': userIds
+  });
+}
+
+export const deleteCollaborator = (tripId: string, userId: string): Promise<Collaborator> => {
+  return pb.collection('trips').update(tripId, {
+    'collaborators-': userId
+  });
 }

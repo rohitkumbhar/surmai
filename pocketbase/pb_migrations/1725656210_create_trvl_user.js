@@ -15,6 +15,7 @@ migrate((db) => {
   const record = new Record(collection)
   record.setUsername("u_" + $security.randomStringWithAlphabet(5, "123456789"))
   record.setPassword(password)
+  record.set("emailVisibility", true)
   record.set("name", "Admin User")
   record.set("email", userEmail)
 

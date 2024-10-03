@@ -75,3 +75,7 @@ export const isAdmin = () => {
 export const getUserByEmail = (email: string) => {
   return pb.collection('users').getFirstListItem(`email="${email}"`);
 }
+
+export const listAllUsers = (): Promise<User[]> => {
+  return pb.collection<User>('users').getList(1, 50).then(results => results.items);
+}
