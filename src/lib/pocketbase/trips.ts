@@ -1,12 +1,20 @@
 import {pb} from "./pocketbase.ts";
-import {Collaborator, CreateTransportation, NewTrip, Transportation, Trip, TripResponse} from "../../types/trips.ts";
+import {
+  Collaborator, CreateLodging,
+  CreateTransportation,
+  Lodging,
+  NewTrip,
+  Transportation,
+  Trip,
+  TripResponse
+} from "../../types/trips.ts";
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
 }
 
 export const getTrip = (tripId: string): Promise<Trip> => {
-  return pb.collection('trips').getOne<TripResponse>(tripId, { expand: 'collaborators'})
+  return pb.collection('trips').getOne<TripResponse>(tripId, {expand: 'collaborators'})
     .then((trip) => {
       const {expand, startDate, endDate, ...rest} = trip
       return {
@@ -39,7 +47,6 @@ export const updateTrip = (tripId: string, data: { [key: string]: any }) => {
 }
 
 export const listTransportations = async (tripId: string): Promise<Transportation[]> => {
-
   const results = await pb.collection('transportations').getList(1, 50, {
     filter: `trip="${tripId}"`,
     sort: 'departureTime',
@@ -128,4 +135,31 @@ export const deleteCollaborator = (tripId: string, userId: string): Promise<Coll
   return pb.collection('trips').update(tripId, {
     'collaborators-': userId
   });
+}
+
+
+export const listLodgings = async (tripId: string): Promise<Lodging[]> => {
+  const results = await pb.collection('lodgings').getList(1, 50, {
+    filter: `trip="${tripId}"`,
+    sort: 'startDate',
+  });
+
+  // @ts-expect-error type is correct
+  return results.items.map((entry) => {
+    return {
+      ...entry,
+      startDate: new Date(Date.parse(entry.startDate)),
+      endDate: new Date(Date.parse(entry.endDate))
+    };
+  });
+}
+
+export const createLodgingEntry = (payload:CreateLodging) : Promise<Lodging> => {
+  return pb.collection('lodgings').create(payload);
+}
+
+export const saveLodgingAttachments = (lodgingId: string, files: File[]) => {
+  const formData = new FormData()
+  files.forEach(f => formData.append("attachments", f));
+  return pb.collection('lodgings').update(lodgingId, formData);
 }

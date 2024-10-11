@@ -1,5 +1,11 @@
 export {
-  authWithUsernameAndPassword, currentUser, logoutCurrentUser, createUserWithPassword, isAdmin, getUserByEmail, listAllUsers
+  authWithUsernameAndPassword,
+  currentUser,
+  logoutCurrentUser,
+  createUserWithPassword,
+  isAdmin,
+  getUserByEmail,
+  listAllUsers
 } from './pocketbase/auth'
 export {
   getTrip,
@@ -16,7 +22,10 @@ export {
   uploadTripCoverImage,
   deleteTrip,
   addCollaborators,
-  deleteCollaborator
+  deleteCollaborator,
+  listLodgings,
+  createLodgingEntry,
+  saveLodgingAttachments
 } from './pocketbase/trips'
 
 

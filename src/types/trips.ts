@@ -93,3 +93,31 @@ export type Collaborator = {
   trip: string,
   user: string | User
 }
+
+export type Lodging = {
+  id: string,
+  type: string,
+  name: string,
+  address?: string,
+  cost?: Cost,
+  startDate: Date,
+  endDate: Date,
+  trip: string,
+  confirmationCode?: string,
+  metadata?: { [key: string]: any }
+  attachments?: string[]
+}
+
+export type CreateLodging = Omit<Lodging, 'id'>;
+
+
+export type LodgingFormSchema = {
+  type?: string,
+  name?: string,
+  address?: string,
+  cost?: number,
+  currencyCode: string,
+  startDate?: Date,
+  endDate?: Date,
+  confirmationCode? : string
+}

@@ -10,6 +10,7 @@ import {TransportationPanel} from "../../components/trip/transportation/Transpor
 import {useTranslation} from "react-i18next";
 import {useDocumentTitle} from "@mantine/hooks";
 import {useEffect, useState} from "react";
+import {LodgingPanel} from "../../components/trip/lodging/LodgingPanel.tsx";
 
 export const ViewTrip = () => {
 
@@ -103,7 +104,7 @@ export const ViewTrip = () => {
             </Group>
           </Accordion.Control>
           <Accordion.Panel>
-            <p>Nothing to see yet</p>
+            <LodgingPanel trip={trip}/>
           </Accordion.Panel>
         </Accordion.Item>
       </Accordion>
