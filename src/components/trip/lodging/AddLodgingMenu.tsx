@@ -1,8 +1,8 @@
 import {Button, Menu, rem} from '@mantine/core';
 import {IconBedFlat, IconBuildingEstate, IconChevronDown, IconHome, IconTent,} from '@tabler/icons-react';
 import {useTranslation} from "react-i18next";
-import {closeModal, openContextModal} from '@mantine/modals';
-import {Trip} from "../../../types/trips.ts";
+import {openContextModal} from '@mantine/modals';
+import {LodgingType, Trip} from "../../../types/trips.ts";
 import {useMediaQuery} from "@mantine/hooks";
 
 export const AddLodgingMenu = ({trip, refetch}: {
@@ -41,7 +41,7 @@ export const AddLodgingMenu = ({trip, refetch}: {
               fullScreen: isMobile,
               innerProps: {
                 trip: trip,
-                type: 'hotel',
+                type: LodgingType.HOTEL,
                 onSuccess: () => {
                   refetch()
                 },
@@ -49,7 +49,6 @@ export const AddLodgingMenu = ({trip, refetch}: {
                 }
               },
             });
-
           }}
           leftSection={
             <IconBuildingEstate
@@ -64,20 +63,19 @@ export const AddLodgingMenu = ({trip, refetch}: {
         <Menu.Item
           onClick={() => {
             openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_bus', 'Add Bus'),
+              modal: 'genericLodgingForm',
+              title: t('lodging.add_home', 'Add Home'),
               radius: 'md',
+              size: 'auto',
               withCloseButton: isMobile,
               fullScreen: isMobile,
               innerProps: {
-                transportationType: 'bus',
                 trip: trip,
+                type: LodgingType.HOME,
                 onSuccess: () => {
-                  closeModal('genericTransportationForm')
                   refetch()
                 },
                 onCancel: () => {
-                  closeModal('genericTransportationForm')
                 }
               },
             });
@@ -94,22 +92,20 @@ export const AddLodgingMenu = ({trip, refetch}: {
 
         <Menu.Item
           onClick={() => {
-
             openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_boat', 'Add Car/Taxi'),
+              modal: 'genericLodgingForm',
+              title: t('lodging.rental', 'Add Rental'),
               radius: 'md',
+              size: 'auto',
               withCloseButton: isMobile,
               fullScreen: isMobile,
               innerProps: {
-                transportationType: 'car',
                 trip: trip,
+                type: LodgingType.RENTAL,
                 onSuccess: () => {
-                  closeModal('genericTransportationForm')
                   refetch()
                 },
                 onCancel: () => {
-                  closeModal('genericTransportationForm')
                 }
               },
             });
@@ -121,28 +117,26 @@ export const AddLodgingMenu = ({trip, refetch}: {
             />
           }
         >
-          {t('transportation.vacation_rental', 'Vac. Rental')}
+          {t('transportation.vacation_rental', 'Rental')}
 
         </Menu.Item>
 
         <Menu.Item
           onClick={() => {
-
             openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_boat', 'Add Car/Taxi'),
+              modal: 'genericLodgingForm',
+              title: t('lodging.add_camp_site', 'Add Camp Site'),
               radius: 'md',
+              size: 'auto',
               withCloseButton: isMobile,
               fullScreen: isMobile,
               innerProps: {
-                transportationType: 'car',
                 trip: trip,
+                type: LodgingType.CAMP_SITE,
                 onSuccess: () => {
-                  closeModal('genericTransportationForm')
                   refetch()
                 },
                 onCancel: () => {
-                  closeModal('genericTransportationForm')
                 }
               },
             });
@@ -155,7 +149,6 @@ export const AddLodgingMenu = ({trip, refetch}: {
           }
         >
           {t('transportation.camp_site', 'Camp Site')}
-
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

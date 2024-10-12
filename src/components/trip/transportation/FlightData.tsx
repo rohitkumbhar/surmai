@@ -2,9 +2,9 @@ import {Transportation, Trip} from "../../../types/trips.ts";
 import {Avatar, Group, rem, Stack, Text, Title, Tooltip} from "@mantine/core";
 import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture} from "@tabler/icons-react";
 import {deleteTransportation} from "../../../lib";
-import {formatDate, formatTime} from "./util.ts";
+import {formatDate, formatTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
-import {Attachments} from "./Attachments.tsx";
+import {Attachments} from "../common/Attachments.tsx";
 import {DataLine} from "../DataLine.tsx";
 import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
@@ -111,7 +111,7 @@ export const FlightData = ({trip, flight, refetch}: { trip: Trip, flight: Transp
         </Stack>
 
       </Group>
-      <Attachments transportation={flight} refetch={refetch}/>
+      <Attachments entity={flight} refetch={refetch}/>
     </DataLine>
   )
 }

@@ -1,10 +1,10 @@
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {Box, Center, Divider, Grid, Text, Title, Tooltip} from "@mantine/core";
 import {IconBus, IconCar, IconPlaneInflight, IconShip, IconTrain} from "@tabler/icons-react";
-import {deleteTransportation} from "../../../lib";
-import {formatDate, formatTime, getTravelTime} from "./util.ts";
+import {deleteTransportation, deleteTransportationAttachment} from "../../../lib";
+import {formatDate, formatTime, getTravelTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
-import {Attachments} from "./Attachments.tsx";
+import {Attachments} from "../common/Attachments.tsx";
 import {DataLine} from "../DataLine.tsx";
 import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
@@ -104,8 +104,8 @@ export const GenericTransportationData = ({trip, transportation, refetch}: {
         </Grid.Col>
 
         <Grid.Col span={{base: 12, sm: 2, md: 1, lg: 1}}>
-          <Center>
-            <Text c={"dimmed"} size={"xs"} >
+          <Center h={"100%"}>
+            <Text c={"dimmed"} size={"xs"}>
               {getTravelTime(transportation.departureTime, transportation.arrivalTime)}
             </Text>
           </Center>
@@ -150,7 +150,8 @@ export const GenericTransportationData = ({trip, transportation, refetch}: {
           </Title>
         </Grid.Col>
       </Grid>
-      <Attachments transportation={transportation} refetch={refetch}/>
+      <Attachments entity={transportation} refetch={refetch}
+                   onDelete={(attachmentName) => deleteTransportationAttachment(transportation.id, attachmentName)}/>
     </DataLine>
   )
 }

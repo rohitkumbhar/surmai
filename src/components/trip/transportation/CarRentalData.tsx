@@ -2,9 +2,9 @@ import {Transportation, Trip} from "../../../types/trips.ts";
 import {Box, Divider, Grid, Text, Title, Tooltip} from "@mantine/core";
 import {IconArticle} from "@tabler/icons-react";
 import {deleteTransportation} from "../../../lib";
-import {formatDate, formatTime} from "./util.ts";
+import {formatDate, formatTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
-import {Attachments} from "./Attachments.tsx";
+import {Attachments} from "../common/Attachments.tsx";
 import {DataLine} from "../DataLine.tsx";
 import {closeModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
@@ -113,7 +113,7 @@ export const CarRentalData = ({trip, rental, refetch}: { trip: Trip, rental: Tra
           </Title>
         </Grid.Col>
       </Grid>
-      <Attachments transportation={rental} refetch={refetch}/>
+      <Attachments entity={rental} refetch={refetch}/>
 
       {/*<Group>
         <Group pl={"xs"}>

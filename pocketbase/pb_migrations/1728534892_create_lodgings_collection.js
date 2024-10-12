@@ -19,7 +19,7 @@ migrate((db) => {
             "hotel",
             "home",
             "vacation_rental",
-            "other"
+            "camp_site"
           ]
         }
       },

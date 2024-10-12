@@ -119,5 +119,12 @@ export type LodgingFormSchema = {
   currencyCode: string,
   startDate?: Date,
   endDate?: Date,
-  confirmationCode? : string
+  confirmationCode?: string
+}
+
+export const enum LodgingType {
+  HOTEL = "hotel",
+  HOME = "home",
+  RENTAL = "vacation_rental",
+  CAMP_SITE = "camp_site"
 }

@@ -28,3 +28,10 @@ export const getTravelTime = (start: Date, end: Date): string => {
 
   return `${hoursDiff} hour(s) & ${remainingMinutes} minutes`;
 }
+
+export const getNumberOfDays = (start: Date, end: Date): string => {
+  const s = dayjs(start)
+  const e = dayjs(end)
+  const days = e.diff(s, 'days', false)
+  return `${days} day(s)`;
+}

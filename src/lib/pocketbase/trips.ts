@@ -158,6 +158,14 @@ export const createLodgingEntry = (payload:CreateLodging) : Promise<Lodging> => 
   return pb.collection('lodgings').create(payload);
 }
 
+export const updateLodgingEntry = (lodgingId: string, payload:CreateLodging) : Promise<Lodging> => {
+  return pb.collection('lodgings').update(lodgingId, payload);
+}
+
+export const deleteLodging = (lodgingId: string) => {
+  return pb.collection('lodgings').delete(lodgingId);
+}
+
 export const saveLodgingAttachments = (lodgingId: string, files: File[]) => {
   const formData = new FormData()
   files.forEach(f => formData.append("attachments", f));

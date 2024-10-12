@@ -6,7 +6,7 @@ import {Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title}
 import {DateTimePicker} from "@mantine/dates";
 import {CurrencyInput} from "../../util/CurrencyInput.tsx";
 import {useTranslation} from "react-i18next";
-import {createLodgingEntry, saveLodgingAttachments} from "../../../lib";
+import {createLodgingEntry, saveLodgingAttachments, updateLodgingEntry} from "../../../lib";
 
 export const GenericLodgingForm = ({context, id, innerProps}: ContextModalProps<{
   trip: Trip
@@ -53,6 +53,17 @@ export const GenericLodgingForm = ({context, id, innerProps}: ContextModalProps<
     if (lodging?.id) {
       // update
       console.log("updating")
+      updateLodgingEntry(lodging.id, data as CreateLodging).then(result => {
+        if (files.length > 0) {
+          saveLodgingAttachments(result.id, files).then(() => {
+            onSuccess()
+          })
+        } else {
+          onSuccess()
+        }
+      }).finally(() => {
+        context.closeModal(id)
+      })
     } else {
       createLodgingEntry(data as CreateLodging).then(result => {
         if (files.length > 0) {
