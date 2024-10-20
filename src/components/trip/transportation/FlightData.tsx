@@ -1,7 +1,7 @@
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {Avatar, Group, rem, Stack, Text, Title, Tooltip} from "@mantine/core";
 import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture} from "@tabler/icons-react";
-import {deleteTransportation} from "../../../lib";
+import {deleteTransportation, deleteTransportationAttachment} from "../../../lib";
 import {formatDate, formatTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
 import {Attachments} from "../common/Attachments.tsx";
@@ -40,7 +40,7 @@ export const FlightData = ({trip, flight, refetch}: { trip: Trip, flight: Transp
       onDelete={() => {
         openConfirmModal({
           title: t('delete_flight', 'Delete Flight'),
-          confirmProps: { color: 'red' },
+          confirmProps: {color: 'red'},
           children: (
             <Text size="sm">
               {t('deletion_confirmation', 'This action cannot be undone.')}
@@ -111,7 +111,9 @@ export const FlightData = ({trip, flight, refetch}: { trip: Trip, flight: Transp
         </Stack>
 
       </Group>
-      <Attachments entity={flight} refetch={refetch}/>
+      <Attachments entity={flight} refetch={refetch}
+                   onDelete={(attachmentName) => deleteTransportationAttachment(flight.id, attachmentName)}
+      />
     </DataLine>
   )
 }

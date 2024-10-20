@@ -5,6 +5,7 @@ import classes from './Navbar.module.css';
 import {UserButton} from "../user/UserButton.tsx";
 import {useNavigate} from "react-router-dom";
 import {isAdmin} from "../../lib";
+import {FishOne} from "../logo/FishOne.tsx";
 
 
 interface NavbarLinkProps {
@@ -53,7 +54,7 @@ export function Navbar() {
   return (
     <nav className={classes.navbar}>
       <Center>
-        <IconFish color={"var(--mantine-color-white)"} size={30}/>
+        <FishOne size={30}/>
       </Center>
 
       <div className={classes.navbarMain}>

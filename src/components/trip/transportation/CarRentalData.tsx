@@ -1,7 +1,7 @@
 import {Transportation, Trip} from "../../../types/trips.ts";
 import {Box, Divider, Grid, Text, Title, Tooltip} from "@mantine/core";
 import {IconArticle} from "@tabler/icons-react";
-import {deleteTransportation} from "../../../lib";
+import {deleteTransportation, deleteTransportationAttachment} from "../../../lib";
 import {formatDate, formatTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
 import {Attachments} from "../common/Attachments.tsx";
@@ -113,7 +113,9 @@ export const CarRentalData = ({trip, rental, refetch}: { trip: Trip, rental: Tra
           </Title>
         </Grid.Col>
       </Grid>
-      <Attachments entity={rental} refetch={refetch}/>
+      <Attachments entity={rental} refetch={refetch}
+                   onDelete={(attachmentName) => deleteTransportationAttachment(rental.id, attachmentName)}
+      />
 
       {/*<Group>
         <Group pl={"xs"}>
