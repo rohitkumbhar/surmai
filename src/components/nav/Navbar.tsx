@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {Center, rem, Stack, Tooltip, UnstyledButton} from '@mantine/core';
-import {IconFish, IconHome2, IconSettings,} from '@tabler/icons-react';
+import {IconHome2, IconSettings,} from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import {UserButton} from "../user/UserButton.tsx";
 import {useNavigate} from "react-router-dom";
