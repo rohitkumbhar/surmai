@@ -7,7 +7,7 @@ import {VitePWA} from 'vite-plugin-pwa'
 export default defineConfig(() => {
 
   // @ts-ignore
-  const routeMatchCallback = ({request}) => {
+  const routeMatchCallback = ({ request}) => {
     console.log("match callback request", request)
     return true
   }
