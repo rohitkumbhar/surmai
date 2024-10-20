@@ -7,7 +7,7 @@ import {VitePWA} from 'vite-plugin-pwa'
 export default defineConfig(() => {
 
   // @ts-ignore
-  const routeMatchCallback = ({ request}) => {
+  const routeMatchCallback = ({request}) => {
     console.log("match callback request", request)
     return true
   }
@@ -21,8 +21,47 @@ export default defineConfig(() => {
           enabled: true
         },
         manifest: {
+          theme_color: '#6b7a99',
           icons: [
-            { src: "/icons/fish-2.svg", type: "image/svg" }
+            {
+              src: "icons/pwa-64x64.png",
+              sizes: "64x64",
+              type: "image/png"
+            },
+            {
+              src: "icons/pwa-192x192.png",
+              sizes: "192x192",
+              type: "image/png"
+            },
+            {
+              src: "icons/pwa-512x512.png",
+              sizes: "512x512",
+              type: "image/png"
+            },
+            {
+              src: "icons/maskable-icon-512x512.png",
+              sizes: "512x512",
+              type: "image/png",
+              purpose: "maskable"
+            }
+          ],
+          screenshots: [
+            {
+
+              src: "screenshots/wide.jpg",
+              sizes: "1303x569",
+              type: "image/jpeg",
+              form_factor: "wide",
+              label: "Application"
+            },
+            {
+
+              src: "screenshots/mobile.jpg",
+              sizes: "379x597",
+              type: "image/jpeg",
+              form_factor: "narrow",
+              label: "Application"
+            }
           ]
         },
         workbox: {
