@@ -1,3 +1,23 @@
+FROM node:20 AS builder
+
+USER node
+WORKDIR /surmai
+
+ADD src src
+ADD public public
+COPY .eslintrc.cjs .
+COPY index.html .
+COPY package.json .
+COPY postcss.config.js .
+COPY tsconfig.app.json .
+COPY tsconfig.json .
+COPY tsconfig.node.json .
+COPY vite.config.ts .
+
+RUN npm install --no-audit
+RUN npm run build
+
+
 FROM alpine:latest
 
 ARG PB_VERSION=0.22.20
@@ -12,7 +32,9 @@ RUN unzip /tmp/pb.zip -d /pb/
 COPY pocketbase/init.sh /pb/init.sh
 COPY pocketbase/pb_migrations /pb_migrations
 COPY pocketbase/pb_hooks /pb_hooks
-COPY dist /pb_public
+
+COPY --from=builder /surmai/dist /pb_public
+
 
 EXPOSE 8080
 
