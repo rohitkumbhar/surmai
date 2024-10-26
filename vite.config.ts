@@ -66,7 +66,8 @@ export default defineConfig(() => {
           ]
         },
         workbox: {
-          templatedURLs: {},
+
+          navigateFallbackDenylist: [/^\/api\/files/],
           runtimeCaching: [
             {
               urlPattern: routeMatchCallback,
