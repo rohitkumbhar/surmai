@@ -21,7 +21,8 @@ export const Attachments = ({entity, refetch, onDelete}: {
 
         {(entity.attachments || []).map((attachmentName: string) => {
           return (
-            <a href={getAttachmentUrl(entity, attachmentName)} target={"_blank"} key={attachmentName}>
+            <a href={getAttachmentUrl(entity, attachmentName)} target={"_blank"} download={`${attachmentName}`}
+               rel="noreferrer" key={attachmentName}>
               <Badge variant={"transparent"} size={"lg"} radius={0}
                      leftSection={<IconFile/>}
                      rightSection={<CloseButton
