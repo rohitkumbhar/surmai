@@ -7,9 +7,8 @@ import {VitePWA} from 'vite-plugin-pwa'
 export default defineConfig(() => {
 
   // @ts-expect-error types
-  const routeMatchCallback: RouteMatchCallback = ({request, path}) => {
-    console.log("match callback request", request, path)
-    return false; // path.toString().indexOf("/api/files") == -1
+  const routeMatchCallback: RouteMatchCallback = ({path}) => {
+    return path.toString().indexOf("/api") == -1
 
   }
   return {
@@ -66,14 +65,14 @@ export default defineConfig(() => {
           ]
         },
         workbox: {
-
-          navigateFallbackDenylist: [/^\/api\/files/],
+          // Don't return index.html for any API calls
+          navigateFallbackDenylist: [/^\/api/],
           runtimeCaching: [
             {
               urlPattern: routeMatchCallback,
               handler: 'NetworkFirst',
               options: {
-                cacheName: 'trips-cache',
+                cacheName: 'surmai-cache',
                 expiration: {
                   maxEntries: 10,
                   maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
