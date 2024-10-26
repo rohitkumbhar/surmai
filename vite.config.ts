@@ -7,8 +7,9 @@ import {VitePWA} from 'vite-plugin-pwa'
 export default defineConfig(() => {
 
   // @ts-expect-error types
-  const routeMatchCallback: RouteMatchCallback = ({path}) => {
-    return path.toString().indexOf("/api") == -1
+  const routeMatchCallback: RouteMatchCallback = ({request, path}) => {
+    console.log("path => ", path, " in request", request)
+    return path?.toString().indexOf("/api") == -1
 
   }
   return {
