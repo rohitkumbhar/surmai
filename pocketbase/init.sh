@@ -9,4 +9,6 @@
 	--publicDir=/pb_public \
 	--hooksDir=/pb_hooks \
 	--migrationsDir=/pb_migrations \
-	--automigrate=false
+	--automigrate=false \
+	--dev
+
