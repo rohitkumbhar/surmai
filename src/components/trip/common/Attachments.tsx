@@ -1,5 +1,5 @@
 import {Lodging, Transportation} from "../../../types/trips.ts";
-import {Anchor, Badge, CloseButton, Divider, Group, Text} from "@mantine/core";
+import {Badge, CloseButton, Divider, Group, Text} from "@mantine/core";
 import {getAttachmentUrl} from "../../../lib";
 import {IconFile} from "@tabler/icons-react";
 import {useTranslation} from "react-i18next";
@@ -21,7 +21,7 @@ export const Attachments = ({entity, refetch, onDelete}: {
 
         {(entity.attachments || []).map((attachmentName: string) => {
           return (
-            <Anchor href={getAttachmentUrl(entity, attachmentName)} target={"_blank"} key={attachmentName}>
+            <a href={getAttachmentUrl(entity, attachmentName)} target={"_blank"} key={attachmentName}>
               <Badge variant={"transparent"} size={"lg"} radius={0}
                      leftSection={<IconFile/>}
                      rightSection={<CloseButton
@@ -53,7 +53,7 @@ export const Attachments = ({entity, refetch, onDelete}: {
                          event.preventDefault()
 
                        }}/>}>{attachmentName}</Badge>
-            </Anchor>
+            </a>
           )
         })}
       </Group>}
