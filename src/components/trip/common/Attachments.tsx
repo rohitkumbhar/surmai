@@ -1,10 +1,11 @@
 import {Lodging, Transportation} from "../../../types/trips.ts";
-import {Badge, CloseButton, Divider, Group, Text} from "@mantine/core";
+import {Anchor, Badge, CloseButton, Divider, Group, Text} from "@mantine/core";
 import {getAttachmentUrl} from "../../../lib";
 import {IconFile} from "@tabler/icons-react";
 import {useTranslation} from "react-i18next";
-import {openConfirmModal} from "@mantine/modals";
+import {openConfirmModal, openContextModal} from "@mantine/modals";
 import {notifications} from "@mantine/notifications";
+import {useMediaQuery} from "@mantine/hooks";
 
 export const Attachments = ({entity, refetch, onDelete}: {
   entity: Transportation | Lodging,
@@ -13,6 +14,7 @@ export const Attachments = ({entity, refetch, onDelete}: {
 }) => {
 
   const {t} = useTranslation()
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
     <>
@@ -21,7 +23,23 @@ export const Attachments = ({entity, refetch, onDelete}: {
 
         {(entity.attachments || []).map((attachmentName: string) => {
           return (
-            <a href={getAttachmentUrl(entity, attachmentName)} target={"_blank"} download={`${attachmentName}`}
+            <Anchor href={'#'} target={"_blank"}
+                    onClick={(event) => {
+                      event.preventDefault()
+                      const url = getAttachmentUrl(entity, attachmentName);
+                      openContextModal({
+                        modal: 'attachmentViewer',
+                        title: attachmentName,
+                        radius: 'md',
+                        withCloseButton: true,
+                        fullScreen: isMobile,
+                        size: 'auto',
+                        innerProps: {
+                          fileName: attachmentName,
+                          attachmentUrl: url
+                        },
+                      });
+                    }}
                rel="noreferrer" key={attachmentName}>
               <Badge variant={"transparent"} size={"lg"} radius={0}
                      leftSection={<IconFile/>}
@@ -54,7 +72,7 @@ export const Attachments = ({entity, refetch, onDelete}: {
                          event.preventDefault()
 
                        }}/>}>{attachmentName}</Badge>
-            </a>
+            </Anchor>
           )
         })}
       </Group>}

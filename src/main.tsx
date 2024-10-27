@@ -31,6 +31,7 @@ import {EditBasicInfoForm} from "./components/trip/basic/EditBasicInfoForm.tsx";
 import {UploadCoverImageForm} from "./components/trip/basic/UploadCoverImageForm.tsx";
 import {Collaborators} from "./components/trip/basic/Collaborators.tsx";
 import {GenericLodgingForm} from "./components/trip/lodging/GenericLodgingForm.tsx";
+import {AttachmentViewer} from "./components/trip/common/AttachmentViewer.tsx";
 dayjs.extend(duration)
 dayjs.extend(relativeTime)
 
@@ -114,7 +115,8 @@ const modals = {
   carRentalForm: CarRentalForm,
   genericTransportationForm: GenericTransportationModeForm,
   collaboratorsForm: Collaborators,
-  genericLodgingForm: GenericLodgingForm
+  genericLodgingForm: GenericLodgingForm,
+  attachmentViewer: AttachmentViewer
 }
 
 declare module '@mantine/modals' {

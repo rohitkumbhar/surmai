@@ -27,6 +27,7 @@
     "i18next-http-backend": "^2.6.1",
     "pocketbase": "^0.21.5",
     "react": "^18.3.1",
+    "react-doc-viewer": "^0.1.14",
     "react-dom": "^18.3.1",
     "react-easy-crop": "^5.0.8",
     "react-i18next": "^15.0.1",
