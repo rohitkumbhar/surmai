@@ -1,17 +1,27 @@
 import {ContextModalProps} from "@mantine/modals";
-import DocViewer, {JPGRenderer, PDFRenderer, PNGRenderer} from "react-doc-viewer";
+import {Button, Container, Group, Space} from "@mantine/core";
+import {PDFViewer} from "./PDFViewer.tsx";
+import {IconDownload} from "@tabler/icons-react";
+import {ImageViewer} from "./ImageViewer.tsx";
 
-import {pdfjs} from "react-pdf";
-import pdfjsWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
-
-pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
 export const AttachmentViewer = ({innerProps}: ContextModalProps<{
   fileName: string,
   attachmentUrl: string
 
 }>) => {
-  const {attachmentUrl} = innerProps
-  return <DocViewer pluginRenderers={[PDFRenderer, PNGRenderer, JPGRenderer]}
-                    documents={[{uri: attachmentUrl}]}/>;
+  const {fileName, attachmentUrl} = innerProps
+
+  const extension = fileName.split('.').pop()?.toLowerCase()
+  const isPdf = extension === "pdf"
+  const isImage = extension && ["jpg", "jpeg", "png", "webp", "bmp"].includes(extension)
+
+  return <Container>
+    <Group><Button component={'a'} href={`${attachmentUrl}?download=1`} w={"auto"} download={fileName}
+                   rightSection={<IconDownload size={14}/>}>Download</Button></Group>
+    <Space h="md"/>
+    <Group> {isPdf && <PDFViewer documentUrl={attachmentUrl}/>}
+      {isImage && <ImageViewer imageUrl={attachmentUrl} imageName={fileName}/>}
+      {!(isPdf || isImage) && <div> Unable to render this file</div>}</Group>
+  </Container>
 }

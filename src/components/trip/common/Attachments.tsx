@@ -33,7 +33,7 @@ export const Attachments = ({entity, refetch, onDelete}: {
                         radius: 'md',
                         withCloseButton: true,
                         fullScreen: isMobile,
-                        size: '75%',
+                        size: 'auto',
                         innerProps: {
                           fileName: attachmentName,
                           attachmentUrl: url
