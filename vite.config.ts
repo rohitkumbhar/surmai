@@ -8,7 +8,7 @@ export default defineConfig(() => {
 
   // @ts-expect-error types
   const routeMatchCallback: RouteMatchCallback = ({request}) => {
-    return request?.url.includes("api");
+    return request?.url.includes("api") || request?.url.includes("pdf.worker");
   }
   return {
     plugins: [
