@@ -8,8 +8,7 @@ export default defineConfig(() => {
 
   // @ts-expect-error types
   const routeMatchCallback: RouteMatchCallback = ({request}) => {
-    return request?.url.indexOf("/api") == -1
-
+    return request?.url.includes("api");
   }
   return {
     plugins: [
