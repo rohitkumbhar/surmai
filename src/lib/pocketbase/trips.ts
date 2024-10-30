@@ -1,6 +1,7 @@
 import {pb} from "./pocketbase.ts";
 import {
-  Collaborator, CreateLodging,
+  Collaborator,
+  CreateLodging,
   CreateTransportation,
   Lodging,
   NewTrip,
@@ -154,11 +155,11 @@ export const listLodgings = async (tripId: string): Promise<Lodging[]> => {
   });
 }
 
-export const createLodgingEntry = (payload:CreateLodging) : Promise<Lodging> => {
+export const createLodgingEntry = (payload: CreateLodging): Promise<Lodging> => {
   return pb.collection('lodgings').create(payload);
 }
 
-export const updateLodgingEntry = (lodgingId: string, payload:CreateLodging) : Promise<Lodging> => {
+export const updateLodgingEntry = (lodgingId: string, payload: CreateLodging): Promise<Lodging> => {
   return pb.collection('lodgings').update(lodgingId, payload);
 }
 
@@ -170,4 +171,36 @@ export const saveLodgingAttachments = (lodgingId: string, files: File[]) => {
   const formData = new FormData()
   files.forEach(f => formData.append("attachments", f));
   return pb.collection('lodgings').update(lodgingId, formData);
+}
+
+export const loadEverything = (tripId: string) => {
+
+  return import("pdfjs-dist/build/pdf.worker.mjs?url").then((pdfjsWorker) => {
+    console.log("pdfjsWorker =>", pdfjsWorker)
+    return fetch(pdfjsWorker.default)
+  }).then(() => {
+    return getTrip(tripId)
+  }).then(() => {
+    return listTransportations(tripId)
+  }).then((transportations) => {
+    transportations.forEach(tr => {
+      tr.attachments?.forEach((attachment) => {
+        const attachmentUrl = getAttachmentUrl(tr, attachment);
+        fetch(attachmentUrl).then(() => {
+          console.log("Attachment ", attachment, " downloaded")
+        })
+      })
+    })
+  }).then(() => {
+    return listLodgings(tripId)
+  }).then((lodgings) => {
+    lodgings.forEach((l) => {
+      l.attachments?.forEach((attachment) => {
+        const attachmentUrl = getAttachmentUrl(l, attachment);
+        fetch(attachmentUrl).then(() => {
+          console.log("Attachment ", attachment, " downloaded")
+        })
+      })
+    })
+  });
 }

@@ -1,10 +1,10 @@
 import {useTranslation} from "react-i18next";
 import {useMediaQuery} from "@mantine/hooks";
 import {Button, Menu, rem, Text} from "@mantine/core";
-import {IconChevronDown, IconPencil, IconPhoto, IconTrash, IconUsers} from "@tabler/icons-react";
+import {IconChevronDown, IconDownload, IconPencil, IconPhoto, IconTrash, IconUsers} from "@tabler/icons-react";
 import {openConfirmModal, openContextModal} from "@mantine/modals";
 import {Trip} from "../../../types/trips.ts";
-import {deleteTrip} from "../../../lib";
+import {deleteTrip, loadEverything} from "../../../lib";
 import {notifications} from "@mantine/notifications";
 
 
@@ -101,6 +101,35 @@ export const BasicInfoMenu = ({trip, refetch}: {
         }
       >
         {t('basic.add_cover_image', 'Add Collaborators')}
+      </Menu.Item>
+      <Menu.Divider/>
+      <Menu.Item
+        onClick={() => {
+          loadEverything(trip.id).then(() => {
+            notifications.show({
+              title: 'Offline',
+              message: `Data for ${trip.name} has been added to cache`,
+              position: 'top-right'
+            })
+          }).catch(err => {
+
+            console.log("Error", err)
+            notifications.show({
+              title: 'Downloaded',
+              variant: "error",
+              message: `Data for ${trip.name} could not be downloaded`,
+              position: 'top-right'
+            })
+          })
+        }}
+        leftSection={
+          <IconDownload
+            style={{width: rem(16), height: rem(16)}}
+            stroke={1.5}
+          />
+        }
+      >
+        {t('offline', 'Enable Offline')}
       </Menu.Item>
       <Menu.Divider/>
       <Menu.Item

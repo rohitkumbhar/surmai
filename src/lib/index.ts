@@ -27,7 +27,8 @@ export {
   createLodgingEntry,
   saveLodgingAttachments,
   updateLodgingEntry,
-  deleteLodging
+  deleteLodging,
+  loadEverything
 } from './pocketbase/trips'
 
 
