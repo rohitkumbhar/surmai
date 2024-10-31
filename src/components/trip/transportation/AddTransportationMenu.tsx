@@ -37,6 +37,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
               title: t('transportation.add_new_flight', 'Add Flight'),
               radius: 'md',
               withCloseButton: false,
+              size: "auto",
               fullScreen: isMobile,
               innerProps: {
                 transportationType: 'flight',
@@ -69,6 +70,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
               title: t('transportation.add_bus', 'Add Bus'),
               radius: 'md',
               withCloseButton: false,
+              size: "auto",
               fullScreen: isMobile,
               innerProps: {
                 transportationType: 'bus',
@@ -101,6 +103,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
               title: t('transportation.add_boat', 'Add Car/Taxi'),
               radius: 'md',
               withCloseButton: false,
+              size: "auto",
               fullScreen: isMobile,
               innerProps: {
                 transportationType: 'car',
@@ -133,6 +136,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
               title: t('transportation.add_boat', 'Add Boat Ride'),
               radius: 'md',
               withCloseButton: false,
+              size: "auto",
               fullScreen: isMobile,
               innerProps: {
                 transportationType: 'boat',
@@ -165,6 +169,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
               title: t('transportation.add_train', 'Add Train Ride'),
               radius: 'md',
               withCloseButton: false,
+              size: "auto",
               fullScreen: isMobile,
               innerProps: {
                 transportationType: 'train',
@@ -198,6 +203,7 @@ export const AddTransportationMenu = ({trip, refetch}: {
               title: t('transportation.add_rental_car', 'Add Rental Car'),
               radius: 'md',
               withCloseButton: false,
+              size: "auto",
               fullScreen: isMobile,
               innerProps: {
                 trip: trip,

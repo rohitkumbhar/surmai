@@ -90,14 +90,18 @@ export const GenericTransportationModeForm = ({context, id, innerProps}: Context
           <Group>
             <TextInput name={"from"} label={t('transportation.from', "From")} required
                        key={form.key('origin')} {...form.getInputProps('origin')}/>
-            <DateTimePicker highlightToday valueFormat="DD MMM YYYY hh:mm A" name={"departureTime"}
+            <DateTimePicker highlightToday valueFormat="lll" name={"departureTime"}
+                            w={rem('200px')}
                             label={t('transportation.departure_time', "Departure Time")} clearable required
                             key={form.key('departureTime')} {...form.getInputProps('departureTime')} miw={rem(150)}/>
+
+          </Group>
+          <Group>
             <TextInput name={"to"} label={t('transportation.to', "To")} required
                        key={form.key('destination')} {...form.getInputProps('destination')}/>
-            <DateTimePicker valueFormat="DD MMM YYYY hh:mm A" name={"arrivalTime"}
+            <DateTimePicker valueFormat="lll" name={"arrivalTime"}
                             label={t('transportation.arrival_time', "Arrival Time")} required
-                            miw={rem(150)}
+                            w={rem('200px')}
                             clearable
                             key={form.key('arrivalTime')} {...form.getInputProps('arrivalTime')}/>
           </Group>
@@ -108,6 +112,9 @@ export const GenericTransportationModeForm = ({context, id, innerProps}: Context
             <TextInput name={"reservation"} label={t('transportation.reservation', 'Reservation')}
                        key={form.key('reservation')} {...form.getInputProps('reservation')}/>
 
+
+          </Group>
+          <Group>
             <CurrencyInput
               costKey={form.key('cost')}
               costProps={form.getInputProps('cost')}

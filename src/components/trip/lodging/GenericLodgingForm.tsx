@@ -92,13 +92,14 @@ export const GenericLodgingForm = ({context, id, innerProps}: ContextModalProps<
                     key={form.key('address')} {...form.getInputProps('address')}/>
         </Stack>
         <Group>
-          <DateTimePicker highlightToday valueFormat="DD MMM YYYY hh:mm A" name={"startDate"}
+          <DateTimePicker highlightToday valueFormat="lll" name={"startDate"}
                           label={t('lodging.start_date', "Check-In")} clearable required
+                          w={rem('200px')}
                           key={form.key('startDate')} {...form.getInputProps('startDate')} miw={rem(150)}/>
 
-          <DateTimePicker valueFormat="DD MMM YYYY hh:mm A" name={"endDate"}
+          <DateTimePicker valueFormat="lll" name={"endDate"}
                           label={t('lodging.end_date', "Check-Out")} required
-                          miw={rem(150)}
+                          w={rem('200px')}
                           clearable
                           key={form.key('endDate')} {...form.getInputProps('endDate')}/>
         </Group>
