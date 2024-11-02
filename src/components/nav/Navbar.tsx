@@ -4,15 +4,14 @@ import {IconHome2, IconSettings,} from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import {UserButton} from "../user/UserButton.tsx";
 import {useNavigate} from "react-router-dom";
-import {isAdmin} from "../../lib";
 import {FishOne} from "../logo/FishOne.tsx";
+import {useClickOutside} from "@mantine/hooks";
 
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
   label: string;
   active?: boolean;
-
   onClick?(): void;
 }
 
@@ -27,19 +26,23 @@ function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
 }
 
 
-export function Navbar() {
+interface NavbarProps {
+  close?: () => void
+}
 
+export function Navbar({close}: NavbarProps) {
+
+
+  const ref = useClickOutside(() => (close && close()));
 
   const mainNav = [
     {icon: IconHome2, label: 'Home', route: '/'},
-    {icon: IconSettings, label: 'Settings', route: '/profile', admin: true},
+    {icon: IconSettings, label: 'Settings', route: '/profile'},
   ];
 
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
-  const links = mainNav.filter(link => {
-    return link.admin ? isAdmin() : true;
-  }).map((link, index) => (
+  const links = mainNav.map((link, index) => (
     <NavbarLink
       {...link}
       key={link.label}
@@ -47,12 +50,13 @@ export function Navbar() {
       onClick={() => {
         setActive(index)
         navigate(link.route)
+        close && close();
       }}
     />
   ));
 
   return (
-    <nav className={classes.navbar}>
+    <nav className={classes.navbar} ref={ref}>
       <Center>
         <FishOne size={30}/>
       </Center>

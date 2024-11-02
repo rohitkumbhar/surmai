@@ -4,7 +4,8 @@ import {Outlet} from "react-router-dom";
 import {Navbar} from "./components/nav/Navbar.tsx";
 
 function App() {
-  const [opened, {toggle}] = useDisclosure();
+
+  const [opened, {toggle, close}] = useDisclosure();
   useDocumentTitle('Surmai');
   return (
     <AppShell
@@ -24,8 +25,11 @@ function App() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm"/>
-        <Navbar/>
+        <Navbar close={() => {
+          if (opened) {
+            close()
+          }
+        }}/>
       </AppShell.Navbar>
       <AppShell.Main><Outlet/></AppShell.Main>
     </AppShell>
