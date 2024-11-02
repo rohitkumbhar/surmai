@@ -5,7 +5,8 @@ export {
   createUserWithPassword,
   isAdmin,
   getUserByEmail,
-  listAllUsers
+  listAllUsers,
+  authRefresh
 } from './pocketbase/auth'
 export {
   getTrip,

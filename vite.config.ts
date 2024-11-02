@@ -73,7 +73,7 @@ export default defineConfig(() => {
               options: {
                 cacheName: 'surmai-cache',
                 expiration: {
-                  maxEntries: 10,
+                  maxEntries: 100,
                   maxAgeSeconds: 60 * 60 * 24 * 365 // <== 365 days
                 },
                 cacheableResponse: {

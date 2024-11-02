@@ -79,3 +79,7 @@ export const getUserByEmail = (email: string) => {
 export const listAllUsers = (): Promise<User[]> => {
   return pb.collection<User>('users').getList(1, 50).then(results => results.items);
 }
+
+export const authRefresh = () => {
+  return pb.collection("users").authRefresh()
+}
