@@ -32,7 +32,7 @@ import {EditBasicInfoForm} from "./components/trip/basic/EditBasicInfoForm.tsx";
 import {UploadCoverImageForm} from "./components/trip/basic/UploadCoverImageForm.tsx";
 import {Collaborators} from "./components/trip/basic/Collaborators.tsx";
 import {GenericLodgingForm} from "./components/trip/lodging/GenericLodgingForm.tsx";
-import {AttachmentViewer} from "./components/trip/common/AttachmentViewer.tsx";
+import {AttachmentViewer} from "./components/trip/attachments/AttachmentViewer.tsx";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(duration)

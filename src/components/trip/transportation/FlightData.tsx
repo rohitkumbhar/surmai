@@ -4,7 +4,7 @@ import {IconChevronsRight, IconPlaneArrival, IconPlaneDeparture} from "@tabler/i
 import {deleteTransportation, deleteTransportationAttachment} from "../../../lib";
 import {formatDate, formatTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
-import {Attachments} from "../common/Attachments.tsx";
+import {Attachments} from "../attachments/Attachments.tsx";
 import {DataLine} from "../DataLine.tsx";
 import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";

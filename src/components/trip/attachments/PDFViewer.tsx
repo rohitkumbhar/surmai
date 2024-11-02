@@ -2,6 +2,7 @@ import {Document, Page, pdfjs} from "react-pdf";
 import {useState} from "react";
 import pdfjsWorker from "pdfjs-dist/build/pdf.worker.mjs?url";
 import {Stack} from "@mantine/core";
+import styles from './PDFViewer.module.css'
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 
@@ -15,7 +16,7 @@ export const PDFViewer = ({documentUrl}: { documentUrl: string }) => {
 
   return (
     <div>
-      <Document file={documentUrl} onLoadSuccess={onDocumentLoadSuccess}>
+      <Document file={documentUrl} onLoadSuccess={onDocumentLoadSuccess} className={styles.fitContainer}>
         <Stack gap={"xs"}>
           {Array.from(
             new Array(numPages),

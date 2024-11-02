@@ -4,7 +4,7 @@ import {IconArticle} from "@tabler/icons-react";
 import {deleteTransportation, deleteTransportationAttachment} from "../../../lib";
 import {formatDate, formatTime} from "../common/util.ts";
 import {useTranslation} from "react-i18next";
-import {Attachments} from "../common/Attachments.tsx";
+import {Attachments} from "../attachments/Attachments.tsx";
 import {DataLine} from "../DataLine.tsx";
 import {closeModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";

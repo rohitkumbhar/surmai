@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 import {DataLine} from "../DataLine.tsx";
 import {closeModal, openConfirmModal, openContextModal} from "@mantine/modals";
 import {useMediaQuery} from "@mantine/hooks";
-import {Attachments} from "../common/Attachments.tsx";
+import {Attachments} from "../attachments/Attachments.tsx";
 import {deleteLodging, formatDate} from "../../../lib";
 import {formatTime, getNumberOfDays} from "../common/util.ts";
 import {notifications} from "@mantine/notifications";

@@ -91,9 +91,9 @@ export const GenericTransportationModeForm = ({context, id, innerProps}: Context
             <TextInput name={"from"} label={t('transportation.from', "From")} required
                        key={form.key('origin')} {...form.getInputProps('origin')}/>
             <DateTimePicker highlightToday valueFormat="lll" name={"departureTime"}
-                            w={rem('200px')}
+                            miw={rem('200px')}
                             label={t('transportation.departure_time', "Departure Time")} clearable required
-                            key={form.key('departureTime')} {...form.getInputProps('departureTime')} miw={rem(150)}/>
+                            key={form.key('departureTime')} {...form.getInputProps('departureTime')} />
 
           </Group>
           <Group>
@@ -101,7 +101,7 @@ export const GenericTransportationModeForm = ({context, id, innerProps}: Context
                        key={form.key('destination')} {...form.getInputProps('destination')}/>
             <DateTimePicker valueFormat="lll" name={"arrivalTime"}
                             label={t('transportation.arrival_time', "Arrival Time")} required
-                            w={rem('200px')}
+                            miw={rem('200px')}
                             clearable
                             key={form.key('arrivalTime')} {...form.getInputProps('arrivalTime')}/>
           </Group>
