@@ -1,12 +1,11 @@
-import {useState} from 'react';
-import {Center, rem, Stack, Tooltip, UnstyledButton} from '@mantine/core';
-import {IconHome2, IconSettings,} from '@tabler/icons-react';
+import { useState } from 'react';
+import { Center, rem, Stack, Tooltip, UnstyledButton } from '@mantine/core';
+import { IconHome2, IconSettings } from '@tabler/icons-react';
 import classes from './Navbar.module.css';
-import {UserButton} from "../user/UserButton.tsx";
-import {useNavigate} from "react-router-dom";
-import {FishOne} from "../logo/FishOne.tsx";
-import {useClickOutside} from "@mantine/hooks";
-
+import { UserButton } from '../user/UserButton.tsx';
+import { useNavigate } from 'react-router-dom';
+import { FishOne } from '../logo/FishOne.tsx';
+import { useClickOutside } from '@mantine/hooks';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -15,29 +14,30 @@ interface NavbarLinkProps {
   onClick?(): void;
 }
 
-function NavbarLink({icon: Icon, label, active, onClick}: NavbarLinkProps) {
+function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
   return (
-    <Tooltip label={label} position="right" transitionProps={{duration: 0}}>
-      <UnstyledButton onClick={onClick} className={classes.link} data-active={active || undefined}>
-        <Icon style={{width: rem(20), height: rem(20)}} stroke={1.5}/>
+    <Tooltip label={label} position="right" transitionProps={{ duration: 0 }}>
+      <UnstyledButton
+        onClick={onClick}
+        className={classes.link}
+        data-active={active || undefined}
+      >
+        <Icon style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
       </UnstyledButton>
     </Tooltip>
   );
 }
 
-
 interface NavbarProps {
-  close?: () => void
+  close?: () => void;
 }
 
-export function Navbar({close}: NavbarProps) {
-
-
-  const ref = useClickOutside(() => (close && close()));
+export function Navbar({ close }: NavbarProps) {
+  const ref = useClickOutside(() => close && close());
 
   const mainNav = [
-    {icon: IconHome2, label: 'Home', route: '/'},
-    {icon: IconSettings, label: 'Settings', route: '/profile'},
+    { icon: IconHome2, label: 'Home', route: '/' },
+    { icon: IconSettings, label: 'Settings', route: '/profile' },
   ];
 
   const navigate = useNavigate();
@@ -48,8 +48,8 @@ export function Navbar({close}: NavbarProps) {
       key={link.label}
       active={index === active}
       onClick={() => {
-        setActive(index)
-        navigate(link.route)
+        setActive(index);
+        navigate(link.route);
         close && close();
       }}
     />
@@ -58,7 +58,7 @@ export function Navbar({close}: NavbarProps) {
   return (
     <nav className={classes.navbar} ref={ref}>
       <Center>
-        <FishOne size={30}/>
+        <FishOne size={30} />
       </Center>
 
       <div className={classes.navbarMain}>
@@ -69,7 +69,7 @@ export function Navbar({close}: NavbarProps) {
 
       <Stack justify="center" gap={0}>
         <div className={classes.link}>
-          <UserButton/>
+          <UserButton />
         </div>
       </Stack>
     </nav>

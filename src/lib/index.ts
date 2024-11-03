@@ -6,8 +6,8 @@ export {
   isAdmin,
   getUserByEmail,
   listAllUsers,
-  authRefresh
-} from './pocketbase/auth'
+  authRefresh,
+} from './pocketbase/auth';
 export {
   getTrip,
   listTrips,
@@ -29,14 +29,13 @@ export {
   saveLodgingAttachments,
   updateLodgingEntry,
   deleteLodging,
-  loadEverything
-} from './pocketbase/trips'
-
+  loadEverything,
+} from './pocketbase/trips';
 
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
-  })
-}
+    day: 'numeric',
+  });
+};

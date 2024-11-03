@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {Box, Collapse, Group, rem, Text, ThemeIcon} from '@mantine/core';
-import {IconChevronRight} from '@tabler/icons-react';
+import { useState } from 'react';
+import { Box, Collapse, Group, rem, Text, ThemeIcon } from '@mantine/core';
+import { IconChevronRight } from '@tabler/icons-react';
 import classes from './NavbarLinksGroup.module.css';
 
 interface LinksGroupProps {
@@ -10,7 +10,12 @@ interface LinksGroupProps {
   links?: { label: string; link: string }[];
 }
 
-export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
+export function LinksGroup({
+  icon: Icon,
+  label,
+  initiallyOpened,
+  links,
+}: LinksGroupProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (
@@ -31,9 +36,10 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
         <Group justify="space-between" gap={0}>
           <Box style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
-
-              { // @ts-expect-error unmatched to any
-                 <Icon style={{ width: rem(18), height: rem(18) }} /> }
+              {
+                // @ts-expect-error unmatched to any
+                <Icon style={{ width: rem(18), height: rem(18) }} />
+              }
             </ThemeIcon>
             <Box ml="md">{label}</Box>
           </Box>

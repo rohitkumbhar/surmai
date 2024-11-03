@@ -1,5 +1,5 @@
-
 Trip
+
 - Basic Info
 - Participant Info
 - Transportation Info
@@ -7,6 +7,7 @@ Trip
 - Activities Info
 
 Basic Trip
+
 - id
 - name
 - description
@@ -15,11 +16,13 @@ Basic Trip
 - image
 
 Participant Info
+
 - Name
 - Email
 - Age
 
 Transportation Info
+
 - Transport type (airline, railways, rental car)
 - Dates
 - Reservation info
@@ -27,6 +30,7 @@ Transportation Info
 - Type attributes (json data may be)
 
 Lodging Info
+
 - Name
 - Dates
 - Type

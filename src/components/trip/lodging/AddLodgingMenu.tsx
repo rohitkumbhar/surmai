@@ -1,20 +1,28 @@
-import {Button, Menu, rem} from '@mantine/core';
-import {IconBedFlat, IconBuildingEstate, IconChevronDown, IconHome, IconTent,} from '@tabler/icons-react';
-import {useTranslation} from "react-i18next";
-import {openContextModal} from '@mantine/modals';
-import {LodgingType, Trip} from "../../../types/trips.ts";
-import {useMediaQuery} from "@mantine/hooks";
+import { Button, Menu, rem } from '@mantine/core';
+import {
+  IconBedFlat,
+  IconBuildingEstate,
+  IconChevronDown,
+  IconHome,
+  IconTent,
+} from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+import { openContextModal } from '@mantine/modals';
+import { LodgingType, Trip } from '../../../types/trips.ts';
+import { useMediaQuery } from '@mantine/hooks';
 
-export const AddLodgingMenu = ({trip, refetch}: {
-  trip: Trip,
-  refetch: () => void,
+export const AddLodgingMenu = ({
+  trip,
+  refetch,
+}: {
+  trip: Trip;
+  refetch: () => void;
 }) => {
-
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   return (
     <Menu
-      transitionProps={{transition: 'pop-top-right'}}
+      transitionProps={{ transition: 'pop-top-right' }}
       position="bottom-end"
       width={150}
       withinPortal
@@ -22,7 +30,10 @@ export const AddLodgingMenu = ({trip, refetch}: {
       <Menu.Target>
         <Button
           rightSection={
-            <IconChevronDown style={{width: rem(18), height: rem(18)}} stroke={1.5}/>
+            <IconChevronDown
+              style={{ width: rem(18), height: rem(18) }}
+              stroke={1.5}
+            />
           }
           pr={12}
         >
@@ -43,16 +54,15 @@ export const AddLodgingMenu = ({trip, refetch}: {
                 trip: trip,
                 type: LodgingType.HOTEL,
                 onSuccess: () => {
-                  refetch()
+                  refetch();
                 },
-                onCancel: () => {
-                }
+                onCancel: () => {},
               },
             });
           }}
           leftSection={
             <IconBuildingEstate
-              style={{width: rem(16), height: rem(16)}}
+              style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
           }
@@ -73,16 +83,15 @@ export const AddLodgingMenu = ({trip, refetch}: {
                 trip: trip,
                 type: LodgingType.HOME,
                 onSuccess: () => {
-                  refetch()
+                  refetch();
                 },
-                onCancel: () => {
-                }
+                onCancel: () => {},
               },
             });
           }}
           leftSection={
             <IconHome
-              style={{width: rem(16), height: rem(16)}}
+              style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
           }
@@ -103,22 +112,20 @@ export const AddLodgingMenu = ({trip, refetch}: {
                 trip: trip,
                 type: LodgingType.RENTAL,
                 onSuccess: () => {
-                  refetch()
+                  refetch();
                 },
-                onCancel: () => {
-                }
+                onCancel: () => {},
               },
             });
           }}
           leftSection={
             <IconBedFlat
-              style={{width: rem(16), height: rem(16)}}
+              style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
           }
         >
           {t('transportation.vacation_rental', 'Rental')}
-
         </Menu.Item>
 
         <Menu.Item
@@ -134,16 +141,15 @@ export const AddLodgingMenu = ({trip, refetch}: {
                 trip: trip,
                 type: LodgingType.CAMP_SITE,
                 onSuccess: () => {
-                  refetch()
+                  refetch();
                 },
-                onCancel: () => {
-                }
+                onCancel: () => {},
               },
             });
           }}
           leftSection={
             <IconTent
-              style={{width: rem(16), height: rem(16)}}
+              style={{ width: rem(16), height: rem(16) }}
               stroke={1.5}
             />
           }
@@ -153,4 +159,4 @@ export const AddLodgingMenu = ({trip, refetch}: {
       </Menu.Dropdown>
     </Menu>
   );
-}
+};

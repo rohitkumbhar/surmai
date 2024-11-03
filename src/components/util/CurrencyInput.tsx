@@ -1,22 +1,26 @@
-import {NumberInput, rem, Select} from '@mantine/core';
-import {useTranslation} from "react-i18next";
+import { NumberInput, rem, Select } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 
 const data = [
-  {value: 'USD', label: '🇺🇸 USD'},
-  {value: 'EUR', label: '🇪🇺 EUR'},
-  {value: 'CAD', label: '🇨🇦 CAD'},
-  {value: 'GBP', label: '🇬🇧 GBP'},
-  {value: 'AUD', label: '🇦🇺 AUD'},
+  { value: 'USD', label: '🇺🇸 USD' },
+  { value: 'EUR', label: '🇪🇺 EUR' },
+  { value: 'CAD', label: '🇨🇦 CAD' },
+  { value: 'GBP', label: '🇬🇧 GBP' },
+  { value: 'AUD', label: '🇦🇺 AUD' },
 ];
 
-export const CurrencyInput = ({currencyCodeKey, costKey, costProps, currencyCodeProps}: {
-  currencyCodeKey: string,
-  costKey: string,
-  costProps: any,
-  currencyCodeProps: any
+export const CurrencyInput = ({
+  currencyCodeKey,
+  costKey,
+  costProps,
+  currencyCodeProps,
+}: {
+  currencyCodeKey: string;
+  costKey: string;
+  costProps: any;
+  currencyCodeProps: any;
 }) => {
-
-  const { t} = useTranslation()
+  const { t } = useTranslation();
 
   const select = (
     <Select
@@ -24,7 +28,7 @@ export const CurrencyInput = ({currencyCodeKey, costKey, costProps, currencyCode
       {...currencyCodeProps}
       data={data}
       rightSectionWidth={28}
-      defaultValue={"USD"}
+      defaultValue={'USD'}
       withCheckIcon={false}
       styles={{
         input: {
@@ -42,7 +46,7 @@ export const CurrencyInput = ({currencyCodeKey, costKey, costProps, currencyCode
     <NumberInput
       type="number"
       placeholder=""
-      label={t('cost','Cost')}
+      label={t('cost', 'Cost')}
       rightSection={select}
       rightSectionWidth={92}
       key={costKey}
@@ -53,4 +57,4 @@ export const CurrencyInput = ({currencyCodeKey, costKey, costProps, currencyCode
       {...costProps}
     />
   );
-}
+};

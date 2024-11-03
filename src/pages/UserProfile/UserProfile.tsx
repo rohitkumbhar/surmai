@@ -1,32 +1,46 @@
-import {Avatar, Button, Card, Container, Notification, Paper, Text, TextInput} from '@mantine/core';
+import {
+  Avatar,
+  Button,
+  Card,
+  Container,
+  Notification,
+  Paper,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import classes from './UserProfile.module.css';
-import {useEffect, useState} from "react";
-import {useForm} from "@mantine/form";
-import {User} from "../../types/auth.ts";
-import {currentUser} from "../../lib";
+import { useEffect, useState } from 'react';
+import { useForm } from '@mantine/form';
+import { User } from '../../types/auth.ts';
+import { currentUser } from '../../lib';
 
 export const UserProfile = () => {
-
   const [user, setCurrentUser] = useState<User>();
-  const [editing, setEditing] = useState(false)
-  const [apiError, setApiError] = useState<string>()
+  const [editing, setEditing] = useState(false);
+  const [apiError, setApiError] = useState<string>();
 
   useEffect(() => {
-    currentUser().then(resolvedUser => setCurrentUser(resolvedUser))
-  }, [])
-
+    currentUser().then((resolvedUser) => setCurrentUser(resolvedUser));
+  }, []);
 
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
       name: user?.name,
-      profilePicture: ''
-    }
+      profilePicture: '',
+    },
   });
 
   if (!editing) {
     return (
-      <Card withBorder padding="xl" radius="md" className={classes.card} w={300} m={"auto"}>
+      <Card
+        withBorder
+        padding="xl"
+        radius="md"
+        className={classes.card}
+        w={300}
+        m={'auto'}
+      >
         <Card.Section
           h={140}
           className={classes.headerSection}
@@ -52,50 +66,80 @@ export const UserProfile = () => {
           {user?.email}
         </Text>
 
-        <Button fullWidth radius="md" mt="xl" size="md" variant="default" onClick={() => setEditing(true)}>
+        <Button
+          fullWidth
+          radius="md"
+          mt="xl"
+          size="md"
+          variant="default"
+          onClick={() => setEditing(true)}
+        >
           Edit
         </Button>
-      </Card>);
+      </Card>
+    );
   } else {
-
     // @ts-expect-error WIP: Declare Form type
     const updateProfile = (values) => {
-      console.log("Updating user profile with values =>", values)
-    }
+      console.log('Updating user profile with values =>', values);
+    };
 
     return (
-
       <Container size={420} my={40}>
-        <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
-          {apiError &&
-              <Notification withBorder color="red" title="Unable to sign in" onClose={() => setApiError(undefined)}>
-                {apiError}
-              </Notification>}
+        <Paper
+          withBorder
+          shadow="md"
+          p={30}
+          mt={30}
+          radius="md"
+          bg="var(--mantine-primary-color-light)"
+        >
+          {apiError && (
+            <Notification
+              withBorder
+              color="red"
+              title="Unable to sign in"
+              onClose={() => setApiError(undefined)}
+            >
+              {apiError}
+            </Notification>
+          )}
 
           <form onSubmit={form.onSubmit((values) => updateProfile(values))}>
-            <TextInput label="Name" placeholder="Name" mt={"md"} required
-                       key={form.key('name')} {...form.getInputProps('name')}/>
+            <TextInput
+              label="Name"
+              placeholder="Name"
+              mt={'md'}
+              required
+              key={form.key('name')}
+              {...form.getInputProps('name')}
+            />
 
-
-            <div style={{marginTop: '50px', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-              <div style={{backgroundColor: 'pink', margin: 'auto'}}>
-                <Button type={"submit"}>
-                  Update
-                </Button>
+            <div
+              style={{
+                marginTop: '50px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <div style={{ backgroundColor: 'pink', margin: 'auto' }}>
+                <Button type={'submit'}>Update</Button>
               </div>
 
-              <div style={{margin: 'auto'}}>
-                <Button type={"button"} bg={"gray"}
-                        onClick={() => setEditing(false)}>
+              <div style={{ margin: 'auto' }}>
+                <Button
+                  type={'button'}
+                  bg={'gray'}
+                  onClick={() => setEditing(false)}
+                >
                   Cancel
                 </Button>
               </div>
             </div>
-
           </form>
-
         </Paper>
       </Container>
-    )
+    );
   }
-}
+};

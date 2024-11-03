@@ -1,41 +1,46 @@
-import {AppShell, Box, Burger, Group, rem} from '@mantine/core';
-import {useDisclosure, useDocumentTitle} from '@mantine/hooks';
-import {Outlet} from "react-router-dom";
-import {Navbar} from "./components/nav/Navbar.tsx";
+import { AppShell, Box, Burger, Group, rem } from '@mantine/core';
+import { useDisclosure, useDocumentTitle } from '@mantine/hooks';
+import { Outlet } from 'react-router-dom';
+import { Navbar } from './components/nav/Navbar.tsx';
 
 function App() {
-
-  const [opened, {toggle, close}] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure();
   useDocumentTitle('Surmai');
   return (
     <AppShell
-      header={{height: {base: rem('60px'), md: rem('60px'), lg: rem('60px')}}}
+      header={{
+        height: { base: rem('60px'), md: rem('60px'), lg: rem('60px') },
+      }}
       navbar={{
-        width: {base: rem('80px')},
+        width: { base: rem('80px') },
         breakpoint: 'sm',
-        collapsed: {mobile: !opened},
+        collapsed: { mobile: !opened },
       }}
       layout={'alt'}
       padding="md"
     >
       <AppShell.Header>
         <Group h="100%">
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm"/>
+          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group>
-            <Box component="div" id={"app-header"} />
+            <Box component="div" id={'app-header'} />
           </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>
-        <Navbar close={() => {
-          if (opened) {
-            close()
-          }
-        }}/>
+        <Navbar
+          close={() => {
+            if (opened) {
+              close();
+            }
+          }}
+        />
       </AppShell.Navbar>
-      <AppShell.Main><Outlet/></AppShell.Main>
+      <AppShell.Main>
+        <Outlet />
+      </AppShell.Main>
     </AppShell>
   );
 }
 
-export default (App)
+export default App;

@@ -1,16 +1,16 @@
 .card {
-    border: 1px solid var(--mantine-primary-color-light);
-    transition:
-            transform 150ms ease,
-            box-shadow 150ms ease;
+  border: 1px solid var(--mantine-primary-color-light);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
 
-    &:hover {
-        transform: scale(1.01);
-        box-shadow: var(--mantine-shadow-md);
-    }
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: var(--mantine-shadow-md);
+  }
 }
 
 .title {
-    font-family: 'Greycliff CF', var(--mantine-font-family);
-    font-weight: bold;
+  font-family: 'Greycliff CF', var(--mantine-font-family);
+  font-weight: bold;
 }

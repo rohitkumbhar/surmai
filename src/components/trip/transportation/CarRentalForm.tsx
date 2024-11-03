@@ -1,23 +1,43 @@
-import {Button, FileButton, Group, rem, Stack, Text, TextInput, Title} from "@mantine/core";
-import {DateTimePicker} from "@mantine/dates";
-import {CarRentalFormSchema, CreateTransportation, Transportation, Trip} from "../../../types/trips.ts";
-import {useForm} from "@mantine/form";
-import {CurrencyInput} from "../../util/CurrencyInput.tsx";
-import {useState} from "react";
-import {useTranslation} from "react-i18next";
-import {createTransportationEntry, saveTransportationAttachments} from "../../../lib";
-import {ContextModalProps} from "@mantine/modals";
-import {updateTransportation} from "../../../lib/pocketbase/trips.ts";
+import {
+  Button,
+  FileButton,
+  Group,
+  rem,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
+import {
+  CarRentalFormSchema,
+  CreateTransportation,
+  Transportation,
+  Trip,
+} from '../../../types/trips.ts';
+import { useForm } from '@mantine/form';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import {
+  createTransportationEntry,
+  saveTransportationAttachments,
+} from '../../../lib';
+import { ContextModalProps } from '@mantine/modals';
+import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
 
-export const CarRentalForm = ({context, id, innerProps}: ContextModalProps<{
-  trip: Trip,
-  carRental?: Transportation,
-  onSuccess: () => void,
-  onCancel: () => void
+export const CarRentalForm = ({
+  context,
+  id,
+  innerProps,
+}: ContextModalProps<{
+  trip: Trip;
+  carRental?: Transportation;
+  onSuccess: () => void;
+  onCancel: () => void;
 }>) => {
-
-  const {trip, carRental, onSuccess, onCancel} = innerProps
-  const {t} = useTranslation()
+  const { trip, carRental, onSuccess, onCancel } = innerProps;
+  const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const form = useForm<CarRentalFormSchema>({
     mode: 'uncontrolled',
@@ -29,14 +49,13 @@ export const CarRentalForm = ({context, id, innerProps}: ContextModalProps<{
       dropOffTime: carRental?.arrivalTime,
       confirmationCode: carRental?.metadata?.confirmationCode,
       cost: carRental?.cost?.value,
-      currencyCode: carRental?.cost?.currency || 'USD'
+      currencyCode: carRental?.cost?.currency || 'USD',
     },
     validate: {},
-  })
+  });
 
   // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
-
     const carRentalData: CreateTransportation = {
       type: 'rental_car',
       trip: trip.id,
@@ -44,74 +63,110 @@ export const CarRentalForm = ({context, id, innerProps}: ContextModalProps<{
       destination: values.dropOffLocation,
       cost: {
         value: values.cost,
-        currency: values.currencyCode
+        currency: values.currencyCode,
       },
       departureTime: values.pickupTime,
       arrivalTime: values.dropOffTime,
       metadata: {
         confirmationCode: values.confirmationCode,
-        rentalCompany: values.rentalCompany
-      }
-    }
-
+        rentalCompany: values.rentalCompany,
+      },
+    };
 
     if (carRental?.id) {
-      updateTransportation(carRental.id, carRentalData).then((result) => {
-        if (files.length > 0) {
-          saveTransportationAttachments(result.id, files).then(() => {
-            onSuccess()
-          })
-        } else {
-          onSuccess()
-        }
-      }).finally(() => {
-        context.closeModal(id)
-      })
+      updateTransportation(carRental.id, carRentalData)
+        .then((result) => {
+          if (files.length > 0) {
+            saveTransportationAttachments(result.id, files).then(() => {
+              onSuccess();
+            });
+          } else {
+            onSuccess();
+          }
+        })
+        .finally(() => {
+          context.closeModal(id);
+        });
     } else {
-      createTransportationEntry(carRentalData).then(transportation => {
-        if (files.length > 0) {
-          saveTransportationAttachments(transportation.id, files).then(() => {
-            onSuccess()
-          });
-        } else {
-          onSuccess();
-        }
-      }).finally(() => {
-        context.closeModal(id)
-      });
+      createTransportationEntry(carRentalData)
+        .then((transportation) => {
+          if (files.length > 0) {
+            saveTransportationAttachments(transportation.id, files).then(() => {
+              onSuccess();
+            });
+          } else {
+            onSuccess();
+          }
+        })
+        .finally(() => {
+          context.closeModal(id);
+        });
     }
-
-
-  }
+  };
 
   return (
     <Stack>
-      <Title order={4}>{t('transportation.add_rental_car', 'Add Rental Car')}</Title>
+      <Title order={4}>
+        {t('transportation.add_rental_car', 'Add Rental Car')}
+      </Title>
       <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
         <Stack>
           <Group>
-            <TextInput name={"rentalCompany"} label={t('transportation.rental_company', "Rental Company")} required
-                       key={form.key('rentalCompany')} {...form.getInputProps('rentalCompany')}/>
+            <TextInput
+              name={'rentalCompany'}
+              label={t('transportation.rental_company', 'Rental Company')}
+              required
+              key={form.key('rentalCompany')}
+              {...form.getInputProps('rentalCompany')}
+            />
 
-            <DateTimePicker highlightToday valueFormat="DD MMM YYYY hh:mm A" name={"pickupTime"}
-                            label={t('transportation.pickup_time', "Pickup Time")} clearable required
-                            key={form.key('pickupTime')} {...form.getInputProps('pickupTime')} miw={rem(150)}/>
+            <DateTimePicker
+              highlightToday
+              valueFormat="DD MMM YYYY hh:mm A"
+              name={'pickupTime'}
+              label={t('transportation.pickup_time', 'Pickup Time')}
+              clearable
+              required
+              key={form.key('pickupTime')}
+              {...form.getInputProps('pickupTime')}
+              miw={rem(150)}
+            />
 
-            <DateTimePicker highlightToday valueFormat="DD MMM YYYY hh:mm A" name={"dropOffTime"}
-                            label={t('transportation.dropOff_time', "Drop-off Time")} clearable required
-                            key={form.key('dropOffTime')} {...form.getInputProps('dropOffTime')} miw={rem(150)}/>
-
+            <DateTimePicker
+              highlightToday
+              valueFormat="DD MMM YYYY hh:mm A"
+              name={'dropOffTime'}
+              label={t('transportation.dropOff_time', 'Drop-off Time')}
+              clearable
+              required
+              key={form.key('dropOffTime')}
+              {...form.getInputProps('dropOffTime')}
+              miw={rem(150)}
+            />
           </Group>
           <Group>
-            <TextInput name={"pickupLocation"} label={t('transportation.pickup_location', 'Pickup Location')} required
-                       miw={rem('300px')} key={form.key('pickupLocation')} {...form.getInputProps('pickupLocation')}/>
-            <TextInput name={"dropOffLocation"} label={t('transportation.dropOff_location', 'DropOff Location')}
-                       required
-                       miw={rem('300px')} key={form.key('dropOffLocation')} {...form.getInputProps('dropOffLocation')}/>
-            <TextInput name={"confirmationCode"} label={t('transportation.confirmation_code', 'Confirmation Code')}
-                       key={form.key('confirmationCode')} {...form.getInputProps('confirmationCode')}/>
-
-
+            <TextInput
+              name={'pickupLocation'}
+              label={t('transportation.pickup_location', 'Pickup Location')}
+              required
+              miw={rem('300px')}
+              key={form.key('pickupLocation')}
+              {...form.getInputProps('pickupLocation')}
+            />
+            <TextInput
+              name={'dropOffLocation'}
+              label={t('transportation.dropOff_location', 'DropOff Location')}
+              required
+              miw={rem('300px')}
+              key={form.key('dropOffLocation')}
+              {...form.getInputProps('dropOffLocation')}
+            />
+            <TextInput
+              name={'confirmationCode'}
+              label={t('transportation.confirmation_code', 'Confirmation Code')}
+              key={form.key('confirmationCode')}
+              {...form.getInputProps('confirmationCode')}
+            />
           </Group>
           <Group>
             <Stack>
@@ -122,9 +177,13 @@ export const CarRentalForm = ({context, id, innerProps}: ContextModalProps<{
                 currencyCodeProps={form.getInputProps('currencyCode')}
               />
               <Group>
-                <Title size={"md"}>{t('attachments', 'Attachments')}
-                  <Text size={"xs"} c={"dimmed"}>
-                    {t('transportation.attachments_desc', 'Upload any related documents for this rental e.g. confirmation email')}
+                <Title size={'md'}>
+                  {t('attachments', 'Attachments')}
+                  <Text size={'xs'} c={'dimmed'}>
+                    {t(
+                      'transportation.attachments_desc',
+                      'Upload any related documents for this rental e.g. confirmation email'
+                    )}
                   </Text>
                 </Title>
               </Group>
@@ -135,40 +194,53 @@ export const CarRentalForm = ({context, id, innerProps}: ContextModalProps<{
               </Group>
 
               <Group>
-                <FileButton onChange={setFiles}
-                            accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp"
-                            form={"files"} name={"files"}
-                            multiple>
+                <FileButton
+                  onChange={setFiles}
+                  accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp"
+                  form={'files'}
+                  name={'files'}
+                  multiple
+                >
                   {(props) => {
-
                     if (carRental?.id) {
-                      return (<Stack>
-                        <Text
-                          size={"xs"}>{`${carRental.attachments ? carRental.attachments.length : 0} existing files`}</Text>
-                        <Button {...props}>{t('upload_more', 'Upload More')}</Button>
-                      </Stack>)
+                      return (
+                        <Stack>
+                          <Text
+                            size={'xs'}
+                          >{`${carRental.attachments ? carRental.attachments.length : 0} existing files`}</Text>
+                          <Button {...props}>
+                            {t('upload_more', 'Upload More')}
+                          </Button>
+                        </Stack>
+                      );
                     } else {
-                      return (<Button {...props}>{t('upload', 'Upload')}</Button>)
+                      return (
+                        <Button {...props}>{t('upload', 'Upload')}</Button>
+                      );
                     }
-
                   }}
                 </FileButton>
               </Group>
             </Stack>
           </Group>
-          <Group justify={"flex-end"}>
-            <Button type={"submit"} w={"min-content"}>
+          <Group justify={'flex-end'}>
+            <Button type={'submit'} w={'min-content'}>
               {t('save', 'Save')}
             </Button>
-            <Button type={"button"} variant={"default"} w={"min-content"} onClick={() => {
-              context.closeModal(id)
-              onCancel()
-            }}>
-              {t('cancel', "Cancel")}
+            <Button
+              type={'button'}
+              variant={'default'}
+              w={'min-content'}
+              onClick={() => {
+                context.closeModal(id);
+                onCancel();
+              }}
+            >
+              {t('cancel', 'Cancel')}
             </Button>
           </Group>
         </Stack>
       </form>
-    </Stack>)
-}
-
+    </Stack>
+  );
+};
