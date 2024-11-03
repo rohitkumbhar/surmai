@@ -33,7 +33,7 @@ export const BasicInfoView = ({trip, refetch}: { trip: Trip, refetch: () => void
     <Title order={4} fw={400}> {trip.description}</Title>
     <Text size={"sm"}>{formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}</Text>
     <Divider/>
-    <Text mt={"md"}>{t('basic.visiting', 'Visiting')}</Text>
+    <Text mt={"md"}>{t('basic.destinations', 'Destinations')}</Text>
     <Group>
       {(trip.destinations || []).map(destination => {
         return (
@@ -46,7 +46,7 @@ export const BasicInfoView = ({trip, refetch}: { trip: Trip, refetch: () => void
       })}
     </Group>
     <Divider/>
-    <Text mt={"md"}>{t('basic.with', 'Going With')}</Text>
+    <Text mt={"md"}>{t('basic.travellers', 'Travellers')}</Text>
     <Group>
       {(trip.participants || []).map((person, index) => {
         return (<Group wrap={"nowrap"} key={person.name}>

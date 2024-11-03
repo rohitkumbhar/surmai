@@ -41,8 +41,8 @@ export const ViewTrip = () => {
     <Container py={"xl"} size="lg">
       <Header>
         <Group>
-          <Text size={"xl"} px={"md"}>{trip?.name}</Text>
-          <Text size={"sm"}
+          <Text size={"sm"} px={"md"}>{trip?.name}</Text>
+          <Text size={"sm"} visibleFrom={"sm"}
                 c={"dimmed"}>{formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}</Text>
         </Group>
       </Header>

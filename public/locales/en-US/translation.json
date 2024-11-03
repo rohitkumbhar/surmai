@@ -23,13 +23,23 @@
   },
   "basic": {
     "section_name": "Basic Information",
-    "section_description": "View basic information about your trip",
-    "visiting": "Visiting",
-    "with": "Going With"
+    "section_description": "View basic information about the trip",
+    "destinations": "Destinations",
+    "travellers": "Travellers",
+    "trip_name": "Name",
+    "trip_name_description": "A short name for your trip e.g. Summer 2025 in Costa Rica",
+    "trip_description": "Brief Description",
+    "trip_description_description": "Optional: Brief description of the trip",
+    "trip_destinations": "Destinations",
+    "trip_destinations_description":"Enter the destinations in this trip e.g. San Jose, Guanacaste",
+    "trip_dates": "Trip Dates",
+    "trip_dates_description": "Select the start and end dates of the trip",
+    "travellers_description": "Enter the names of travellers on this trip. Multiple names can be separated by a comma"
+
   },
   "transportation": {
     "section_name": "Transportation",
-    "section_description": "View and edit your transportation arrangements for this trip",
+    "section_description": "View and edit transportation arrangements for this trip",
     "add_new": "Add new",
     "flight":"Flight",
     "bus": "Bus",
@@ -59,6 +69,6 @@
   },
   "lodging": {
     "section_name": "Lodging",
-    "section_description": "View and edit your lodging arrangements for this trip"
+    "section_description": "View and edit the lodging arrangements for this trip"
   }
 }

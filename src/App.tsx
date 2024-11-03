@@ -21,7 +21,9 @@ function App() {
       <AppShell.Header>
         <Group h="100%">
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm"/>
-          <Box component="div" id={"app-header"} visibleFrom={"sm"}/>
+          <Group>
+            <Box component="div" id={"app-header"} />
+          </Group>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar>

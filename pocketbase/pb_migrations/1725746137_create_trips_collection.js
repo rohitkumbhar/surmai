@@ -15,7 +15,7 @@ migrate((db) => {
         presentable: false,
         unique: false,
         options: {
-          min: 5,
+          min: 2,
           max: null,
           pattern: ""
         }
