@@ -59,8 +59,9 @@ export const GenericTransportationData = ({
       onEdit={() => {
         openContextModal({
           modal: 'genericTransportationForm',
-          title: t('Edit', 'Edit'),
+          title: `${t('Edit', 'Edit')} ${t('transportation.' + transportation.type)}`,
           radius: 'md',
+          size: 'auto',
           withCloseButton: false,
           fullScreen: isMobile,
           innerProps: {
@@ -109,8 +110,8 @@ export const GenericTransportationData = ({
           <Box component="div" visibleFrom={'md'}>
             <Tooltip
               label={t(
-                `transportation_type_${transportation.type}`,
-                transportation.type
+                `transportation.${transportation.type}`,
+                `transportation.${transportation.type}`
               )}
             >
               <TypeIcon size={'sm'} stroke={1} />
@@ -119,8 +120,8 @@ export const GenericTransportationData = ({
           <Box component="div" hiddenFrom={'md'}>
             <Title size={'lg'}>
               {t(
-                `transportation_type_${transportation.type}`,
-                transportation.type
+                `transportation.${transportation.type}`,
+                `transportation.${transportation.type}`
               )}
             </Title>
             <Divider mt={'5px'} />

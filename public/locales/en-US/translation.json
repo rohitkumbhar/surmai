@@ -55,7 +55,7 @@
     "to": "To",
     "arrival_time": "Arrival Time",
     "airline": "Airline",
-    "attachments_desc": "Upload any related documents for this flight e.g. confirmation email",
+    "attachments_desc": "Upload any related documents in PDF or JPEG/PNG formats",
     "save_flight": "Save Flight",
     "add_rental_car": "Add Rental Car",
     "rental_company": "Rental Company",

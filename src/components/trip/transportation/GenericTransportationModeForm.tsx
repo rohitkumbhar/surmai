@@ -76,7 +76,6 @@ export const GenericTransportationModeForm = ({
     };
 
     if (transportation?.id) {
-      // Update an existing flight
       updateTransportation(transportation.id, payload)
         .then((result) => {
           if (files.length > 0) {
@@ -194,7 +193,7 @@ export const GenericTransportationModeForm = ({
               <Group>
                 <FileButton
                   onChange={setFiles}
-                  accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp"
+                  accept="application/pdf,image/png,image/jpeg,image/gif,image/webp"
                   form={'files'}
                   name={'files'}
                   multiple

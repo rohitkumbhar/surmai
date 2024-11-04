@@ -19,7 +19,6 @@ import { TripsContainer } from './pages/trips/TripsContainer.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './lib/i18n';
 import { ModalsProvider } from '@mantine/modals';
-import { FlightForm } from './components/trip/transportation/FlightForm.tsx';
 import { Notifications } from '@mantine/notifications';
 import { CarRentalForm } from './components/trip/transportation/CarRentalForm';
 import { GenericTransportationModeForm } from './components/trip/transportation/GenericTransportationModeForm';
@@ -117,7 +116,6 @@ const queryClient = new QueryClient();
 const modals = {
   editBasicInfoForm: EditBasicInfoForm,
   uploadCoverImageForm: UploadCoverImageForm,
-  addFlightForm: FlightForm,
   carRentalForm: CarRentalForm,
   genericTransportationForm: GenericTransportationModeForm,
   collaboratorsForm: Collaborators,
