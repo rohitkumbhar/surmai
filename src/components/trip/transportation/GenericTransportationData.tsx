@@ -1,33 +1,12 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
-import {
-  Box,
-  Center,
-  Divider,
-  Grid,
-  Text,
-  Title,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconBus,
-  IconCar,
-  IconPlaneInflight,
-  IconShip,
-  IconTrain,
-} from '@tabler/icons-react';
-import {
-  deleteTransportation,
-  deleteTransportationAttachment,
-} from '../../../lib';
-import { formatDate, formatTime, getTravelTime } from '../common/util.ts';
+import { Box, Divider, Grid, Text, Title, Tooltip } from '@mantine/core';
+import { IconBus, IconCar, IconPlaneInflight, IconShip, IconTrain } from '@tabler/icons-react';
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib';
+import { formatDate, formatTime } from '../common/util.ts';
 import { useTranslation } from 'react-i18next';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
-import {
-  closeModal,
-  openConfirmModal,
-  openContextModal,
-} from '@mantine/modals';
+import { closeModal, openConfirmModal, openContextModal } from '@mantine/modals';
 import { useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 
@@ -138,17 +117,6 @@ export const GenericTransportationData = ({
               {formatTime(i18n.language, transportation.departureTime)}
             </Text>
           </Title>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 2, md: 1, lg: 1 }}>
-          <Center h={'100%'}>
-            <Text c={'dimmed'} size={'xs'}>
-              {getTravelTime(
-                transportation.departureTime,
-                transportation.arrivalTime
-              )}
-            </Text>
-          </Center>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>

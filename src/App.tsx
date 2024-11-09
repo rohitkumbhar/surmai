@@ -18,9 +18,10 @@ function App() {
       }}
       layout={'alt'}
       padding="md"
+      bg={"var(--mantine-color-dark-light)"}
     >
-      <AppShell.Header>
-        <Group h="100%">
+      <AppShell.Header >
+        <Group h="100%" bg={"var(--mantine-color-dark-light)"}>
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group>
             <Box component="div" id={'app-header'} />

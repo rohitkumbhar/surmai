@@ -37,7 +37,7 @@ export function Navbar({ close }: NavbarProps) {
 
   const mainNav = [
     { icon: IconHome2, label: 'Home', route: '/' },
-    { icon: IconSettings, label: 'Settings', route: '/profile' },
+    { icon: IconSettings, label: 'Settings', route: '/settings' }
   ];
 
   const navigate = useNavigate();

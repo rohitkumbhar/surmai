@@ -34,7 +34,7 @@ export const UserProfile = () => {
   if (!editing) {
     return (
       <Card
-        withBorder
+
         padding="xl"
         radius="md"
         className={classes.card}

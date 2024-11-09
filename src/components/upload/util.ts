@@ -1,4 +1,4 @@
-import { CroppedImage } from '../../../types/trips.ts';
+import { CroppedImage } from '../../types/trips.ts';
 
 export const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {

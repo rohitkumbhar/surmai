@@ -1,20 +1,14 @@
 import { Avatar, Group, Menu, rem, UnstyledButton } from '@mantine/core';
 import { IconLogout, IconSettings } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { currentUser, logoutCurrentUser } from '../../lib';
-import { useEffect, useState } from 'react';
-import { User } from '../../types/auth.ts';
+import { getAttachmentUrl, logoutCurrentUser } from '../../lib';
+import { useState } from 'react';
+import { useCurrentUser } from '../../lib/hooks/useCurrentUser.ts';
 
 export function UserButton() {
   const [, setUserMenuOpened] = useState(false);
-  const [user, setCurrentUser] = useState<User>();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    currentUser().then((currentUser) => {
-      setCurrentUser(currentUser);
-    });
-  }, []);
+  const { user } = useCurrentUser();
 
   return (
     <Menu
@@ -30,6 +24,7 @@ export function UserButton() {
               radius="xl"
               alt={user?.name}
               name={user?.name}
+              src={user?.avatar && getAttachmentUrl(user, user.avatar)}
               style={{ background: 'white' }}
             />
           </Group>
@@ -37,7 +32,7 @@ export function UserButton() {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Label>{user?.name}</Menu.Label>
-        <Link to={'/profile'}>
+        <Link to={'/settings'}>
           <Menu.Item
             leftSection={
               <IconSettings
@@ -46,7 +41,7 @@ export function UserButton() {
               />
             }
           >
-            Profile
+            Settings
           </Menu.Item>
         </Link>
         <Menu.Item

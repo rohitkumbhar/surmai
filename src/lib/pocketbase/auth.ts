@@ -3,9 +3,9 @@ import { User } from '../../types/auth.ts';
 import { ClientResponseError } from 'pocketbase';
 
 export const authWithUsernameAndPassword = async ({
-  email,
-  password,
-}: {
+                                                    email,
+                                                    password,
+                                                  }: {
   email: string;
   password: string;
 }) => {
@@ -46,11 +46,11 @@ export const logoutCurrentUser = async () => {
 };
 
 export const createUserWithPassword = async ({
-  email,
-  name,
-  password,
-  passwordConfirm,
-}: {
+                                               email,
+                                               name,
+                                               password,
+                                               passwordConfirm,
+                                             }: {
   email: string;
   name: string;
   password: string;
@@ -97,4 +97,10 @@ export const listAllUsers = (): Promise<User[]> => {
 
 export const authRefresh = () => {
   return pb.collection('users').authRefresh();
+};
+
+export const updateUserAvatar = (userId: string, file: File | Blob) => {
+  const formData = new FormData();
+  formData.append('avatar', file);
+  return pb.collection('users').update(userId, formData);
 };

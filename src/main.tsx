@@ -11,7 +11,6 @@ import '@mantine/notifications/styles.css';
 import { createTheme, MantineProvider } from '@mantine/core';
 import { SignIn } from './pages/SignIn/SignIn.tsx';
 import { SignUp } from './pages/SignUp/SignUp.tsx';
-import { UserProfile } from './pages/UserProfile/UserProfile.tsx';
 import { MyTrips } from './pages/trips/MyTrips.tsx';
 import { CreateNewTrip } from './pages/trips/CreateNewTrip.tsx';
 import { ViewTrip } from './pages/trips/ViewTrip.tsx';
@@ -28,10 +27,11 @@ import duration from 'dayjs/plugin/duration';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import { EditBasicInfoForm } from './components/trip/basic/EditBasicInfoForm.tsx';
-import { UploadCoverImageForm } from './components/trip/basic/UploadCoverImageForm.tsx';
+import { UploadImageForm } from './components/upload/UploadImageForm.tsx';
 import { Collaborators } from './components/trip/basic/Collaborators.tsx';
 import { GenericLodgingForm } from './components/trip/lodging/GenericLodgingForm.tsx';
 import { AttachmentViewer } from './components/trip/attachments/AttachmentViewer.tsx';
+import { Settings } from './pages/Settings/Settings.tsx';
 
 dayjs.extend(localizedFormat);
 dayjs.extend(duration);
@@ -70,8 +70,8 @@ const theme = createTheme({
 
 const pages = [
   {
-    path: '/profile',
-    element: <UserProfile />,
+    path: '/settings',
+    element: <Settings />,
   },
 ];
 
@@ -115,7 +115,7 @@ const queryClient = new QueryClient();
 
 const modals = {
   editBasicInfoForm: EditBasicInfoForm,
-  uploadCoverImageForm: UploadCoverImageForm,
+  uploadImageForm: UploadImageForm,
   carRentalForm: CarRentalForm,
   genericTransportationForm: GenericTransportationModeForm,
   collaboratorsForm: Collaborators,

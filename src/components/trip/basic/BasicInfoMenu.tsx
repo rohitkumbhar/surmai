@@ -11,13 +11,13 @@ import {
 } from '@tabler/icons-react';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
-import { deleteTrip, loadEverything } from '../../../lib';
+import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
 import { notifications } from '@mantine/notifications';
 
 export const BasicInfoMenu = ({
-  trip,
-  refetch,
-}: {
+                                trip,
+                                refetch,
+                              }: {
   trip: Trip;
   refetch: () => void;
 }) => {
@@ -68,15 +68,19 @@ export const BasicInfoMenu = ({
         <Menu.Item
           onClick={() => {
             openContextModal({
-              modal: 'uploadCoverImageForm',
+              modal: 'uploadImageForm',
               title: t('basic.add_cover_image', 'Add Cover Image'),
               radius: 'md',
               withCloseButton: false,
               size: 'auto',
               fullScreen: isMobile,
               innerProps: {
-                trip: trip,
-                refetch: refetch,
+                aspectRatio: 1920 / 800,
+                saveUploadedImage: (uploadedImage: File | Blob) => {
+                  uploadTripCoverImage(trip.id, uploadedImage).then(() => {
+                    refetch();
+                  });
+                },
               },
             });
           }}
@@ -161,7 +165,8 @@ export const BasicInfoMenu = ({
                 confirm: t('delete', 'Delete'),
                 cancel: t('cancel', 'Cancel'),
               },
-              onCancel: () => {},
+              onCancel: () => {
+              },
               onConfirm: () => {
                 deleteTrip(trip.id).then(() => {
                   notifications.show({
