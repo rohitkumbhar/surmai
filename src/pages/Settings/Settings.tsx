@@ -13,7 +13,7 @@ export const Settings = () => {
   const { user, reloadUser } = useCurrentUser();
 
   return (
-    <Container>
+    <Container >
       <Header>
         <Text p={10}>
           Settings

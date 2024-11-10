@@ -28,21 +28,6 @@ export const BasicInfoView = ({
 
   return (
     <Stack gap={'md'}>
-      <AspectRatio ratio={1920 / 400}>
-        {trip.coverImage && (
-          <Image src={getAttachmentUrl(trip, trip.coverImage)} />
-        )}
-        {!trip.coverImage && (
-          <ActionIcon
-            variant="subtle"
-            bd={'solid 1px var(--mantine-primary-color-filled)'}
-            aria-label="Settings"
-            style={{ height: '100%' }}
-          >
-            <IconPhoto stroke={1.5} />
-          </ActionIcon>
-        )}
-      </AspectRatio>
       <Flex
         mih={30}
         justify="flex-end"

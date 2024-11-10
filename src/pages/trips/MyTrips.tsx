@@ -16,6 +16,7 @@ import { formatDate, getAttachmentUrl, listTrips } from '../../lib';
 import { useQuery } from '@tanstack/react-query';
 import { Trip } from '../../types/trips.ts';
 import { useTranslation } from 'react-i18next';
+import {TripCard} from "../../components/trip/TripCard.tsx";
 
 export const MyTrips = () => {
   const navigate = useNavigate();
@@ -40,7 +41,8 @@ export const MyTrips = () => {
   }
 
   const cards = data.map((trip) => (
-    <Card
+    <TripCard trip={trip} />
+    /*<Card
       key={trip.name}
       p="md"
       radius="md"
@@ -77,7 +79,7 @@ export const MyTrips = () => {
       <Text className={classes.title} mt={5}>
         {trip.name}
       </Text>
-    </Card>
+    </Card>*/
   ));
 
   const createNew = (
