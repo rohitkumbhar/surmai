@@ -1,21 +1,10 @@
-import { Trip } from '../../../types/trips.ts';
-import { useTranslation } from 'react-i18next';
-import {
-  ActionIcon,
-  AspectRatio,
-  Divider,
-  Flex,
-  Group,
-  Image,
-  Paper,
-  Stack,
-  Text,
-  Title,
-} from '@mantine/core';
-import { formatDate, getAttachmentUrl } from '../../../lib';
-import { IconPhoto } from '@tabler/icons-react';
-import { ParticipantData } from './ParticipantData.tsx';
-import { BasicInfoMenu } from './BasicInfoMenu.tsx';
+import {Trip} from '../../../types/trips.ts';
+import {useTranslation} from 'react-i18next';
+import {Divider, Flex, Group, Paper, Stack, Text, Title,} from '@mantine/core';
+import {formatDate} from '../../../lib';
+import {IconPhoto} from '@tabler/icons-react';
+import {ParticipantData} from './ParticipantData.tsx';
+import {BasicInfoMenu} from './BasicInfoMenu.tsx';
 
 export const BasicInfoView = ({
   trip,

@@ -1,12 +1,25 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Text, Title, Tooltip } from '@mantine/core';
-import { IconBus, IconCar, IconPlaneInflight, IconShip, IconTrain } from '@tabler/icons-react';
-import { deleteTransportation, deleteTransportationAttachment } from '../../../lib';
+import {
+  IconBus,
+  IconCar,
+  IconPlaneInflight,
+  IconShip,
+  IconTrain,
+} from '@tabler/icons-react';
+import {
+  deleteTransportation,
+  deleteTransportationAttachment,
+} from '../../../lib';
 import { formatDate, formatTime } from '../common/util.ts';
 import { useTranslation } from 'react-i18next';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
-import { closeModal, openConfirmModal, openContextModal } from '@mantine/modals';
+import {
+  closeModal,
+  openConfirmModal,
+  openContextModal,
+} from '@mantine/modals';
 import { useMediaQuery } from '@mantine/hooks';
 import { notifications } from '@mantine/notifications';
 

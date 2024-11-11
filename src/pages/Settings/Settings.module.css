@@ -1,7 +1,9 @@
 .icon {
-    color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3));
+  color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3));
 }
 
 .name {
-    font-family: Greycliff CF, var(--mantine-font-family);
+  font-family:
+    Greycliff CF,
+    var(--mantine-font-family);
 }

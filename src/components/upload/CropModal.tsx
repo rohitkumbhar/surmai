@@ -3,12 +3,12 @@ import { useState } from 'react';
 import Cropper from 'react-easy-crop';
 
 export const CropModal = ({
-                            file,
-                            aspectRatio,
-                            onCropComplete,
-                          }: {
+  file,
+  aspectRatio,
+  onCropComplete,
+}: {
   file: File;
-  aspectRatio: number,
+  aspectRatio: number;
   onCropComplete: (val: CroppedImage, val2: CroppedImage) => void;
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });

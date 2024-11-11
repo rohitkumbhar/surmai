@@ -34,7 +34,6 @@ export const UserProfile = () => {
   if (!editing) {
     return (
       <Card
-
         padding="xl"
         radius="md"
         className={classes.card}
@@ -51,7 +50,7 @@ export const UserProfile = () => {
         />
 
         <Avatar
-          src={user?.prefs?.profilePictureUrl}
+          src={user?.avatar}
           name={user?.name}
           size={80}
           radius={80}

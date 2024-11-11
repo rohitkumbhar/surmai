@@ -1,25 +1,34 @@
-import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { authRefresh } from '../lib';
+import { createContext, useEffect, useState } from 'react';
+import { authRefresh, currentUser } from '../lib';
+import { User } from '../types/auth.ts';
+import { SignIn } from '../pages/SignIn/SignIn.tsx';
 
-// @ts-expect-error What is even type?
-export const SecureRoute = ({ children }) => {
-  const navigate = useNavigate();
-  const [allowChildren, setAllowChildren] = useState(false);
+export const AuthContext = createContext<{
+  user?: User;
+  reloadUser?: () => void;
+}>({});
+
+export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
+  const [user, setCurrentUser] = useState<User>();
+
   useEffect(() => {
-    authRefresh()
-      .then(() => {
-        setAllowChildren(true);
-      })
-      .catch((err) => {
-        console.log('err', typeof err, JSON.stringify(err));
-        if (err.isAbort) {
-          setAllowChildren(true);
-        } else {
-          setAllowChildren(false);
-          navigate('/login');
-        }
-      });
-  }, [navigate]);
-  return allowChildren ? children : null;
+    currentUser().then((resolvedUser) => setCurrentUser(resolvedUser));
+  }, []);
+
+  const reloadUser = () => {
+    authRefresh().then((result) => {
+      setCurrentUser(result.record as unknown as User);
+    });
+  };
+
+  const value = {
+    user,
+    reloadUser,
+  };
+
+  return user ? (
+    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  ) : (
+    <SignIn />
+  );
 };

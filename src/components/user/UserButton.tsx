@@ -3,7 +3,7 @@ import { IconLogout, IconSettings } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAttachmentUrl, logoutCurrentUser } from '../../lib';
 import { useState } from 'react';
-import { useCurrentUser } from '../../lib/hooks/useCurrentUser.ts';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 
 export function UserButton() {
   const [, setUserMenuOpened] = useState(false);

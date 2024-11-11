@@ -15,9 +15,9 @@ import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
 import { notifications } from '@mantine/notifications';
 
 export const BasicInfoMenu = ({
-                                trip,
-                                refetch,
-                              }: {
+  trip,
+  refetch,
+}: {
   trip: Trip;
   refetch: () => void;
 }) => {
@@ -165,8 +165,7 @@ export const BasicInfoMenu = ({
                 confirm: t('delete', 'Delete'),
                 cancel: t('cancel', 'Cancel'),
               },
-              onCancel: () => {
-              },
+              onCancel: () => {},
               onConfirm: () => {
                 deleteTrip(trip.id).then(() => {
                   notifications.show({

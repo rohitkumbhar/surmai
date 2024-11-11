@@ -1,15 +1,22 @@
-import {IconPhoto} from '@tabler/icons-react';
-import {ActionIcon, AspectRatio, Badge, Card, Group, Image, Text} from '@mantine/core';
+import { IconPhoto } from '@tabler/icons-react';
+import {
+  ActionIcon,
+  AspectRatio,
+  Badge,
+  Card,
+  Group,
+  Image,
+  Text,
+} from '@mantine/core';
 import classes from './TripCard.module.css';
-import {Trip} from "../../types/trips.ts";
-import {formatDate, getAttachmentUrl} from "../../lib";
-import {useNavigate} from "react-router-dom";
-import {useTranslation} from "react-i18next";
+import { Trip } from '../../types/trips.ts';
+import { formatDate, getAttachmentUrl } from '../../lib';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-
-export function TripCard({trip}: { trip: Trip }) {
+export function TripCard({ trip }: { trip: Trip }) {
   const navigateFunction = useNavigate();
-  const {id, name, coverImage, destinations} = trip
+  const { id, name, coverImage, destinations } = trip;
   const { i18n } = useTranslation();
 
   const features = destinations?.map((destination) => (
@@ -19,14 +26,16 @@ export function TripCard({trip}: { trip: Trip }) {
   ));
 
   return (
-    <Card withBorder
-          radius="md"
-          p="md"
-          className={classes.card}
-          onClick={(event) => {
-            navigateFunction(`/trips/${id}`);
-            event.preventDefault();
-          }}>
+    <Card
+      withBorder
+      radius="md"
+      p="md"
+      className={classes.card}
+      onClick={(event) => {
+        navigateFunction(`/trips/${id}`);
+        event.preventDefault();
+      }}
+    >
       <Card.Section>
         {/*{coverImage && <Image src={getAttachmentUrl(trip, coverImage)} alt={name} height={180}/>}*/}
         <AspectRatio ratio={1920 / 800}>
@@ -42,9 +51,9 @@ export function TripCard({trip}: { trip: Trip }) {
               variant="subtle"
               bd={'solid 1px var(--mantine-primary-color-filled)'}
               aria-label="Settings"
-              style={{height: '100%'}}
+              style={{ height: '100%' }}
             >
-              <IconPhoto stroke={1.5}/>
+              <IconPhoto stroke={1.5} />
             </ActionIcon>
           )}
         </AspectRatio>

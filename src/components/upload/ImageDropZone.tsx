@@ -6,8 +6,8 @@ import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
 
 export const ImageDropZone = ({
-                                     setUploadedFile,
-                                   }: {
+  setUploadedFile,
+}: {
   setUploadedFile: (val: File) => void;
 }) => {
   const theme = useMantineTheme();
@@ -65,7 +65,7 @@ export const ImageDropZone = ({
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
             {t(
               'basic.upload_cover_image',
-              'Drag and drop an image in this area',
+              'Drag and drop an image in this area'
             )}
           </Text>
         </div>

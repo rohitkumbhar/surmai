@@ -7,7 +7,7 @@ export {
   getUserByEmail,
   listAllUsers,
   authRefresh,
-  updateUserAvatar
+  updateUserAvatar,
 } from './pocketbase/auth';
 export {
   getTrip,

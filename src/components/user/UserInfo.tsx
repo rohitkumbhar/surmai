@@ -34,7 +34,7 @@ export const UserInfo = () => {
         <UnstyledButton className={classes.user}>
           <Group>
             <Avatar
-              src={user?.prefs?.profilePictureUrl}
+              src={user?.avatar}
               alt={user?.name}
               name={user?.name}
               radius="xl"

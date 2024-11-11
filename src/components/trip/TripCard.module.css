@@ -1,31 +1,32 @@
 .card {
-    /*background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));*/
-    border: 1px solid var(--mantine-primary-color-light);
-    transition:
-            transform 150ms ease,
-            box-shadow 150ms ease;
+  /*background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));*/
+  border: 1px solid var(--mantine-primary-color-light);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
 
-    &:hover {
-        transform: scale(1.01);
-        box-shadow: var(--mantine-shadow-md);
-    }
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: var(--mantine-shadow-md);
+  }
 }
 
 .section {
-    border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
-    padding-left: var(--mantine-spacing-md);
-    padding-right: var(--mantine-spacing-md);
-    padding-bottom: var(--mantine-spacing-md);
+  border-bottom: rem(1px) solid
+    light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  padding-left: var(--mantine-spacing-md);
+  padding-right: var(--mantine-spacing-md);
+  padding-bottom: var(--mantine-spacing-md);
 }
 
 .like {
-    color: var(--mantine-color-red-6);
-    width: rem(20px);
-    height: rem(20px);
+  color: var(--mantine-color-red-6);
+  width: rem(20px);
+  height: rem(20px);
 }
 
 .label {
-    text-transform: uppercase;
-    font-size: var(--mantine-font-size-xs);
-    font-weight: 700;
+  text-transform: uppercase;
+  font-size: var(--mantine-font-size-xs);
+  font-weight: 700;
 }

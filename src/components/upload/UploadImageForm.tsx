@@ -6,17 +6,17 @@ import { getCroppedImg } from './util.ts';
 import { ImageDropZone } from './ImageDropZone.tsx';
 import { CropModal } from './CropModal.tsx';
 
-export const UploadImageForm = (
-  {
-    context,
-    id,
-    innerProps,
-  }: ContextModalProps<{
-    aspectRatio: number;
-    saveUploadedImage: (image: File | Blob) => void;
-  }>) => {
+export const UploadImageForm = ({
+  context,
+  id,
+  innerProps,
+}: ContextModalProps<{
+  aspectRatio: number;
+  saveUploadedImage: (image: File | Blob) => void;
+}>) => {
   const [uploadedFile, setUploadedFile] = useState<File | undefined>();
-  const [croppedAreaPixels, setCroppedAreaPixels] = useState<CroppedImage | null>(null);
+  const [croppedAreaPixels, setCroppedAreaPixels] =
+    useState<CroppedImage | null>(null);
 
   const { aspectRatio, saveUploadedImage } = innerProps;
   const [active, setActive] = useState(0);
@@ -29,14 +29,14 @@ export const UploadImageForm = (
         (file) => {
           saveUploadedImage(file as File);
           context.closeModal(id);
-        },
+        }
       );
     }
   };
 
   const onCropComplete = (
     _croppedArea: CroppedImage,
-    croppedAreaPixels: CroppedImage,
+    croppedAreaPixels: CroppedImage
   ) => {
     setCroppedAreaPixels(croppedAreaPixels);
   };
@@ -48,8 +48,7 @@ export const UploadImageForm = (
         onStepClick={setActive}
         allowNextStepsSelect={false}
       >
-        <Stepper.Step
-          label="Upload Image">
+        <Stepper.Step label="Upload Image">
           <ImageDropZone
             setUploadedFile={(file) => {
               setUploadedFile(file);
@@ -57,11 +56,13 @@ export const UploadImageForm = (
             }}
           />
         </Stepper.Step>
-        <Stepper.Step
-          label="Crop Image"
-        >
+        <Stepper.Step label="Crop Image">
           {uploadedFile && (
-            <CropModal file={uploadedFile} onCropComplete={onCropComplete} aspectRatio={aspectRatio} />
+            <CropModal
+              file={uploadedFile}
+              onCropComplete={onCropComplete}
+              aspectRatio={aspectRatio}
+            />
           )}
           <Center>
             <Button
