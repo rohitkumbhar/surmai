@@ -1,46 +1,32 @@
-import {
-  Button,
-  FileButton,
-  Group,
-  rem,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
-import { DateTimePicker } from '@mantine/dates';
-import {
-  CreateTransportation,
-  Transportation,
-  TransportationFormSchema,
-  Trip,
-} from '../../../types/trips.ts';
-import { useForm } from '@mantine/form';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import {
-  createTransportationEntry,
-  saveTransportationAttachments,
-} from '../../../lib';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ContextModalProps } from '@mantine/modals';
-import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
+import {Button, FileButton, Group, rem, Stack, Text, TextInput, Title,} from '@mantine/core';
+import {DateTimePicker} from '@mantine/dates';
+import {CreateTransportation, Transportation, TransportationFormSchema, Trip,} from '../../../types/trips.ts';
+import {useForm} from '@mantine/form';
+import {CurrencyInput} from '../../util/CurrencyInput.tsx';
+import {createTransportationEntry, saveTransportationAttachments,} from '../../../lib';
+import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {updateTransportation} from '../../../lib/pocketbase/trips.ts';
+import {useCurrentUser} from "../../../auth/useCurrentUser.ts";
 
 export const GenericTransportationModeForm = ({
-  context,
-  id,
-  innerProps,
-}: ContextModalProps<{
+                                                transportationType,
+                                                trip,
+                                                transportation,
+                                                onSuccess,
+                                                onCancel
+                                              }: {
   transportationType: string;
   trip: Trip;
   transportation?: Transportation;
   onSuccess: () => void;
   onCancel: () => void;
-}>) => {
-  const { transportationType, trip, transportation, onSuccess, onCancel } =
-    innerProps;
-  const { t } = useTranslation();
+}) => {
+
+  const {t} = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
+  const {user} = useCurrentUser()
+  console.log("in GenericTransportationModeForm ", user)
   const form = useForm<TransportationFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -51,7 +37,7 @@ export const GenericTransportationModeForm = ({
       provider: transportation?.metadata?.provider,
       reservation: transportation?.metadata?.reservation,
       cost: transportation?.cost?.value,
-      currencyCode: transportation?.cost?.currency || 'USD',
+      currencyCode: transportation?.cost?.currency,
     },
     validate: {},
   });
@@ -85,19 +71,14 @@ export const GenericTransportationModeForm = ({
           } else {
             onSuccess();
           }
-        })
-        .finally(() => {
-          context.closeModal(id);
         });
     } else {
       createTransportationEntry(payload).then((result: Transportation) => {
         if (files.length > 0) {
           saveTransportationAttachments(result.id, files).then(() => {
-            context.closeModal(id);
             onSuccess();
           });
         } else {
-          context.closeModal(id);
           onSuccess();
         }
       });
@@ -229,7 +210,6 @@ export const GenericTransportationModeForm = ({
               variant={'default'}
               w={'min-content'}
               onClick={() => {
-                context.closeModal(id);
                 onCancel();
               }}
             >

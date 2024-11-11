@@ -10,7 +10,7 @@ export const modals = {
   editBasicInfoForm: EditBasicInfoForm,
   uploadImageForm: UploadImageForm,
   carRentalForm: CarRentalForm,
-  genericTransportationForm: GenericTransportationModeForm,
+  // genericTransportationForm: GenericTransportationModeForm,
   collaboratorsForm: Collaborators,
   genericLodgingForm: GenericLodgingForm,
   attachmentViewer: AttachmentViewer,

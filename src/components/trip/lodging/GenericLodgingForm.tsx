@@ -49,7 +49,7 @@ export const GenericLodgingForm = ({
       name: lodging?.name,
       address: lodging?.address,
       cost: lodging?.cost?.value,
-      currencyCode: lodging?.cost?.currency || 'USD',
+      currencyCode: lodging?.cost?.currency,
       startDate: lodging?.startDate,
       endDate: lodging?.endDate,
       confirmationCode: lodging?.confirmationCode,

@@ -81,7 +81,7 @@ export type TransportationFormSchema = {
   arrivalTime?: Date;
   reservation?: string;
   cost?: number;
-  currencyCode: string;
+  currencyCode?: string;
 };
 
 export type CroppedImage = {
@@ -118,7 +118,7 @@ export type LodgingFormSchema = {
   name?: string;
   address?: string;
   cost?: number;
-  currencyCode: string;
+  currencyCode?: string;
   startDate?: Date;
   endDate?: Date;
   confirmationCode?: string;

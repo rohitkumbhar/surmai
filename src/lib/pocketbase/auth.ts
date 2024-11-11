@@ -104,3 +104,7 @@ export const updateUserAvatar = (userId: string, file: File | Blob) => {
   formData.append('avatar', file);
   return pb.collection('users').update(userId, formData);
 };
+
+export const updateUser = (userId: string, data: object) => {
+  return pb.collection('users').update(userId, data);
+};

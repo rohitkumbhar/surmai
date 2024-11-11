@@ -1,22 +1,19 @@
-import { Avatar, Button, Container, Group, Paper, Title } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { openContextModal } from '@mantine/modals';
-import { useDocumentTitle, useMediaQuery } from '@mantine/hooks';
-import { getAttachmentUrl, updateUserAvatar } from '../../lib';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
+import {Avatar, Button, Container, Group, Paper, Title} from '@mantine/core';
+import {useTranslation} from 'react-i18next';
+import {openContextModal} from '@mantine/modals';
+import {useDocumentTitle, useMediaQuery} from '@mantine/hooks';
+import {getAttachmentUrl, updateUser} from '../../lib';
+import {useCurrentUser} from '../../auth/useCurrentUser.ts';
+import {UserSettingsForm} from '../../components/account/UserSettingsForm.tsx';
 
 export const Settings = () => {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
-  const { user, reloadUser } = useCurrentUser();
+  const {user, reloadUser} = useCurrentUser();
   useDocumentTitle(t('settings', 'Settings'));
 
   return (
     <Container>
-      {/*<Header>
-        <Text size={"lg"} p={10}>{t('settings', 'Settings')}</Text>
-      </Header>*/}
       <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'}>
         <Title order={2} fw={700} py={'sm'}>
           {t('user_settings', 'User Settings')}
@@ -42,7 +39,7 @@ export const Settings = () => {
                   innerProps: {
                     aspectRatio: 400 / 400,
                     saveUploadedImage: (uploadedImage: File | Blob) => {
-                      updateUserAvatar(user.id, uploadedImage).then(() => {
+                      updateUser(user.id, uploadedImage).then(() => {
                         reloadUser && reloadUser();
                       });
                     },
@@ -50,11 +47,11 @@ export const Settings = () => {
                 });
               }}
             >
-              Change Avatar
+              {t('change_avatar', 'Change Avatar')}
             </Button>
           )}
         </Group>
-        <UserSettingsForm />
+        <UserSettingsForm/>
 
         <Group wrap="nowrap" gap={10} mt={3}></Group>
       </Paper>

@@ -15,8 +15,10 @@ import { useMediaQuery } from '@mantine/hooks';
 export const AddTransportationMenu = ({
   trip,
   refetch,
+  onClick
 }: {
   trip: Trip;
+  onClick: (selectedType: string) => void
   refetch: () => void;
 }) => {
   const { t } = useTranslation();
@@ -44,25 +46,28 @@ export const AddTransportationMenu = ({
       <Menu.Dropdown>
         <Menu.Item
           onClick={() => {
-            openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_new_flight', 'Add Flight'),
-              radius: 'md',
-              withCloseButton: false,
-              size: 'auto',
-              fullScreen: isMobile,
-              innerProps: {
-                transportationType: 'flight',
-                trip: trip,
-                onSuccess: () => {
-                  closeModal('genericTransportationForm');
-                  refetch();
-                },
-                onCancel: () => {
-                  closeModal('genericTransportationForm');
-                },
-              },
-            });
+            // openContextModal({
+            //   modal: 'genericTransportationForm',
+            //   title: t('transportation.add_new_flight', 'Add Flight'),
+            //   radius: 'md',
+            //   withCloseButton: false,
+            //   size: 'auto',
+            //   fullScreen: isMobile,
+            //   innerProps: {
+            //     transportationType: 'flight',
+            //     trip: trip,
+            //     onSuccess: () => {
+            //       closeModal('genericTransportationForm');
+            //       refetch();
+            //     },
+            //     onCancel: () => {
+            //       closeModal('genericTransportationForm');
+            //     },
+            //   },
+            // });
+
+            onClick('flight')
+
           }}
           leftSection={
             <IconPlane
@@ -76,25 +81,27 @@ export const AddTransportationMenu = ({
 
         <Menu.Item
           onClick={() => {
-            openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_bus', 'Add Bus'),
-              radius: 'md',
-              withCloseButton: false,
-              size: 'auto',
-              fullScreen: isMobile,
-              innerProps: {
-                transportationType: 'bus',
-                trip: trip,
-                onSuccess: () => {
-                  closeModal('genericTransportationForm');
-                  refetch();
-                },
-                onCancel: () => {
-                  closeModal('genericTransportationForm');
-                },
-              },
-            });
+            // openContextModal({
+            //   modal: 'genericTransportationForm',
+            //   title: t('transportation.add_bus', 'Add Bus'),
+            //   radius: 'md',
+            //   withCloseButton: false,
+            //   size: 'auto',
+            //   fullScreen: isMobile,
+            //   innerProps: {
+            //     transportationType: 'bus',
+            //     trip: trip,
+            //     onSuccess: () => {
+            //       closeModal('genericTransportationForm');
+            //       refetch();
+            //     },
+            //     onCancel: () => {
+            //       closeModal('genericTransportationForm');
+            //     },
+            //   },
+            // });
+            onClick('bus')
+
           }}
           leftSection={
             <IconBus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
@@ -105,25 +112,27 @@ export const AddTransportationMenu = ({
 
         <Menu.Item
           onClick={() => {
-            openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_boat', 'Add Car/Taxi'),
-              radius: 'md',
-              withCloseButton: false,
-              size: 'auto',
-              fullScreen: isMobile,
-              innerProps: {
-                transportationType: 'car',
-                trip: trip,
-                onSuccess: () => {
-                  closeModal('genericTransportationForm');
-                  refetch();
-                },
-                onCancel: () => {
-                  closeModal('genericTransportationForm');
-                },
-              },
-            });
+            // openContextModal({
+            //   modal: 'genericTransportationForm',
+            //   title: t('transportation.add_boat', 'Add Car/Taxi'),
+            //   radius: 'md',
+            //   withCloseButton: false,
+            //   size: 'auto',
+            //   fullScreen: isMobile,
+            //   innerProps: {
+            //     transportationType: 'car',
+            //     trip: trip,
+            //     onSuccess: () => {
+            //       closeModal('genericTransportationForm');
+            //       refetch();
+            //     },
+            //     onCancel: () => {
+            //       closeModal('genericTransportationForm');
+            //     },
+            //   },
+            // });
+            onClick('car')
+
           }}
           leftSection={
             <IconCar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />
@@ -133,25 +142,27 @@ export const AddTransportationMenu = ({
         </Menu.Item>
         <Menu.Item
           onClick={() => {
-            openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_boat', 'Add Boat Ride'),
-              radius: 'md',
-              withCloseButton: false,
-              size: 'auto',
-              fullScreen: isMobile,
-              innerProps: {
-                transportationType: 'boat',
-                trip: trip,
-                onSuccess: () => {
-                  closeModal('genericTransportationForm');
-                  refetch();
-                },
-                onCancel: () => {
-                  closeModal('genericTransportationForm');
-                },
-              },
-            });
+            // openContextModal({
+            //   modal: 'genericTransportationForm',
+            //   title: t('transportation.add_boat', 'Add Boat Ride'),
+            //   radius: 'md',
+            //   withCloseButton: false,
+            //   size: 'auto',
+            //   fullScreen: isMobile,
+            //   innerProps: {
+            //     transportationType: 'boat',
+            //     trip: trip,
+            //     onSuccess: () => {
+            //       closeModal('genericTransportationForm');
+            //       refetch();
+            //     },
+            //     onCancel: () => {
+            //       closeModal('genericTransportationForm');
+            //     },
+            //   },
+            // });
+            onClick('boat')
+
           }}
           leftSection={
             <IconShip
@@ -164,25 +175,27 @@ export const AddTransportationMenu = ({
         </Menu.Item>
         <Menu.Item
           onClick={() => {
-            openContextModal({
-              modal: 'genericTransportationForm',
-              title: t('transportation.add_train', 'Add Train Ride'),
-              radius: 'md',
-              withCloseButton: false,
-              size: 'auto',
-              fullScreen: isMobile,
-              innerProps: {
-                transportationType: 'train',
-                trip: trip,
-                onSuccess: () => {
-                  closeModal('genericTransportationForm');
-                  refetch();
-                },
-                onCancel: () => {
-                  closeModal('genericTransportationForm');
-                },
-              },
-            });
+            // openContextModal({
+            //   modal: 'genericTransportationForm',
+            //   title: t('transportation.add_train', 'Add Train Ride'),
+            //   radius: 'md',
+            //   withCloseButton: false,
+            //   size: 'auto',
+            //   fullScreen: isMobile,
+            //   innerProps: {
+            //     transportationType: 'train',
+            //     trip: trip,
+            //     onSuccess: () => {
+            //       closeModal('genericTransportationForm');
+            //       refetch();
+            //     },
+            //     onCancel: () => {
+            //       closeModal('genericTransportationForm');
+            //     },
+            //   },
+            // });
+            onClick('train')
+
           }}
           leftSection={
             <IconTrain
