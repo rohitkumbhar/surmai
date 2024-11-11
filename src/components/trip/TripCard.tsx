@@ -37,7 +37,6 @@ export function TripCard({ trip }: { trip: Trip }) {
       }}
     >
       <Card.Section>
-        {/*{coverImage && <Image src={getAttachmentUrl(trip, coverImage)} alt={name} height={180}/>}*/}
         <AspectRatio ratio={1920 / 800}>
           {coverImage && (
             <Image

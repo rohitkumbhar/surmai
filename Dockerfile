@@ -1,8 +1,8 @@
 FROM node:20 AS builder
 
-USER node
-WORKDIR /surmai
 
+WORKDIR /surmai
+RUN mkdir node_modules
 ADD src src
 ADD public public
 COPY .eslintrc.cjs .
@@ -16,7 +16,6 @@ COPY vite.config.ts .
 
 RUN npm install --no-audit
 RUN npm run build
-
 
 FROM alpine:latest
 

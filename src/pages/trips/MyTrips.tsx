@@ -1,11 +1,22 @@
-import {ActionIcon, AspectRatio, Card, Container, Divider, LoadingOverlay, SimpleGrid, Text,} from '@mantine/core';
+import {
+  ActionIcon,
+  AspectRatio,
+  Card,
+  Container,
+  Divider,
+  LoadingOverlay,
+  SimpleGrid,
+  Text,
+} from '@mantine/core';
 import classes from './MyTrips.module.css';
-import {IconPlus} from '@tabler/icons-react';
-import {useNavigate} from 'react-router-dom';
-import {listTrips} from '../../lib';
-import {useQuery} from '@tanstack/react-query';
-import {Trip} from '../../types/trips.ts';
-import {TripCard} from '../../components/trip/TripCard.tsx';
+import { IconPlus } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
+import { listTrips } from '../../lib';
+import { useQuery } from '@tanstack/react-query';
+import { Trip } from '../../types/trips.ts';
+import { TripCard } from '../../components/trip/TripCard.tsx';
+import { ErrorBoundary } from 'react-error-boundary';
+import {ErrorInfo} from "react";
 
 export const MyTrips = () => {
   const navigate = useNavigate();
@@ -28,9 +39,19 @@ export const MyTrips = () => {
     throw new Error(error.message);
   }
 
-  const cards = data.map((trip) => (
-    <TripCard trip={trip} />
-  ));
+  const logError = (error: Error, info: ErrorInfo) => {
+    // Do something with the error, e.g. log to an external API
+    console.log(error);
+    console.log(' info', info);
+  };
+
+  const cards = () => {
+    return data.map((trip) => (
+      <ErrorBoundary key={trip.id} onError={logError} fallback={<p>Wrong!</p>}>
+        <TripCard trip={trip} />
+      </ErrorBoundary>
+    ));
+  };
 
   const createNew = (
     <Card
@@ -73,7 +94,7 @@ export const MyTrips = () => {
       </SimpleGrid>
       <Divider />
       <SimpleGrid mt={'md'} cols={{ base: 1, sm: 2, md: 3 }}>
-        {cards}
+        {data && cards()}
       </SimpleGrid>
     </Container>
   );

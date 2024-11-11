@@ -26,5 +26,4 @@ services:
     environment:
       SURMAI_ADMIN_EMAIL: rohit@kumbhar.net
       SURMAI_ADMIN_PASSWORD: ul4Mtqcx07gCX
-      SURMAI_CORS_ORIGINS: surmai.kumbhar.net,192.168.68.171:5173
 ```
