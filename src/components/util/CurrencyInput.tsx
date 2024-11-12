@@ -1,7 +1,6 @@
 import { NumberInput, rem, Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { currencyCodes } from './currencyCodes.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 
 export const CurrencyInput = ({
   currencyCodeKey,
@@ -15,9 +14,6 @@ export const CurrencyInput = ({
   currencyCodeProps: any;
 }) => {
   const { t } = useTranslation();
-  const { user } = useCurrentUser();
-
-  console.log('user cu', user);
 
   const select = (
     <Select
@@ -25,7 +21,6 @@ export const CurrencyInput = ({
       {...currencyCodeProps}
       data={currencyCodes}
       rightSectionWidth={28}
-      defaultValue={user?.currencyCode || 'USD'}
       withCheckIcon={false}
       styles={{
         input: {

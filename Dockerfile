@@ -14,7 +14,8 @@ COPY tsconfig.json .
 COPY tsconfig.node.json .
 COPY vite.config.ts .
 
-RUN npm install --no-audit
+RUN npm install -g npm@10.3.0 # For windows
+RUN npm install --no-audit --force --loglevel verbose
 RUN npm run build
 
 FROM alpine:latest

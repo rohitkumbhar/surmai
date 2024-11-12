@@ -1,0 +1,17 @@
+version: '3.7'
+
+volumes:
+  surmai_data:
+
+services:
+  surmai_dev:
+    container_name: surmai_server
+    image: surmai:latest
+    volumes:
+      - surmai_data:/pb_data
+    ports:
+      - 9090:8080
+    restart: always
+    environment:
+      SURMAI_ADMIN_EMAIL: admin@surmai.net
+      SURMAI_ADMIN_PASSWORD: ChangeMe123#@!
