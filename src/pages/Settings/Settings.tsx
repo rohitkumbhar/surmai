@@ -1,15 +1,15 @@
-import {Avatar, Button, Container, Group, Paper, Title} from '@mantine/core';
-import {useTranslation} from 'react-i18next';
-import {openContextModal} from '@mantine/modals';
-import {useDocumentTitle, useMediaQuery} from '@mantine/hooks';
-import {getAttachmentUrl, updateUser} from '../../lib';
-import {useCurrentUser} from '../../auth/useCurrentUser.ts';
-import {UserSettingsForm} from '../../components/account/UserSettingsForm.tsx';
+import { Avatar, Button, Container, Group, Paper, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { openContextModal } from '@mantine/modals';
+import { useDocumentTitle, useMediaQuery } from '@mantine/hooks';
+import { getAttachmentUrl, updateUser } from '../../lib';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
 
 export const Settings = () => {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
-  const {user, reloadUser} = useCurrentUser();
+  const { user, reloadUser } = useCurrentUser();
   useDocumentTitle(t('settings', 'Settings'));
 
   return (
@@ -51,7 +51,7 @@ export const Settings = () => {
             </Button>
           )}
         </Group>
-        <UserSettingsForm/>
+        <UserSettingsForm />
 
         <Group wrap="nowrap" gap={10} mt={3}></Group>
       </Paper>

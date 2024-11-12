@@ -16,7 +16,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Trip } from '../../types/trips.ts';
 import { TripCard } from '../../components/trip/TripCard.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import {ErrorInfo} from "react";
+import { ErrorInfo } from 'react';
 
 export const MyTrips = () => {
   const navigate = useNavigate();

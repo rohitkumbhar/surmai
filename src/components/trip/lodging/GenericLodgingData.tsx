@@ -1,14 +1,32 @@
-import {Lodging, LodgingType, Trip} from '../../../types/trips.ts';
-import {Box, Center, Divider, Grid, Text, Title, Tooltip,} from '@mantine/core';
-import {IconBedFlat, IconBuildingEstate, IconCar, IconHome, IconTent,} from '@tabler/icons-react';
-import {useTranslation} from 'react-i18next';
-import {DataLine} from '../DataLine.tsx';
-import {closeModal, openConfirmModal, openContextModal,} from '@mantine/modals';
-import {useMediaQuery} from '@mantine/hooks';
-import {Attachments} from '../attachments/Attachments.tsx';
-import {deleteLodging, formatDate} from '../../../lib';
-import {formatTime, getNumberOfDays} from '../common/util.ts';
-import {notifications} from '@mantine/notifications';
+import { Lodging, LodgingType, Trip } from '../../../types/trips.ts';
+import {
+  Box,
+  Center,
+  Divider,
+  Grid,
+  Text,
+  Title,
+  Tooltip,
+} from '@mantine/core';
+import {
+  IconBedFlat,
+  IconBuildingEstate,
+  IconCar,
+  IconHome,
+  IconTent,
+} from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+import { DataLine } from '../DataLine.tsx';
+import {
+  closeModal,
+  openConfirmModal,
+  openContextModal,
+} from '@mantine/modals';
+import { useMediaQuery } from '@mantine/hooks';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { deleteLodging, formatDate } from '../../../lib';
+import { formatTime, getNumberOfDays } from '../common/util.ts';
+import { notifications } from '@mantine/notifications';
 
 const typeIcons = {
   [LodgingType.HOTEL]: IconBuildingEstate,

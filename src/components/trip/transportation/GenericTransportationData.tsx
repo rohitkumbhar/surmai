@@ -1,16 +1,24 @@
-import {Transportation, Trip} from '../../../types/trips.ts';
-import {Box, Divider, Grid, Modal, Text, Title, Tooltip} from '@mantine/core';
-import {IconBus, IconCar, IconPlaneInflight, IconShip, IconTrain,} from '@tabler/icons-react';
-import {deleteTransportation, deleteTransportationAttachment,} from '../../../lib';
-import {formatDate, formatTime} from '../common/util.ts';
-import {useTranslation} from 'react-i18next';
-import {Attachments} from '../attachments/Attachments.tsx';
-import {DataLine} from '../DataLine.tsx';
-import {openConfirmModal,} from '@mantine/modals';
-import {useDisclosure, useMediaQuery} from '@mantine/hooks';
-import {notifications} from '@mantine/notifications';
-import {useCurrentUser} from "../../../auth/useCurrentUser.ts";
-import {GenericTransportationModeForm} from "./GenericTransportationModeForm.tsx";
+import { Transportation, Trip } from '../../../types/trips.ts';
+import { Box, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
+import {
+  IconBus,
+  IconCar,
+  IconPlaneInflight,
+  IconShip,
+  IconTrain,
+} from '@tabler/icons-react';
+import {
+  deleteTransportation,
+  deleteTransportationAttachment,
+} from '../../../lib';
+import { formatDate, formatTime } from '../common/util.ts';
+import { useTranslation } from 'react-i18next';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { DataLine } from '../DataLine.tsx';
+import { openConfirmModal } from '@mantine/modals';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { notifications } from '@mantine/notifications';
+import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 
 const typeIcons = {
   boat: IconShip,
@@ -21,19 +29,17 @@ const typeIcons = {
 };
 
 export const GenericTransportationData = ({
-                                            trip,
-                                            transportation,
-                                            refetch,
-                                          }: {
+  trip,
+  transportation,
+  refetch,
+}: {
   trip: Trip;
   transportation: Transportation;
   refetch: () => void;
 }) => {
-  const {t, i18n} = useTranslation();
+  const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
-  const {user} = useCurrentUser()
-  console.log("in GenericTransportationData ", user)
-  const [opened, {open, close}] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(false);
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
 
@@ -41,31 +47,11 @@ export const GenericTransportationData = ({
     <DataLine
       onEdit={() => {
         open();
-        // openContextModal({
-        //   modal: 'genericTransportationForm',
-        //   title: `${t('Edit', 'Edit')} ${t('transportation.' + transportation.type)}`,
-        //   radius: 'md',
-        //   size: 'auto',
-        //   withCloseButton: false,
-        //   fullScreen: isMobile,
-        //   innerProps: {
-        //     transportationType: transportation.type,
-        //     trip: trip,
-        //     transportation: transportation,
-        //     onSuccess: () => {
-        //       closeModal('genericTransportationForm');
-        //       refetch();
-        //     },
-        //     onCancel: () => {
-        //       closeModal('genericTransportationForm');
-        //     },
-        //   },
-        // });
       }}
       onDelete={() => {
         openConfirmModal({
           title: t('delete_transportation', 'Delete Transportation'),
-          confirmProps: {color: 'red'},
+          confirmProps: { color: 'red' },
           children: (
             <Text size="sm">
               {t('deletion_confirmation', 'This action cannot be undone.')}
@@ -89,19 +75,32 @@ export const GenericTransportationData = ({
         });
       }}
     >
-      <Modal opened={opened} size="auto" fullScreen={isMobile} title="Modal size auto" onClose={() => {
-        close()
-      }}>
-        <GenericTransportationModeForm transportationType={transportation.type}
-                                       transportation={transportation}
-                                       trip={trip} onSuccess={() => {
+      <Modal
+        opened={opened}
+        size="auto"
+        fullScreen={isMobile}
+        title={t(
+          'transportation.edit_' + transportation.type,
+          'Edit Transportation'
+        )}
+        onClose={() => {
           close();
-        }} onCancel={() => {
-          close()
-        }}/>
+        }}
+      >
+        <GenericTransportationModeForm
+          transportationType={transportation.type}
+          transportation={transportation}
+          trip={trip}
+          onSuccess={() => {
+            close();
+          }}
+          onCancel={() => {
+            close();
+          }}
+        />
       </Modal>
       <Grid align={'top'} p={'xs'} grow={false}>
-        <Grid.Col span={{base: 12, sm: 12, md: 1, lg: 1}} p={'md'}>
+        <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip
               label={t(
@@ -109,7 +108,7 @@ export const GenericTransportationData = ({
                 `transportation.${transportation.type}`
               )}
             >
-              <TypeIcon size={'sm'} stroke={1}/>
+              <TypeIcon size={'sm'} stroke={1} />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
@@ -119,11 +118,11 @@ export const GenericTransportationData = ({
                 `transportation.${transportation.type}`
               )}
             </Title>
-            <Divider mt={'5px'}/>
+            <Divider mt={'5px'} />
           </Box>
         </Grid.Col>
 
-        <Grid.Col span={{base: 12, sm: 5, md: 2, lg: 1.5}}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Title size="lg" fw={400}>
             {transportation.origin}
             <Text size="xs" c={'dimmed'}>
@@ -135,7 +134,7 @@ export const GenericTransportationData = ({
           </Title>
         </Grid.Col>
 
-        <Grid.Col span={{base: 12, sm: 5, md: 2, lg: 1.5}}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Title size="lg" fw={400}>
             {transportation.destination}
             <Text size="xs" c={'dimmed'}>
@@ -147,13 +146,13 @@ export const GenericTransportationData = ({
           </Title>
         </Grid.Col>
 
-        <Grid.Col span={{base: 12, sm: 6, md: 2, lg: 2}}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('transportation.provider', 'Provider')}
           </Text>
           <Title size="md">{transportation.metadata.provider}</Title>
         </Grid.Col>
-        <Grid.Col span={{base: 12, sm: 6, md: 2, lg: 2}}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('transportation.reservation', 'Reservation')}
           </Text>
@@ -162,7 +161,7 @@ export const GenericTransportationData = ({
           </Title>
         </Grid.Col>
 
-        <Grid.Col span={{base: 12, sm: 6, md: 2, lg: 2}}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>

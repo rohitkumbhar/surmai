@@ -6,7 +6,7 @@ import {
   Text,
   useCombobox,
 } from '@mantine/core';
-import {useTranslation} from "react-i18next";
+import { useTranslation } from 'react-i18next';
 
 interface Item {
   value: string;
@@ -47,8 +47,7 @@ export function ColorSchemeSelect({
   formKey: string;
   formProps: any;
 }) {
-
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -77,8 +76,10 @@ export function ColorSchemeSelect({
         {...formProps}
         data={colors}
         label={'Select Primary Color'}
-        description={t('color_scheme_description', 'Set the primary color based on your taste')}
-
+        description={t(
+          'color_scheme_description',
+          'Set the primary color based on your taste'
+        )}
         withCheckIcon={false}
         renderOption={renderSelectOption}
       />

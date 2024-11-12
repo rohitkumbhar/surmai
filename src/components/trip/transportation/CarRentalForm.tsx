@@ -23,22 +23,24 @@ import {
   createTransportationEntry,
   saveTransportationAttachments,
 } from '../../../lib';
-import { ContextModalProps } from '@mantine/modals';
 import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const CarRentalForm = ({
-  context,
-  id,
-  innerProps,
-}: ContextModalProps<{
+  trip,
+  carRental,
+  onSuccess,
+  onCancel,
+}: {
   trip: Trip;
   carRental?: Transportation;
   onSuccess: () => void;
   onCancel: () => void;
-}>) => {
-  const { trip, carRental, onSuccess, onCancel } = innerProps;
+}) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
+  const { user } = useCurrentUser();
+
   const form = useForm<CarRentalFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -49,7 +51,7 @@ export const CarRentalForm = ({
       dropOffTime: carRental?.arrivalTime,
       confirmationCode: carRental?.metadata?.confirmationCode,
       cost: carRental?.cost?.value,
-      currencyCode: carRental?.cost?.currency || 'USD',
+      currencyCode: carRental?.cost?.currency || user?.currencyCode || 'USD',
     },
     validate: {},
   });
@@ -74,33 +76,25 @@ export const CarRentalForm = ({
     };
 
     if (carRental?.id) {
-      updateTransportation(carRental.id, carRentalData)
-        .then((result) => {
-          if (files.length > 0) {
-            saveTransportationAttachments(result.id, files).then(() => {
-              onSuccess();
-            });
-          } else {
+      updateTransportation(carRental.id, carRentalData).then((result) => {
+        if (files.length > 0) {
+          saveTransportationAttachments(result.id, files).then(() => {
             onSuccess();
-          }
-        })
-        .finally(() => {
-          context.closeModal(id);
-        });
+          });
+        } else {
+          onSuccess();
+        }
+      });
     } else {
-      createTransportationEntry(carRentalData)
-        .then((transportation) => {
-          if (files.length > 0) {
-            saveTransportationAttachments(transportation.id, files).then(() => {
-              onSuccess();
-            });
-          } else {
+      createTransportationEntry(carRentalData).then((transportation) => {
+        if (files.length > 0) {
+          saveTransportationAttachments(transportation.id, files).then(() => {
             onSuccess();
-          }
-        })
-        .finally(() => {
-          context.closeModal(id);
-        });
+          });
+        } else {
+          onSuccess();
+        }
+      });
     }
   };
 
@@ -232,7 +226,6 @@ export const CarRentalForm = ({
               variant={'default'}
               w={'min-content'}
               onClick={() => {
-                context.closeModal(id);
                 onCancel();
               }}
             >

@@ -31,17 +31,16 @@
     "trip_description": "Brief Description",
     "trip_description_description": "Optional: Brief description of the trip",
     "trip_destinations": "Destinations",
-    "trip_destinations_description":"Enter the destinations in this trip e.g. San Jose, Guanacaste",
+    "trip_destinations_description": "Enter the destinations in this trip e.g. San Jose, Guanacaste",
     "trip_dates": "Trip Dates",
     "trip_dates_description": "Select the start and end dates of the trip",
     "travellers_description": "Enter the names of travellers on this trip. Multiple names can be separated by a comma"
-
   },
   "transportation": {
     "section_name": "Transportation",
     "section_description": "View and edit transportation arrangements for this trip",
     "add_new": "Add new",
-    "flight":"Flight",
+    "flight": "Flight",
     "bus": "Bus",
     "car_taxi": "Car/Taxi",
     "rental_car": "Car Rental",
@@ -58,6 +57,7 @@
     "attachments_desc": "Upload any related documents in PDF or JPEG/PNG formats",
     "save_flight": "Save Flight",
     "add_rental_car": "Add Rental Car",
+    "edit_rental_car": "Edit Rental Car",
     "rental_company": "Rental Company",
     "pickup_time": "Pickup Time",
     "dropOff_time": "Drop-off Time",
@@ -65,7 +65,17 @@
     "dropOff_location": "DropOff Location",
     "save_rental_car": "Save Rental Information",
     "pickup": "Pickup",
-    "drop_off": "Drop Off"
+    "drop_off": "Drop Off",
+    "add_flight": "Add New Flight",
+    "add_train": "Add New Train Ride",
+    "add_boat": "Add New Boat Ride",
+    "add_bus": "Add New Bus Ride",
+    "add_car": "Add New Car Ride",
+    "edit_flight": "Edit Flight",
+    "edit_train": "Edit Train Ride",
+    "edit_boat": "Edit Boat Ride",
+    "edit_bus": "Edit Bus Ride",
+    "edit_car": "Edit Car Ride"
   },
   "lodging": {
     "section_name": "Lodging",

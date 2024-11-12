@@ -1,18 +1,18 @@
-import {createContext, useContext, useEffect, useState} from 'react';
-import {authRefresh, currentUser} from '../lib';
-import {User} from '../types/auth.ts';
-import {useNavigate} from 'react-router-dom';
-import {SurmaiContext} from "../app/Surmai.tsx";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { authRefresh, currentUser } from '../lib';
+import { User } from '../types/auth.ts';
+import { useNavigate } from 'react-router-dom';
+import { SurmaiContext } from '../app/Surmai.tsx';
 
 export const AuthContext = createContext<{
   user?: User;
   reloadUser?: () => void;
 }>({});
 
-export const SecureRoute = ({children}: { children: React.ReactNode }) => {
+export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, setCurrentUser] = useState<User>();
   const navigate = useNavigate();
-  const {changeColor} = useContext(SurmaiContext)
+  const { changeColor } = useContext(SurmaiContext);
 
   useEffect(() => {
     currentUser()
@@ -22,9 +22,9 @@ export const SecureRoute = ({children}: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (user?.colorScheme) {
-      changeColor?.(user.colorScheme)
+      changeColor?.(user.colorScheme);
     }
-  }, [user])
+  }, [user]);
 
   const reloadUser = () => {
     authRefresh()

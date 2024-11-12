@@ -70,7 +70,7 @@ export type CarRentalFormSchema = {
   dropOffTime?: Date;
   confirmationCode?: string;
   cost?: number;
-  currencyCode: string;
+  currencyCode?: string;
 };
 
 export type TransportationFormSchema = {

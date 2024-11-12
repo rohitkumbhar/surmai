@@ -1,5 +1,5 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
-import { Box, Divider, Grid, Text, Title, Tooltip } from '@mantine/core';
+import { Box, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
 import { IconArticle } from '@tabler/icons-react';
 import {
   deleteTransportation,
@@ -9,8 +9,8 @@ import { formatDate, formatTime } from '../common/util.ts';
 import { useTranslation } from 'react-i18next';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
-import { closeModal, openContextModal } from '@mantine/modals';
-import { useMediaQuery } from '@mantine/hooks';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { CarRentalForm } from './CarRentalForm.tsx';
 
 export const CarRentalData = ({
   trip,
@@ -23,28 +23,12 @@ export const CarRentalData = ({
 }) => {
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
     <DataLine
       onEdit={() => {
-        openContextModal({
-          modal: 'carRentalForm',
-          title: t('transportation.edit_car_rental', 'Edit Car Rental'),
-          radius: 'md',
-          withCloseButton: false,
-          fullScreen: isMobile,
-          innerProps: {
-            trip: trip,
-            carRental: rental,
-            onSuccess: () => {
-              closeModal('carRentalForm');
-              refetch();
-            },
-            onCancel: () => {
-              closeModal('carRentalForm');
-            },
-          },
-        });
+        open();
       }}
       onDelete={() => {
         deleteTransportation(rental.id).then(() => {
@@ -52,6 +36,28 @@ export const CarRentalData = ({
         });
       }}
     >
+      <Modal
+        opened={opened}
+        size="auto"
+        fullScreen={isMobile}
+        title={t('transportation.edit_rental_car', 'Edit Rental Car')}
+        onClose={() => {
+          close();
+        }}
+      >
+        <CarRentalForm
+          carRental={rental}
+          trip={trip}
+          onSuccess={() => {
+            refetch();
+            close();
+          }}
+          onCancel={() => {
+            close();
+          }}
+        />
+      </Modal>
+
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 1, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'sm'}>
@@ -78,12 +84,6 @@ export const CarRentalData = ({
             {`${formatDate(i18n.language, rental.departureTime)} ${formatTime(i18n.language, rental.departureTime)}`}
           </Text>
         </Grid.Col>
-
-        {/*<Grid.Col span={{base: 12, sm: 2, md: 1, lg: 1}}>
-          <Text c={"dimmed"} size={"xs"}>
-            {getTravelTime(rental.departureTime, rental.arrivalTime)}
-          </Text>
-        </Grid.Col>*/}
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
@@ -128,62 +128,6 @@ export const CarRentalData = ({
           deleteTransportationAttachment(rental.id, attachmentName)
         }
       />
-
-      {/*<Group>
-        <Group pl={"xs"}>
-          <Tooltip label={rental.metadata.rentalCompany}>
-            <Avatar name={rental.metadata.rentalCompany} size={"lg"} color="initials"
-                    radius={"9"}/>
-          </Tooltip>
-        </Group>
-        <Group justify="flex-start" p={"10px"} gap={"md"}>
-          <Group miw={rem(150)} maw={rem(150)}>
-            <IconCarSuv size="1.4rem" stroke={1.5}/>
-            <Title size="md" fw={400}>
-              {t('transportation.pickup', 'Pickup')}
-              <Text size="xs" c={"dimmed"}>
-                {formatDate(i18n.language, rental.departureTime)}
-              </Text>
-              <Text size="xs" c={"dimmed"}>
-                {formatTime(i18n.language, rental.departureTime)}
-              </Text>
-              <Text size="xs" c={"dimmed"}>
-                {rental.origin}
-              </Text>
-            </Title>
-          </Group>
-          <IconChevronsRight/>
-          <Group miw={rem(150)} maw={rem(150)}>
-            <IconCarSuv size="1.4rem" stroke={1.5}/>
-            <Title size="md" fw={400}>
-              {t('transportation.drop_off', 'Drop Off')}
-              <Text size="xs" c={"dimmed"}>
-                {formatDate(i18n.language, rental.arrivalTime)}
-              </Text>
-              <Text size="xs" c={"dimmed"}>
-                {formatTime(i18n.language, rental.arrivalTime)}
-              </Text>
-              <Text size="xs" c={"dimmed"}>
-                {rental.destination}
-              </Text>
-            </Title>
-          </Group>
-        </Group>
-
-        <Stack gap={"1"} pl={"md"} miw={rem(150)}>
-          <Text fw={400} c={"dimmed"}>{t('transportation.confirmation_code', 'Confirmation Code')}</Text>
-          <Text tt="uppercase">{rental.metadata.confirmationCode}</Text>
-        </Stack>
-
-        <Stack gap={"1"} pl={"md"} miw={rem(200)}>
-          <Text fw={400} c={"dimmed"}>{t('cost', 'Cost')}</Text>
-          <Text tt="uppercase">{`${rental.cost.value} ${rental.cost.currency || ''}`}</Text>
-        </Stack>
-      </Group>
-
-      <Group>
-        <Attachments transportation={rental} refetch={refetch}/>
-      </Group>*/}
     </DataLine>
   );
 };

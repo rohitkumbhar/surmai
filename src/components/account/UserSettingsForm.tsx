@@ -1,18 +1,18 @@
-import {useCurrentUser} from '../../auth/useCurrentUser.ts';
-import {useForm} from '@mantine/form';
-import {UserSettingsFormType} from '../../types/auth.ts';
-import {Box, Button, Group, Select, TextInput} from '@mantine/core';
-import {useTranslation} from 'react-i18next';
-import {ColorSchemeSelect} from './ColorSchemeSelect.tsx';
-import {useContext} from 'react';
-import {SurmaiContext} from '../../app/Surmai.tsx';
-import {updateUser} from "../../lib";
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { useForm } from '@mantine/form';
+import { UserSettingsFormType } from '../../types/auth.ts';
+import { Box, Button, Group, Select, TextInput } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
+import { useContext } from 'react';
+import { SurmaiContext } from '../../app/Surmai.tsx';
+import { updateUser } from '../../lib';
 
-import {currencyCodes} from "../util/currencyCodes.ts";
+import { currencyCodes } from '../util/currencyCodes.ts';
 
 export const UserSettingsForm = () => {
-  const {user, reloadUser} = useCurrentUser();
-  const {t} = useTranslation();
+  const { user, reloadUser } = useCurrentUser();
+  const { t } = useTranslation();
 
   const appCtx = useContext(SurmaiContext);
 
@@ -33,11 +33,11 @@ export const UserSettingsForm = () => {
       updateUser(user.id, {
         name: values.name,
         colorScheme: values.colorScheme,
-        currencyCode: values.currencyCode
+        currencyCode: values.currencyCode,
       }).then(() => {
         appCtx.changeColor?.(values.colorScheme);
-        reloadUser?.()
-      })
+        reloadUser?.();
+      });
     }
     // mantineTheme.primaryColor = "green"
   };
@@ -57,19 +57,21 @@ export const UserSettingsForm = () => {
 
         <ColorSchemeSelect
           formKey={form.key('colorScheme')}
-          formProps={{...form.getInputProps('colorScheme')}}
+          formProps={{ ...form.getInputProps('colorScheme') }}
         />
 
         <Select
           mt={'sm'}
           name={'currencyCode'}
           label={t('currency_code', 'Currency Code')}
-          description={t('currency_code_desc', 'Set your default currency code')}
+          description={t(
+            'currency_code_desc',
+            'Set your default currency code'
+          )}
           key={form.key('currencyCode')}
           {...form.getInputProps('currencyCode')}
           data={currencyCodes}
           withCheckIcon={false}
-
         />
 
         <Group justify={'flex-end'}>
