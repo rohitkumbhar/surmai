@@ -17,20 +17,14 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         placeholder="Name"
         mt={'md'}
         required
-        description={t(
-          'basic.trip_name_description',
-          'A short name for your trip e.g. Summer 2025 in Costa Rica'
-        )}
+        description={t('basic.trip_name_description', 'A short name for your trip e.g. Summer 2025 in Costa Rica')}
         key={form.key('name')}
         {...form.getInputProps('name')}
       />
 
       <Textarea
         label={t('basic.trip_description', 'Brief Description')}
-        description={t(
-          'basic.trip_description_description',
-          'Optional: Brief description of the trip'
-        )}
+        description={t('basic.trip_description_description', 'Optional: Brief description of the trip')}
         placeholder=""
         key={form.key('description')}
         {...form.getInputProps('description')}
@@ -53,10 +47,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         type="range"
         required
         label={t('basic.trip_dates', 'Trip Dates')}
-        description={t(
-          'basic.trip_dates_description',
-          'Select the start and end dates of the trip'
-        )}
+        description={t('basic.trip_dates_description', 'Select the start and end dates of the trip')}
         placeholder="Pick date"
         key={form.key('dateRange')}
         {...form.getInputProps('dateRange')}

@@ -1,10 +1,7 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
 import { IconArticle } from '@tabler/icons-react';
-import {
-  deleteTransportation,
-  deleteTransportationAttachment,
-} from '../../../lib';
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib';
 import { formatDate, formatTime } from '../common/util.ts';
 import { useTranslation } from 'react-i18next';
 import { Attachments } from '../attachments/Attachments.tsx';
@@ -61,16 +58,12 @@ export const CarRentalData = ({
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 1, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'sm'}>
-            <Tooltip
-              label={t(`transportation_type_${rental.type}`, rental.type)}
-            >
+            <Tooltip label={t(`transportation_type_${rental.type}`, rental.type)}>
               <IconArticle size={'sm'} stroke={1} />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'sm'}>
-            <Title size={'lg'}>
-              {t(`transportation_type_${rental.type}`, rental.type)}
-            </Title>
+            <Title size={'lg'}>{t(`transportation_type_${rental.type}`, rental.type)}</Title>
             <Divider mt={'5px'} />
           </Box>
         </Grid.Col>
@@ -105,9 +98,7 @@ export const CarRentalData = ({
           <Text size="sm" c={'dimmed'}>
             {t('transportation.reservation', 'Reservation')}
           </Text>
-          <Title size="md">
-            {rental.metadata.confirmationCode || 'Unknown'}
-          </Title>
+          <Title size="md">{rental.metadata.confirmationCode || 'Unknown'}</Title>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
@@ -115,18 +106,14 @@ export const CarRentalData = ({
             {t('cost', 'Cost')}
           </Text>
           <Title size="md">
-            {rental.cost.value
-              ? `${rental.cost.value} ${rental.cost.currency || ''}`
-              : 'Unknown'}
+            {rental.cost.value ? `${rental.cost.value} ${rental.cost.currency || ''}` : 'Unknown'}
           </Title>
         </Grid.Col>
       </Grid>
       <Attachments
         entity={rental}
         refetch={refetch}
-        onDelete={(attachmentName) =>
-          deleteTransportationAttachment(rental.id, attachmentName)
-        }
+        onDelete={(attachmentName) => deleteTransportationAttachment(rental.id, attachmentName)}
       />
     </DataLine>
   );

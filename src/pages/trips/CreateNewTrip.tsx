@@ -32,8 +32,7 @@ export const CreateNewTrip = () => {
       <form
         onSubmit={form.onSubmit(async (values) => {
           const user = await currentUser();
-          const { name, description, dateRange, participants, destinations } =
-            values;
+          const { name, description, dateRange, participants, destinations } = values;
           const data: NewTrip = {
             name: name,
             description: description,
@@ -53,11 +52,7 @@ export const CreateNewTrip = () => {
           });
         })}
       >
-        <Accordion
-          chevronPosition="right"
-          variant="contained"
-          value="basic_info"
-        >
+        <Accordion chevronPosition="right" variant="contained" value="basic_info">
           <Accordion.Item value={'basic_info'} key={'basic_info'}>
             <Accordion.Control
               icon={
@@ -74,9 +69,7 @@ export const CreateNewTrip = () => {
                 <div>
                   <Text>{'Basic Information'}</Text>
                   <Text size="sm" c="dimmed" fw={400}>
-                    {
-                      'Enter some basic information about your trip to get started'
-                    }
+                    {'Enter some basic information about your trip to get started'}
                   </Text>
                 </div>
               </Group>

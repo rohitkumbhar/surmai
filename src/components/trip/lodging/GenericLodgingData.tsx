@@ -1,32 +1,15 @@
 import { Lodging, LodgingType, Trip } from '../../../types/trips.ts';
-import {
-  Box,
-  Center,
-  Divider,
-  Grid,
-  Text,
-  Title,
-  Tooltip,
-} from '@mantine/core';
-import {
-  IconBedFlat,
-  IconBuildingEstate,
-  IconCar,
-  IconHome,
-  IconTent,
-} from '@tabler/icons-react';
+import { Box, Center, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
+import { IconBedFlat, IconBuildingEstate, IconCar, IconHome, IconTent } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
-import {
-  closeModal,
-  openConfirmModal,
-  openContextModal,
-} from '@mantine/modals';
-import { useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal } from '@mantine/modals';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { deleteLodging, formatDate } from '../../../lib';
 import { formatTime, getNumberOfDays } from '../common/util.ts';
 import { notifications } from '@mantine/notifications';
+import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 
 const typeIcons = {
   [LodgingType.HOTEL]: IconBuildingEstate,
@@ -45,6 +28,7 @@ export const GenericLodgingData = ({
   refetch: () => void;
 }) => {
   const { t, i18n } = useTranslation();
+  const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[lodging.type] || IconCar;
@@ -52,36 +36,13 @@ export const GenericLodgingData = ({
   return (
     <DataLine
       onEdit={() => {
-        openContextModal({
-          modal: 'genericLodgingForm',
-          title: t('edit', 'Edit'),
-          radius: 'md',
-          size: 'auto',
-          withCloseButton: isMobile,
-          fullScreen: isMobile,
-          innerProps: {
-            trip: trip,
-            lodging: lodging,
-            type: lodging.type,
-            onSuccess: () => {
-              closeModal('genericLodgingForm');
-              refetch();
-            },
-            onCancel: () => {
-              closeModal('genericLodgingForm');
-            },
-          },
-        });
+        openForm();
       }}
       onDelete={() => {
         openConfirmModal({
           title: t('delete_lodging', 'Delete Lodging'),
           confirmProps: { color: 'red' },
-          children: (
-            <Text size="sm">
-              {t('deletion_confirmation', 'This action cannot be undone.')}
-            </Text>
-          ),
+          children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
           labels: {
             confirm: t('delete', 'Delete'),
             cancel: t('cancel', 'Cancel'),
@@ -100,6 +61,28 @@ export const GenericLodgingData = ({
         });
       }}
     >
+      <Modal
+        opened={formOpened}
+        fullScreen={isMobile}
+        size="auto"
+        title={t('lodging.edit_' + lodging.type, 'Edit Lodging')}
+        onClose={() => {
+          closeForm();
+        }}
+      >
+        <GenericLodgingForm
+          type={lodging.type}
+          lodging={lodging}
+          trip={trip}
+          onSuccess={() => {
+            refetch();
+            closeForm();
+          }}
+          onCancel={() => {
+            closeForm();
+          }}
+        />
+      </Modal>
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
@@ -108,9 +91,7 @@ export const GenericLodgingData = ({
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
-            <Title size={'lg'}>
-              {t(`lodging_type_${lodging.type}`, lodging.type)}
-            </Title>
+            <Title size={'lg'}>{t(`lodging_type_${lodging.type}`, lodging.type)}</Title>
             <Divider mt={'5px'} />
           </Box>
         </Grid.Col>
@@ -165,9 +146,7 @@ export const GenericLodgingData = ({
             {t('cost', 'Cost')}
           </Text>
           <Title size="md">
-            {lodging.cost?.value
-              ? `${lodging.cost.value} ${lodging.cost.currency || ''}`
-              : 'Unknown'}
+            {lodging.cost?.value ? `${lodging.cost.value} ${lodging.cost.currency || ''}` : 'Unknown'}
           </Title>
         </Grid.Col>
       </Grid>

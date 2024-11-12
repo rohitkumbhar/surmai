@@ -14,8 +14,5 @@ export const getStrength = (password: string) => {
     }
   });
 
-  return Math.max(
-    100 - (100 / (passwordRequirements.length + 1)) * multiplier,
-    10
-  );
+  return Math.max(100 - (100 / (passwordRequirements.length + 1)) * multiplier, 10);
 };

@@ -1,41 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from '@mantine/hooks';
 import { Button, Menu, rem, Text } from '@mantine/core';
-import {
-  IconChevronDown,
-  IconDownload,
-  IconPencil,
-  IconPhoto,
-  IconTrash,
-  IconUsers,
-} from '@tabler/icons-react';
+import { IconChevronDown, IconDownload, IconPencil, IconPhoto, IconTrash, IconUsers } from '@tabler/icons-react';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
 import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
 import { notifications } from '@mantine/notifications';
 
-export const BasicInfoMenu = ({
-  trip,
-  refetch,
-}: {
-  trip: Trip;
-  refetch: () => void;
-}) => {
+export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
     <Menu>
       <Menu.Target>
-        <Button
-          rightSection={
-            <IconChevronDown
-              style={{ width: rem(18), height: rem(18) }}
-              stroke={1.5}
-            />
-          }
-          pr={12}
-        >
+        <Button rightSection={<IconChevronDown style={{ width: rem(18), height: rem(18) }} stroke={1.5} />} pr={12}>
           {t('actions', 'Actions')}
         </Button>
       </Menu.Target>
@@ -56,12 +35,7 @@ export const BasicInfoMenu = ({
               },
             });
           }}
-          leftSection={
-            <IconPencil
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
-          }
+          leftSection={<IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('edit', 'Edit')}
         </Menu.Item>
@@ -84,12 +58,7 @@ export const BasicInfoMenu = ({
               },
             });
           }}
-          leftSection={
-            <IconPhoto
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
-          }
+          leftSection={<IconPhoto style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('basic.add_cover_image', 'Add Cover Image')}
         </Menu.Item>
@@ -110,12 +79,7 @@ export const BasicInfoMenu = ({
               },
             });
           }}
-          leftSection={
-            <IconUsers
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
-          }
+          leftSection={<IconUsers style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('basic.add_cover_image', 'Add Collaborators')}
         </Menu.Item>
@@ -140,12 +104,7 @@ export const BasicInfoMenu = ({
                 });
               });
           }}
-          leftSection={
-            <IconDownload
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
-          }
+          leftSection={<IconDownload style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('offline', 'Enable Offline')}
         </Menu.Item>
@@ -156,11 +115,7 @@ export const BasicInfoMenu = ({
             openConfirmModal({
               title: t('delete_trip', 'Delete Trip'),
               confirmProps: { color: 'red' },
-              children: (
-                <Text size="sm">
-                  {t('deletion_confirmation', 'This action cannot be undone.')}
-                </Text>
-              ),
+              children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
               labels: {
                 confirm: t('delete', 'Delete'),
                 cancel: t('cancel', 'Cancel'),
@@ -178,12 +133,7 @@ export const BasicInfoMenu = ({
               },
             });
           }}
-          leftSection={
-            <IconTrash
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
-          }
+          leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('delete', 'Delete')}
         </Menu.Item>

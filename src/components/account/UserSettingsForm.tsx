@@ -55,19 +55,13 @@ export const UserSettingsForm = () => {
           {...form.getInputProps('name')}
         />
 
-        <ColorSchemeSelect
-          formKey={form.key('colorScheme')}
-          formProps={{ ...form.getInputProps('colorScheme') }}
-        />
+        <ColorSchemeSelect formKey={form.key('colorScheme')} formProps={{ ...form.getInputProps('colorScheme') }} />
 
         <Select
           mt={'sm'}
           name={'currencyCode'}
           label={t('currency_code', 'Currency Code')}
-          description={t(
-            'currency_code_desc',
-            'Set your default currency code'
-          )}
+          description={t('currency_code_desc', 'Set your default currency code')}
           key={form.key('currencyCode')}
           {...form.getInputProps('currencyCode')}
           data={currencyCodes}

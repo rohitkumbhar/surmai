@@ -1,11 +1,4 @@
-import {
-  Button,
-  Container,
-  Notification,
-  Paper,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { Button, Container, Notification, Paper, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -46,24 +39,14 @@ export const SignUp = () => {
     },
 
     validate: {
-      email: (value) =>
-        /^\S+@\S+$/.test(value)
-          ? null
-          : t('account.invalid_email', 'Invalid email'),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : t('account.invalid_email', 'Invalid email')),
     },
   });
 
   return (
     <>
       <Container size={420} my={40}>
-        <Paper
-          withBorder
-          shadow="md"
-          p={30}
-          mt={30}
-          radius="md"
-          bg="var(--mantine-primary-color-light)"
-        >
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
           <Text size="lg" ta="center" mt={5}>
             {t('create_account', 'Create An Account')}
           </Text>
@@ -72,10 +55,7 @@ export const SignUp = () => {
             <Notification
               withBorder
               color="red"
-              title={t(
-                'account_creation_failed',
-                'Unable to create an account'
-              )}
+              title={t('account_creation_failed', 'Unable to create an account')}
               onClose={() => setApiError(undefined)}
             >
               {apiError}

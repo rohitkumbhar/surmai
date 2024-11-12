@@ -1,12 +1,5 @@
 import { Lodging, Transportation } from '../../../types/trips.ts';
-import {
-  Anchor,
-  Badge,
-  CloseButton,
-  Divider,
-  Group,
-  Text,
-} from '@mantine/core';
+import { Anchor, Badge, CloseButton, Divider, Group, Text } from '@mantine/core';
 import { getAttachmentUrl } from '../../../lib';
 import { IconFile } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
@@ -69,10 +62,7 @@ export const Attachments = ({
                           confirmProps: { color: 'red' },
                           children: (
                             <Text size="sm">
-                              {t(
-                                'attachment_deletion_confirmation',
-                                'This action cannot be undone.'
-                              )}
+                              {t('attachment_deletion_confirmation', 'This action cannot be undone.')}
                             </Text>
                           ),
                           labels: {

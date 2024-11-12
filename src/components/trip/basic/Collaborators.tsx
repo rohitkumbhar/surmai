@@ -1,47 +1,23 @@
 import { ContextModalProps, openConfirmModal } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
 import { forwardRef, useEffect, useState } from 'react';
-import {
-  ActionIcon,
-  Avatar,
-  Button,
-  ComboboxItem,
-  Container,
-  Group,
-  MultiSelect,
-  Paper,
-  Text,
-} from '@mantine/core';
+import { ActionIcon, Avatar, Button, ComboboxItem, Container, Group, MultiSelect, Paper, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import {
-  addCollaborators,
-  currentUser as getCurrentUser,
-  deleteCollaborator,
-  listAllUsers,
-} from '../../../lib';
+import { addCollaborators, currentUser as getCurrentUser, deleteCollaborator, listAllUsers } from '../../../lib';
 import { User } from '../../../types/auth.ts';
 import { IconTrash, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-const UserSearch = ({
-  trip,
-  setNewCollaborators,
-}: {
-  trip: Trip;
-  setNewCollaborators: (val: string[]) => void;
-}) => {
+const UserSearch = ({ trip, setNewCollaborators }: { trip: Trip; setNewCollaborators: (val: string[]) => void }) => {
   const [curUser, setCurrentUser] = useState<User | undefined>();
   const { data } = useQuery<User[]>({
     queryKey: ['listAllUsers'],
     queryFn: () => listAllUsers(),
   });
 
-  const userIndex: Map<string, User> = (data || []).reduce(
-    (accumulator, obj) => {
-      return accumulator.set(obj.id, obj);
-    },
-    new Map<string, User>()
-  );
+  const userIndex: Map<string, User> = (data || []).reduce((accumulator, obj) => {
+    return accumulator.set(obj.id, obj);
+  }, new Map<string, User>());
 
   const renderOption = ({ option }: { option: ComboboxItem }) => {
     const user = userIndex.get(option.value);
@@ -77,9 +53,7 @@ const UserSearch = ({
     const opts =
       data?.map((user) => {
         const isOwner = user.id === trip.ownerId;
-        const isExistingCollaborator = trip.collaborators?.find(
-          (ec) => ec.id === user.id
-        );
+        const isExistingCollaborator = trip.collaborators?.find((ec) => ec.id === user.id);
         const isMe = curUser?.id === user.id;
         const label = `${user.name} ${isOwner ? '(Owner)' : ''}`;
         return {
@@ -103,20 +77,13 @@ const UserSearch = ({
   );
 };
 
-const CollaboratorButton = forwardRef<
-  HTMLDivElement,
-  { trip: Trip; user: User; onSave: () => void }
->((props, ref) => {
+const CollaboratorButton = forwardRef<HTMLDivElement, { trip: Trip; user: User; onSave: () => void }>((props, ref) => {
   const { t } = useTranslation();
   const { trip, user, onSave } = props;
   const { name, email } = user;
   return (
     <div ref={ref}>
-      <Paper
-        shadow={'sm'}
-        p={'xs'}
-        bd={'1px solid var(--mantine-primary-color-2)'}
-      >
+      <Paper shadow={'sm'} p={'xs'} bd={'1px solid var(--mantine-primary-color-2)'}>
         <Group>
           <Avatar key={name} name={name} color="initials" />
           <div>
@@ -136,14 +103,7 @@ const CollaboratorButton = forwardRef<
               openConfirmModal({
                 title: t('delete_collaborator', 'Delete Collaborator'),
                 confirmProps: { color: 'red' },
-                children: (
-                  <Text size="sm">
-                    {t(
-                      'deletion_confirmation',
-                      'This action cannot be undone.'
-                    )}
-                  </Text>
-                ),
+                children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
                 labels: {
                   confirm: t('delete', 'Delete'),
                   cancel: t('cancel', 'Cancel'),
@@ -191,11 +151,7 @@ export const Collaborators = ({
         {(trip.collaborators || []).map((collaborator) => {
           return (
             <Group wrap={'nowrap'} key={collaborator.id}>
-              <CollaboratorButton
-                trip={trip}
-                user={collaborator}
-                onSave={onSave}
-              />
+              <CollaboratorButton trip={trip} user={collaborator} onSave={onSave} />
             </Group>
           );
         })}

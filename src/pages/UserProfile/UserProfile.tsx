@@ -1,13 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  Container,
-  Notification,
-  Paper,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { Avatar, Button, Card, Container, Notification, Paper, Text, TextInput } from '@mantine/core';
 import classes from './UserProfile.module.css';
 import { useEffect, useState } from 'react';
 import { useForm } from '@mantine/form';
@@ -33,13 +24,7 @@ export const UserProfile = () => {
 
   if (!editing) {
     return (
-      <Card
-        padding="xl"
-        radius="md"
-        className={classes.card}
-        w={300}
-        m={'auto'}
-      >
+      <Card padding="xl" radius="md" className={classes.card} w={300} m={'auto'}>
         <Card.Section
           h={140}
           className={classes.headerSection}
@@ -65,14 +50,7 @@ export const UserProfile = () => {
           {user?.email}
         </Text>
 
-        <Button
-          fullWidth
-          radius="md"
-          mt="xl"
-          size="md"
-          variant="default"
-          onClick={() => setEditing(true)}
-        >
+        <Button fullWidth radius="md" mt="xl" size="md" variant="default" onClick={() => setEditing(true)}>
           Edit
         </Button>
       </Card>
@@ -85,21 +63,9 @@ export const UserProfile = () => {
 
     return (
       <Container size={420} my={40}>
-        <Paper
-          withBorder
-          shadow="md"
-          p={30}
-          mt={30}
-          radius="md"
-          bg="var(--mantine-primary-color-light)"
-        >
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
           {apiError && (
-            <Notification
-              withBorder
-              color="red"
-              title="Unable to sign in"
-              onClose={() => setApiError(undefined)}
-            >
+            <Notification withBorder color="red" title="Unable to sign in" onClose={() => setApiError(undefined)}>
               {apiError}
             </Notification>
           )}
@@ -127,11 +93,7 @@ export const UserProfile = () => {
               </div>
 
               <div style={{ margin: 'auto' }}>
-                <Button
-                  type={'button'}
-                  bg={'gray'}
-                  onClick={() => setEditing(false)}
-                >
+                <Button type={'button'} bg={'gray'} onClick={() => setEditing(false)}>
                   Cancel
                 </Button>
               </div>

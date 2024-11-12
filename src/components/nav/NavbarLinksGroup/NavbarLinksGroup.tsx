@@ -10,12 +10,7 @@ interface LinksGroupProps {
   links?: { label: string; link: string }[];
 }
 
-export function LinksGroup({
-  icon: Icon,
-  label,
-  initiallyOpened,
-  links,
-}: LinksGroupProps) {
+export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksGroupProps) {
   const hasLinks = Array.isArray(links);
   const [opened, setOpened] = useState(initiallyOpened || false);
   const items = (hasLinks ? links : []).map((link) => (

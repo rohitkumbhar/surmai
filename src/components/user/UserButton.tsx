@@ -33,14 +33,7 @@ export function UserButton() {
       <Menu.Dropdown>
         <Menu.Label>{user?.name}</Menu.Label>
         <Link to={'/settings'}>
-          <Menu.Item
-            leftSection={
-              <IconSettings
-                style={{ width: rem(16), height: rem(16) }}
-                stroke={1.5}
-              />
-            }
-          >
+          <Menu.Item leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
             Settings
           </Menu.Item>
         </Link>
@@ -49,12 +42,7 @@ export function UserButton() {
             await logoutCurrentUser();
             navigate(0);
           }}
-          leftSection={
-            <IconLogout
-              style={{ width: rem(16), height: rem(16) }}
-              stroke={1.5}
-            />
-          }
+          leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           Logout
         </Menu.Item>

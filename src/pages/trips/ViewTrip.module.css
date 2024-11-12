@@ -13,28 +13,16 @@
 
   &::before,
   &::after {
-    background-color: light-dark(
-      var(--mantine-color-gray-2),
-      var(--mantine-color-dark-7)
-    ) !important;
+    background-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-7)) !important;
   }
 
   &:hover {
-    background-color: light-dark(
-      var(--mantine-color-gray-1),
-      var(--mantine-color-dark-5)
-    );
+    background-color: light-dark(var(--mantine-color-gray-1), var(--mantine-color-dark-5));
   }
 
   &[data-active] {
-    background-color: light-dark(
-      var(--mantine-color-white),
-      var(--mantine-color-dark-7)
-    );
-    border-color: light-dark(
-      var(--mantine-color-gray-2),
-      var(--mantine-color-dark-7)
-    );
+    background-color: light-dark(var(--mantine-color-white), var(--mantine-color-dark-7));
+    border-color: light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-7));
     /*border-bottom-color: transparent;*/
   }
 }

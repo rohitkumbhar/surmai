@@ -1,13 +1,4 @@
-import {
-  ActionIcon,
-  AspectRatio,
-  Card,
-  Container,
-  Divider,
-  LoadingOverlay,
-  SimpleGrid,
-  Text,
-} from '@mantine/core';
+import { ActionIcon, AspectRatio, Card, Container, Divider, LoadingOverlay, SimpleGrid, Text } from '@mantine/core';
 import classes from './MyTrips.module.css';
 import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -26,13 +17,7 @@ export const MyTrips = () => {
   });
 
   if (isPending) {
-    return (
-      <LoadingOverlay
-        visible={true}
-        zIndex={1000}
-        overlayProps={{ radius: 'sm', blur: 2 }}
-      />
-    );
+    return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
   if (isError) {
@@ -67,11 +52,7 @@ export const MyTrips = () => {
       }}
     >
       <AspectRatio ratio={1920 / 400}>
-        <ActionIcon
-          variant="filled"
-          aria-label="Settings"
-          style={{ height: '100%' }}
-        >
+        <ActionIcon variant="filled" aria-label="Settings" style={{ height: '100%' }}>
           <IconPlus stroke={1.5} />
         </ActionIcon>
       </AspectRatio>

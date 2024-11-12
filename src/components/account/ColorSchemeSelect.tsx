@@ -1,11 +1,4 @@
-import {
-  Box,
-  Group,
-  Select,
-  SelectProps,
-  Text,
-  useCombobox,
-} from '@mantine/core';
+import { Box, Group, Select, SelectProps, Text, useCombobox } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 interface Item {
@@ -40,13 +33,7 @@ const colors: Item[] = [
   { value: 'potato', label: '🥔 Potato', description: 'Anyway you like it' },
 ];
 
-export function ColorSchemeSelect({
-  formKey,
-  formProps,
-}: {
-  formKey: string;
-  formProps: any;
-}) {
+export function ColorSchemeSelect({ formKey, formProps }: { formKey: string; formProps: any }) {
   const { t } = useTranslation();
 
   const combobox = useCombobox({
@@ -76,10 +63,7 @@ export function ColorSchemeSelect({
         {...formProps}
         data={colors}
         label={'Select Primary Color'}
-        description={t(
-          'color_scheme_description',
-          'Set the primary color based on your taste'
-        )}
+        description={t('color_scheme_description', 'Set the primary color based on your taste')}
         withCheckIcon={false}
         renderOption={renderSelectOption}
       />

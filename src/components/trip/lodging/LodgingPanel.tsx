@@ -1,11 +1,13 @@
 import { Lodging, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
 import { listLodgings } from '../../../lib';
-import { Container, Flex, LoadingOverlay, Stack, Title } from '@mantine/core';
+import { Container, Flex, LoadingOverlay, Modal, Stack, Title } from '@mantine/core';
 import { AddLodgingMenu } from './AddLodgingMenu.tsx';
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { GenericLodgingData } from './GenericLodgingData.tsx';
+import { GenericLodgingForm } from './GenericLodgingForm.tsx';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
 export const LodgingPanel = ({ trip }: { trip: Trip }) => {
   const { t } = useTranslation();
@@ -15,14 +17,12 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
     queryFn: () => listLodgings(tripId || ''),
   });
 
+  const isMobile = useMediaQuery('(max-width: 50em)');
+  const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
+  const [newLodgingType, setNewLodgingType] = useState<string>('hotel');
+
   if (isPending) {
-    return (
-      <LoadingOverlay
-        visible={true}
-        zIndex={1000}
-        overlayProps={{ radius: 'sm', blur: 2 }}
-      />
-    );
+    return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
   if (isError) {
@@ -31,15 +31,35 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
 
   return (
     <Container py={'xs'} size="lg">
-      <Flex
-        mih={50}
-        gap="md"
-        justify="flex-end"
-        align="center"
-        direction="row"
-        wrap="wrap"
+      <Modal
+        opened={formOpened}
+        fullScreen={isMobile}
+        size="auto"
+        title={t('lodging.add_' + newLodgingType, 'Add Lodging')}
+        onClose={() => {
+          closeForm();
+        }}
       >
-        <AddLodgingMenu trip={trip} refetch={refetch} />
+        <GenericLodgingForm
+          type={newLodgingType}
+          trip={trip}
+          onSuccess={() => {
+            refetch();
+            closeForm();
+          }}
+          onCancel={() => {
+            closeForm();
+          }}
+        />
+      </Modal>
+
+      <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
+        <AddLodgingMenu
+          onClick={(type) => {
+            setNewLodgingType(type);
+            openForm();
+          }}
+        />
       </Flex>
       {
         <Stack mt={'sm'}>

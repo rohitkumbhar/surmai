@@ -1,12 +1,5 @@
 import { useParams } from 'react-router-dom';
-import {
-  Accordion,
-  Container,
-  Group,
-  LoadingOverlay,
-  rem,
-  Text,
-} from '@mantine/core';
+import { Accordion, Container, Group, LoadingOverlay, rem, Text } from '@mantine/core';
 import { IconBed, IconInfoSquare, IconPlane } from '@tabler/icons-react';
 import { Trip } from '../../types/trips.ts';
 import { formatDate, getTrip } from '../../lib';
@@ -36,13 +29,7 @@ export const ViewTrip = () => {
   }, [data]);
 
   if (isPending) {
-    return (
-      <LoadingOverlay
-        visible={true}
-        zIndex={1000}
-        overlayProps={{ radius: 'sm', blur: 2 }}
-      />
-    );
+    return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
   if (isError) {
@@ -57,8 +44,7 @@ export const ViewTrip = () => {
             {trip?.name}
           </Text>
           <Text size={'sm'} visibleFrom={'sm'} c={'dimmed'}>
-            {formatDate(i18n.language, trip.startDate)} -{' '}
-            {formatDate(i18n.language, trip.endDate)}
+            {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
           </Text>
         </Group>
       </Header>
@@ -80,10 +66,7 @@ export const ViewTrip = () => {
               <div>
                 <Text>{t('basic.section_name', 'Basic Information')}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
-                  {t(
-                    'basic.section_description',
-                    'View basic information about your trip'
-                  )}
+                  {t('basic.section_description', 'View basic information about your trip')}
                 </Text>
               </div>
             </Group>
@@ -107,9 +90,7 @@ export const ViewTrip = () => {
           >
             <Group wrap="nowrap">
               <div>
-                <Text>
-                  {t('transportation.section_name', 'Transportation')}
-                </Text>
+                <Text>{t('transportation.section_name', 'Transportation')}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
                   {t(
                     'transportation.section_description',
@@ -140,10 +121,7 @@ export const ViewTrip = () => {
               <div>
                 <Text>{t('lodging.section_name', 'Lodging')}</Text>
                 <Text size="sm" c="dimmed" fw={400}>
-                  {t(
-                    'lodging.section_description',
-                    'View and edit your lodging arrangements for this trip'
-                  )}
+                  {t('lodging.section_description', 'View and edit your lodging arrangements for this trip')}
                 </Text>
               </div>
             </Group>

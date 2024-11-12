@@ -39,7 +39,5 @@ export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
     reloadUser,
   };
 
-  return user ? (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  ) : null;
+  return user ? <AuthContext.Provider value={value}>{children}</AuthContext.Provider> : null;
 };

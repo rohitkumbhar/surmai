@@ -14,8 +14,7 @@ export const AttachmentViewer = ({
 
   const extension = fileName.split('.').pop()?.toLowerCase();
   const isPdf = extension === 'pdf';
-  const isImage =
-    extension && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(extension);
+  const isImage = extension && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(extension);
 
   return (
     <Container>
@@ -34,9 +33,7 @@ export const AttachmentViewer = ({
       <Group>
         {' '}
         {isPdf && <PDFViewer documentUrl={attachmentUrl} />}
-        {isImage && (
-          <ImageViewer imageUrl={attachmentUrl} imageName={fileName} />
-        )}
+        {isImage && <ImageViewer imageUrl={attachmentUrl} imageName={fileName} />}
         {!(isPdf || isImage) && <div> Unable to render this file</div>}
       </Group>
     </Container>

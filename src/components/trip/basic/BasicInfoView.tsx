@@ -6,25 +6,12 @@ import { IconPhoto } from '@tabler/icons-react';
 import { ParticipantData } from './ParticipantData.tsx';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 
-export const BasicInfoView = ({
-  trip,
-  refetch,
-}: {
-  trip: Trip;
-  refetch: () => void;
-}) => {
+export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t, i18n } = useTranslation();
 
   return (
     <Stack gap={'md'}>
-      <Flex
-        mih={30}
-        justify="flex-end"
-        align="center"
-        wrap="wrap"
-        pos={'relative'}
-        top={'20px'}
-      >
+      <Flex mih={30} justify="flex-end" align="center" wrap="wrap" pos={'relative'} top={'20px'}>
         <BasicInfoMenu trip={trip} refetch={refetch} />
       </Flex>
       <Title order={1}>{trip.name}</Title>
@@ -33,8 +20,7 @@ export const BasicInfoView = ({
         {trip.description}
       </Title>
       <Text size={'sm'}>
-        {formatDate(i18n.language, trip.startDate)} -{' '}
-        {formatDate(i18n.language, trip.endDate)}
+        {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
       </Text>
       <Divider />
       <Text mt={'md'}>{t('basic.destinations', 'Destinations')}</Text>
@@ -42,12 +28,7 @@ export const BasicInfoView = ({
         {(trip.destinations || []).map((destination) => {
           return (
             <Group wrap={'nowrap'} key={destination.name}>
-              <Paper
-                shadow="sm"
-                radius="sm"
-                p="xl"
-                bg={'var(--mantine-primary-color-light)'}
-              >
+              <Paper shadow="sm" radius="sm" p="xl" bg={'var(--mantine-primary-color-light)'}>
                 <IconPhoto />
                 <Text>{destination.name}</Text>
               </Paper>
@@ -61,12 +42,7 @@ export const BasicInfoView = ({
         {(trip.participants || []).map((person, index) => {
           return (
             <Group wrap={'nowrap'} key={person.name}>
-              <ParticipantData
-                participant={person}
-                trip={trip}
-                index={index}
-                refetch={refetch}
-              />
+              <ParticipantData participant={person} trip={trip} index={index} refetch={refetch} />
             </Group>
           );
         })}

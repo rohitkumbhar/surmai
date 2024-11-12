@@ -1,28 +1,11 @@
-import {
-  Button,
-  FileButton,
-  Group,
-  rem,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import {
-  CarRentalFormSchema,
-  CreateTransportation,
-  Transportation,
-  Trip,
-} from '../../../types/trips.ts';
+import { CarRentalFormSchema, CreateTransportation, Transportation, Trip } from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  createTransportationEntry,
-  saveTransportationAttachments,
-} from '../../../lib';
+import { createTransportationEntry, saveTransportationAttachments } from '../../../lib';
 import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
@@ -100,9 +83,7 @@ export const CarRentalForm = ({
 
   return (
     <Stack>
-      <Title order={4}>
-        {t('transportation.add_rental_car', 'Add Rental Car')}
-      </Title>
+      <Title order={4}>{t('transportation.add_rental_car', 'Add Rental Car')}</Title>
       <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
         <Stack>
           <Group>
@@ -202,15 +183,11 @@ export const CarRentalForm = ({
                           <Text
                             size={'xs'}
                           >{`${carRental.attachments ? carRental.attachments.length : 0} existing files`}</Text>
-                          <Button {...props}>
-                            {t('upload_more', 'Upload More')}
-                          </Button>
+                          <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                         </Stack>
                       );
                     } else {
-                      return (
-                        <Button {...props}>{t('upload', 'Upload')}</Button>
-                      );
+                      return <Button {...props}>{t('upload', 'Upload')}</Button>;
                     }
                   }}
                 </FileButton>

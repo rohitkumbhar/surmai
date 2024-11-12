@@ -5,11 +5,7 @@ import classes from './UploadImageForm.module.css';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
 
-export const ImageDropZone = ({
-  setUploadedFile,
-}: {
-  setUploadedFile: (val: File) => void;
-}) => {
+export const ImageDropZone = ({ setUploadedFile }: { setUploadedFile: (val: File) => void }) => {
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
   const { t } = useTranslation();
@@ -30,53 +26,28 @@ export const ImageDropZone = ({
         <div style={{ pointerEvents: 'none' }}>
           <Group justify="center">
             <Dropzone.Accept>
-              <IconDownload
-                style={{ width: rem(50), height: rem(50) }}
-                color={theme.colors.blue[6]}
-                stroke={1.5}
-              />
+              <IconDownload style={{ width: rem(50), height: rem(50) }} color={theme.colors.blue[6]} stroke={1.5} />
             </Dropzone.Accept>
             <Dropzone.Reject>
-              <IconX
-                style={{ width: rem(50), height: rem(50) }}
-                color={theme.colors.red[6]}
-                stroke={1.5}
-              />
+              <IconX style={{ width: rem(50), height: rem(50) }} color={theme.colors.red[6]} stroke={1.5} />
             </Dropzone.Reject>
             <Dropzone.Idle>
-              <IconCloudUpload
-                style={{ width: rem(50), height: rem(50) }}
-                stroke={1.5}
-              />
+              <IconCloudUpload style={{ width: rem(50), height: rem(50) }} stroke={1.5} />
             </Dropzone.Idle>
           </Group>
 
           <Text ta="center" fw={700} fz="lg" mt="xl">
-            <Dropzone.Accept>
-              {t('basic.drop_files_here', 'Drop image here')}
-            </Dropzone.Accept>
-            <Dropzone.Reject>
-              {t('basic.cover_image_limit', 'Image file less than 30mb')}
-            </Dropzone.Reject>
-            <Dropzone.Idle>
-              {t('basic.upload-cover_image', 'Upload Image')}
-            </Dropzone.Idle>
+            <Dropzone.Accept>{t('basic.drop_files_here', 'Drop image here')}</Dropzone.Accept>
+            <Dropzone.Reject>{t('basic.cover_image_limit', 'Image file less than 30mb')}</Dropzone.Reject>
+            <Dropzone.Idle>{t('basic.upload-cover_image', 'Upload Image')}</Dropzone.Idle>
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
-            {t(
-              'basic.upload_cover_image',
-              'Drag and drop an image in this area'
-            )}
+            {t('basic.upload_cover_image', 'Drag and drop an image in this area')}
           </Text>
         </div>
       </Dropzone>
 
-      <Button
-        className={classes.control}
-        size="md"
-        radius="xl"
-        onClick={() => openRef.current?.()}
-      >
+      <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current?.()}>
         {t('basic.select_image', 'Upload Image')}
       </Button>
     </div>

@@ -1,30 +1,15 @@
 import { Participant, Trip } from '../../../types/trips.ts';
-import {
-  Avatar,
-  Box,
-  Group,
-  Paper,
-  Popover,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { Avatar, Box, Group, Paper, Popover, Text, TextInput } from '@mantine/core';
 import { forwardRef, useState } from 'react';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
 import { updateTrip } from '../../../lib';
 
-const ParticipantButton = forwardRef<
-  HTMLDivElement,
-  { name: string; email?: string }
->((props, ref) => {
+const ParticipantButton = forwardRef<HTMLDivElement, { name: string; email?: string }>((props, ref) => {
   const { name, email } = props;
   return (
     <div ref={ref}>
-      <Paper
-        shadow={'sm'}
-        p={'xs'}
-        bd={'1px solid var(--mantine-primary-color-2)'}
-      >
+      <Paper shadow={'sm'} p={'xs'} bd={'1px solid var(--mantine-primary-color-2)'}>
         <Group>
           <Avatar key={name} name={name} color="initials" />
           <div>
@@ -54,9 +39,7 @@ export const ParticipantData = ({
   refetch: () => void;
 }) => {
   const { name, email } = participant;
-  const [participantEmail, setParticipantEmail] = useState<string | undefined>(
-    participant.email
-  );
+  const [participantEmail, setParticipantEmail] = useState<string | undefined>(participant.email);
 
   const form = useForm<{ email?: string; collaborator?: boolean }>({
     mode: 'uncontrolled',

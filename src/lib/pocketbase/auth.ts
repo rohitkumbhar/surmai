@@ -2,13 +2,7 @@ import { pb, pbAdmin } from './pocketbase.ts';
 import { User } from '../../types/auth.ts';
 import { ClientResponseError } from 'pocketbase';
 
-export const authWithUsernameAndPassword = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) => {
+export const authWithUsernameAndPassword = async ({ email, password }: { email: string; password: string }) => {
   return pbAdmin.admins
     .authWithPassword(email, password)
     .then(async () => {
@@ -20,9 +14,7 @@ export const authWithUsernameAndPassword = async ({
       return result.record;
     })
     .catch(async () => {
-      const result = await pb
-        .collection('users')
-        .authWithPassword(email, password);
+      const result = await pb.collection('users').authWithPassword(email, password);
       return result.record;
     });
 };

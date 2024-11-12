@@ -1,11 +1,4 @@
-import {
-  Container,
-  Flex,
-  LoadingOverlay,
-  Modal,
-  Stack,
-  Title,
-} from '@mantine/core';
+import { Container, Flex, LoadingOverlay, Modal, Stack, Title } from '@mantine/core';
 import { Transportation, Trip } from '../../../types/trips.ts';
 import { AddTransportationMenu } from './AddTransportationMenu.tsx';
 import { Fragment, useState } from 'react';
@@ -20,31 +13,18 @@ import { CarRentalForm } from './CarRentalForm.tsx';
 
 export const TransportationPanel = ({ trip }: { trip: Trip }) => {
   const { t } = useTranslation();
-  const [formOpened, { open: openForm, close: closeForm }] =
-    useDisclosure(false);
-  const [
-    carRentalFormOpened,
-    { open: openRentalForm, close: closeRentalForm },
-  ] = useDisclosure(false);
-  const [newTransportationType, setNewTransportationType] =
-    useState<string>('flight');
+  const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
+  const [carRentalFormOpened, { open: openRentalForm, close: closeRentalForm }] = useDisclosure(false);
+  const [newTransportationType, setNewTransportationType] = useState<string>('flight');
   const isMobile = useMediaQuery('(max-width: 50em)');
   const tripId = trip.id;
-  const { isPending, isError, data, error, refetch } = useQuery<
-    Transportation[]
-  >({
+  const { isPending, isError, data, error, refetch } = useQuery<Transportation[]>({
     queryKey: ['listTransportations', tripId],
     queryFn: () => listTransportations(tripId || ''),
   });
 
   if (isPending) {
-    return (
-      <LoadingOverlay
-        visible={true}
-        zIndex={1000}
-        overlayProps={{ radius: 'sm', blur: 2 }}
-      />
-    );
+    return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
   if (isError) {
@@ -57,10 +37,7 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t(
-          'transportation.add_' + newTransportationType,
-          'Add Transportation'
-        )}
+        title={t('transportation.add_' + newTransportationType, 'Add Transportation')}
         onClose={() => {
           closeForm();
         }}
@@ -99,14 +76,7 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         />
       </Modal>
 
-      <Flex
-        mih={50}
-        gap="md"
-        justify="flex-end"
-        align="center"
-        direction="row"
-        wrap="wrap"
-      >
+      <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
         <AddTransportationMenu
           onClick={(type) => {
             if (type === 'car_rental') {
@@ -119,52 +89,18 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         />
       </Flex>
       <Stack mt={'sm'}>
-        <Title order={5}>
-          {t('transportation.travel_timeline', 'Travel Timeline')}
-        </Title>
+        <Title order={5}>{t('transportation.travel_timeline', 'Travel Timeline')}</Title>
         {data
           .filter((t) => t.type !== 'rental_car')
           .map((t: Transportation) => {
             return (
               <Fragment key={t.id}>
-                {t.type === 'flight' && (
-                  <GenericTransportationData
-                    refetch={refetch}
-                    trip={trip}
-                    transportation={t}
-                  />
-                )}
-                {t.type === 'rental_car' && (
-                  <CarRentalData refetch={refetch} trip={trip} rental={t} />
-                )}
-                {t.type === 'bus' && (
-                  <GenericTransportationData
-                    refetch={refetch}
-                    trip={trip}
-                    transportation={t}
-                  />
-                )}
-                {t.type === 'boat' && (
-                  <GenericTransportationData
-                    refetch={refetch}
-                    trip={trip}
-                    transportation={t}
-                  />
-                )}
-                {t.type === 'train' && (
-                  <GenericTransportationData
-                    refetch={refetch}
-                    trip={trip}
-                    transportation={t}
-                  />
-                )}
-                {t.type === 'car' && (
-                  <GenericTransportationData
-                    refetch={refetch}
-                    trip={trip}
-                    transportation={t}
-                  />
-                )}
+                {t.type === 'flight' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+                {t.type === 'rental_car' && <CarRentalData refetch={refetch} trip={trip} rental={t} />}
+                {t.type === 'bus' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+                {t.type === 'boat' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+                {t.type === 'train' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+                {t.type === 'car' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
               </Fragment>
             );
           })}

@@ -49,9 +49,7 @@ export const updateTrip = (tripId: string, data: { [key: string]: any }) => {
   return pb.collection('trips').update(tripId, data);
 };
 
-export const listTransportations = async (
-  tripId: string
-): Promise<Transportation[]> => {
+export const listTransportations = async (tripId: string): Promise<Transportation[]> => {
   const results = await pb.collection('transportations').getList(1, 50, {
     filter: `trip="${tripId}"`,
     sort: 'departureTime',
@@ -75,10 +73,7 @@ export const deleteTransportation = (transportationId: string) => {
   return pb.collection('transportations').delete(transportationId);
 };
 
-export const addFlight = (
-  tripId: string,
-  data: { [key: string]: any }
-): Promise<Transportation> => {
+export const addFlight = (tripId: string, data: { [key: string]: any }): Promise<Transportation> => {
   const payload = {
     type: 'flight',
     origin: data.origin,
@@ -99,23 +94,15 @@ export const addFlight = (
   return pb.collection('transportations').create(payload);
 };
 
-export const updateTransportation = (
-  transportationId: string,
-  data: CreateTransportation
-): Promise<Transportation> => {
+export const updateTransportation = (transportationId: string, data: CreateTransportation): Promise<Transportation> => {
   return pb.collection('transportations').update(transportationId, data);
 };
 
-export const createTransportationEntry = (
-  payload: CreateTransportation
-): Promise<Transportation> => {
+export const createTransportationEntry = (payload: CreateTransportation): Promise<Transportation> => {
   return pb.collection('transportations').create(payload);
 };
 
-export const saveTransportationAttachments = (
-  transportationId: string,
-  files: File[]
-) => {
+export const saveTransportationAttachments = (transportationId: string, files: File[]) => {
   const formData = new FormData();
   files.forEach((f) => formData.append('attachments', f));
   return pb.collection('transportations').update(transportationId, formData);
@@ -125,37 +112,25 @@ export const getAttachmentUrl = (record: any, fileName: string) => {
   return pb.files.getUrl(record, fileName);
 };
 
-export const deleteTransportationAttachment = (
-  transportationId: string,
-  fileName: string
-) => {
+export const deleteTransportationAttachment = (transportationId: string, fileName: string) => {
   return pb.collection('transportations').update(transportationId, {
     'attachments-': [fileName],
   });
 };
 
-export const uploadTripCoverImage = (
-  tripId: string,
-  coverImage: File | Blob
-) => {
+export const uploadTripCoverImage = (tripId: string, coverImage: File | Blob) => {
   const formData = new FormData();
   formData.append('coverImage', coverImage);
   return pb.collection('trips').update(tripId, formData);
 };
 
-export const addCollaborators = (
-  tripId: string,
-  userIds: string[]
-): Promise<Collaborator> => {
+export const addCollaborators = (tripId: string, userIds: string[]): Promise<Collaborator> => {
   return pb.collection('trips').update(tripId, {
     'collaborators+': userIds,
   });
 };
 
-export const deleteCollaborator = (
-  tripId: string,
-  userId: string
-): Promise<Collaborator> => {
+export const deleteCollaborator = (tripId: string, userId: string): Promise<Collaborator> => {
   return pb.collection('trips').update(tripId, {
     'collaborators-': userId,
   });
@@ -177,16 +152,11 @@ export const listLodgings = async (tripId: string): Promise<Lodging[]> => {
   });
 };
 
-export const createLodgingEntry = (
-  payload: CreateLodging
-): Promise<Lodging> => {
+export const createLodgingEntry = (payload: CreateLodging): Promise<Lodging> => {
   return pb.collection('lodgings').create(payload);
 };
 
-export const updateLodgingEntry = (
-  lodgingId: string,
-  payload: CreateLodging
-): Promise<Lodging> => {
+export const updateLodgingEntry = (lodgingId: string, payload: CreateLodging): Promise<Lodging> => {
   return pb.collection('lodgings').update(lodgingId, payload);
 };
 

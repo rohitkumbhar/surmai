@@ -1,13 +1,4 @@
-import {
-  Anchor,
-  Button,
-  Container,
-  Notification,
-  Paper,
-  PasswordInput,
-  Text,
-  TextInput,
-} from '@mantine/core';
+import { Anchor, Button, Container, Notification, Paper, PasswordInput, Text, TextInput } from '@mantine/core';
 import classes from './SignIn.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
@@ -22,10 +13,7 @@ export const SignIn = () => {
   const { t } = useTranslation();
   const [apiError, setApiError] = useState<string>();
 
-  const signInWithEmailAndPassword = (values: {
-    email: string;
-    password: string;
-  }) => {
+  const signInWithEmailAndPassword = (values: { email: string; password: string }) => {
     authWithUsernameAndPassword({
       email: values.email,
       password: values.password,
@@ -55,34 +43,18 @@ export const SignIn = () => {
   return (
     <div className={classes.wrapper}>
       <Container size={420} my={40}>
-        <Paper
-          withBorder
-          shadow="md"
-          p={30}
-          mt={30}
-          radius="md"
-          bg="var(--mantine-primary-color-light)"
-        >
+        <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
           <Text size="lg" ta="center" mt={5}>
             {t('sign_in', 'Sign In')}
           </Text>
 
           {apiError && (
-            <Notification
-              withBorder
-              color="red"
-              title="Unable to sign in"
-              onClose={() => setApiError(undefined)}
-            >
+            <Notification withBorder color="red" title="Unable to sign in" onClose={() => setApiError(undefined)}>
               {apiError}
             </Notification>
           )}
 
-          <form
-            onSubmit={form.onSubmit((values) =>
-              signInWithEmailAndPassword(values)
-            )}
-          >
+          <form onSubmit={form.onSubmit((values) => signInWithEmailAndPassword(values))}>
             <TextInput
               label={t('email', 'Email')}
               placeholder="you@domain.com"

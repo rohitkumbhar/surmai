@@ -1,26 +1,9 @@
-import {
-  Button,
-  FileButton,
-  Group,
-  rem,
-  Stack,
-  Text,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import {
-  CreateTransportation,
-  Transportation,
-  TransportationFormSchema,
-  Trip,
-} from '../../../types/trips.ts';
+import { CreateTransportation, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import {
-  createTransportationEntry,
-  saveTransportationAttachments,
-} from '../../../lib';
+import { createTransportationEntry, saveTransportationAttachments } from '../../../lib';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
@@ -53,8 +36,7 @@ export const GenericTransportationModeForm = ({
       provider: transportation?.metadata?.provider,
       reservation: transportation?.metadata?.reservation,
       cost: transportation?.cost?.value,
-      currencyCode:
-        transportation?.cost?.currency || user?.currencyCode || 'USD',
+      currencyCode: transportation?.cost?.currency || user?.currencyCode || 'USD',
     },
     validate: {},
   });
@@ -174,10 +156,7 @@ export const GenericTransportationModeForm = ({
                 <Title size={'md'}>
                   {t('attachments', 'Attachments')}
                   <Text size={'xs'} c={'dimmed'}>
-                    {t(
-                      'transportation.attachments_desc',
-                      'Upload any related documents e.g. confirmation email'
-                    )}
+                    {t('transportation.attachments_desc', 'Upload any related documents e.g. confirmation email')}
                   </Text>
                 </Title>
               </Group>
@@ -202,15 +181,11 @@ export const GenericTransportationModeForm = ({
                           <Text
                             size={'xs'}
                           >{`${transportation.attachments ? transportation.attachments.length : 0} existing files`}</Text>
-                          <Button {...props}>
-                            {t('upload_more', 'Upload More')}
-                          </Button>
+                          <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                         </Stack>
                       );
                     } else {
-                      return (
-                        <Button {...props}>{t('upload', 'Upload')}</Button>
-                      );
+                      return <Button {...props}>{t('upload', 'Upload')}</Button>;
                     }
                   }}
                 </FileButton>

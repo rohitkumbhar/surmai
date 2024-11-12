@@ -17,6 +17,5 @@
 
 .headerSection {
   /*this your primary color*/
-  background: var(--mantine-color-body)
-    linear-gradient(var(--mantine-primary-color-light), transparent);
+  background: var(--mantine-color-body) linear-gradient(var(--mantine-primary-color-light), transparent);
 }

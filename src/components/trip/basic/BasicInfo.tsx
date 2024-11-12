@@ -1,10 +1,6 @@
 import { Trip } from '../../../types/trips.ts';
 import { Container } from '@mantine/core';
-import {
-  QueryObserverResult,
-  RefetchOptions,
-  Register,
-} from '@tanstack/react-query';
+import { QueryObserverResult, RefetchOptions, Register } from '@tanstack/react-query';
 import { BasicInfoView } from './BasicInfoView.tsx';
 
 export const BasicInfo = ({

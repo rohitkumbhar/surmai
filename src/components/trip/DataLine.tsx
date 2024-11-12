@@ -18,11 +18,7 @@ export const DataLine = ({
   return (
     <Paper withBorder pos={'relative'}>
       <Group pos={'absolute'} right={'5px'} top={'2px'}>
-        <Menu
-          position="bottom-start"
-          onClose={() => setMenuOpened(false)}
-          onOpen={() => setMenuOpened(true)}
-        >
+        <Menu position="bottom-start" onClose={() => setMenuOpened(false)} onOpen={() => setMenuOpened(true)}>
           <Menu.Target>
             <ActionIcon variant={'transparent'} p={'2px'}>
               <IconDots title={t('menu', 'Menu')} />
@@ -32,12 +28,7 @@ export const DataLine = ({
             {onEdit && (
               <Menu.Item
                 onClick={onEdit}
-                leftSection={
-                  <IconPencil
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={1.5}
-                  />
-                }
+                leftSection={<IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
               >
                 {t('edit', 'Edit')}
               </Menu.Item>
@@ -46,12 +37,7 @@ export const DataLine = ({
             {onDelete && (
               <Menu.Item
                 onClick={onDelete}
-                leftSection={
-                  <IconTrash
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={1.5}
-                  />
-                }
+                leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
               >
                 {t('delete', 'Delete')}
               </Menu.Item>

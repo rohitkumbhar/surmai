@@ -1,47 +1,29 @@
-import { ContextModalProps } from '@mantine/modals';
-import {
-  CreateLodging,
-  Lodging,
-  LodgingFormSchema,
-  Trip,
-} from '../../../types/trips.ts';
+import { CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import {
-  Button,
-  FileButton,
-  Group,
-  rem,
-  Stack,
-  Text,
-  Textarea,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
-import {
-  createLodgingEntry,
-  saveLodgingAttachments,
-  updateLodgingEntry,
-} from '../../../lib';
+import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '../../../lib';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const GenericLodgingForm = ({
-  context,
-  id,
-  innerProps,
-}: ContextModalProps<{
+  trip,
+  type,
+  lodging,
+  onSuccess,
+  onCancel,
+}: {
   trip: Trip;
   lodging?: Lodging;
   type: string;
   onSuccess: () => void;
   onCancel: () => void;
-}>) => {
+}) => {
   const { t } = useTranslation();
-  const { trip, type, lodging, onSuccess, onCancel } = innerProps;
-
   const [files, setFiles] = useState<File[]>([]);
+  const { user } = useCurrentUser();
   const form = useForm<LodgingFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -49,7 +31,7 @@ export const GenericLodgingForm = ({
       name: lodging?.name,
       address: lodging?.address,
       cost: lodging?.cost?.value,
-      currencyCode: lodging?.cost?.currency,
+      currencyCode: lodging?.cost?.currency || user?.currencyCode || 'USD',
       startDate: lodging?.startDate,
       endDate: lodging?.endDate,
       confirmationCode: lodging?.confirmationCode,
@@ -74,28 +56,22 @@ export const GenericLodgingForm = ({
     if (lodging?.id) {
       // update
       console.log('updating');
-      updateLodgingEntry(lodging.id, data as CreateLodging)
-        .then((result) => {
-          if (files.length > 0) {
-            saveLodgingAttachments(result.id, files).then(() => {
-              onSuccess();
-            });
-          } else {
+      updateLodgingEntry(lodging.id, data as CreateLodging).then((result) => {
+        if (files.length > 0) {
+          saveLodgingAttachments(result.id, files).then(() => {
             onSuccess();
-          }
-        })
-        .finally(() => {
-          context.closeModal(id);
-        });
+          });
+        } else {
+          onSuccess();
+        }
+      });
     } else {
       createLodgingEntry(data as CreateLodging).then((result) => {
         if (files.length > 0) {
           saveLodgingAttachments(result.id, files).then(() => {
-            context.closeModal(id);
             onSuccess();
           });
         } else {
-          context.closeModal(id);
           onSuccess();
         }
       });
@@ -170,10 +146,7 @@ export const GenericLodgingForm = ({
                 <Title size={'md'}>
                   {t('attachments', 'Attachments')}
                   <Text size={'xs'} c={'dimmed'}>
-                    {t(
-                      'lodging.attachments_desc',
-                      'Upload any related documents e.g. confirmation email'
-                    )}
+                    {t('lodging.attachments_desc', 'Upload any related documents e.g. confirmation email')}
                   </Text>
                 </Title>
               </Group>
@@ -198,15 +171,11 @@ export const GenericLodgingForm = ({
                           <Text
                             size={'xs'}
                           >{`${lodging.attachments ? lodging.attachments.length : 0} existing files`}</Text>
-                          <Button {...props}>
-                            {t('upload_more', 'Upload More')}
-                          </Button>
+                          <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                         </Stack>
                       );
                     } else {
-                      return (
-                        <Button {...props}>{t('upload', 'Upload')}</Button>
-                      );
+                      return <Button {...props}>{t('upload', 'Upload')}</Button>;
                     }
                   }}
                 </FileButton>
@@ -222,7 +191,6 @@ export const GenericLodgingForm = ({
               variant={'default'}
               w={'min-content'}
               onClick={() => {
-                context.closeModal(id);
                 onCancel();
               }}
             >

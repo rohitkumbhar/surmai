@@ -6,13 +6,7 @@ import { getStrength, passwordRequirements } from './util.ts';
 import { UseFormReturnType } from '@mantine/form';
 import { SignUpForm } from '../../types/auth.ts';
 
-export const FancyPasswordInput = ({
-  fieldName,
-  form,
-}: {
-  fieldName: string;
-  form: UseFormReturnType<SignUpForm>;
-}) => {
+export const FancyPasswordInput = ({ fieldName, form }: { fieldName: string; form: UseFormReturnType<SignUpForm> }) => {
   const { t } = useTranslation();
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [currentPasswordValue, setCurrentPasswordValue] = useState('');
@@ -21,11 +15,7 @@ export const FancyPasswordInput = ({
   const color = strength === 100 ? 'teal' : strength > 50 ? 'yellow' : 'red';
 
   const checks = passwordRequirements.map((requirement, index) => (
-    <PasswordRequirement
-      key={index}
-      label={requirement.label}
-      meets={requirement.re.test(currentPasswordValue)}
-    />
+    <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(currentPasswordValue)} />
   ));
 
   // @ts-expect-error It works really
@@ -34,17 +24,9 @@ export const FancyPasswordInput = ({
   });
 
   return (
-    <Popover
-      opened={popoverOpened}
-      position="bottom"
-      width="target"
-      transitionProps={{ transition: 'pop' }}
-    >
+    <Popover opened={popoverOpened} position="bottom" width="target" transitionProps={{ transition: 'pop' }}>
       <Popover.Target>
-        <div
-          onFocusCapture={() => setPopoverOpened(true)}
-          onBlurCapture={() => setPopoverOpened(false)}
-        >
+        <div onFocusCapture={() => setPopoverOpened(true)} onBlurCapture={() => setPopoverOpened(false)}>
           <PasswordInput
             mt="md"
             label={t('password', 'Password')}
@@ -57,10 +39,7 @@ export const FancyPasswordInput = ({
       <Popover.Dropdown>
         <Progress color={color} value={strength} size={5} mb="xs" />
         <PasswordRequirement
-          label={t(
-            'password_includes_8_chars',
-            'Includes at least 8 characters'
-          )}
+          label={t('password_includes_8_chars', 'Includes at least 8 characters')}
           meets={currentPasswordValue.length > 7}
         />
         {checks}

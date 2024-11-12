@@ -1,13 +1,5 @@
 import { IconPhoto } from '@tabler/icons-react';
-import {
-  ActionIcon,
-  AspectRatio,
-  Badge,
-  Card,
-  Group,
-  Image,
-  Text,
-} from '@mantine/core';
+import { ActionIcon, AspectRatio, Badge, Card, Group, Image, Text } from '@mantine/core';
 import classes from './TripCard.module.css';
 import { Trip } from '../../types/trips.ts';
 import { formatDate, getAttachmentUrl } from '../../lib';
@@ -38,13 +30,7 @@ export function TripCard({ trip }: { trip: Trip }) {
     >
       <Card.Section>
         <AspectRatio ratio={1920 / 800}>
-          {coverImage && (
-            <Image
-              src={getAttachmentUrl(trip, coverImage)}
-              alt={'Cover Image'}
-              fit={'cover'}
-            />
-          )}
+          {coverImage && <Image src={getAttachmentUrl(trip, coverImage)} alt={'Cover Image'} fit={'cover'} />}
           {!coverImage && (
             <ActionIcon
               variant="subtle"
