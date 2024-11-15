@@ -42,7 +42,7 @@
     "add_new": "Add new",
     "flight": "Flight",
     "bus": "Bus",
-    "car_taxi": "Car/Taxi",
+    "car": "Car/Taxi",
     "rental_car": "Car Rental",
     "boat": "Boat",
     "train": "Train",
@@ -79,6 +79,10 @@
   },
   "lodging": {
     "section_name": "Lodging",
+    "home": "Home",
+    "hotel": "Hotel",
+    "camp_site": "Camp Site",
+    "vacation_rental": "Vacation Rental",
     "section_description": "View and edit the lodging arrangements for this trip"
   }
 }

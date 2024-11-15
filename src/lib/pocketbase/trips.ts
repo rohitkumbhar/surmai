@@ -173,7 +173,6 @@ export const saveLodgingAttachments = (lodgingId: string, files: File[]) => {
 export const loadEverything = (tripId: string) => {
   return import('pdfjs-dist/build/pdf.worker.mjs?url')
     .then((pdfjsWorker) => {
-      console.log('pdfjsWorker =>', pdfjsWorker);
       return fetch(pdfjsWorker.default);
     })
     .then(() => {
