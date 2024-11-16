@@ -28,7 +28,6 @@ export const UserSettingsForm = () => {
   });
 
   const handleSubmission = (values: UserSettingsFormType) => {
-    console.log(values);
     if (user?.id) {
       updateUser(user.id, {
         name: values.name,

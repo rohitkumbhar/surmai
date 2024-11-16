@@ -9,9 +9,9 @@ import { useTranslation } from 'react-i18next';
 export function TripCard({ trip }: { trip: Trip }) {
   const navigateFunction = useNavigate();
   const { id, name, coverImage, destinations } = trip;
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
-  const features = destinations?.map((destination) => (
+  const destinationBadge = destinations?.map((destination) => (
     <Badge variant="light" key={destination.name}>
       {destination.name}
     </Badge>
@@ -20,8 +20,8 @@ export function TripCard({ trip }: { trip: Trip }) {
   return (
     <Card
       withBorder
-      radius="md"
-      p="md"
+      radius={'md'}
+      p={'md'}
       className={classes.card}
       onClick={(event) => {
         navigateFunction(`/trips/${id}`);
@@ -33,9 +33,9 @@ export function TripCard({ trip }: { trip: Trip }) {
           {coverImage && <Image src={getAttachmentUrl(trip, coverImage)} alt={'Cover Image'} fit={'cover'} />}
           {!coverImage && (
             <ActionIcon
-              variant="subtle"
+              variant={'subtle'}
               bd={'solid 1px var(--mantine-primary-color-filled)'}
-              aria-label="Settings"
+              aria-label={'Settings'}
               style={{ height: '100%' }}
             >
               <IconPhoto stroke={1.5} />
@@ -49,9 +49,6 @@ export function TripCard({ trip }: { trip: Trip }) {
           <Text fz="lg" fw={500}>
             {name}
           </Text>
-          {/*<Badge size="sm" variant="light">
-            {"Available Offline"}
-          </Badge>*/}
         </Group>
         <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
           {`${formatDate(i18n.language, trip.startDate)} - ${formatDate(i18n.language, trip.endDate)}`}
@@ -59,11 +56,11 @@ export function TripCard({ trip }: { trip: Trip }) {
       </Card.Section>
 
       <Card.Section className={classes.section}>
-        <Text mt="md" className={classes.label} c="dimmed">
-          Destinations
+        <Text mt="md" className={classes.label} c={'dimmed'}>
+          {t('destinations','Destinations')}
         </Text>
         <Group gap={7} mt={5}>
-          {features}
+          {destinationBadge}
         </Group>
       </Card.Section>
     </Card>

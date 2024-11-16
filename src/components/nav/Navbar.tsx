@@ -1,9 +1,8 @@
-import { useState } from 'react';
 import { Center, rem, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { IconHome2, IconSettings } from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import { UserButton } from '../user/UserButton.tsx';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FishOne } from '../logo/FishOne.tsx';
 import { useClickOutside } from '@mantine/hooks';
 
@@ -37,14 +36,13 @@ export function Navbar({ close }: NavbarProps) {
   ];
 
   const navigate = useNavigate();
-  const [active, setActive] = useState(0);
+  const location = useLocation();
   const links = mainNav.map((link, index) => (
     <NavbarLink
       {...link}
       key={link.label}
-      active={index === active}
+      active={location.pathname === link.route}
       onClick={() => {
-        setActive(index);
         navigate(link.route);
         close && close();
       }}

@@ -2,7 +2,7 @@ import { Avatar, Button, Container, Group, Paper, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { openContextModal } from '@mantine/modals';
 import { useDocumentTitle, useMediaQuery } from '@mantine/hooks';
-import { getAttachmentUrl, updateUser } from '../../lib';
+import { getAttachmentUrl, updateUserAvatar } from '../../lib';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
 
@@ -39,7 +39,7 @@ export const Settings = () => {
                   innerProps: {
                     aspectRatio: 400 / 400,
                     saveUploadedImage: (uploadedImage: File | Blob) => {
-                      updateUser(user.id, uploadedImage).then(() => {
+                      updateUserAvatar(user.id, uploadedImage).then(() => {
                         reloadUser && reloadUser();
                       });
                     },

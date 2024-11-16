@@ -33,7 +33,7 @@ export const MyTrips = () => {
   const cards = () => {
     return data.map((trip) => (
       <ErrorBoundary key={trip.id} onError={logError} fallback={<p>Wrong!</p>}>
-        <TripCard trip={trip} />
+        {trip && <TripCard trip={trip} />}
       </ErrorBoundary>
     ));
   };
