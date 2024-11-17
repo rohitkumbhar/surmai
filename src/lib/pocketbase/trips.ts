@@ -9,6 +9,7 @@ import {
   Trip,
   TripResponse,
 } from '../../types/trips.ts';
+import {listActivities} from "./activities.ts";
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
@@ -196,6 +197,19 @@ export const loadEverything = (tripId: string) => {
     })
     .then((lodgings) => {
       lodgings.forEach((l) => {
+        l.attachments?.forEach((attachment) => {
+          const attachmentUrl = getAttachmentUrl(l, attachment);
+          fetch(attachmentUrl).then(() => {
+            console.log('Attachment ', attachment, ' downloaded');
+          });
+        });
+      });
+    })
+    .then(() => {
+      return listActivities(tripId);
+    })
+    .then((activities) => {
+      activities.forEach((l) => {
         l.attachments?.forEach((attachment) => {
           const attachmentUrl = getAttachmentUrl(l, attachment);
           fetch(attachmentUrl).then(() => {
