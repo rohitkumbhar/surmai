@@ -1,4 +1,4 @@
-import { Lodging, Transportation } from '../../../types/trips.ts';
+import { Activity, Lodging, Transportation } from '../../../types/trips.ts';
 import { Anchor, Badge, CloseButton, Divider, Group, Text } from '@mantine/core';
 import { getAttachmentUrl } from '../../../lib';
 import { IconFile } from '@tabler/icons-react';
@@ -12,7 +12,7 @@ export const Attachments = ({
   refetch,
   onDelete,
 }: {
-  entity: Transportation | Lodging;
+  entity: Transportation | Lodging | Activity;
   refetch: () => void;
   onDelete: (attachmentName: string) => Promise<unknown>;
 }) => {
@@ -26,70 +26,69 @@ export const Attachments = ({
         <Group p={'sm'}>
           {(entity.attachments || []).map((attachmentName: string) => {
             return (
-              <Anchor
-                href={'#'}
-                target={'_blank'}
-                onClick={(event) => {
-                  event.preventDefault();
-                  const url = getAttachmentUrl(entity, attachmentName);
-                  openContextModal({
-                    modal: 'attachmentViewer',
-                    title: attachmentName,
-                    radius: 'md',
-                    withCloseButton: true,
-                    fullScreen: isMobile,
-                    size: 'auto',
-                    innerProps: {
-                      fileName: attachmentName,
-                      attachmentUrl: url,
-                    },
-                  });
-                }}
-                rel="noreferrer"
-                key={attachmentName}
-              >
-                <Badge
-                  variant={'transparent'}
-                  size={'lg'}
-                  radius={0}
-                  leftSection={<IconFile />}
-                  rightSection={
-                    <CloseButton
-                      title={t('delete_attachment', 'Delete Attachment')}
-                      onClick={(event) => {
-                        openConfirmModal({
-                          title: t('delete_attachment', 'Delete Attachment'),
-                          confirmProps: { color: 'red' },
-                          children: (
-                            <Text size="sm">
-                              {t('attachment_deletion_confirmation', 'This action cannot be undone.')}
-                            </Text>
-                          ),
-                          labels: {
-                            confirm: t('delete', 'Delete'),
-                            cancel: t('cancel', 'Cancel'),
-                          },
-                          onCancel: () => console.log('Cancel'),
-                          onConfirm: () => {
-                            onDelete(attachmentName).then(() => {
-                              notifications.show({
-                                title: 'Attachment deleted',
-                                message: `${attachmentName} has been deleted`,
-                                position: 'top-right',
-                              });
-                              refetch();
+              <Badge
+                variant={'transparent'}
+                size={'lg'}
+                radius={0}
+                leftSection={<IconFile />}
+                rightSection={
+                  <CloseButton
+                    title={t('delete_attachment', 'Delete Attachment')}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      openConfirmModal({
+                        title: t('delete_attachment', 'Delete Attachment'),
+                        confirmProps: { color: 'red' },
+                        children: (
+                          <Text size="sm">
+                            {t('attachment_deletion_confirmation', 'This action cannot be undone.')}
+                          </Text>
+                        ),
+                        labels: {
+                          confirm: t('delete', 'Delete'),
+                          cancel: t('cancel', 'Cancel'),
+                        },
+                        onCancel: () => console.log('Cancel'),
+                        onConfirm: () => {
+                          onDelete(attachmentName).then(() => {
+                            notifications.show({
+                              title: 'Attachment deleted',
+                              message: `${attachmentName} has been deleted`,
+                              position: 'top-right',
                             });
-                          },
-                        });
-
-                        event.preventDefault();
-                      }}
-                    />
-                  }
+                            refetch();
+                          });
+                        },
+                      });
+                    }}
+                  />
+                }
+              >
+                <Anchor
+                  href={'#'}
+                  target={'_blank'}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    const url = getAttachmentUrl(entity, attachmentName);
+                    openContextModal({
+                      modal: 'attachmentViewer',
+                      title: attachmentName,
+                      radius: 'md',
+                      withCloseButton: true,
+                      fullScreen: isMobile,
+                      size: 'auto',
+                      innerProps: {
+                        fileName: attachmentName,
+                        attachmentUrl: url,
+                      },
+                    });
+                  }}
+                  rel="noreferrer"
+                  key={attachmentName}
                 >
                   {attachmentName}
-                </Badge>
-              </Anchor>
+                </Anchor>
+              </Badge>
             );
           })}
         </Group>

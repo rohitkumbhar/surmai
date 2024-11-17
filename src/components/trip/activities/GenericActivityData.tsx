@@ -1,37 +1,27 @@
-import { Lodging, LodgingType, Trip } from '../../../types/trips.ts';
-import { Box, Center, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
-import { IconBedFlat, IconBuildingEstate, IconCar, IconHome, IconTent } from '@tabler/icons-react';
+import { Activity, Trip } from '../../../types/trips.ts';
+import { Grid, Modal, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteLodging, formatDate } from '../../../lib';
-import { formatTime, getNumberOfDays } from '../common/util.ts';
+import { deleteActivity, formatDate } from '../../../lib';
+import { formatTime } from '../common/util.ts';
+import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { notifications } from '@mantine/notifications';
-import { GenericActivitiesForm } from './GenericActivitiesForm.tsx';
 
-const typeIcons = {
-  [LodgingType.HOTEL]: IconBuildingEstate,
-  [LodgingType.HOME]: IconHome,
-  [LodgingType.RENTAL]: IconBedFlat,
-  [LodgingType.CAMP_SITE]: IconTent,
-};
-
-export const GenericActivitiesData = ({
+export const GenericActivityData = ({
   trip,
-  lodging,
+  activity,
   refetch,
 }: {
   trip: Trip;
-  lodging: Lodging;
+  activity: Activity;
   refetch: () => void;
 }) => {
   const { t, i18n } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
-  // @ts-expect-error Icon type
-  const TypeIcon = typeIcons[lodging.type] || IconCar;
 
   return (
     <DataLine
@@ -40,7 +30,7 @@ export const GenericActivitiesData = ({
       }}
       onDelete={() => {
         openConfirmModal({
-          title: t('delete_lodging', 'Delete Lodging'),
+          title: t('delete_activity', 'Delete Activity'),
           confirmProps: { color: 'red' },
           children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
           labels: {
@@ -49,10 +39,10 @@ export const GenericActivitiesData = ({
           },
           onCancel: () => console.log('Cancel'),
           onConfirm: () => {
-            deleteLodging(lodging.id).then(() => {
+            deleteActivity(activity.id).then(() => {
               notifications.show({
                 title: 'Deleted',
-                message: `Lodging at ${lodging.name} has been deleted`,
+                message: `Activity ${activity.name} has been deleted`,
                 position: 'top-right',
               });
               refetch();
@@ -65,14 +55,13 @@ export const GenericActivitiesData = ({
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('lodging.edit_' + lodging.type, 'Edit Lodging')}
+        title={t('activity.edit', 'Edit Activity')}
         onClose={() => {
           closeForm();
         }}
       >
-        <GenericActivitiesForm
-          type={lodging.type}
-          lodging={lodging}
+        <GenericActivityForm
+          activity={activity}
           trip={trip}
           onSuccess={() => {
             refetch();
@@ -84,7 +73,7 @@ export const GenericActivitiesData = ({
         />
       </Modal>
       <Grid align={'top'} p={'xs'} grow={false}>
-        <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
+        {/* <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`lodging.${lodging.type}`, lodging.type)}>
               <TypeIcon size={'sm'} stroke={1} />
@@ -94,51 +83,32 @@ export const GenericActivitiesData = ({
             <Title size={'lg'}>{t(`lodging.${lodging.type}`, lodging.type)}</Title>
             <Divider mt={'5px'} />
           </Box>
-        </Grid.Col>
+        </Grid.Col>*/}
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
-            {t('lodging.check_in', 'Check-In')}
+            {t('activity.start_date', 'Date/Time')}
           </Text>
           <Title size="sm">
-            {`${formatDate(i18n.language, lodging.startDate)} ${formatTime(i18n.language, lodging.startDate)}`}
+            {`${formatDate(i18n.language, activity.startDate)} ${formatTime(i18n.language, activity.startDate)}`}
           </Title>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 2, md: 1, lg: 1 }}>
-          <Center h={'100%'}>
-            <Text c={'dimmed'} size={'xs'}>
-              {getNumberOfDays(lodging.startDate, lodging.endDate)}
-            </Text>
-          </Center>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
-          <Text size="sm" c={'dimmed'}>
-            {t('lodging.check_out', 'Check-Out')}
-          </Text>
-          <Title size="sm">
-            {`${formatDate(i18n.language, lodging.endDate)} ${formatTime(i18n.language, lodging.endDate)}`}
-          </Title>
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 4 }}>
           <Title size="xs" c={'dimmed'}>
             {t('lodging.name', 'Name')}
           </Title>
-          <Text size="md">{lodging.name}</Text>
+          <Text size="md">{activity.name}</Text>
+          <Text size="sm" c={'dimmed'}>
+            {activity.description}
+          </Text>
         </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
+
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 3 }}>
           <Title size="xs" c={'dimmed'}>
             {t('lodging.address', 'Address')}
           </Title>
-          <Text size="md">{lodging.address}</Text>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
-          <Text size="sm" c={'dimmed'}>
-            {t('lodging.confirmation_code', 'Confirmation Code')}
-          </Text>
-          <Title size="md">{lodging.confirmationCode || 'Unknown'}</Title>
+          <Text size="md">{activity.address}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
@@ -146,12 +116,12 @@ export const GenericActivitiesData = ({
             {t('cost', 'Cost')}
           </Text>
           <Title size="md">
-            {lodging.cost?.value ? `${lodging.cost.value} ${lodging.cost.currency || ''}` : 'Unknown'}
+            {activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : 'Unknown'}
           </Title>
         </Grid.Col>
       </Grid>
       <Attachments
-        entity={lodging}
+        entity={activity}
         refetch={refetch}
         onDelete={() => {
           return new Promise<unknown>(() => {

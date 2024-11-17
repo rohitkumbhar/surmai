@@ -34,6 +34,14 @@ export {
   loadEverything,
 } from './pocketbase/trips';
 
+export {
+  listActivities,
+  createActivityEntry,
+  saveActivityAttachments,
+  updateActivityEntry,
+  deleteActivity,
+} from './pocketbase/activities';
+
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {
     year: 'numeric',

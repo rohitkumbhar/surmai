@@ -1,25 +1,24 @@
-import { Lodging, Trip } from '../../../types/trips.ts';
+import { Activity, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
-import { listLodgings } from '../../../lib';
-import { Container, Flex, LoadingOverlay, Modal, Stack, Title } from '@mantine/core';
-import { AddLodgingMenu } from './AddLodgingMenu.tsx';
-import { Fragment, useState } from 'react';
+import { listActivities } from '../../../lib';
+import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Title, Text } from '@mantine/core';
+import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericLodgingData } from './GenericLodgingData.tsx';
-import { GenericLodgingForm } from './GenericLodgingForm.tsx';
+import { GenericActivityData } from './GenericActivityData.tsx';
+import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
-export const LodgingPanel = ({ trip }: { trip: Trip }) => {
+export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
   const { t } = useTranslation();
   const tripId = trip.id;
-  const { isPending, isError, data, error, refetch } = useQuery<Lodging[]>({
-    queryKey: ['listLodgings', tripId],
-    queryFn: () => listLodgings(tripId || ''),
+  const { isPending, isError, data, error, refetch } = useQuery<Activity[]>({
+    queryKey: ['listActivities', tripId],
+    queryFn: () => listActivities(tripId || ''),
   });
 
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
-  const [newLodgingType, setNewLodgingType] = useState<string>('hotel');
 
   if (isPending) {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
@@ -35,13 +34,12 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('lodging.add_' + newLodgingType, 'Add Lodging')}
+        title={t('activity.add_new', 'Add Activity')}
         onClose={() => {
           closeForm();
         }}
       >
-        <GenericLodgingForm
-          type={newLodgingType}
+        <GenericActivityForm
           trip={trip}
           onSuccess={() => {
             refetch();
@@ -54,20 +52,24 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
       </Modal>
 
       <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
-        <AddLodgingMenu
-          onClick={(type) => {
-            setNewLodgingType(type);
+        <AddActivitiesMenu
+          onClick={() => {
             openForm();
           }}
         />
       </Flex>
       {
         <Stack mt={'sm'}>
-          <Title order={5}>{t('lodging.name', 'Lodging')}</Title>
-          {data.map((t: Lodging) => {
+          <Title order={5}>{t('activities', 'Activities')}</Title>
+          {data.length === 0 && (
+            <Card withBorder>
+              <Text c={'dimmed'}>{t('activities.no_data', 'No Activities')}</Text>
+            </Card>
+          )}
+          {data.map((t: Activity) => {
             return (
               <Fragment key={t.id}>
-                <GenericLodgingData refetch={refetch} trip={trip} lodging={t} />
+                <GenericActivityData refetch={refetch} trip={trip} activity={t} />
               </Fragment>
             );
           })}

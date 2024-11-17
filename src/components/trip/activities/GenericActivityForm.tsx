@@ -1,51 +1,45 @@
-import { CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
+import { Activity, ActivityFormSchema, CreateActivity, Trip } from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
-import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '../../../lib';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { createActivityEntry, saveActivityAttachments, updateActivityEntry } from '../../../lib';
 
-export const GenericActivitiesForm = ({
+export const GenericActivityForm = ({
   trip,
-  type,
-  lodging,
+  activity,
   onSuccess,
   onCancel,
 }: {
   trip: Trip;
-  lodging?: Lodging;
-  type: string;
+  activity?: Activity;
   onSuccess: () => void;
   onCancel: () => void;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
-  const form = useForm<LodgingFormSchema>({
+  const form = useForm<ActivityFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
-      type: type,
-      name: lodging?.name,
-      address: lodging?.address,
-      cost: lodging?.cost?.value,
-      currencyCode: lodging?.cost?.currency || user?.currencyCode || 'USD',
-      startDate: lodging?.startDate,
-      endDate: lodging?.endDate,
-      confirmationCode: lodging?.confirmationCode,
+      name: activity?.name,
+      description: activity?.description,
+      address: activity?.address,
+      cost: activity?.cost?.value,
+      currencyCode: activity?.cost?.currency || user?.currencyCode || 'USD',
+      startDate: activity?.startDate,
     },
   });
 
-  const handleFormSubmit = (values: LodgingFormSchema) => {
+  const handleFormSubmit = (values: ActivityFormSchema) => {
     const data = {
-      type: type,
       name: values.name,
+      description: values.description,
       address: values.address,
       startDate: values.startDate,
-      endDate: values.endDate,
-      confirmationCode: values.confirmationCode,
       trip: trip.id,
       cost: {
         value: values.cost,
@@ -53,12 +47,11 @@ export const GenericActivitiesForm = ({
       },
     };
 
-    if (lodging?.id) {
+    if (activity?.id) {
       // update
-      console.log('updating');
-      updateLodgingEntry(lodging.id, data as CreateLodging).then((result) => {
+      updateActivityEntry(activity.id, data as CreateActivity).then((result) => {
         if (files.length > 0) {
-          saveLodgingAttachments(result.id, files).then(() => {
+          saveActivityAttachments(result.id, files).then(() => {
             onSuccess();
           });
         } else {
@@ -66,9 +59,9 @@ export const GenericActivitiesForm = ({
         }
       });
     } else {
-      createLodgingEntry(data as CreateLodging).then((result) => {
+      createActivityEntry(data as CreateActivity).then((result) => {
         if (files.length > 0) {
-          saveLodgingAttachments(result.id, files).then(() => {
+          saveActivityAttachments(result.id, files).then(() => {
             onSuccess();
           });
         } else {
@@ -87,15 +80,20 @@ export const GenericActivitiesForm = ({
           <Stack>
             <TextInput
               name={'name'}
-              label={t('lodging.name', 'Name')}
+              label={t('activity.name', 'Name')}
               required
               key={form.key('name')}
               {...form.getInputProps('name')}
             />
-
             <Textarea
               name={'address'}
-              label={t('lodging.address', 'Address')}
+              label={t('activity.description', 'Description')}
+              key={form.key('description')}
+              {...form.getInputProps('description')}
+            />
+            <Textarea
+              name={'address'}
+              label={t('activity.address', 'Address')}
               required
               key={form.key('address')}
               {...form.getInputProps('address')}
@@ -106,31 +104,12 @@ export const GenericActivitiesForm = ({
               highlightToday
               valueFormat="lll"
               name={'startDate'}
-              label={t('lodging.start_date', 'Check-In')}
+              label={t('activity.start_date', 'Date/Time')}
               clearable
               required
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
               miw={rem(200)}
-            />
-
-            <DateTimePicker
-              valueFormat="lll"
-              name={'endDate'}
-              label={t('lodging.end_date', 'Check-Out')}
-              required
-              miw={rem('200px')}
-              clearable
-              key={form.key('endDate')}
-              {...form.getInputProps('endDate')}
-            />
-          </Group>
-          <Group>
-            <TextInput
-              name={'confirmationCode'}
-              label={t('lodging.confirmationCode', 'ConfirmationCode')}
-              key={form.key('confirmationCode')}
-              {...form.getInputProps('confirmationCode')}
             />
 
             <CurrencyInput
@@ -165,12 +144,12 @@ export const GenericActivitiesForm = ({
                   multiple
                 >
                   {(props) => {
-                    if (lodging?.id) {
+                    if (activity?.id) {
                       return (
                         <Stack>
                           <Text
                             size={'xs'}
-                          >{`${lodging.attachments ? lodging.attachments.length : 0} existing files`}</Text>
+                          >{`${activity.attachments ? activity.attachments.length : 0} existing files`}</Text>
                           <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                         </Stack>
                       );

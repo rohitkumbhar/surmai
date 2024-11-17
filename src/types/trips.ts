@@ -1,4 +1,5 @@
 import { User } from './auth.ts';
+import { RecordModel } from 'pocketbase';
 
 export type Participant = {
   name: string;
@@ -130,3 +131,25 @@ export const enum LodgingType {
   RENTAL = 'vacation_rental',
   CAMP_SITE = 'camp_site',
 }
+
+export interface Activity extends RecordModel {
+  id: string;
+  name: string;
+  description: string;
+  address?: string;
+  startDate: Date;
+  cost?: Cost;
+  trip: string;
+  attachments?: string[];
+}
+
+export type CreateActivity = Omit<Activity, 'id'>;
+
+export type ActivityFormSchema = {
+  name?: string;
+  description?: string;
+  address?: string;
+  cost?: number;
+  currencyCode?: string;
+  startDate?: Date;
+};

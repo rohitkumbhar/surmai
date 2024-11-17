@@ -1,19 +1,19 @@
 import { Lodging, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
 import { listLodgings } from '../../../lib';
-import { Container, Flex, LoadingOverlay, Modal, Stack, Title } from '@mantine/core';
-import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
+import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
+import { AddLodgingMenu } from './AddLodgingMenu.tsx';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GenericActivitiesData } from './GenericActivitiesData.tsx';
-import { GenericActivitiesForm } from './GenericActivitiesForm.tsx';
+import { GenericLodgingData } from './GenericLodgingData.tsx';
+import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
-export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
+export const LodgingPanel = ({ trip }: { trip: Trip }) => {
   const { t } = useTranslation();
   const tripId = trip.id;
   const { isPending, isError, data, error, refetch } = useQuery<Lodging[]>({
-    queryKey: ['listActivities', tripId],
+    queryKey: ['listLodgings', tripId],
     queryFn: () => listLodgings(tripId || ''),
   });
 
@@ -40,7 +40,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
           closeForm();
         }}
       >
-        <GenericActivitiesForm
+        <GenericLodgingForm
           type={newLodgingType}
           trip={trip}
           onSuccess={() => {
@@ -54,7 +54,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
       </Modal>
 
       <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
-        <AddActivitiesMenu
+        <AddLodgingMenu
           onClick={(type) => {
             setNewLodgingType(type);
             openForm();
@@ -64,10 +64,15 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
       {
         <Stack mt={'sm'}>
           <Title order={5}>{t('lodging.name', 'Lodging')}</Title>
+          {data.length === 0 && (
+            <Card withBorder>
+              <Text c={'dimmed'}>{t('lodging.no_data', 'No Lodgings')}</Text>
+            </Card>
+          )}
           {data.map((t: Lodging) => {
             return (
               <Fragment key={t.id}>
-                <GenericActivitiesData refetch={refetch} trip={trip} lodging={t} />
+                <GenericLodgingData refetch={refetch} trip={trip} lodging={t} />
               </Fragment>
             );
           })}

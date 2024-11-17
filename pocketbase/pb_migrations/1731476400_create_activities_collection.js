@@ -36,7 +36,7 @@ migrate((db) => {
       {
         "system": false,
         "id": "fqi1sx9b",
-        "name": "startTime",
+        "name": "startDate",
         "type": "date",
         "required": false,
         "presentable": false,

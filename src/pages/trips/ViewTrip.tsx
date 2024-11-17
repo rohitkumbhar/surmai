@@ -10,8 +10,8 @@ import { TransportationPanel } from '../../components/trip/transportation/Transp
 import { useTranslation } from 'react-i18next';
 import { useDocumentTitle } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
-import { ActivitiesPanel } from '../../components/trip/lodging/ActivitiesPanel.tsx';
-import { LodgingPanel } from '../../components/trip/activities/LodgingPanel.tsx';
+import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
+import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');

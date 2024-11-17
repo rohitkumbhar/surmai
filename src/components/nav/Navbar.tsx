@@ -10,6 +10,7 @@ interface NavbarLinkProps {
   icon: typeof IconHome2;
   label: string;
   active?: boolean;
+
   onClick?(): void;
 }
 
@@ -37,7 +38,7 @@ export function Navbar({ close }: NavbarProps) {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const links = mainNav.map((link, index) => (
+  const links = mainNav.map((link) => (
     <NavbarLink
       {...link}
       key={link.label}

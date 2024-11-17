@@ -1,4 +1,4 @@
-import { Container, Flex, LoadingOverlay, Modal, Stack, Title } from '@mantine/core';
+import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
 import { Transportation, Trip } from '../../../types/trips.ts';
 import { AddTransportationMenu } from './AddTransportationMenu.tsx';
 import { Fragment, useState } from 'react';
@@ -30,6 +30,9 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
   if (isError) {
     throw new Error(error.message);
   }
+
+  const rentalAgreements = (data || []).filter((t) => t.type === 'rental_car');
+  const tickets = (data || []).filter((t) => t.type !== 'rental_car');
 
   return (
     <Container py={'xs'} size="lg">
@@ -90,33 +93,39 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
       </Flex>
       <Stack mt={'sm'}>
         <Title order={5}>{t('transportation.travel_timeline', 'Travel Timeline')}</Title>
-        {data
-          .filter((t) => t.type !== 'rental_car')
-          .map((t: Transportation) => {
-            return (
-              <Fragment key={t.id}>
-                {t.type === 'flight' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-                {t.type === 'rental_car' && <CarRentalData refetch={refetch} trip={trip} rental={t} />}
-                {t.type === 'bus' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-                {t.type === 'boat' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-                {t.type === 'train' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-                {t.type === 'car' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-              </Fragment>
-            );
-          })}
+        {tickets.length === 0 && (
+          <Card withBorder>
+            <Text c={'dimmed'}>{t('transportation.no_tickets', 'No Tickets')}</Text>
+          </Card>
+        )}
+        {tickets.map((t: Transportation) => {
+          return (
+            <Fragment key={t.id}>
+              {t.type === 'flight' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+              {t.type === 'rental_car' && <CarRentalData refetch={refetch} trip={trip} rental={t} />}
+              {t.type === 'bus' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+              {t.type === 'boat' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+              {t.type === 'train' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+              {t.type === 'car' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+            </Fragment>
+          );
+        })}
       </Stack>
 
       <Stack mt={'sm'}>
         <Title order={5}>{t('transportation.travel_rentals', 'Rentals')}</Title>
-        {data
-          .filter((t) => t.type === 'rental_car')
-          .map((t: Transportation) => {
-            return (
-              <Fragment key={t.id}>
-                <CarRentalData refetch={refetch} trip={trip} rental={t} />
-              </Fragment>
-            );
-          })}
+        {rentalAgreements.length === 0 && (
+          <Card withBorder>
+            <Text c={'dimmed'}>{t('transportation.no_tickets', 'No Rentals')}</Text>
+          </Card>
+        )}
+        {rentalAgreements.map((t: Transportation) => {
+          return (
+            <Fragment key={t.id}>
+              <CarRentalData refetch={refetch} trip={trip} rental={t} />
+            </Fragment>
+          );
+        })}
       </Stack>
     </Container>
   );
