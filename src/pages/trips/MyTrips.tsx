@@ -8,9 +8,13 @@ import { Trip } from '../../types/trips.ts';
 import { TripCard } from '../../components/trip/TripCard.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorInfo } from 'react';
+import { Header } from '../../components/nav/Header.tsx';
+import { useTranslation } from 'react-i18next';
 
 export const MyTrips = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const { isPending, isError, data, error } = useQuery<Trip[]>({
     queryKey: ['my_trips'],
     queryFn: listTrips,
@@ -41,8 +45,9 @@ export const MyTrips = () => {
   const createNew = (
     <Card
       key={'create_new'}
-      p="md"
-      radius="md"
+      withBorder
+      radius={'md'}
+      p={'md'}
       component="a"
       href="#"
       className={classes.card}
@@ -51,7 +56,7 @@ export const MyTrips = () => {
         event.preventDefault();
       }}
     >
-      <AspectRatio ratio={1920 / 400}>
+      <AspectRatio ratio={1920 / 800}>
         <ActionIcon variant="filled" aria-label="Settings" style={{ height: '100%' }}>
           <IconPlus stroke={1.5} />
         </ActionIcon>
@@ -66,10 +71,12 @@ export const MyTrips = () => {
   );
 
   return (
-    <Container py="xl">
-      <Text size="xl" tt="uppercase" fw={700} mt="md" mb="md">
-        My Trips
-      </Text>
+    <Container py="xl" size={"xl"}>
+      <Header>
+        <Text p={'sm'} size="md" fw={700}>
+          {t('all_trips', 'All Trips')}
+        </Text>
+      </Header>
       <SimpleGrid mb={'md'} cols={{ base: 1, sm: 2, md: 3 }}>
         {[createNew]}
       </SimpleGrid>

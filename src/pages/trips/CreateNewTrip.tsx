@@ -7,6 +7,7 @@ import { CreateTripForm, NewTrip } from '../../types/trips.ts';
 import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
 import { basicInfoFormValidation } from '../../components/trip/basic/validation.ts';
 import { useTranslation } from 'react-i18next';
+import { Header } from '../../components/nav/Header.tsx';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
@@ -25,9 +26,11 @@ export const CreateNewTrip = () => {
 
   return (
     <Container py="xl">
-      <Text size="xl" tt="uppercase" fw={700} mt="md" mb="md">
-        {t('trip.new', 'Start A New Trip')}
-      </Text>
+      <Header>
+        <Text size="md" p={'sm'}>
+          {t('trip.new', 'Start A New Trip')}
+        </Text>
+      </Header>
 
       <form
         onSubmit={form.onSubmit(async (values) => {

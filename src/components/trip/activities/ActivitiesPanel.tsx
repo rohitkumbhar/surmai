@@ -29,7 +29,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
   }
 
   return (
-    <Container py={'xs'} size="lg">
+    <Container py={'xs'} size="xl">
       <Modal
         opened={formOpened}
         fullScreen={isMobile}

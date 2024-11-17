@@ -1,7 +1,7 @@
 import { Activity, Lodging, Transportation } from '../../../types/trips.ts';
 import { Anchor, Badge, CloseButton, Divider, Group, Text } from '@mantine/core';
 import { getAttachmentUrl } from '../../../lib';
-import { IconFile } from '@tabler/icons-react';
+import { IconFile, IconFileTypeBmp, IconFileTypeJpg, IconFileTypePdf, IconFileTypePng } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
@@ -19,6 +19,20 @@ export const Attachments = ({
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
 
+  const getFileTypeIcon = (name: string) => {
+    const fileName = name.toLowerCase();
+    if (fileName.endsWith('.pdf')) {
+      return <IconFileTypePdf />;
+    } else if (fileName.endsWith('.png')) {
+      return <IconFileTypePng />;
+    } else if (fileName.endsWith('.bmp')) {
+      return <IconFileTypeBmp />;
+    } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
+      return <IconFileTypeJpg />;
+    }
+    return <IconFile />;
+  };
+
   return (
     <>
       <Divider />
@@ -28,9 +42,10 @@ export const Attachments = ({
             return (
               <Badge
                 variant={'transparent'}
-                size={'lg'}
+                size={'md'}
+                tt={'none'}
                 radius={0}
-                leftSection={<IconFile />}
+                leftSection={getFileTypeIcon(attachmentName)}
                 rightSection={
                   <CloseButton
                     title={t('delete_attachment', 'Delete Attachment')}
@@ -41,7 +56,11 @@ export const Attachments = ({
                         confirmProps: { color: 'red' },
                         children: (
                           <Text size="sm">
-                            {t('attachment_deletion_confirmation', 'This action cannot be undone.')}
+                            {t(
+                              'attachment_deletion_confirmation',
+                              'Deleting "{{attachmentName}}". This action cannot be undone.',
+                              { attachmentName: attachmentName }
+                            )}
                           </Text>
                         ),
                         labels: {

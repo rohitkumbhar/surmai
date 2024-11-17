@@ -1,10 +1,11 @@
-import { Avatar, Button, Container, Group, Paper, Title } from '@mantine/core';
+import { Avatar, Button, Container, Group, Paper, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { openContextModal } from '@mantine/modals';
 import { useDocumentTitle, useMediaQuery } from '@mantine/hooks';
 import { getAttachmentUrl, updateUserAvatar } from '../../lib';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
+import { Header } from '../../components/nav/Header.tsx';
 
 export const Settings = () => {
   const { t } = useTranslation();
@@ -14,6 +15,11 @@ export const Settings = () => {
 
   return (
     <Container>
+      <Header>
+        <Text size="md" p={'sm'}>
+          {t('settings', 'Settings')}
+        </Text>
+      </Header>
       <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'}>
         <Title order={2} fw={700} py={'sm'}>
           {t('user_settings', 'User Settings')}

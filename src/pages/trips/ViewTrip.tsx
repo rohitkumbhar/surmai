@@ -38,7 +38,7 @@ export const ViewTrip = () => {
   }
   const trip = data;
   return (
-    <Container py={'xl'} size="lg">
+    <Container py={'sm'} size="xl">
       <Header>
         <Group>
           <Text size={'sm'} px={'md'}>

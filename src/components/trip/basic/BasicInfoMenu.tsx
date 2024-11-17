@@ -6,9 +6,11 @@ import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
 import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
 import { notifications } from '@mantine/notifications';
+import { useNavigate } from 'react-router-dom';
 
 export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
@@ -129,6 +131,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                     position: 'top-right',
                   });
                   refetch();
+                  navigate('/');
                 });
               },
             });

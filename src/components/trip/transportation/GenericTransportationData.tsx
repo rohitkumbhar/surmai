@@ -76,6 +76,7 @@ export const GenericTransportationData = ({
           transportation={transportation}
           trip={trip}
           onSuccess={() => {
+            refetch();
             close();
           }}
           onCancel={() => {

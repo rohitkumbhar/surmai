@@ -35,7 +35,7 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
   const tickets = (data || []).filter((t) => t.type !== 'rental_car');
 
   return (
-    <Container py={'xs'} size="lg">
+    <Container py={'xs'} size="xl">
       <Modal
         opened={formOpened}
         fullScreen={isMobile}

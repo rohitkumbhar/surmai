@@ -20,7 +20,7 @@ export const BasicInfo = ({
   >;
 }) => {
   return (
-    <Container py={'xs'} size="lg">
+    <Container py={'xs'} size="xl">
       <BasicInfoView trip={trip} refetch={refetch} />
     </Container>
   );

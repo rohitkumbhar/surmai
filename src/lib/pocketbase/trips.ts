@@ -9,7 +9,7 @@ import {
   Trip,
   TripResponse,
 } from '../../types/trips.ts';
-import {listActivities} from "./activities.ts";
+import { listActivities } from './activities.ts';
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
