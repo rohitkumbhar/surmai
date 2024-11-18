@@ -42,6 +42,8 @@ export {
   deleteActivity,
 } from './pocketbase/activities';
 
+export { countCities, countAirports } from './pocketbase/lists';
+
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {
     year: 'numeric',

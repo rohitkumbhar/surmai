@@ -86,3 +86,11 @@ building and prettier for formatting.
 ### Why not $other_thing?
 
 I wanted to learn React, that's about it.
+
+# Bundled Data
+
+## Airports
+From [OurAirports](https://ourairports.com/data/)
+
+## Cities
+From [countries-states-cities-database](https://github.com/dr5hn/countries-states-cities-database)

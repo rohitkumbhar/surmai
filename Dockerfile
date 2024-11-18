@@ -15,7 +15,7 @@ COPY tsconfig.node.json .
 COPY vite.config.ts .
 
 RUN npm install -g npm@10.3.0 # For windows
-RUN npm install --no-audit --force --loglevel verbose
+RUN npm install --no-audit
 RUN npm run build
 
 FROM alpine:latest
@@ -32,6 +32,7 @@ RUN unzip /tmp/pb.zip -d /pb/
 COPY pocketbase/init.sh /pb/init.sh
 COPY pocketbase/pb_migrations /pb_migrations
 COPY pocketbase/pb_hooks /pb_hooks
+COPY pocketbase/lists /lists
 
 COPY --from=builder /surmai/dist /pb_public
 
