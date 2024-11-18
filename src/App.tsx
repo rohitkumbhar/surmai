@@ -2,6 +2,8 @@ import { AppShell, Box, Burger, Group, rem } from '@mantine/core';
 import { useDisclosure, useDocumentTitle } from '@mantine/hooks';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './components/nav/Navbar.tsx';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Error } from './components/error/Error.tsx';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
@@ -38,7 +40,9 @@ function App() {
         />
       </AppShell.Navbar>
       <AppShell.Main>
-        <Outlet />
+        <ErrorBoundary FallbackComponent={Error}>
+          <Outlet />
+        </ErrorBoundary>
       </AppShell.Main>
     </AppShell>
   );

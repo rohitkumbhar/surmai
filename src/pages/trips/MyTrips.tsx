@@ -25,7 +25,7 @@ export const MyTrips = () => {
   }
 
   if (isError) {
-    throw new Error(error.message);
+    throw error;
   }
 
   const logError = (error: Error, info: ErrorInfo) => {
@@ -36,7 +36,7 @@ export const MyTrips = () => {
 
   const cards = () => {
     return data.map((trip) => (
-      <ErrorBoundary key={trip.id} onError={logError} fallback={<p>Wrong!</p>}>
+      <ErrorBoundary key={trip.id} onError={logError} fallback={<p>Uh oh!</p>}>
         {trip && <TripCard trip={trip} />}
       </ErrorBoundary>
     ));
@@ -71,7 +71,7 @@ export const MyTrips = () => {
   );
 
   return (
-    <Container py="xl" size={"xl"}>
+    <Container py="xl" size={'xl'}>
       <Header>
         <Text p={'sm'} size="md" fw={700}>
           {t('all_trips', 'All Trips')}

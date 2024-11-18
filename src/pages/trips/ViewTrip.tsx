@@ -16,6 +16,7 @@ import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPane
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
   useDocumentTitle(docTitle);
+
   const { tripId } = useParams();
   const { t, i18n } = useTranslation();
   const { isPending, isError, data, error, refetch } = useQuery<Trip>({
@@ -33,9 +34,12 @@ export const ViewTrip = () => {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
+  console.log('Error => ', JSON.stringify(error));
+
   if (isError) {
-    throw new Error(error.message);
+    throw error;
   }
+
   const trip = data;
   return (
     <Container py={'sm'} size="xl">
