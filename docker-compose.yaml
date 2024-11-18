@@ -1,16 +1,16 @@
-version: '3.7'
-
 volumes:
   surmai_data:
 
 services:
-  surmai_dev:
+  surmai:
     container_name: surmai_server
     image: surmai:latest
+    build:
+      dockerfile: ./Dockerfile
     volumes:
       - surmai_data:/pb_data
     ports:
-      - 9090:8080
+      - "9090:8080"
     restart: always
     environment:
       SURMAI_ADMIN_EMAIL: admin@surmai.net
