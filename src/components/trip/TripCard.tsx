@@ -5,6 +5,7 @@ import { Trip } from '../../types/trips.ts';
 import { formatDate, getAttachmentUrl } from '../../lib';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { nanoid } from 'nanoid';
 
 export function TripCard({ trip }: { trip: Trip }) {
   const navigateFunction = useNavigate();
@@ -12,7 +13,7 @@ export function TripCard({ trip }: { trip: Trip }) {
   const { t, i18n } = useTranslation();
 
   const destinationBadge = destinations?.map((destination) => (
-    <Badge variant="light" key={destination.name}>
+    <Badge variant="light" key={destination.id || nanoid()}>
       {destination.name}
     </Badge>
   ));

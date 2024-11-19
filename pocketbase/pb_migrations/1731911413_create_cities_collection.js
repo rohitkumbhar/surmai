@@ -21,8 +21,7 @@ migrate((db) => {
       },
       {
         'system': false,
-        'id': 'i2nguw4u',
-        'name': 'state_code',
+        'name': 'stateCode',
         'type': 'text',
         'required': false,
         'presentable': false,
@@ -35,8 +34,7 @@ migrate((db) => {
       },
       {
         'system': false,
-        'id': 'tbhemluv',
-        'name': 'state_name',
+        'name': 'stateName',
         'type': 'text',
         'required': false,
         'presentable': false,
@@ -49,8 +47,7 @@ migrate((db) => {
       },
       {
         'system': false,
-        'id': 'fkeghsvq',
-        'name': 'country_code',
+        'name': 'countryCode',
         'type': 'text',
         'required': false,
         'presentable': false,
@@ -63,8 +60,7 @@ migrate((db) => {
       },
       {
         'system': false,
-        'id': 'ovelojuy',
-        'name': 'country_name',
+        'name': 'countryName',
         'type': 'text',
         'required': false,
         'presentable': false,
@@ -77,7 +73,6 @@ migrate((db) => {
       },
       {
         'system': false,
-        'id': '6kalaiom',
         'name': 'latitude',
         'type': 'text',
         'required': false,
@@ -91,7 +86,6 @@ migrate((db) => {
       },
       {
         'system': false,
-        'id': 'ecos7nnl',
         'name': 'longitude',
         'type': 'text',
         'required': false,

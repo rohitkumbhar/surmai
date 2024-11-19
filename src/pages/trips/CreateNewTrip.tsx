@@ -46,7 +46,14 @@ export const CreateNewTrip = () => {
               return { name: p };
             }),
             destinations: destinations?.map((d) => {
-              return { name: d };
+              return {
+                id: d.id,
+                name: d.name,
+                stateName: d.stateName,
+                countryName: d.countryName,
+                latitude: d.latitude,
+                longitude: d.longitude,
+              };
             }),
           };
 

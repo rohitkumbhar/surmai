@@ -9,10 +9,10 @@ routerAdd('POST', '/load-city-data', (c) => {
     try {
       const record = new Record(collection, {
         'name': cities[i].name,
-        'state_code': cities[i].state_code,
-        'state_name': cities[i].state_name,
-        'country_code': cities[i].country_code,
-        'country_name': cities[i].country_name,
+        'stateCode': cities[i].state_code,
+        'stateName': cities[i].state_name,
+        'countryCode': cities[i].country_code,
+        'countryName': cities[i].country_name,
         'latitude': cities[i].latitude,
         'longitude': cities[i].longitude,
       });

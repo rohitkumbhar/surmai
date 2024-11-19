@@ -6,6 +6,7 @@ import { updateTrip } from '../../../lib';
 import { EditTripBasicForm } from './EditTripBasicForm.tsx';
 import { Button, Group } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
+import { nanoid } from 'nanoid';
 
 export const EditBasicInfoForm = ({
   context,
@@ -23,7 +24,16 @@ export const EditBasicInfoForm = ({
     name: trip.name,
     description: trip.description,
     dateRange: [trip.startDate, trip.endDate],
-    destinations: trip.destinations?.map((item) => item.name),
+    destinations: trip.destinations?.map((item) => {
+      return {
+        id: item.id || nanoid(),
+        name: item.name,
+        stateName: item.stateName,
+        countryName: item.countryName,
+        latitude: item.latitude,
+        longitude: item.longitude,
+      };
+    }),
     participants: trip.participants?.map((item) => item.name),
   };
 
@@ -41,8 +51,15 @@ export const EditBasicInfoForm = ({
           description: values.description,
           startDate: values.dateRange[0],
           endDate: values.dateRange[1],
-          destinations: values.destinations?.map((name) => {
-            return { name: name };
+          destinations: values.destinations?.map((d) => {
+            return {
+              id: d.id,
+              name: d.name,
+              stateName: d.stateName,
+              countryName: d.countryName,
+              latitude: d.latitude,
+              longitude: d.longitude,
+            };
           }),
           participants: values.participants?.map((name) => {
             return { name: name };

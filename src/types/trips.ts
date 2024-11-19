@@ -8,6 +8,11 @@ export type Participant = {
 };
 
 export type Destination = {
+  id: string;
+  stateName?: string;
+  countryName?: string;
+  latitude?: string;
+  longitude?: string;
   name: string;
   category?: string;
 };
@@ -40,7 +45,7 @@ export type CreateTripForm = {
   dateRange: [Date | null, Date | null];
   coverImage?: string;
   participants?: string[];
-  destinations?: string[];
+  destinations?: Destination[];
 };
 
 export type Cost = {

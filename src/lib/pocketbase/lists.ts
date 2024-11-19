@@ -1,6 +1,5 @@
 import { pb } from './pocketbase.ts';
 
-
 export const countCities = async () => {
   const { totalItems } = await pb.collection('cities').getList(1, 1);
   return totalItems;
@@ -13,6 +12,6 @@ export const countAirports = async () => {
 
 export const searchCities = (query: string) => {
   return pb.collection('cities').getList(1, 10, {
-    filter: `name~"${query}"`
+    filter: `name~"${query}"`,
   });
 };

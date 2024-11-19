@@ -27,7 +27,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
       <Group>
         {(trip.destinations || []).map((destination) => {
           return (
-            <Group wrap={'nowrap'} key={destination.name}>
+            <Group wrap={'nowrap'} key={destination.id}>
               <Paper shadow="sm" radius="sm" p="xl" bg={'var(--mantine-primary-color-light)'}>
                 <IconPhoto />
                 <Text>{destination.name}</Text>
