@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useMediaQuery } from '@mantine/hooks';
+import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { Button, Menu, rem, Text } from '@mantine/core';
 import { IconChevronDown, IconDownload, IconPencil, IconPhoto, IconTrash, IconUsers } from '@tabler/icons-react';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
@@ -7,11 +7,16 @@ import { Trip } from '../../../types/trips.ts';
 import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
 import { notifications } from '@mantine/notifications';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useMediaQuery('(max-width: 50em)');
+
+  const [, setOfflineCacheTimestamp] = useLocalStorage<string | null>({
+    key: `offline-cache-timestamp-${trip.id}`,
+  });
 
   return (
     <Menu>
@@ -90,6 +95,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           onClick={() => {
             loadEverything(trip.id)
               .then(() => {
+                setOfflineCacheTimestamp(dayjs().format('L LT'));
                 notifications.show({
                   title: 'Offline',
                   message: `Data for ${trip.name} has been added to cache`,
@@ -98,6 +104,8 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               })
               .catch((err) => {
                 console.log('Error', err);
+                setOfflineCacheTimestamp(null);
+
                 notifications.show({
                   title: 'Downloaded',
                   variant: 'error',
@@ -122,7 +130,8 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                 confirm: t('delete', 'Delete'),
                 cancel: t('cancel', 'Cancel'),
               },
-              onCancel: () => {},
+              onCancel: () => {
+              },
               onConfirm: () => {
                 deleteTrip(trip.id).then(() => {
                   notifications.show({

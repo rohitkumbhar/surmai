@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Accordion, Container, Group, LoadingOverlay, rem, Text } from '@mantine/core';
-import { IconBed, IconCalendar, IconInfoSquare, IconPlane } from '@tabler/icons-react';
+import { Accordion, Alert, Container, Group, LoadingOverlay, rem, Text } from '@mantine/core';
+import { IconBed, IconCalendar, IconInfoSquare, IconPlane, IconRefresh, IconWifiOff } from '@tabler/icons-react';
 import { Trip } from '../../types/trips.ts';
 import { formatDate, getTrip } from '../../lib';
 import { Header } from '../../components/nav/Header.tsx';
@@ -8,7 +8,7 @@ import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { TransportationPanel } from '../../components/trip/transportation/TransportationPanel.tsx';
 import { useTranslation } from 'react-i18next';
-import { useDocumentTitle } from '@mantine/hooks';
+import { useDisclosure, useDocumentTitle, useLocalStorage, useNetwork } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
 import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
@@ -23,6 +23,13 @@ export const ViewTrip = () => {
     queryKey: ['trip', tripId],
     queryFn: () => getTrip(tripId || ''),
   });
+
+  const { online } = useNetwork();
+  const [showAlert, { close: closeAlert }] = useDisclosure(true);
+  const [offlineCacheTimestamp] = useLocalStorage<string | null>({
+    key: `offline-cache-timestamp-${tripId}`,
+  });
+
 
   useEffect(() => {
     if (data) {
@@ -53,6 +60,32 @@ export const ViewTrip = () => {
           </Text>
         </Group>
       </Header>
+
+
+      {online && offlineCacheTimestamp && showAlert &&
+        <Alert variant="light" title={t('offline_access', 'Offline Access')} icon={<IconRefresh />} mb="sm"
+               onClose={closeAlert}
+               withCloseButton
+               closeButtonLabel={t('dismiss', 'Dismiss')}>
+          {t('offline_sync_status', 'Trip data was synced to this device at {{offlineCacheTimestamp}}', { offlineCacheTimestamp: offlineCacheTimestamp })}
+        </Alert>}
+
+      {!online && offlineCacheTimestamp && showAlert &&
+        <Alert variant="light" title={t('offline', 'Offline')} icon={<IconWifiOff />} mb="sm"
+               onClose={closeAlert}
+               withCloseButton
+               closeButtonLabel={t('dismiss', 'Dismiss')}>
+          {t('offline_data_display', 'Showing trip data synced at {{offlineCacheTimestamp}}', { offlineCacheTimestamp: offlineCacheTimestamp })}
+        </Alert>}
+
+      {!online && !offlineCacheTimestamp && showAlert &&
+        <Alert variant="light" title={t('offline', 'Offline')} icon={<IconWifiOff />} mb="sm"
+               onClose={closeAlert}
+               withCloseButton
+               closeButtonLabel={t('dismiss', 'Dismiss')}>
+          {t('offline_no_data', 'Trip data may not be available.')}
+        </Alert>}
+
 
       <Accordion chevronPosition="right" variant="separated" multiple={true}>
         <Accordion.Item value={'basic_info'} key={'basic_info'}>
@@ -99,7 +132,7 @@ export const ViewTrip = () => {
                 <Text size="sm" c="dimmed" fw={400}>
                   {t(
                     'transportation.section_description',
-                    'View and edit your transportation arrangements for this trip'
+                    'View and edit your transportation arrangements for this trip',
                   )}
                 </Text>
               </div>
