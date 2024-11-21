@@ -8,6 +8,7 @@ import { CreateNewTrip } from '../pages/trips/CreateNewTrip.tsx';
 import { ViewTrip } from '../pages/trips/ViewTrip.tsx';
 import { SignIn } from '../pages/SignIn/SignIn.tsx';
 import { SignUp } from '../pages/SignUp/SignUp.tsx';
+import { UserProfile } from '../pages/UserProfile/UserProfile.tsx';
 
 export const buildRouter = () => {
   return createBrowserRouter([
@@ -22,6 +23,10 @@ export const buildRouter = () => {
         {
           path: '/',
           element: <MyTrips />,
+        },
+        {
+          path: '/profile',
+          element: <UserProfile />
         },
         {
           path: '/settings',

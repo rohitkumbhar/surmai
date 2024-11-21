@@ -5,6 +5,7 @@ import { UserButton } from '../user/UserButton.tsx';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FishOne } from '../logo/FishOne.tsx';
 import { useClickOutside } from '@mantine/hooks';
+import { isAdmin } from '../../lib';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -30,25 +31,28 @@ interface NavbarProps {
 
 export function Navbar({ close }: NavbarProps) {
   const ref = useClickOutside(() => close && close());
+  const isCurrentUserAdmin = isAdmin();
 
   const mainNav = [
     { icon: IconHome2, label: 'Home', route: '/' },
-    { icon: IconSettings, label: 'Settings', route: '/settings' },
+    { icon: IconSettings, label: 'Settings', route: '/settings', isAdmin: true },
   ];
 
   const navigate = useNavigate();
   const location = useLocation();
-  const links = mainNav.map((link) => (
-    <NavbarLink
-      {...link}
-      key={link.label}
-      active={location.pathname === link.route}
-      onClick={() => {
-        navigate(link.route);
-        close && close();
-      }}
-    />
-  ));
+  const links = mainNav
+    .filter(link => !link.isAdmin || isCurrentUserAdmin)
+    .map((link) => (
+      <NavbarLink
+        {...link}
+        key={link.label}
+        active={location.pathname === link.route}
+        onClick={() => {
+          navigate(link.route);
+          close && close();
+        }}
+      />
+    ));
 
   return (
     <nav className={classes.navbar} ref={ref}>

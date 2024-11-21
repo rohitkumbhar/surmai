@@ -1,14 +1,16 @@
 import { Avatar, Group, Menu, rem, UnstyledButton } from '@mantine/core';
-import { IconLogout, IconSettings } from '@tabler/icons-react';
+import { IconLogout, IconUser } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAttachmentUrl, logoutCurrentUser } from '../../lib';
 import { useState } from 'react';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { useTranslation } from 'react-i18next';
 
 export function UserButton() {
   const [, setUserMenuOpened] = useState(false);
   const navigate = useNavigate();
   const { user } = useCurrentUser();
+  const { t } = useTranslation();
 
   return (
     <Menu
@@ -32,9 +34,9 @@ export function UserButton() {
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Label>{user?.name}</Menu.Label>
-        <Link to={'/settings'}>
-          <Menu.Item leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
-            Settings
+        <Link to={'/profile'}>
+          <Menu.Item leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
+            {t('profile', 'Profile')}
           </Menu.Item>
         </Link>
         <Menu.Item
@@ -44,7 +46,7 @@ export function UserButton() {
           }}
           leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          Logout
+          {t('logout', 'Logout')}
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
