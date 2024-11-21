@@ -10,7 +10,7 @@ import { nanoid } from 'nanoid';
 export function TripCard({ trip }: { trip: Trip }) {
   const navigateFunction = useNavigate();
   const { id, name, coverImage, destinations } = trip;
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   const destinationBadge = destinations?.map((destination) => (
     <Badge variant="light" key={destination.id || nanoid()}>
@@ -57,10 +57,10 @@ export function TripCard({ trip }: { trip: Trip }) {
       </Card.Section>
 
       <Card.Section className={classes.section}>
-        <Text mt="md" className={classes.label} c={'dimmed'}>
+        {/*        <Text mt="md" className={classes.label} c={'dimmed'}>
           {t('destinations', 'Destinations')}
-        </Text>
-        <Group gap={7} mt={5}>
+        </Text>*/}
+        <Group gap={7} mt={'md'}>
           {destinationBadge}
         </Group>
       </Card.Section>

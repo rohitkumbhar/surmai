@@ -130,8 +130,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                 confirm: t('delete', 'Delete'),
                 cancel: t('cancel', 'Cancel'),
               },
-              onCancel: () => {
-              },
+              onCancel: () => {},
               onConfirm: () => {
                 deleteTrip(trip.id).then(() => {
                   notifications.show({

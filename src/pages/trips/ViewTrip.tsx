@@ -30,7 +30,6 @@ export const ViewTrip = () => {
     key: `offline-cache-timestamp-${tripId}`,
   });
 
-
   useEffect(() => {
     if (data) {
       setDocTitle(data.name);
@@ -61,31 +60,51 @@ export const ViewTrip = () => {
         </Group>
       </Header>
 
+      {online && offlineCacheTimestamp && showAlert && (
+        <Alert
+          variant="light"
+          title={t('offline_access', 'Offline Access')}
+          icon={<IconRefresh />}
+          mb="sm"
+          onClose={closeAlert}
+          withCloseButton
+          closeButtonLabel={t('dismiss', 'Dismiss')}
+        >
+          {t('offline_sync_status', 'Trip data was synced to this device at {{offlineCacheTimestamp}}', {
+            offlineCacheTimestamp: offlineCacheTimestamp,
+          })}
+        </Alert>
+      )}
 
-      {online && offlineCacheTimestamp && showAlert &&
-        <Alert variant="light" title={t('offline_access', 'Offline Access')} icon={<IconRefresh />} mb="sm"
-               onClose={closeAlert}
-               withCloseButton
-               closeButtonLabel={t('dismiss', 'Dismiss')}>
-          {t('offline_sync_status', 'Trip data was synced to this device at {{offlineCacheTimestamp}}', { offlineCacheTimestamp: offlineCacheTimestamp })}
-        </Alert>}
+      {!online && offlineCacheTimestamp && showAlert && (
+        <Alert
+          variant="light"
+          title={t('offline', 'Offline')}
+          icon={<IconWifiOff />}
+          mb="sm"
+          onClose={closeAlert}
+          withCloseButton
+          closeButtonLabel={t('dismiss', 'Dismiss')}
+        >
+          {t('offline_data_display', 'Showing trip data synced at {{offlineCacheTimestamp}}', {
+            offlineCacheTimestamp: offlineCacheTimestamp,
+          })}
+        </Alert>
+      )}
 
-      {!online && offlineCacheTimestamp && showAlert &&
-        <Alert variant="light" title={t('offline', 'Offline')} icon={<IconWifiOff />} mb="sm"
-               onClose={closeAlert}
-               withCloseButton
-               closeButtonLabel={t('dismiss', 'Dismiss')}>
-          {t('offline_data_display', 'Showing trip data synced at {{offlineCacheTimestamp}}', { offlineCacheTimestamp: offlineCacheTimestamp })}
-        </Alert>}
-
-      {!online && !offlineCacheTimestamp && showAlert &&
-        <Alert variant="light" title={t('offline', 'Offline')} icon={<IconWifiOff />} mb="sm"
-               onClose={closeAlert}
-               withCloseButton
-               closeButtonLabel={t('dismiss', 'Dismiss')}>
+      {!online && !offlineCacheTimestamp && showAlert && (
+        <Alert
+          variant="light"
+          title={t('offline', 'Offline')}
+          icon={<IconWifiOff />}
+          mb="sm"
+          onClose={closeAlert}
+          withCloseButton
+          closeButtonLabel={t('dismiss', 'Dismiss')}
+        >
           {t('offline_no_data', 'Trip data may not be available.')}
-        </Alert>}
-
+        </Alert>
+      )}
 
       <Accordion chevronPosition="right" variant="separated" multiple={true}>
         <Accordion.Item value={'basic_info'} key={'basic_info'}>
@@ -132,7 +151,7 @@ export const ViewTrip = () => {
                 <Text size="sm" c="dimmed" fw={400}>
                   {t(
                     'transportation.section_description',
-                    'View and edit your transportation arrangements for this trip',
+                    'View and edit your transportation arrangements for this trip'
                   )}
                 </Text>
               </div>
