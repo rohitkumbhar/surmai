@@ -1,9 +1,21 @@
-.icon {
-  color: light-dark(var(--mantine-color-gray-5), var(--mantine-color-dark-3));
+.card {
+  background-color: var(--mantine-color-body);
 }
 
-.name {
-  font-family:
-    Greycliff CF,
-    var(--mantine-font-family);
+.item {
+  & + & {
+    padding-top: var(--mantine-spacing-sm);
+    margin-top: var(--mantine-spacing-sm);
+    border-top: 1px solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-4));
+  }
+}
+
+.switch {
+  & * {
+    cursor: pointer;
+  }
+}
+
+.title {
+  line-height: 1;
 }

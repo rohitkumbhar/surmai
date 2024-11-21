@@ -81,6 +81,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
               {values.map((v) => {
                 return (
                   <Pill
+                    radius={'xs'}
                     key={v.id}
                     withRemoveButton
                     onRemove={() => {

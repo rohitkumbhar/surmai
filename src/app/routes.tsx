@@ -26,7 +26,7 @@ export const buildRouter = () => {
         },
         {
           path: '/profile',
-          element: <UserProfile />
+          element: <UserProfile />,
         },
         {
           path: '/settings',

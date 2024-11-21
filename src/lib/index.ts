@@ -42,7 +42,7 @@ export {
   deleteActivity,
 } from './pocketbase/activities';
 
-export { countCities, countAirports, searchCities } from './pocketbase/lists';
+export { loadCities, countCities, countAirports, searchCities } from './pocketbase/lists';
 
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {

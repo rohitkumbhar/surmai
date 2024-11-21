@@ -14,14 +14,13 @@ export const UserProfile = () => {
   useDocumentTitle(t('settings', 'Settings'));
 
   return (
-    <Container size={"xl"}>
+    <Container size={'xl'}>
       <Header>
         <Text size="md" p={'sm'}>
           {t('user_profile', 'User Profile')}
         </Text>
       </Header>
       <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'}>
-
         <Group wrap="nowrap" mt={'sm'}>
           <Avatar
             name={user?.name}

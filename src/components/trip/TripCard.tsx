@@ -33,12 +33,7 @@ export function TripCard({ trip }: { trip: Trip }) {
         <AspectRatio ratio={1920 / 800}>
           {coverImage && <Image src={getAttachmentUrl(trip, coverImage)} alt={'Cover Image'} fit={'cover'} />}
           {!coverImage && (
-            <ActionIcon
-              variant={'subtle'}
-              bd={'solid 1px var(--mantine-primary-color-filled)'}
-              aria-label={'Settings'}
-              style={{ height: '100%' }}
-            >
+            <ActionIcon variant={'light'} aria-label={'Settings'} style={{ height: '100%' }}>
               <IconPhoto stroke={1.5} />
             </ActionIcon>
           )}
@@ -47,11 +42,11 @@ export function TripCard({ trip }: { trip: Trip }) {
 
       <Card.Section className={classes.section} mt="md">
         <Group justify="apart">
-          <Text fz="lg" fw={500}>
+          <Text fz="md" fw={'bold'}>
             {name}
           </Text>
         </Group>
-        <Text c="dimmed" size="xs" tt="uppercase" fw={700} mt="md">
+        <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
           {`${formatDate(i18n.language, trip.startDate)} - ${formatDate(i18n.language, trip.endDate)}`}
         </Text>
       </Card.Section>

@@ -14,9 +14,6 @@ migrate((db) => {
     });
     dao.saveRecord(record);
   }
-
-  console.log('Created ', airports.length, 'airport entries');
-
 }, (db) => {
   return null;
 });

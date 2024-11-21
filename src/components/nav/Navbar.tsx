@@ -41,7 +41,7 @@ export function Navbar({ close }: NavbarProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const links = mainNav
-    .filter(link => !link.isAdmin || isCurrentUserAdmin)
+    .filter((link) => !link.isAdmin || isCurrentUserAdmin)
     .map((link) => (
       <NavbarLink
         {...link}
