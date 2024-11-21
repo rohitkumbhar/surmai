@@ -14,7 +14,7 @@ export const UserProfile = () => {
   useDocumentTitle(t('settings', 'Settings'));
 
   return (
-    <Container>
+    <Container size={"xl"}>
       <Header>
         <Text size="md" p={'sm'}>
           {t('user_profile', 'User Profile')}

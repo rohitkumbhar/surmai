@@ -8,7 +8,7 @@ export const Settings = () => {
   useDocumentTitle(t('settings', 'Settings'));
 
   return (
-    <Container>
+    <Container size={"xl"}>
       <Header>
         <Text size="md" p={'sm'}>
           {t('settings', 'Settings')}
