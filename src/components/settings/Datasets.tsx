@@ -45,7 +45,7 @@ export const Datasets = () => {
         Load available datasets
       </Text>
 
-      <Group justify="space-between" className={classes.item} wrap="nowrap" gap="xl" key={'cities_dataset'}>
+      <Group justify="space-between" className={classes.item} gap="xl" key={'cities_dataset'}>
         <div>
           <Text>World Cities</Text>
           <Text size="sm" c="dimmed">
@@ -59,7 +59,7 @@ export const Datasets = () => {
         <Button onClick={cityLoadConfirmationModal}>Load Cities</Button>
       </Group>
 
-      <Group justify="space-between" className={classes.item} wrap="nowrap" gap="xl" key={'airports_dataset'}>
+      <Group justify="space-between" className={classes.item} gap="xl" key={'airports_dataset'}>
         <div>
           <Text>World Airports</Text>
           <Text size="sm" c="dimmed">

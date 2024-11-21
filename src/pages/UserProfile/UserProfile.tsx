@@ -1,4 +1,4 @@
-import { Avatar, Button, Container, Group, Paper, Text } from '@mantine/core';
+import { AspectRatio, Avatar, Button, Container, Group, Paper, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { openContextModal } from '@mantine/modals';
 import { useDocumentTitle, useMediaQuery } from '@mantine/hooks';
@@ -21,14 +21,17 @@ export const UserProfile = () => {
         </Text>
       </Header>
       <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'}>
-        <Group wrap="nowrap" mt={'sm'}>
-          <Avatar
-            name={user?.name}
-            color={'initials'}
-            src={user?.avatar && getAttachmentUrl(user, user.avatar)}
-            size={200}
-            radius="md"
-          />
+        <Group mt={'sm'}>
+          <AspectRatio ratio={400 / 400}>
+            <Avatar
+              name={user?.name}
+              color={'initials'}
+              src={user?.avatar && getAttachmentUrl(user, user.avatar)}
+              size={100}
+              radius="md"
+            />
+          </AspectRatio>
+
           {user && (
             <Button
               onClick={() => {
