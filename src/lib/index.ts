@@ -9,6 +9,9 @@ export {
   authRefresh,
   updateUserAvatar,
   updateUser,
+  areSignupsEnabled,
+  enableUserSignups,
+  disableUserSignups,
 } from './pocketbase/auth';
 export {
   getTrip,

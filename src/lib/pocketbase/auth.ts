@@ -65,7 +65,9 @@ export const createUserWithPassword = async ({
       .catch((err: ClientResponseError) => {
         const messages = [err.message];
         Object.entries(err.data || {}).forEach(([, val]) => {
-          messages.push(val.message);
+          if (val.message) {
+            messages.push(val.message);
+          }
         });
         reject(messages.join('.'));
       });
@@ -99,4 +101,22 @@ export const updateUserAvatar = (userId: string, file: File | Blob) => {
 
 export const updateUser = (userId: string, data: object) => {
   return pb.collection('users').update(userId, data);
+};
+
+export const areSignupsEnabled = () => {
+  return pbAdmin.collections.getOne('users').then((usersCollection) => {
+    return usersCollection.createRule != null;
+  });
+};
+
+export const disableUserSignups = () => {
+  return pbAdmin.collections.update('users', {
+    createRule: null,
+  });
+};
+
+export const enableUserSignups = () => {
+  return pbAdmin.collections.update('users', {
+    createRule: '',
+  });
 };

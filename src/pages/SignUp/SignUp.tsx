@@ -1,4 +1,4 @@
-import { Button, Container, Notification, Paper, Text, TextInput } from '@mantine/core';
+import { Alert, Button, Container, Paper, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +27,9 @@ export const SignUp = () => {
       .then(() => {
         navigate('/login');
       })
-      .catch((err) => setApiError(err.message));
+      .catch((err) => {
+        setApiError(err);
+      });
   };
 
   const form = useForm<SignUpForm>({
@@ -52,14 +54,14 @@ export const SignUp = () => {
           </Text>
 
           {apiError && (
-            <Notification
-              withBorder
-              color="red"
+            <Alert
+              withCloseButton
+              closeButtonLabel={'Dismiss'}
               title={t('account_creation_failed', 'Unable to create an account')}
               onClose={() => setApiError(undefined)}
             >
               {apiError}
-            </Notification>
+            </Alert>
           )}
 
           <form onSubmit={form.onSubmit((values) => createAccount(values))}>
