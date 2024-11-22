@@ -1,13 +1,14 @@
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CreateTransportation, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { createTransportationEntry, saveTransportationAttachments } from '../../../lib';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { AutocompleteLoading } from '../../util/AutocompleteLoading.tsx';
 
 export const GenericTransportationModeForm = ({
   transportationType,
@@ -88,13 +89,16 @@ export const GenericTransportationModeForm = ({
       <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
         <Stack>
           <Group>
-            <TextInput
+            <AutocompleteLoading form={form as UseFormReturnType<unknown>} propName={'from'}/>
+          </Group>
+          <Group>
+            {/*<TextInput
               name={'from'}
               label={t('transportation.from', 'From')}
               required
               key={form.key('origin')}
               {...form.getInputProps('origin')}
-            />
+            />*/}
             <DateTimePicker
               highlightToday
               valueFormat="lll"

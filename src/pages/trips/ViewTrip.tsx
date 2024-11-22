@@ -40,8 +40,6 @@ export const ViewTrip = () => {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
-  console.log('Error => ', JSON.stringify(error));
-
   if (isError) {
     throw error;
   }
@@ -151,7 +149,7 @@ export const ViewTrip = () => {
                 <Text size="sm" c="dimmed" fw={400}>
                   {t(
                     'transportation.section_description',
-                    'View and edit your transportation arrangements for this trip'
+                    'View and edit your transportation arrangements for this trip',
                   )}
                 </Text>
               </div>
