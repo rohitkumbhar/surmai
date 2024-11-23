@@ -1,7 +1,7 @@
 migrate((db) => {
 
   const collectionSchema = {
-    name: 'cities',
+    name: 'places',
     type: 'base',
     system: false,
     schema: [
@@ -99,8 +99,8 @@ migrate((db) => {
       },
     ],
     indexes: [
-      "CREATE INDEX `idx_city_name` ON `cities` (`name`)",
-      "CREATE UNIQUE INDEX `idx_wUWSzHG` ON `cities` (`name`,`stateName`,`countryName`)"
+      "CREATE INDEX `idx_place_name` ON `places` (`name`)",
+      "CREATE UNIQUE INDEX `idx_wUWSzHG` ON `places` (`name`,`stateName`,`countryName`)"
     ],
     listRule: '',
     viewRule: '',

@@ -159,8 +159,7 @@ export type ActivityFormSchema = {
   startDate?: Date;
 };
 
-
 export interface Airport extends RecordModel {
   iata_code?: string;
-  name: string
+  name: string;
 }

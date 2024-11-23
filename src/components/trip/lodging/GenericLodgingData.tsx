@@ -1,5 +1,5 @@
 import { Lodging, LodgingType, Trip } from '../../../types/trips.ts';
-import { Box, Center, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
+import { Box, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
 import { IconBedFlat, IconBuildingEstate, IconCar, IconHome, IconTent } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
@@ -7,7 +7,7 @@ import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { deleteLodging, formatDate } from '../../../lib';
-import { formatTime, getNumberOfDays } from '../common/util.ts';
+import { formatTime } from '../common/util.ts';
 import { notifications } from '@mantine/notifications';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 
@@ -96,30 +96,28 @@ export const GenericLodgingData = ({
           </Box>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('lodging.check_in', 'Check-In')}
           </Text>
-          <Title size="sm">
-            {`${formatDate(i18n.language, lodging.startDate)} ${formatTime(i18n.language, lodging.startDate)}`}
-          </Title>
+          <Text size="md">{`${formatDate(i18n.language, lodging.startDate)}`}</Text>
+          <Text size="md">{`${formatTime(i18n.language, lodging.startDate)}`}</Text>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 2, md: 1, lg: 1 }}>
+        {/*<Grid.Col span={{ base: 12, sm: 2, md: 1, lg: 1 }}>
           <Center h={'100%'}>
             <Text c={'dimmed'} size={'xs'}>
               {getNumberOfDays(lodging.startDate, lodging.endDate)}
             </Text>
           </Center>
         </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+*/}
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('lodging.check_out', 'Check-Out')}
           </Text>
-          <Title size="sm">
-            {`${formatDate(i18n.language, lodging.endDate)} ${formatTime(i18n.language, lodging.endDate)}`}
-          </Title>
+          <Text size="md">{`${formatDate(i18n.language, lodging.endDate)}`}</Text>
+          <Text size="md">{`${formatTime(i18n.language, lodging.endDate)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>

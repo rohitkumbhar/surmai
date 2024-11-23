@@ -100,27 +100,25 @@ export const GenericTransportationData = ({
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
-          <Title size="lg" fw={400}>
+          <Text size="sm" c={'dimmed'}>
+            {t('transportation.from', 'From')}
+          </Text>
+          <Title size="md" fw={400}>
             {transportation.origin}
-            <Text size="xs" c={'dimmed'}>
-              {formatDate(i18n.language, transportation.departureTime)}
-            </Text>
-            <Text size="xs" c={'dimmed'}>
-              {formatTime(i18n.language, transportation.departureTime)}
-            </Text>
           </Title>
+          <Text size="xs">{formatDate(i18n.language, transportation.departureTime)}</Text>
+          <Text size="xs">{formatTime(i18n.language, transportation.departureTime)}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
-          <Title size="lg" fw={400}>
+          <Text size="sm" c={'dimmed'}>
+            {t('transportation.to', 'To')}
+          </Text>
+          <Title size="md" fw={400}>
             {transportation.destination}
-            <Text size="xs" c={'dimmed'}>
-              {formatDate(i18n.language, transportation.arrivalTime)}
-            </Text>
-            <Text size="xs" c={'dimmed'}>
-              {formatTime(i18n.language, transportation.arrivalTime)}
-            </Text>
           </Title>
+          <Text size="xs">{formatDate(i18n.language, transportation.arrivalTime)}</Text>
+          <Text size="xs">{formatTime(i18n.language, transportation.arrivalTime)}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>

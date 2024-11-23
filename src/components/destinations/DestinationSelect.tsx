@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Combobox, Group, Pill, PillsInput, Text, useCombobox } from '@mantine/core';
 import { useClickOutside, useDebouncedState } from '@mantine/hooks';
-import { searchCities } from '../../lib';
+import { searchPlaces } from '../../lib';
 import { nanoid } from 'nanoid';
 import { UseFormReturnType } from '@mantine/form';
 import { Destination } from '../../types/trips.ts';
@@ -24,7 +24,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   useEffect(() => {
     if (search?.length > 3) {
       setLoading(true);
-      searchCities(search).then((results) => {
+      searchPlaces(search).then((results) => {
         setSearchResults(results.items as unknown as Destination[]);
         setLoading(false);
         setOpened(true);

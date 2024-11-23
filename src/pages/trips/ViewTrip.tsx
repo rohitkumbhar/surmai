@@ -149,7 +149,7 @@ export const ViewTrip = () => {
                 <Text size="sm" c="dimmed" fw={400}>
                   {t(
                     'transportation.section_description',
-                    'View and edit your transportation arrangements for this trip',
+                    'View and edit your transportation arrangements for this trip'
                   )}
                 </Text>
               </div>

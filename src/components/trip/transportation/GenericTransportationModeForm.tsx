@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { AutocompleteLoading } from '../../util/AutocompleteLoading.tsx';
+import { AirportSelect } from './AirportSelect.tsx';
 
 export const GenericTransportationModeForm = ({
   transportationType,
@@ -85,33 +85,49 @@ export const GenericTransportationModeForm = ({
   };
 
   return (
-    <Stack>
-      <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
-        <Stack>
-          <Group>
-            <AutocompleteLoading form={form as UseFormReturnType<unknown>} propName={'from'}/>
-          </Group>
-          <Group>
-            {/*<TextInput
+    <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
+      <Stack>
+        <Group>
+          {transportationType === 'flight' ? (
+            <AirportSelect
+              form={form as UseFormReturnType<unknown>}
+              propName={'origin'}
+              label={t('transportation.from', 'From')}
+              required={true}
+              withAsterisk={true}
+            />
+          ) : (
+            <TextInput
               name={'from'}
               label={t('transportation.from', 'From')}
               required
               key={form.key('origin')}
               {...form.getInputProps('origin')}
-            />*/}
-            <DateTimePicker
-              highlightToday
-              valueFormat="lll"
-              name={'departureTime'}
-              miw={rem('200px')}
-              label={t('transportation.departure_time', 'Departure Time')}
-              clearable
-              required
-              key={form.key('departureTime')}
-              {...form.getInputProps('departureTime')}
             />
-          </Group>
-          <Group>
+          )}
+
+          <DateTimePicker
+            highlightToday
+            valueFormat="lll"
+            name={'departureTime'}
+            miw={rem('200px')}
+            label={t('transportation.departure_time', 'Departure Time')}
+            clearable
+            required
+            key={form.key('departureTime')}
+            {...form.getInputProps('departureTime')}
+          />
+        </Group>
+        <Group>
+          {transportationType === 'flight' ? (
+            <AirportSelect
+              form={form as UseFormReturnType<unknown>}
+              propName={'destination'}
+              label={t('transportation.to', 'To')}
+              required={true}
+              withAsterisk={true}
+            />
+          ) : (
             <TextInput
               name={'to'}
               label={t('transportation.to', 'To')}
@@ -119,100 +135,101 @@ export const GenericTransportationModeForm = ({
               key={form.key('destination')}
               {...form.getInputProps('destination')}
             />
-            <DateTimePicker
-              valueFormat="lll"
-              name={'arrivalTime'}
-              label={t('transportation.arrival_time', 'Arrival Time')}
-              required
-              miw={rem('200px')}
-              clearable
-              key={form.key('arrivalTime')}
-              {...form.getInputProps('arrivalTime')}
-            />
-          </Group>
-          <Group>
-            <TextInput
-              name={'provider'}
-              label={t('transportation.provider', 'Provider')}
-              required
-              key={form.key('provider')}
-              {...form.getInputProps('provider')}
-            />
+          )}
 
-            <TextInput
-              name={'reservation'}
-              label={t('transportation.reservation', 'Reservation')}
-              key={form.key('reservation')}
-              {...form.getInputProps('reservation')}
-            />
-          </Group>
-          <Group>
-            <CurrencyInput
-              costKey={form.key('cost')}
-              costProps={form.getInputProps('cost')}
-              currencyCodeKey={form.key('currencyCode')}
-              currencyCodeProps={form.getInputProps('currencyCode')}
-            />
-          </Group>
-          <Group>
-            <Stack>
-              <Group>
-                <Title size={'md'}>
-                  {t('attachments', 'Attachments')}
-                  <Text size={'xs'} c={'dimmed'}>
-                    {t('transportation.attachments_desc', 'Upload any related documents e.g. confirmation email')}
-                  </Text>
-                </Title>
-              </Group>
-              <Group>
-                {files.map((file, index) => (
-                  <Text key={index}>{file.name}</Text>
-                ))}
-              </Group>
+          <DateTimePicker
+            valueFormat="lll"
+            name={'arrivalTime'}
+            label={t('transportation.arrival_time', 'Arrival Time')}
+            required
+            miw={rem('200px')}
+            clearable
+            key={form.key('arrivalTime')}
+            {...form.getInputProps('arrivalTime')}
+          />
+        </Group>
+        <Group>
+          <TextInput
+            name={'provider'}
+            label={t('transportation.provider', 'Provider')}
+            required
+            key={form.key('provider')}
+            {...form.getInputProps('provider')}
+          />
 
-              <Group>
-                <FileButton
-                  onChange={setFiles}
-                  accept="application/pdf,image/png,image/jpeg,image/gif,image/webp"
-                  form={'files'}
-                  name={'files'}
-                  multiple
-                >
-                  {(props) => {
-                    if (transportation?.id) {
-                      return (
-                        <Stack>
-                          <Text
-                            size={'xs'}
-                          >{`${transportation.attachments ? transportation.attachments.length : 0} existing files`}</Text>
-                          <Button {...props}>{t('upload_more', 'Upload More')}</Button>
-                        </Stack>
-                      );
-                    } else {
-                      return <Button {...props}>{t('upload', 'Upload')}</Button>;
-                    }
-                  }}
-                </FileButton>
-              </Group>
-            </Stack>
-          </Group>
-          <Group justify={'flex-end'}>
-            <Button type={'submit'} w={'min-content'}>
-              {t('save', 'Save')}
-            </Button>
-            <Button
-              type={'button'}
-              variant={'default'}
-              w={'min-content'}
-              onClick={() => {
-                onCancel();
-              }}
-            >
-              {t('cancel', 'Cancel')}
-            </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Stack>
+          <TextInput
+            name={'reservation'}
+            label={t('transportation.reservation', 'Reservation')}
+            key={form.key('reservation')}
+            {...form.getInputProps('reservation')}
+          />
+        </Group>
+        <Group>
+          <CurrencyInput
+            costKey={form.key('cost')}
+            costProps={form.getInputProps('cost')}
+            currencyCodeKey={form.key('currencyCode')}
+            currencyCodeProps={form.getInputProps('currencyCode')}
+          />
+        </Group>
+        <Group>
+          <Stack>
+            <Group>
+              <Title size={'md'}>
+                {t('attachments', 'Attachments')}
+                <Text size={'xs'} c={'dimmed'}>
+                  {t('transportation.attachments_desc', 'Upload any related documents e.g. confirmation email')}
+                </Text>
+              </Title>
+            </Group>
+            <Group>
+              {files.map((file, index) => (
+                <Text key={index}>{file.name}</Text>
+              ))}
+            </Group>
+
+            <Group>
+              <FileButton
+                onChange={setFiles}
+                accept="application/pdf,image/png,image/jpeg,image/gif,image/webp"
+                form={'files'}
+                name={'files'}
+                multiple
+              >
+                {(props) => {
+                  if (transportation?.id) {
+                    return (
+                      <Stack>
+                        <Text
+                          size={'xs'}
+                        >{`${transportation.attachments ? transportation.attachments.length : 0} existing files`}</Text>
+                        <Button {...props}>{t('upload_more', 'Upload More')}</Button>
+                      </Stack>
+                    );
+                  } else {
+                    return <Button {...props}>{t('upload', 'Upload')}</Button>;
+                  }
+                }}
+              </FileButton>
+            </Group>
+          </Stack>
+        </Group>
+        <Group justify={'flex-end'}>
+          <Button type={'submit'} w={'min-content'}>
+            {t('save', 'Save')}
+          </Button>
+          <Button
+            type={'button'}
+            variant={'default'}
+            w={'min-content'}
+            onClick={() => {
+              onCancel();
+            }}
+          >
+            {t('cancel', 'Cancel')}
+          </Button>
+        </Group>
+      </Stack>
+    </form>
   );
 };

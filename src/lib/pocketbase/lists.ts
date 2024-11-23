@@ -7,8 +7,8 @@ export const loadCities = () => {
   });
 };
 
-export const countCities = async () => {
-  const { totalItems } = await pb.collection('cities').getList(1, 1);
+export const countPlaces = async () => {
+  const { totalItems } = await pb.collection('places').getList(1, 1);
   return totalItems;
 };
 
@@ -17,8 +17,8 @@ export const countAirports = async () => {
   return totalItems;
 };
 
-export const searchCities = (query: string) => {
-  return pb.collection('cities').getList(1, 10, {
+export const searchPlaces = (query: string) => {
+  return pb.collection('places').getList(1, 10, {
     filter: `name~"${query}"`,
   });
 };

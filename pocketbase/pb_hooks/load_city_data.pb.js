@@ -1,7 +1,7 @@
 routerAdd('POST', '/load-city-data', (c) => {
 
   const dao = $app.dao();
-  const collection = dao.findCollectionByNameOrId('cities');
+  const collection = dao.findCollectionByNameOrId('places');
   const cities = require('/lists/cities.json');
 
 
