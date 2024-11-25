@@ -99,7 +99,7 @@ export const GenericTransportationData = ({
           </Box>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
           <Text size="sm" c={'dimmed'}>
             {t('transportation.from', 'From')}
           </Text>
@@ -110,7 +110,7 @@ export const GenericTransportationData = ({
           <Text size="xs">{formatTime(i18n.language, transportation.departureTime)}</Text>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
           <Text size="sm" c={'dimmed'}>
             {t('transportation.to', 'To')}
           </Text>
@@ -121,7 +121,7 @@ export const GenericTransportationData = ({
           <Text size="xs">{formatTime(i18n.language, transportation.arrivalTime)}</Text>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('transportation.provider', 'Provider')}
           </Text>

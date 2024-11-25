@@ -1,4 +1,4 @@
-import { AppShell, Box, Burger, Group, rem } from '@mantine/core';
+import { AppShell, Box, Burger, Container, Group, rem } from '@mantine/core';
 import { useDisclosure, useDocumentTitle } from '@mantine/hooks';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './components/nav/Navbar.tsx';
@@ -23,12 +23,12 @@ function App() {
       bg={'var(--mantine-color-dark-light)'}
     >
       <AppShell.Header>
-        <Group h="100%" bg={'var(--mantine-color-dark-light)'}>
+        <Container size={'xl'} h={'100%'}>
           <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group>
             <Box component="div" id={'app-header'} />
           </Group>
-        </Group>
+        </Container>
       </AppShell.Header>
       <AppShell.Navbar>
         <Navbar
