@@ -4,7 +4,7 @@ import classes from './Navbar.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FishOne } from '../logo/FishOne.tsx';
 import { useClickOutside } from '@mantine/hooks';
-import { isAdmin } from '../../lib';
+import { isAdmin, logoutCurrentUser } from '../../lib';
 import { useTranslation } from 'react-i18next';
 
 interface NavbarLinkProps {
@@ -73,6 +73,7 @@ export function Navbar({ close }: NavbarProps) {
           <UnstyledButton
             onClick={() => {
               navigate('/profile');
+              close && close();
             }}
             className={classes.link}
             data-active={location.pathname === '/profile' || undefined}
@@ -86,8 +87,10 @@ export function Navbar({ close }: NavbarProps) {
 
         <Tooltip label={t('logout', 'Logout')} position="right" transitionProps={{ duration: 0 }}>
           <UnstyledButton
-            onClick={() => {
-              navigate('/profile');
+            onClick={async () => {
+              await logoutCurrentUser();
+              navigate(0);
+              close && close();
             }}
             className={classes.link}
             data-active={undefined}
