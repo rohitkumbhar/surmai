@@ -18,7 +18,7 @@ export const countAirports = async () => {
 };
 
 export const searchPlaces = (query: string) => {
-  return pb.collection('places').getList(1, 10, {
+  return pb.collection('places').getList(1, 20, {
     filter: `name~"${query}"`,
   });
 };

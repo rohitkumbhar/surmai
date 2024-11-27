@@ -5,10 +5,11 @@ import { searchPlaces } from '../../lib';
 import { nanoid } from 'nanoid';
 import { UseFormReturnType } from '@mantine/form';
 import { Destination } from '../../types/trips.ts';
+import { useTranslation } from 'react-i18next';
 
 export function DestinationSelect({ propName, form }: { propName: string; form: UseFormReturnType<unknown> }) {
+  const { t } = useTranslation();
   const currentValues = form.getValues();
-  const [opened, setOpened] = useState(false);
   const [search, setSearch] = useDebouncedState('', 200);
   const [searchResults, setSearchResults] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
@@ -17,17 +18,17 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
     currentValues ? (currentValues[propName] as Destination[]) || [] : []
   );
 
+  const combobox = useCombobox();
   const inputRef = useRef<HTMLInputElement>();
-  const dropdownRef = useClickOutside(() => setOpened(false));
-  const combobox = useCombobox({ opened });
+  const dropdownRef = useClickOutside(() => combobox.closeDropdown());
 
   useEffect(() => {
-    if (search?.length > 3) {
+    if (search?.length > 1) {
       setLoading(true);
       searchPlaces(search).then((results) => {
         setSearchResults(results.items as unknown as Destination[]);
         setLoading(false);
-        setOpened(true);
+        combobox.openDropdown();
       });
     }
   }, [search]);
@@ -62,7 +63,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
       }
     }
 
-    setOpened(false);
+    combobox.closeDropdown();
   };
 
   return (
@@ -70,8 +71,11 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
       <Combobox store={combobox} onOptionSubmit={handleValueSelect}>
         <Combobox.Target>
           <PillsInput
-            label="Destinations"
-            description="Enter the destinations in this trip e.g. San Jose, Guanacaste"
+            label={t('basic.trip_destinations', 'Destinations')}
+            description={t(
+              'basic.trip_destinations_description',
+              'Enter the destinations in this trip e.g. San Jose, Guanacaste'
+            )}
             withAsterisk
             required
             key={form.key(propName)}
@@ -107,19 +111,21 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
           </PillsInput>
         </Combobox.Target>
         <Combobox.Dropdown ref={dropdownRef}>
-          <Combobox.Options>
+          <Combobox.Options mah={300} style={{ overflowY: 'auto' }}>
             {loading && <Combobox.Empty>Loading....</Combobox.Empty>}
-            {!loading && options.length > 0 && options}
-            {!loading && options.length === 0 && (
+            {!loading && (
               <Combobox.Option value={'create_new'} key={'create_new'}>
                 <Group gap={'xs'}>
                   <Text size={'md'} fw={400}>
                     {search}
                   </Text>
-                  <Text size={'xs'} c={'dimmed'}>{`Create New Entry`}</Text>
+                  <Text size={'xs'} c={'dimmed'}>
+                    {t('basic.create_new_entry', 'Create New Entry')}
+                  </Text>
                 </Group>
               </Combobox.Option>
             )}
+            {!loading && options.length > 0 && options}
           </Combobox.Options>
         </Combobox.Dropdown>
       </Combobox>
