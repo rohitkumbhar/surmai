@@ -73,7 +73,7 @@ export const MyTrips = () => {
   return (
     <Container py="xl" size={'xl'}>
       <Header>
-        <Text p={'sm'} size="md" fw={700}>
+        <Text size={'md'} mt={'md'}>
           {t('all_trips', 'All Trips')}
         </Text>
       </Header>

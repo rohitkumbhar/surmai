@@ -48,12 +48,12 @@ export const ViewTrip = () => {
   return (
     <Container py={'sm'} size="xl">
       <Header>
-        <Text size={'md'} mt={'xs'}>
-          {trip?.name}
-        </Text>
-        <Text size={'sm'} visibleFrom={'sm'} c={'dimmed'}>
-          {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
-        </Text>
+        <Group mt={'md'}>
+          <Text size={'md'}>{trip?.name}</Text>
+          <Text size={'sm'} visibleFrom={'sm'} c={'dimmed'}>
+            {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
+          </Text>
+        </Group>
       </Header>
 
       {online && offlineCacheTimestamp && showAlert && (

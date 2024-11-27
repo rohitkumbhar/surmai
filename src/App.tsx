@@ -14,7 +14,7 @@ function App() {
         height: { base: rem('60px'), md: rem('60px'), lg: rem('60px') },
       }}
       navbar={{
-        width: { base: rem('80px') },
+        width: { base: rem('1vw'), sm: rem('80px') },
         breakpoint: 'sm',
         collapsed: { mobile: !opened },
       }}
@@ -24,8 +24,8 @@ function App() {
     >
       <AppShell.Header>
         <Container size={'xl'} h={'100%'}>
-          <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
           <Group>
+            <Burger mt={'md'} opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Box component="div" id={'app-header'} />
           </Group>
         </Container>

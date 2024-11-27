@@ -12,7 +12,7 @@ export const Settings = () => {
   return (
     <Container size={'xl'}>
       <Header>
-        <Text size="md" fw={700}>
+        <Text size={'md'} mt={'md'}>
           {t('site_settings', 'Site Settings')}
         </Text>
       </Header>

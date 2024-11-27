@@ -1,5 +1,5 @@
 .navbar {
-  width: rem(80px);
+  /*width: rem(80px);*/
   height: 100%;
   padding: var(--mantine-spacing-md);
   display: flex;
@@ -13,13 +13,19 @@
 }
 
 .link {
-  width: rem(50px);
+  /*width: rem(50px);*/
   height: rem(50px);
   border-radius: var(--mantine-radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--mantine-color-white);
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    align-items: center;
+    padding-left: rem(10px);
+    justify-content: flex-start;
+  }
 
   &:hover {
     background-color: var(--mantine-primary-color-7);

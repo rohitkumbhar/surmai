@@ -1,14 +1,17 @@
 # Surmai
-
-Surmai is a personal travel planning application.
+Surmai is a personal travel planning application. 
 
 # Rationale
-
 As avid travellers, we (me & SO) split up the planning tasks e.g. booking plane tickets and
 making dinner reservations etc, with the receipts / confirmation emails being in our own
-respective inboxes. These emails were tagged but were not necessarily organized in the order in
-which things would happen. It was also a huge pain to find the right email at the right time, especially
+respective inboxes. These emails were tagged but were not necessarily organized chronologically. 
+It was also a huge pain to find the right email at the right time, especially
 given some low bandwidth connections.
+
+I've been a Backend software engineer for the last ~20 years. My last professional interaction with Javascript was
+pre jQuery days when Internet Explorer 5 demanded we test the `navigator` every time something was to be written. I have
+been exposed to the "new" Javascript at my current job as a necessity and decided to use this project as a learning
+opportunity.
 
 Surmai was built to solve 3 particular challenges while planning a trip:
 
@@ -17,7 +20,6 @@ Surmai was built to solve 3 particular challenges while planning a trip:
 3. Keep the data private.
 
 # Features
-
 - Organize a trip in one place
 - Allow collaboration between multiple users
 - Offline access
@@ -58,42 +60,33 @@ docker-compose build
 docker-compose up -d
 ```
 
-# Technical Details
+# Credits
 
-I've been a Backend software engineer for the last ~20 years. My last professional interaction with Javascript was
-pre jQuery days when Internet Explorer 5 demanded we test the `navigator` every time something was to be written. I have
-been exposed to the "new" Javascript at my current job as a necessity and decided to use this project as a learning
-opportunity.
-
-## Backend
-
+## PocketBase
 Surmai uses [PocketBase](https://pocketbase.io/) as it's backend platform. The API is great and the documentation is
 first-class. The PocketBase Admin UI also allows for configuration that is not available from within Surmai (yet).
 
-### Why not SupaBase/AppWrite etc?
-
-They will work honestly but there is some heft involved for a self-hosted, personal application.
-
-## Frontend
-
+## Mantine
 Surmai is a React based SPA built using the absolutely phenomenal library [Mantine](https://mantine.dev/). Vite for
 building and prettier for formatting.
 
-### Why so ugly tho?
+## Icon
+[Fish SVG Vector](https://www.svgrepo.com/svg/280960/fish)
 
-~20 years as a backend dev, I have a tendency to lean towards function over form.
-
-### Why not $other_thing?
-
-I wanted to learn React, that's about it.
-
-# Bundled Data
-
-## Airports
+## Bundled Data
+### Airports
 From [OurAirports](https://ourairports.com/data/)
 
-## Cities
+### Cities
 From [countries-states-cities-database](https://github.com/dr5hn/countries-states-cities-database)
 
-## Airlines
+### Airlines
 From [airlines-logos-dataset](https://github.com/imgmongelli/airlines-logos-dataset)
+
+
+# Possibly FAQ
+### Why so ugly tho?
+~20 years as a backend dev, I have a tendency to lean towards function over form.
+
+### Why not ${other_thing}?
+I wanted to learn React/Typescript, that's about it.

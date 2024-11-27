@@ -16,7 +16,7 @@ export const UserProfile = () => {
   return (
     <Container size={'xl'}>
       <Header>
-        <Text size="md" p={'sm'}>
+        <Text size={'md'} mt={'md'}>
           {t('user_profile', 'User Profile')}
         </Text>
       </Header>
