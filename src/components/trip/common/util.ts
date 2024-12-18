@@ -35,3 +35,25 @@ export const getNumberOfDays = (start: Date, end: Date): string => {
   const days = e.diff(s, 'days', false);
   return `${days} day(s)`;
 };
+
+export const downloadAsBase64 = async (url: string) => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const reader = new FileReader();
+  await new Promise((resolve, reject) => {
+    reader.onload = resolve;
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+
+  const readerResult = reader.result;
+  if (!readerResult) {
+    return null;
+  }
+
+  if (typeof readerResult === 'string') {
+    return readerResult;
+  }
+
+  return readerResult;
+};

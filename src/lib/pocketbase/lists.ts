@@ -25,6 +25,6 @@ export const searchPlaces = (query: string) => {
 
 export const searchAirports = (query: string) => {
   return pb.collection('airports').getList(1, 10, {
-    filter: `(name~"${query}" || iata_code~"${query}")`,
+    filter: `(name~"${query}" || iataCode~"${query}")`,
   });
 };

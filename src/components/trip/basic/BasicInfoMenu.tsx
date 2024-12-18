@@ -1,7 +1,15 @@
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { Button, Menu, rem, Text } from '@mantine/core';
-import { IconChevronDown, IconDownload, IconPencil, IconPhoto, IconTrash, IconUsers } from '@tabler/icons-react';
+import {
+  IconChevronDown,
+  IconDownload,
+  IconPackageExport,
+  IconPencil,
+  IconPhoto,
+  IconTrash,
+  IconUsers,
+} from '@tabler/icons-react';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
 import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
@@ -32,6 +40,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               modal: 'editBasicInfoForm',
               title: t('edit_trip', 'Edit Trip'),
               radius: 'md',
+              size: 'auto',
               withCloseButton: false,
               fullScreen: isMobile,
               innerProps: {
@@ -117,6 +126,24 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           leftSection={<IconDownload style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('offline', 'Enable Offline')}
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item
+          onClick={() => {
+            openContextModal({
+              modal: 'exportTripModal',
+              title: t('basic.export', 'Export'),
+              withCloseButton: false,
+              fullScreen: isMobile,
+              size: 'lg',
+              innerProps: {
+                trip: trip,
+              },
+            });
+          }}
+          leftSection={<IconPackageExport style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        >
+          {t('basic.export', 'Export')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item

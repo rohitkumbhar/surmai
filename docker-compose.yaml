@@ -4,7 +4,7 @@ volumes:
 services:
   surmai:
     container_name: surmai_server
-    image: surmai:latest
+    image: surmai:golang-build
     build:
       dockerfile: ./Dockerfile
     volumes:

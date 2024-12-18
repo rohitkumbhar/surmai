@@ -19,10 +19,6 @@ export const AirportSelect = ({
   withAsterisk: boolean;
 }) => {
   const currentValues = form.getValues();
-
-  // @ts-expect-error its ok
-  console.log('currva', currentValues[propName]);
-
   const [search, setSearch] = useDebouncedState('', 200);
   const [searchResults, setSearchResults] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
@@ -43,14 +39,14 @@ export const AirportSelect = ({
   }, [search]);
 
   const options = searchResults
-    .filter((item) => item.iata_code && item.iata_code !== '')
+    .filter((item) => item.iataCode && item.iataCode !== '')
     .map((item) => (
       <Combobox.Option value={item.id} key={item.id}>
         <Group gap={'xs'}>
           <Text size={'md'} fw={400}>
             {item.name}
           </Text>
-          <Text size={'xs'} c={'dimmed'}>{`${item.iata_code}`}</Text>
+          <Text size={'xs'} c={'dimmed'}>{`${item.iataCode}`}</Text>
         </Group>
       </Combobox.Option>
     ));
@@ -62,8 +58,8 @@ export const AirportSelect = ({
     } else {
       const selection = searchResults.find((item) => item.id === val);
       if (selection) {
-        setValue(selection.iata_code);
-        form.setFieldValue(propName, selection.iata_code);
+        setValue(selection.iataCode);
+        form.setFieldValue(propName, selection.iataCode);
       }
     }
     combobox.closeDropdown();
