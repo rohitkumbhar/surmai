@@ -7,6 +7,13 @@ export const loadCities = () => {
   });
 };
 
+export const loadAirports = () => {
+  return pbAdmin.send('/load-airport-data', {
+    method: 'POST',
+    signal: AbortSignal.timeout(5 * 60 * 1000),
+  });
+};
+
 export const countPlaces = async () => {
   const { totalItems } = await pb.collection('places').getList(1, 1);
   return totalItems;

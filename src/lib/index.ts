@@ -46,7 +46,7 @@ export {
   deleteActivity,
 } from './pocketbase/activities';
 
-export { loadCities, countPlaces, countAirports, searchPlaces, searchAirports } from './pocketbase/lists';
+export { loadCities, loadAirports, countPlaces, countAirports, searchPlaces, searchAirports } from './pocketbase/lists';
 
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {
