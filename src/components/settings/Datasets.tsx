@@ -89,7 +89,7 @@ export const Datasets = () => {
         <div>
           <Text>World Airports</Text>
           <Text size="sm" c="dimmed">
-            A list of medium and large airports around the world. This list is automatically loaded on setup.
+            A list of medium and large airports around the world.
           </Text>
           {/*<Text size="sm" c="dimmed">
             Currently loaded airports: {airportCount || 0}
