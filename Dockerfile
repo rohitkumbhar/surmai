@@ -33,20 +33,11 @@ RUN go build -o surmai-backend
 
 FROM alpine:3.21
 
-#ARG PB_VERSION=0.22.22
-
 RUN apk add --no-cache \
     unzip \
     ca-certificates
 
-# download and unzip PocketBase
-#ADD https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip /tmp/pb.zip
-#RUN unzip /tmp/pb.zip -d /pb/
-COPY pocketbase/init.sh /pb/init.sh
-#COPY pocketbase/pb_migrations /pb_migrations
-#COPY pocketbase/pb_hooks /pb_hooks
-#COPY pocketbase/lists /lists
-
+COPY backend/init.sh /pb/init.sh
 COPY backend/datasets /datasets
 COPY --from=frontend /surmai/dist /pb_public
 COPY --from=backend /build/surmai-backend /pb/surmai-backend
