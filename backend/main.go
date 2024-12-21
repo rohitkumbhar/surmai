@@ -12,13 +12,15 @@ import (
 	"strings"
 )
 
-//TIP <p>To run your code, right-click the code and select <b>Run</b>.</p> <p>Alternatively, click
-// the <icon src="AllIcons.Actions.Execute"/> icon in the gutter and select the <b>Run</b> menu item from here.</p>
-
 func main() {
-	app := pocketbase.New()
+
 	// loosely check if it was executed using "go run"
 	isGoRun := strings.HasPrefix(os.Args[0], os.TempDir())
+
+	app := pocketbase.NewWithConfig(pocketbase.Config{
+		DefaultDev:     isGoRun,
+		DefaultDataDir: os.Getenv("PB_DATA_DIRECTORY"),
+	})
 
 	migratecmd.MustRegister(app, app.RootCmd, migratecmd.Config{
 		// enable auto creation of migration files when making collection changes in the Dashboard
@@ -30,7 +32,7 @@ func main() {
 		se.Router.POST("/impersonate", R.ImpersonateAction).Bind(apis.RequireSuperuserAuth())
 		se.Router.POST("/load-city-data", R.LoadPlacesDataset).Bind(apis.RequireSuperuserAuth())
 		se.Router.POST("/load-airport-data", R.LoadAirportsDataset).Bind(apis.RequireSuperuserAuth())
-		
+
 		// serves static files from the provided public dir (if exists)
 		se.Router.GET("/{path...}", apis.Static(os.DirFS("./pb_public"), false))
 

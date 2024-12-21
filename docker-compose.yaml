@@ -15,3 +15,4 @@ services:
     environment:
       SURMAI_ADMIN_EMAIL: admin@surmai.net
       SURMAI_ADMIN_PASSWORD: ChangeMe123#@!
+      PB_DATA_DIRECTORY: /pb_data
