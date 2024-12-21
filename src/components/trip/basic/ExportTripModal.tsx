@@ -4,44 +4,39 @@ import { Button, Center, Container } from '@mantine/core';
 import { useState } from 'react';
 import { exportTripData } from '../../../lib';
 
-
 export const ExportTripModal = ({
-                                /*  context,
+  /*  context,
                                   id,*/
-                                  innerProps,
-                                }: ContextModalProps<{
+  innerProps,
+}: ContextModalProps<{
   trip: Trip;
 }>) => {
   const { trip } = innerProps;
 
-
   const [downloadLink, setDownloadLink] = useState<string | undefined>();
 
   const prepareExport = () => {
-
     exportTripData(trip.id).then((data) => {
       prepareDownload(data);
     });
   };
 
   const replacer = (key: string, value: any) => {
-
-
     console.log('key ==> ', key);
 
     if (key === 'attachmentData') {
-      console.log("vvvv", value);
+      console.log('vvvv', value);
 
       for (const [k, v] of Object.entries(value)) {
         console.log('k =>', k);
         console.log('v =>', v);
         console.log('json-v =>', JSON.stringify(v));
       }
- }
+    }
     return value;
   };
 
-  const prepareDownload = (tripData : any) => {
+  const prepareDownload = (tripData: any) => {
     console.log('download data => ', tripData);
 
     console.log('download data => ', JSON.stringify(tripData, replacer));
@@ -61,12 +56,16 @@ export const ExportTripModal = ({
     setDownloadLink(dataUrl);
   };
 
-
-  return (<Container>
-    <Center>
-      {!downloadLink && <Button onClick={prepareExport}>Prepare</Button>}
-      {downloadLink &&
-        <Button component={'a'} href={downloadLink} download={`trip-${trip.name}-${trip.id}.json`}>Download</Button>}
-    </Center>
-  </Container>);
+  return (
+    <Container>
+      <Center>
+        {!downloadLink && <Button onClick={prepareExport}>Prepare</Button>}
+        {downloadLink && (
+          <Button component={'a'} href={downloadLink} download={`trip-${trip.name}-${trip.id}.json`}>
+            Download
+          </Button>
+        )}
+      </Center>
+    </Container>
+  );
 };

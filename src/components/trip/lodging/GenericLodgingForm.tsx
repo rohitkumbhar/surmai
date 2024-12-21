@@ -40,7 +40,7 @@ export const GenericLodgingForm = ({
   });
 
   const handleFormSubmit = (values: LodgingFormSchema) => {
-    const data  = {
+    const data = {
       type: type,
       name: values.name,
       address: values.address,

@@ -12,12 +12,12 @@ import { AirportSelect } from './AirportSelect.tsx';
 import { fakeAsUtcString } from '../common/util.ts';
 
 export const GenericTransportationModeForm = ({
-                                                transportationType,
-                                                trip,
-                                                transportation,
-                                                onSuccess,
-                                                onCancel,
-                                              }: {
+  transportationType,
+  trip,
+  transportation,
+  onSuccess,
+  onCancel,
+}: {
   transportationType: string;
   trip: Trip;
   transportation?: Transportation;
@@ -45,8 +45,7 @@ export const GenericTransportationModeForm = ({
 
   // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
-
-    const payload : CreateTransportation = {
+    const payload: CreateTransportation = {
       type: transportationType,
       origin: values.origin,
       destination: values.destination,
@@ -54,7 +53,7 @@ export const GenericTransportationModeForm = ({
         value: values.cost,
         currency: values.currencyCode,
       },
-      departureTime:  fakeAsUtcString(values.departureTime),
+      departureTime: fakeAsUtcString(values.departureTime),
       arrivalTime: fakeAsUtcString(values.arrivalTime),
       trip: trip.id,
       metadata: {

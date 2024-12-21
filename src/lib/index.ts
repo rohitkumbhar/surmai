@@ -35,7 +35,7 @@ export {
   updateLodgingEntry,
   deleteLodging,
   loadEverything,
-  exportTripData
+  exportTripData,
 } from './pocketbase/trips';
 
 export {

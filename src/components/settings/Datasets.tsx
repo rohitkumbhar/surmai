@@ -39,9 +39,7 @@ export const Datasets = () => {
     modals.openConfirmModal({
       title: 'Loading Airports Dataset',
       children: (
-        <Text size="sm">
-          This action will load airport information into your database and will take a long time.
-        </Text>
+        <Text size="sm">This action will load airport information into your database and will take a long time.</Text>
       ),
       labels: { confirm: 'Confirm', cancel: 'Cancel' },
       onCancel: () => console.log('Cancel'),
@@ -76,13 +74,15 @@ export const Datasets = () => {
             Currently loaded places: {cityCount || 0}
           </Text>*/}
         </div>
-        {cityCount > 0 && <Text component={'div'} size="md">
-           {cityCount || 0}
-          <Text size="sm" c="dimmed">
-            Places Available
+        {cityCount > 0 && (
+          <Text component={'div'} size="md">
+            {cityCount || 0}
+            <Text size="sm" c="dimmed">
+              Places Available
+            </Text>
           </Text>
-        </Text> }
-        {cityCount === 0 && <Button onClick={cityLoadConfirmationModal}>Load Places</Button> }
+        )}
+        {cityCount === 0 && <Button onClick={cityLoadConfirmationModal}>Load Places</Button>}
       </Group>
 
       <Group justify="space-between" className={classes.item} gap="xl" key={'airports_dataset'}>
@@ -95,13 +95,15 @@ export const Datasets = () => {
             Currently loaded airports: {airportCount || 0}
           </Text>*/}
         </div>
-        {airportCount > 0 && <Text component={'div'} size="md">
-          {airportCount || 0}
-          <Text size="sm" c="dimmed">
-            Airports Available
+        {airportCount > 0 && (
+          <Text component={'div'} size="md">
+            {airportCount || 0}
+            <Text size="sm" c="dimmed">
+              Airports Available
+            </Text>
           </Text>
-        </Text> }
-        {airportCount === 0 && <Button onClick={airportsLoadConfirmationModal}>Load Airports</Button> }
+        )}
+        {airportCount === 0 && <Button onClick={airportsLoadConfirmationModal}>Load Airports</Button>}
       </Group>
     </Card>
   );

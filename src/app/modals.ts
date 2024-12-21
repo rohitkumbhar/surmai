@@ -9,7 +9,7 @@ export const modals = {
   uploadImageForm: UploadImageForm,
   collaboratorsForm: Collaborators,
   attachmentViewer: AttachmentViewer,
-  exportTripModal: ExportTripModal
+  exportTripModal: ExportTripModal,
 };
 
 declare module '@mantine/modals' {

@@ -15,7 +15,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState<Destination[]>(
     // @ts-expect-error Existing values match type
-    currentValues ? (currentValues[propName] as Destination[]) || [] : [],
+    currentValues ? (currentValues[propName] as Destination[]) || [] : []
   );
 
   const combobox = useCombobox();

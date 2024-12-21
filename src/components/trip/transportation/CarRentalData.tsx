@@ -83,9 +83,7 @@ export const CarRentalData = ({
             {t('transportation.drop_off', 'Drop Off')}
           </Text>
           <Text size="sm">{rental.destination}</Text>
-          <Text size="sm">
-            {`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(rental.arrivalTime)}`}
-          </Text>
+          <Text size="sm">{`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(rental.arrivalTime)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>

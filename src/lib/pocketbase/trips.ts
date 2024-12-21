@@ -221,25 +221,22 @@ export const loadEverything = (tripId: string) => {
     });
 };
 
-type ExportedTrip = Trip & { coverImageData: string | ArrayBuffer | null }
-type ExportedTransportation = Transportation & { attachmentData: object }
+type ExportedTrip = Trip & { coverImageData: string | ArrayBuffer | null };
+type ExportedTransportation = Transportation & { attachmentData: object };
 
 export const exportTripData = async (tripId: string) => {
-
   // trip
-  const trip = await getTrip(tripId) as ExportedTrip;
+  const trip = (await getTrip(tripId)) as ExportedTrip;
   if (trip.coverImage) {
     const coverImageUrl = getAttachmentUrl(trip, trip.coverImage);
     trip.coverImageData = await downloadAsBase64(coverImageUrl);
   }
 
-
   // transportations
   const transportations = await listTransportations(tripId);
 
-  const exportedTransportations: ExportedTransportation[] = []
+  const exportedTransportations: ExportedTransportation[] = [];
   transportations.forEach((tr) => {
-
     const exportedAttachments: { [key: string]: string | ArrayBuffer | null } = {};
     tr.attachments?.forEach(async (attachment) => {
       const attachmentUrl = getAttachmentUrl(tr, attachment);
@@ -247,8 +244,8 @@ export const exportTripData = async (tripId: string) => {
     });
     exportedTransportations.push({
       ...tr,
-      attachmentData: exportedAttachments
-    })
+      attachmentData: exportedAttachments,
+    });
   });
 
   return { trip: trip, transportations: exportedTransportations };
