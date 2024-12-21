@@ -1,10 +1,7 @@
 import dayjs from 'dayjs';
 
-export const formatTime = (language: string, input: Date) => {
-  return input.toLocaleTimeString(language, {
-    hour: '2-digit',
-    minute: '2-digit',
-  });
+export const formatTime = (input: Date) => {
+  return `${String(input.getHours()).padStart(2,'0')}:${String(input.getMinutes()).padStart(2,'0')}`
 };
 
 export const formatDate = (language: string, input: Date) => {
@@ -15,26 +12,33 @@ export const formatDate = (language: string, input: Date) => {
   });
 };
 
-export const getTravelTime = (start: Date, end: Date): string => {
-  const s = dayjs(start);
-  const e = dayjs(end);
-  const hoursDiff = e.diff(s, 'hours', false);
-  const minutesDiff = e.diff(s, 'minutes', false);
-  const remainingMinutes = minutesDiff - hoursDiff * 60;
 
-  if (remainingMinutes === 0) {
-    return `${hoursDiff} hour(s)`;
+export const fakeAsUtcString = (date: Date | undefined): string => {
+
+  if (!date) {
+    return ''
   }
 
-  return `${hoursDiff} hour(s) & ${remainingMinutes} minutes`;
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:00.000Z`;
 };
 
-export const getNumberOfDays = (start: Date, end: Date): string => {
-  const s = dayjs(start);
-  const e = dayjs(end);
-  const days = e.diff(s, 'days', false);
-  return `${days} day(s)`;
-};
+export const convertSavedToBrowserDate = (dateString: string) => {
+
+  const d = dayjs(dateString, 'UTC').tz('UTC');
+  const savedDate =  new Date(Date.parse(dateString))
+  const convertedDate = new Date()
+  convertedDate.setFullYear(savedDate.getFullYear())
+  convertedDate.setMonth(savedDate.getMonth())
+  convertedDate.setDate(savedDate.getDate())
+  convertedDate.setHours(d.hour())
+  convertedDate.setMinutes(savedDate.getMinutes())
+  convertedDate.setSeconds(0)
+  convertedDate.setMilliseconds(0)
+
+  console.log(`savedDate.getHours() = ${convertedDate.getHours()}`);
+
+  return convertedDate
+}
 
 export const downloadAsBase64 = async (url: string) => {
   const response = await fetch(url);

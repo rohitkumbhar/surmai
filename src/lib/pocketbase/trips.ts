@@ -10,7 +10,7 @@ import {
   TripResponse,
 } from '../../types/trips.ts';
 import { listActivities } from './activities.ts';
-import { downloadAsBase64 } from '../../components/trip/common/util.ts';
+import { convertSavedToBrowserDate, downloadAsBase64 } from '../../components/trip/common/util.ts';
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
@@ -61,8 +61,8 @@ export const listTransportations = async (tripId: string): Promise<Transportatio
   return results.items.map((entry) => {
     return {
       ...entry,
-      departureTime: new Date(Date.parse(entry.departureTime)),
-      arrivalTime: new Date(Date.parse(entry.arrivalTime)),
+      departureTime: convertSavedToBrowserDate(entry.departureTime),
+      arrivalTime: convertSavedToBrowserDate(entry.arrivalTime),
     };
   });
 };
@@ -148,8 +148,8 @@ export const listLodgings = async (tripId: string): Promise<Lodging[]> => {
   return results.items.map((entry) => {
     return {
       ...entry,
-      startDate: new Date(Date.parse(entry.startDate)),
-      endDate: new Date(Date.parse(entry.endDate)),
+      startDate: convertSavedToBrowserDate(entry.startDate),
+      endDate: convertSavedToBrowserDate(entry.endDate),
     };
   });
 };

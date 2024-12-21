@@ -90,7 +90,7 @@ export const GenericActivityData = ({
             {t('activity.start_date', 'Date/Time')}
           </Text>
           <Title size="sm">
-            {`${formatDate(i18n.language, activity.startDate)} ${formatTime(i18n.language, activity.startDate)}`}
+            {`${formatDate(i18n.language, activity.startDate)} ${formatTime(activity.startDate)}`}
           </Title>
         </Grid.Col>
 

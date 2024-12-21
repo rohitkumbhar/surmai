@@ -107,7 +107,7 @@ export const GenericTransportationData = ({
             {transportation.origin}
           </Title>
           <Text size="xs">{formatDate(i18n.language, transportation.departureTime)}</Text>
-          <Text size="xs">{formatTime(i18n.language, transportation.departureTime)}</Text>
+          <Text size="xs">{formatTime(transportation.departureTime)}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
@@ -118,7 +118,7 @@ export const GenericTransportationData = ({
             {transportation.destination}
           </Title>
           <Text size="xs">{formatDate(i18n.language, transportation.arrivalTime)}</Text>
-          <Text size="xs">{formatTime(i18n.language, transportation.arrivalTime)}</Text>
+          <Text size="xs">{formatTime(transportation.arrivalTime)}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>

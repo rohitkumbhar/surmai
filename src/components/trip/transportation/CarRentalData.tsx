@@ -74,7 +74,7 @@ export const CarRentalData = ({
           </Text>
           <Text size="sm">{rental.origin}</Text>
           <Text size="sm">
-            {`${formatDate(i18n.language, rental.departureTime)} ${formatTime(i18n.language, rental.departureTime)}`}
+            {`${formatDate(i18n.language, rental.departureTime)} ${formatTime(rental.departureTime)}`}
           </Text>
         </Grid.Col>
 
@@ -84,7 +84,7 @@ export const CarRentalData = ({
           </Text>
           <Text size="sm">{rental.destination}</Text>
           <Text size="sm">
-            {`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(i18n.language, rental.arrivalTime)}`}
+            {`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(rental.arrivalTime)}`}
           </Text>
         </Grid.Col>
 

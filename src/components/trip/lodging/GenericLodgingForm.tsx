@@ -7,6 +7,7 @@ import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
 import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '../../../lib';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { fakeAsUtcString } from '../common/util.ts';
 
 export const GenericLodgingForm = ({
   trip,
@@ -39,12 +40,12 @@ export const GenericLodgingForm = ({
   });
 
   const handleFormSubmit = (values: LodgingFormSchema) => {
-    const data = {
+    const data  = {
       type: type,
       name: values.name,
       address: values.address,
-      startDate: values.startDate,
-      endDate: values.endDate,
+      startDate: fakeAsUtcString(values.startDate),
+      endDate: fakeAsUtcString(values.endDate),
       confirmationCode: values.confirmationCode,
       trip: trip.id,
       cost: {
@@ -55,8 +56,7 @@ export const GenericLodgingForm = ({
 
     if (lodging?.id) {
       // update
-      console.log('updating');
-      updateLodgingEntry(lodging.id, data as CreateLodging).then((result) => {
+      updateLodgingEntry(lodging.id, data as unknown as CreateLodging).then((result) => {
         if (files.length > 0) {
           saveLodgingAttachments(result.id, files).then(() => {
             onSuccess();
@@ -66,7 +66,7 @@ export const GenericLodgingForm = ({
         }
       });
     } else {
-      createLodgingEntry(data as CreateLodging).then((result) => {
+      createLodgingEntry(data as unknown as CreateLodging).then((result) => {
         if (files.length > 0) {
           saveLodgingAttachments(result.id, files).then(() => {
             onSuccess();
