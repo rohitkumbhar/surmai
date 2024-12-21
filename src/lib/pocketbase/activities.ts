@@ -1,5 +1,6 @@
 import { Activity, CreateActivity } from '../../types/trips.ts';
 import { pb } from './pocketbase.ts';
+import { convertSavedToBrowserDate } from '../../components/trip/common/util.ts';
 
 export const listActivities = async (tripId: string): Promise<Activity[]> => {
   const results = await pb.collection('activities').getList(1, 50, {
@@ -11,7 +12,7 @@ export const listActivities = async (tripId: string): Promise<Activity[]> => {
   return results.items.map((entry) => {
     return {
       ...entry,
-      startDate: new Date(Date.parse(entry.startDate)),
+      startDate: convertSavedToBrowserDate(entry.startDate),
     };
   });
 };

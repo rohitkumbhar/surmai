@@ -7,6 +7,7 @@ import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { createActivityEntry, saveActivityAttachments, updateActivityEntry } from '../../../lib';
+import { fakeAsUtcString } from '../common/util.ts';
 
 export const GenericActivityForm = ({
   trip,
@@ -39,7 +40,7 @@ export const GenericActivityForm = ({
       name: values.name,
       description: values.description,
       address: values.address,
-      startDate: values.startDate,
+      startDate: fakeAsUtcString(values.startDate),
       trip: trip.id,
       cost: {
         value: values.cost,
