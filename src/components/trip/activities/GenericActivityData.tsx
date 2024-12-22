@@ -1,5 +1,5 @@
 import { Activity, Trip } from '../../../types/trips.ts';
-import { Grid, Modal, Text, Title } from '@mantine/core';
+import { Grid, Modal, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
@@ -74,18 +74,16 @@ export const GenericActivityData = ({
       </Modal>
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('activity.start_date', 'Date/Time')}
           </Text>
-          <Title size="sm">
-            {`${formatDate(i18n.language, activity.startDate)} ${formatTime(activity.startDate)}`}
-          </Title>
+          <Text size="sm">{`${formatDate(i18n.language, activity.startDate)} ${formatTime(activity.startDate)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 4 }}>
-          <Title size="xs" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.name', 'Name')}
-          </Title>
+          </Text>
           <Text size="md">{activity.name}</Text>
           <Text size="sm" c={'dimmed'}>
             {activity.description}
@@ -93,19 +91,17 @@ export const GenericActivityData = ({
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 3 }}>
-          <Title size="xs" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.address', 'Address')}
-          </Title>
+          </Text>
           <Text size="md">{activity.address}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Title size="md">
-            {activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : 'Unknown'}
-          </Title>
+          <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
       <Attachments

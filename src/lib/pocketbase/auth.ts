@@ -75,7 +75,7 @@ export const createUserWithPassword = async ({
 };
 
 export const isAdmin = () => {
-  return pbAdmin.authStore.isAdmin && pbAdmin.authStore.isValid;
+  return pbAdmin.authStore.isSuperuser && pbAdmin.authStore.isValid;
 };
 
 export const getUserByEmail = (email: string) => {

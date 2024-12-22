@@ -59,7 +59,7 @@ export const CarRentalData = ({
         <Grid.Col span={{ base: 12, sm: 1, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'sm'}>
             <Tooltip label={t(`transportation_type_${rental.type}`, rental.type)}>
-              <IconArticle size={'sm'} stroke={1} />
+              <IconArticle size={'sm'} stroke={0.5} />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'sm'}>
@@ -87,25 +87,23 @@ export const CarRentalData = ({
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('transportation.provider', 'Provider')}
           </Text>
-          <Title size="md">{rental.metadata.rentalCompany}</Title>
+          <Text size="md">{rental.metadata.rentalCompany}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('transportation.reservation', 'Reservation')}
           </Text>
-          <Title size="md">{rental.metadata.confirmationCode || 'Unknown'}</Title>
+          <Text size="md">{rental.metadata.confirmationCode || 'Unknown'}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Title size="md">
-            {rental.cost.value ? `${rental.cost.value} ${rental.cost.currency || ''}` : 'Unknown'}
-          </Title>
+          <Text size="md">{rental.cost.value ? `${rental.cost.value} ${rental.cost.currency || ''}` : 'Unknown'}</Text>
         </Grid.Col>
       </Grid>
       <Attachments

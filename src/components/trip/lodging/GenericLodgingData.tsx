@@ -87,7 +87,7 @@ export const GenericLodgingData = ({
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`lodging.${lodging.type}`, lodging.type)}>
-              <TypeIcon size={'sm'} stroke={1} />
+              <TypeIcon size={'xs'} stroke={0.5} />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
@@ -96,16 +96,16 @@ export const GenericLodgingData = ({
           </Box>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.check_in', 'Check-In')}
           </Text>
           <Text size="md">{`${formatDate(i18n.language, lodging.startDate)}`}</Text>
           <Text size="md">{`${formatTime(lodging.startDate)}`}</Text>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.check_out', 'Check-Out')}
           </Text>
           <Text size="md">{`${formatDate(i18n.language, lodging.endDate)}`}</Text>
@@ -113,31 +113,29 @@ export const GenericLodgingData = ({
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Title size="xs" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.name', 'Name')}
-          </Title>
+          </Text>
           <Text size="md">{lodging.name}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Title size="xs" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.address', 'Address')}
-          </Title>
+          </Text>
           <Text size="md">{lodging.address}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('lodging.confirmation_code', 'Confirmation Code')}
           </Text>
-          <Title size="md">{lodging.confirmationCode || 'Unknown'}</Title>
+          <Text size="md">{lodging.confirmationCode || ''}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Title size="md">
-            {lodging.cost?.value ? `${lodging.cost.value} ${lodging.cost.currency || ''}` : 'Unknown'}
-          </Title>
+          <Text size="md">{lodging.cost?.value ? `${lodging.cost.value} ${lodging.cost.currency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
       <Attachments

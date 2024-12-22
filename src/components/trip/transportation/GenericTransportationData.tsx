@@ -88,7 +88,7 @@ export const GenericTransportationData = ({
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation.${transportation.type}`, `transportation.${transportation.type}`)}>
-              <TypeIcon size={'sm'} stroke={1} />
+              <TypeIcon size={'xs'} stroke={0.5} />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
@@ -100,49 +100,43 @@ export const GenericTransportationData = ({
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('transportation.from', 'From')}
           </Text>
-          <Title size="md" fw={400}>
-            {transportation.origin}
-          </Title>
+          <Text size="md">{transportation.origin}</Text>
           <Text size="xs">{formatDate(i18n.language, transportation.departureTime)}</Text>
           <Text size="xs">{formatTime(transportation.departureTime)}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('transportation.to', 'To')}
           </Text>
-          <Title size="md" fw={400}>
-            {transportation.destination}
-          </Title>
+          <Text size="md">{transportation.destination}</Text>
           <Text size="xs">{formatDate(i18n.language, transportation.arrivalTime)}</Text>
           <Text size="xs">{formatTime(transportation.arrivalTime)}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('transportation.provider', 'Provider')}
           </Text>
-          <Title size="md">{transportation.metadata.provider}</Title>
+          <Text size="md">{transportation.metadata.provider}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('transportation.reservation', 'Reservation')}
           </Text>
-          <Title size="md">{transportation.metadata.reservation || 'Unknown'}</Title>
+          <Text size="md">{transportation.metadata.reservation || ''}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Title size="md">
-            {transportation.cost.value
-              ? `${transportation.cost.value} ${transportation.cost.currency || ''}`
-              : 'Unknown'}
-          </Title>
+          <Text size="md">
+            {transportation.cost.value ? `${transportation.cost.value} ${transportation.cost.currency || ''}` : ''}
+          </Text>
         </Grid.Col>
       </Grid>
       <Attachments

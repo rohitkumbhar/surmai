@@ -51,7 +51,7 @@ export { loadCities, loadAirports, countPlaces, countAirports, searchPlaces, sea
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {
     year: 'numeric',
-    month: 'long',
+    month: 'short',
     day: 'numeric',
   });
 };
