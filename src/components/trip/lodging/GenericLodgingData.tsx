@@ -104,7 +104,7 @@ export const GenericLodgingData = ({
           <Text size="md">{`${formatTime(lodging.startDate)}`}</Text>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('lodging.check_out', 'Check-Out')}
           </Text>
@@ -112,7 +112,7 @@ export const GenericLodgingData = ({
           <Text size="md">{`${formatTime(lodging.endDate)}`}</Text>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Title size="xs" c={'dimmed'}>
             {t('lodging.name', 'Name')}
           </Title>

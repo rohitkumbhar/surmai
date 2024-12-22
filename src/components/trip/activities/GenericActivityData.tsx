@@ -73,19 +73,7 @@ export const GenericActivityData = ({
         />
       </Modal>
       <Grid align={'top'} p={'xs'} grow={false}>
-        {/* <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
-          <Box component="div" visibleFrom={'md'}>
-            <Tooltip label={t(`lodging.${lodging.type}`, lodging.type)}>
-              <TypeIcon size={'sm'} stroke={1} />
-            </Tooltip>
-          </Box>
-          <Box component="div" hiddenFrom={'md'}>
-            <Title size={'lg'}>{t(`lodging.${lodging.type}`, lodging.type)}</Title>
-            <Divider mt={'5px'} />
-          </Box>
-        </Grid.Col>*/}
-
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
             {t('activity.start_date', 'Date/Time')}
           </Text>
