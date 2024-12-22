@@ -16,14 +16,20 @@ func init() {
 		adminEmail := os.Getenv("SURMAI_ADMIN_EMAIL")
 		adminPassword := os.Getenv("SURMAI_ADMIN_PASSWORD")
 
-		record := core.NewRecord(users)
-		record.Set("email", adminEmail)
-		record.Set("emailVisibility", true)
-		record.Set("password", adminPassword)
-		return app.Save(record)
+		_, err = app.FindAuthRecordByEmail(users, adminEmail)
+
+		if err != nil {
+			record := core.NewRecord(users)
+			record.Set("email", adminEmail)
+			record.Set("emailVisibility", true)
+			record.Set("password", adminPassword)
+			return app.Save(record)
+		}
+		return nil
+
 	}, func(app core.App) error {
 		adminEmail := os.Getenv("SURMAI_ADMIN_EMAIL")
-		record, _ := app.FindAuthRecordByEmail(core.CollectionNameSuperusers, adminEmail)
+		record, _ := app.FindAuthRecordByEmail("users", adminEmail)
 		if record == nil {
 			return nil // probably already deleted
 		}

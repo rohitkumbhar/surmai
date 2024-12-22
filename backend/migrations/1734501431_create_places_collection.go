@@ -8,6 +8,12 @@ import (
 
 func init() {
 	m.Register(func(app core.App) error {
+
+		collectionId, _ := app.FindCollectionByNameOrId("places")
+		if collectionId != nil {
+			return nil
+		}
+
 		places := core.NewBaseCollection("places")
 		places.Fields.Add(
 

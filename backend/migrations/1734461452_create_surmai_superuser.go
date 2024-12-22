@@ -17,14 +17,25 @@ func init() {
 		adminEmail := os.Getenv("SURMAI_ADMIN_EMAIL")
 		adminPassword := os.Getenv("SURMAI_ADMIN_PASSWORD")
 
-		record := core.NewRecord(superusers)
-		record.Set("email", adminEmail)
-		record.Set("password", adminPassword)
-		return app.Save(record)
+		_, err = app.FindAuthRecordByEmail(superusers, adminEmail)
 
-	}, func(app core.App) error {
-		// add down queries...
+		// Create only if the user doesn't exist
+		if err != nil {
+			record := core.NewRecord(superusers)
+			record.Set("email", adminEmail)
+			record.Set("password", adminPassword)
+			return app.Save(record)
+		}
 
 		return nil
+
+	}, func(app core.App) error {
+		adminEmail := os.Getenv("SURMAI_ADMIN_EMAIL")
+		record, _ := app.FindAuthRecordByEmail(core.CollectionNameSuperusers, adminEmail)
+		if record == nil {
+			return nil // probably already deleted
+		}
+
+		return app.Delete(record)
 	})
 }

@@ -9,6 +9,11 @@ import (
 func init() {
 	m.Register(func(app core.App) error {
 
+		collectionId, _ := app.FindCollectionByNameOrId("transportations")
+		if collectionId != nil {
+			return nil
+		}
+
 		trips, err := app.FindCollectionByNameOrId("trips")
 		if err != nil {
 			return err

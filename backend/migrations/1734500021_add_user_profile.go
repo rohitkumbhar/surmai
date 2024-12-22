@@ -12,15 +12,32 @@ func init() {
 			return err
 		}
 
-		users.Fields.Add(
-			&core.TextField{
-				Name: "colorScheme",
-			},
-			&core.TextField{
-				Name: "currencyCode",
-			})
+		saveRequired := false
 
-		return app.Save(users)
+		colorSchemeField := users.Fields.GetByName("colorScheme")
+		if colorSchemeField == nil {
+			saveRequired = true
+			users.Fields.Add(
+				&core.TextField{
+					Name: "colorScheme",
+				})
+		}
+
+		currencyCode := users.Fields.GetByName("currencyCode")
+		if currencyCode == nil {
+			saveRequired = true
+			users.Fields.Add(
+				&core.TextField{
+					Name: "currencyCode",
+				})
+		}
+
+		if saveRequired {
+			return app.Save(users)
+		}
+
+		return nil
+
 	}, func(app core.App) error {
 		// add down queries...
 

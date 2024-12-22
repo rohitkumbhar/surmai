@@ -9,6 +9,11 @@ import (
 func init() {
 	m.Register(func(app core.App) error {
 
+		collectionId, _ := app.FindCollectionByNameOrId("trips")
+		if collectionId != nil {
+			return nil
+		}
+
 		trips := core.NewBaseCollection("trips")
 
 		trips.Fields.Add(
