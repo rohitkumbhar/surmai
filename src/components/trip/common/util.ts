@@ -22,18 +22,14 @@ export const fakeAsUtcString = (date: Date | undefined): string => {
 
 export const convertSavedToBrowserDate = (dateString: string) => {
   const d = dayjs(dateString, 'UTC').tz('UTC');
-  const savedDate = new Date(Date.parse(dateString));
   const convertedDate = new Date();
-  convertedDate.setFullYear(savedDate.getFullYear());
-  convertedDate.setMonth(savedDate.getMonth());
-  convertedDate.setDate(savedDate.getDate());
+  convertedDate.setFullYear(d.year());
+  convertedDate.setMonth(d.month());
+  convertedDate.setDate(d.date());
   convertedDate.setHours(d.hour());
-  convertedDate.setMinutes(savedDate.getMinutes());
+  convertedDate.setMinutes(d.minute());
   convertedDate.setSeconds(0);
   convertedDate.setMilliseconds(0);
-
-  console.log(`savedDate.getHours() = ${convertedDate.getHours()}`);
-
   return convertedDate;
 };
 

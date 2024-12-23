@@ -59,6 +59,9 @@ export const listTransportations = async (tripId: string): Promise<Transportatio
 
   // @ts-expect-error type is correct
   return results.items.map((entry) => {
+
+    console.log("fff => ", entry);
+
     return {
       ...entry,
       departureTime: convertSavedToBrowserDate(entry.departureTime),

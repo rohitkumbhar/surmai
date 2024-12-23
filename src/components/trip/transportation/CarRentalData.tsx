@@ -1,5 +1,5 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
-import { Box, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
+import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
 import { IconArticle } from '@tabler/icons-react';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib';
 import { formatDate, formatTime } from '../common/util.ts';
@@ -57,9 +57,13 @@ export const CarRentalData = ({
 
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 1, md: 1, lg: 1 }} p={'md'}>
-          <Box component="div" visibleFrom={'sm'}>
+          <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_type_${rental.type}`, rental.type)}>
-              <IconArticle size={'sm'} stroke={0.5} />
+              <IconArticle size={'sm'} stroke={0.5} style={{
+                color: 'var(--mantine-primary-color-6)',
+                width: rem(50),
+                height: rem(50)
+              }}/>
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'sm'}>

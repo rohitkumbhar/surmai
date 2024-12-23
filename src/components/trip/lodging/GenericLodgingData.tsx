@@ -1,5 +1,5 @@
 import { Lodging, LodgingType, Trip } from '../../../types/trips.ts';
-import { Box, Divider, Grid, Modal, Text, Title, Tooltip } from '@mantine/core';
+import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
 import { IconBedFlat, IconBuildingEstate, IconCar, IconHome, IconTent } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
@@ -87,7 +87,11 @@ export const GenericLodgingData = ({
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`lodging.${lodging.type}`, lodging.type)}>
-              <TypeIcon size={'xs'} stroke={0.5} />
+              <TypeIcon size={'xs'} stroke={0.5} style={{
+                color: 'var(--mantine-primary-color-6)',
+                width: rem(50),
+                height: rem(50)
+              }} />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
