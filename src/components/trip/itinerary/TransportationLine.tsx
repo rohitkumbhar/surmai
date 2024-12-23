@@ -1,5 +1,5 @@
 import { Transportation } from '../../../types/trips.ts';
-import { Badge, Group, rem, Text } from '@mantine/core';
+import { Badge, Box, Group, rem, Text } from '@mantine/core';
 import { typeIcons } from '../transportation/typeIcons.ts';
 import { IconCar } from '@tabler/icons-react';
 import dayjs, { Dayjs } from 'dayjs';
@@ -21,14 +21,16 @@ export const TransportationLine = ({ transportation, day }: { transportation: Tr
       )}
       {type !== 'rental_car' && (
         <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-          <TypeIcon
-            title={transportation.type}
-            style={{
-              color: 'var(--mantine-primary-color-4)',
-              width: rem(20),
-              height: rem(20),
-            }}
-          />
+         <Box visibleFrom={"md"}>
+           <TypeIcon
+             title={transportation.type}
+             style={{
+               color: 'var(--mantine-primary-color-4)',
+               width: rem(20),
+               height: rem(20),
+             }}
+           />
+         </Box>
 
           {showStartTime && <Badge radius={'xs'}>{formatTime(transportation.departureTime)}</Badge>}
           <Text>{`${transportation.origin} to ${transportation.destination}`}</Text>
@@ -54,15 +56,17 @@ const CarRentalLine = ({
 
   return (
     <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-      <IconCar
-        title={rental.type}
-        style={{
-          color: 'var(--mantine-primary-color-4)',
-          width: rem(20),
-          height: rem(20),
-        }}
-      />
+      <Box visibleFrom={"md"}>
+        <IconCar
+          title={rental.type}
+          style={{
+            color: 'var(--mantine-primary-color-4)',
+            width: rem(20),
+            height: rem(20),
+          }}
+        />
 
+      </Box>
       {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime)}</Badge>}
       {showStartTime && <Text>{`Pickup rental car from ${rental.origin}`}</Text>}
       {showEndTime && <Text>{`Return rental car to ${rental.destination}`}</Text>}
