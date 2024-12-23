@@ -7,17 +7,17 @@ import { useQuery } from '@tanstack/react-query';
 import { listActivities, listLodgings, listTransportations } from '../../../lib';
 import { buildActivitiesIndex, buildLodgingIndex, buildTransportationIndex } from './helper.ts';
 import { TransportationLine } from './TransportationLine.tsx';
+import { LodgingLine } from './LodgingLine.tsx';
+import { ActivityLine } from './ActivityLine.tsx';
 
 export const ItineraryView = ({ trip }: { trip: Trip }) => {
-
-  const [tripDays, setTripDays] = useState<Array<{ id: string, value: Dayjs }>>([]);
+  const [tripDays, setTripDays] = useState<Array<{ id: string; value: Dayjs }>>([]);
 
   const tripId = trip.id;
   const { data: activities } = useQuery<Activity[]>({
     queryKey: ['listActivities', tripId],
     queryFn: () => listActivities(tripId || ''),
   });
-
 
   const { data: transportations } = useQuery<Transportation[]>({
     queryKey: ['listTransportations', trip.id],
@@ -28,7 +28,6 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
     queryKey: ['listLodgings', tripId],
     queryFn: () => listLodgings(tripId || ''),
   });
-
 
   const [transportationItinerary, setTransportationItinerary] = useState<{ [key: string]: Array<Transportation> }>({});
   const [lodgingsItinerary, setLodgingItinerary] = useState<{ [key: string]: Array<Lodging> }>({});
@@ -55,55 +54,53 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
       days.push({ id: m.format('YYYYMMDD'), value: m });
     }
     setTripDays(days);
-
-
   }, [activities, lodgings, transportations]);
 
+  return (
+    <Accordion chevronPosition="right" variant="separated" multiple={true} mt={'sm'}>
+      {tripDays.map((day) => {
+        return (
+          <Accordion.Item value={day.id} key={day.id}>
+            <Accordion.Control
+              icon={
+                <IconCalendar
+                  style={{
+                    color: 'var(--mantine-primary-color-6)',
+                    width: rem(20),
+                    height: rem(20),
+                  }}
+                />
+              }
+            >
+              <Group wrap="nowrap">
+                <div>
+                  <Text>{day.value.format('LL')}</Text>
+                  <Text c={'dimmed'} size={'xs'}>
+                    {`Transportations: ${(transportationItinerary[day.value.toISOString()] || []).length}`} &nbsp;
+                    {`Lodgings: ${(lodgingsItinerary[day.value.toISOString()] || []).length}`} &nbsp;
+                    {`Activities: ${(activitiesItinerary[day.value.toISOString()] || []).length}`}
+                  </Text>
+                </div>
+              </Group>
+            </Accordion.Control>
+            <Accordion.Panel>
+              <Stack>
+                {(transportationItinerary[day.value.toISOString()] || []).map((tr) => {
+                  return <TransportationLine transportation={tr} day={day.value} />;
+                })}
 
-  return (<Accordion chevronPosition="right" variant="separated" multiple={true} mt={'sm'}>
+                {(lodgingsItinerary[day.value.toISOString()] || []).map((tr) => {
+                  return <LodgingLine lodging={tr} day={day.value} />;
+                })}
 
-    {tripDays.map(day => {
-
-      return (
-        <Accordion.Item value={day.id} key={day.id}>
-          <Accordion.Control
-            icon={
-              <IconCalendar
-                style={{
-                  color: 'var(--mantine-primary-color-6)',
-                  width: rem(20),
-                  height: rem(20),
-                }}
-              />
-            }
-          >
-            <Group wrap="nowrap">
-              <div>
-                <Text>{day.value.format('LL')}</Text>
-                <Text c={'dimmed'} size={'xs'}>
-                  {`Transportations: ${(transportationItinerary[day.value.toISOString()] || []).length}`} &nbsp;
-                  {`Lodgings: ${(lodgingsItinerary[day.value.toISOString()] || []).length}`} &nbsp;
-                  {`Activities: ${(activitiesItinerary[day.value.toISOString()] || []).length}`}
-                </Text>
-              </div>
-            </Group>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Stack>
-              {(transportationItinerary[day.value.toISOString()] || []).map(tr => {
-                return (<TransportationLine transportation={tr} day={day.value}/>);
-              })}
-
-              {(lodgingsItinerary[day.value.toISOString()] || []).map(tr => {
-                return (<Text>{`Stay at ${tr.name}`}</Text>);
-              })}
-
-              {(activitiesItinerary[day.value.toISOString()] || []).map(tr => {
-                return (<Text>{`${tr.name}`}</Text>);
-              })}
-            </Stack>
-          </Accordion.Panel>
-        </Accordion.Item>);
-    })}
-  </Accordion>);
+                {(activitiesItinerary[day.value.toISOString()] || []).map((tr) => {
+                  return <ActivityLine activity={tr} day={day.value} />;
+                })}
+              </Stack>
+            </Accordion.Panel>
+          </Accordion.Item>
+        );
+      })}
+    </Accordion>
+  );
 };

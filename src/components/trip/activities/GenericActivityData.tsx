@@ -1,5 +1,5 @@
 import { Activity, Trip } from '../../../types/trips.ts';
-import { Grid, Modal, Text } from '@mantine/core';
+import { Box, Grid, Modal, rem, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
@@ -9,6 +9,7 @@ import { deleteActivity, formatDate } from '../../../lib';
 import { formatTime } from '../common/util.ts';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { notifications } from '@mantine/notifications';
+import { IconActivity } from '@tabler/icons-react';
 
 export const GenericActivityData = ({
   trip,
@@ -73,6 +74,19 @@ export const GenericActivityData = ({
         />
       </Modal>
       <Grid align={'top'} p={'xs'} grow={false}>
+        <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
+          <Box component="div" visibleFrom={'md'}>
+            <IconActivity
+              size={'xs'}
+              stroke={0.5}
+              style={{
+                color: 'var(--mantine-primary-color-6)',
+                width: rem(50),
+                height: rem(50),
+              }}
+            />
+          </Box>
+        </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
             {t('activity.start_date', 'Date/Time')}

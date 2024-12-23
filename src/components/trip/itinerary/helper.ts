@@ -7,7 +7,6 @@ export const buildTransportationIndex = (transportations: Transportation[]) => {
     const start = dayjs(tr.departureTime).startOf('day');
     const end = dayjs(tr.arrivalTime).endOf('day');
     for (let m = dayjs(start); m.isBefore(end); m = m.add(1, 'day')) {
-
       const key = m.toISOString();
       let value = transportationIndex[key];
       if (!value) {
@@ -49,18 +48,17 @@ export const buildActivitiesIndex = (activities: Activity[]) => {
   activities?.forEach((activity) => {
     const start = dayjs(activity.startDate).startOf('day');
 
-
     // for (let m = dayjs(start); m.isBefore(end); m = m.add(1, 'day')) {
-      const key = start.toISOString();
-      let value = lodgingIndex[key];
-      if (!value) {
-        lodgingIndex[key] = [];
-        value = lodgingIndex[key];
-      }
-      const exists = value?.find((entry) => entry.id === activity.id);
-      if (!exists) {
-        lodgingIndex[key].push(activity);
-      }
+    const key = start.toISOString();
+    let value = lodgingIndex[key];
+    if (!value) {
+      lodgingIndex[key] = [];
+      value = lodgingIndex[key];
+    }
+    const exists = value?.find((entry) => entry.id === activity.id);
+    if (!exists) {
+      lodgingIndex[key].push(activity);
+    }
     // }
   });
   return lodgingIndex;

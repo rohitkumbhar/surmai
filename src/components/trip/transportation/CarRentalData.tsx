@@ -59,11 +59,15 @@ export const CarRentalData = ({
         <Grid.Col span={{ base: 12, sm: 1, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_type_${rental.type}`, rental.type)}>
-              <IconArticle size={'sm'} stroke={0.5} style={{
-                color: 'var(--mantine-primary-color-6)',
-                width: rem(50),
-                height: rem(50)
-              }}/>
+              <IconArticle
+                size={'sm'}
+                stroke={0.5}
+                style={{
+                  color: 'var(--mantine-primary-color-6)',
+                  width: rem(50),
+                  height: rem(50),
+                }}
+              />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'sm'}>

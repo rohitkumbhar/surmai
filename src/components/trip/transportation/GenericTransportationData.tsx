@@ -81,11 +81,15 @@ export const GenericTransportationData = ({
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation.${transportation.type}`, `transportation.${transportation.type}`)}>
-              <TypeIcon size={'xs'} stroke={0.5} style={{
-                color: 'var(--mantine-primary-color-6)',
-                width: rem(50),
-                height: rem(50)
-              }} />
+              <TypeIcon
+                size={'xs'}
+                stroke={0.5}
+                style={{
+                  color: 'var(--mantine-primary-color-6)',
+                  width: rem(50),
+                  height: rem(50),
+                }}
+              />
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>

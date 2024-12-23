@@ -20,7 +20,13 @@ export const ViewTrip = () => {
 
   const { tripId } = useParams();
   const { t, i18n } = useTranslation();
-  const { isPending, isError, data : trip, error, refetch } = useQuery<Trip>({
+  const {
+    isPending,
+    isError,
+    data: trip,
+    error,
+    refetch,
+  } = useQuery<Trip>({
     queryKey: ['trip', tripId],
     queryFn: () => getTrip(tripId || ''),
   });
@@ -102,7 +108,6 @@ export const ViewTrip = () => {
         </Alert>
       )}
 
-
       <Tabs defaultValue="organization">
         <Tabs.List>
           <Tabs.Tab value="organization">{t('organization', 'Organization')}</Tabs.Tab>
@@ -155,7 +160,7 @@ export const ViewTrip = () => {
                     <Text size="sm" c="dimmed" fw={400}>
                       {t(
                         'transportation.section_description',
-                        'View and edit your transportation arrangements for this trip',
+                        'View and edit your transportation arrangements for this trip'
                       )}
                     </Text>
                   </div>
@@ -218,14 +223,11 @@ export const ViewTrip = () => {
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
-
         </Tabs.Panel>
         <Tabs.Panel value="itinerary">
           <ItineraryView trip={trip} />
         </Tabs.Panel>
       </Tabs>
-
-
     </Container>
   );
 };
