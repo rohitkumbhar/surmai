@@ -10,7 +10,8 @@ import {
   TripResponse,
 } from '../../types/trips.ts';
 import { listActivities } from './activities.ts';
-import { convertSavedToBrowserDate, downloadAsBase64 } from '../../components/trip/common/util.ts';
+import { convertSavedToBrowserDate } from '../../components/trip/common/util.ts';
+// import { downloadAsBase64 } from '../../components/trip/common/util.ts';
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
@@ -221,35 +222,18 @@ export const loadEverything = (tripId: string) => {
     });
 };
 
-type ExportedTrip = Trip & { coverImageData: string | ArrayBuffer | null };
-type ExportedTransportation = Transportation & { attachmentData: object };
+//type ExportedTrip = Trip & { coverImageData: string | ArrayBuffer | null }
+//type ExportedTransportation = Transportation & { attachmentData: object }
 
 export const exportTripData = async (tripId: string) => {
-  // trip
-  const trip = (await getTrip(tripId)) as ExportedTrip;
-  if (trip.coverImage) {
-    const coverImageUrl = getAttachmentUrl(trip, trip.coverImage);
-    trip.coverImageData = await downloadAsBase64(coverImageUrl);
-  }
 
-  // transportations
-  const transportations = await listTransportations(tripId);
+      const result = await pb.send('/export-trip', {
+        method: 'POST',
+        body: { tripId },
+      });
 
-  const exportedTransportations: ExportedTransportation[] = [];
-  transportations.forEach((tr) => {
-    const exportedAttachments: { [key: string]: string | ArrayBuffer | null } = {};
-    tr.attachments?.forEach(async (attachment) => {
-      const attachmentUrl = getAttachmentUrl(tr, attachment);
-      exportedAttachments[attachment] = await downloadAsBase64(attachmentUrl);
-    });
-    exportedTransportations.push({
-      ...tr,
-      attachmentData: exportedAttachments,
-    });
-  });
 
-  return { trip: trip, transportations: exportedTransportations };
-
+     return result;
   /*let lodgings: Lodging[] = await listLodgings(tripId);
   lodgings.forEach((l) => {
     l.attachments?.forEach((attachment) => {

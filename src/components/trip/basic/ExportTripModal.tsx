@@ -41,7 +41,7 @@ export const ExportTripModal = ({
 
     console.log('download data => ', JSON.stringify(tripData, replacer));
 
-    const blob = new Blob([tripData], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(tripData)], { type: 'application/json' });
     console.log('download data => ', blob);
 
     // If we are replacing a previously generated file we need to
