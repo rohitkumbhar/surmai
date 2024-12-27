@@ -57,7 +57,6 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
 
     const weeks = chunk(days, 7);
     setTripWeeks(weeks);
-
   }, [activities, lodgings, transportations]);
 
   return (

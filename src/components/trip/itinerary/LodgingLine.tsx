@@ -13,7 +13,7 @@ export const LodgingLine = ({ lodging, day }: { lodging: Lodging; day: Dayjs }) 
 
   return (
     <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-      <Box visibleFrom={"md"}>
+      <Box visibleFrom={'md'}>
         <TypeIcon
           title={lodging.type}
           style={{

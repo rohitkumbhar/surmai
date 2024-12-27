@@ -5,6 +5,7 @@ import {
   LoadingOverlay,
   NumberInput,
   PasswordInput,
+  Select,
   Switch,
   Text,
   TextInput,
@@ -18,19 +19,18 @@ import { useQuery } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
 import { useEffect } from 'react';
 
-
 export type SmtpSettings = {
-  enabled?: boolean
-  host?: string
-  port?: number
-  username?: string
-  password?: string
-  tls?: boolean
-  localName?: string
-}
+  enabled?: boolean;
+  host?: string;
+  port?: number;
+  username?: string;
+  password?: string;
+  tls?: boolean;
+  localName?: string;
+  authMethod?: 'PLAIN' | 'LOGIN';
+};
 
 export const SmtpSettingsForm = () => {
-
   const { isPending, data: settings } = useQuery<SmtpSettings | undefined>({
     queryKey: ['getSmtpSettings'],
     queryFn: () => getSmtpSettings(),
@@ -45,15 +45,15 @@ export const SmtpSettingsForm = () => {
     port: settings?.port,
     tls: settings?.tls,
     username: settings?.username,
+    authMethod: settings?.authMethod || 'PLAIN',
   };
 
-  const form = useForm<SmtpSettings>({
+  const form = useForm<SmtpSettings & { tlsValue?: string }>({
     mode: 'uncontrolled',
-    initialValues: initialValues,
+    initialValues: { ...initialValues, tlsValue: initialValues?.tls === true ? 'true' : 'false' },
   });
 
-  const handleSubmission = (values: SmtpSettings) => {
-
+  const handleSubmission = (values: SmtpSettings & { tlsValue?: string }) => {
     if (settings) {
       updateSmtpSettings(values).then(() => {
         notifications.show({
@@ -70,7 +70,8 @@ export const SmtpSettingsForm = () => {
     form.resetDirty(settings);
   }, [settings]);
 
-  return (<Card withBorder radius="md" p="xl" mt={'md'}>
+  return (
+    <Card withBorder radius="md" p="xl" mt={'md'}>
       <Title order={3} fw={500}>
         SMTP Settings
       </Title>
@@ -145,21 +146,34 @@ export const SmtpSettingsForm = () => {
                 {...form.getInputProps('password')}
               />
 
+              <Select
+                label={t('smtp_auth_method', 'Auth Method')}
+                key={form.key('authMethod')}
+                {...form.getInputProps('authMethod')}
+                description={t('smtp_auth_method_desc', 'Select the AUTH method for your SMTP server')}
+                placeholder=""
+                data={['PLAIN', 'LOGIN']}
+              />
+
+              <Select
+                label={t('smtp_tls_enabled', 'TLS Encryption')}
+                description={t('smtp_tls_enabled_description', 'Enable Secure SMTP')}
+                placeholder=""
+                key={form.key('tlsValue')}
+                {...form.getInputProps('tlsValue')}
+                data={[
+                  { value: 'false', label: '(Auto) StartTLS' },
+                  { value: 'true', label: 'Always' },
+                ]}
+                onChange={(_value) => form.setFieldValue('tls', _value === 'true')}
+              />
             </Group>
             <Group mt={'md'} justify="space-between">
-              <div>
-                <Switch
-                  label={t('smtp_tls_enabled', 'Enable TLS')}
-                  className={classes.switch}
-                  key={form.key('tls')}
-                  {...form.getInputProps('tls', { type: 'checkbox' })}
-                />
-              </div>
-              <Button type={'submit'} w={'min-content'} disabled={!form.isDirty()}>
+              <div></div>
+              <Button type={'submit'} w={'min-content'}>
                 {t('save', 'Save')}
               </Button>
             </Group>
-
           </form>
         </div>
       </Group>

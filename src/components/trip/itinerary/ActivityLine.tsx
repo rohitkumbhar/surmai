@@ -9,7 +9,7 @@ export const ActivityLine = ({ activity, day }: { activity: Activity; day: Dayjs
 
   return (
     <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-      <Box visibleFrom={"md"}>
+      <Box visibleFrom={'md'}>
         <IconActivity
           title={activity.type}
           style={{

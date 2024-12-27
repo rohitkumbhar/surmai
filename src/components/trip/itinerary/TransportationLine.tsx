@@ -21,16 +21,16 @@ export const TransportationLine = ({ transportation, day }: { transportation: Tr
       )}
       {type !== 'rental_car' && (
         <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-         <Box visibleFrom={"md"}>
-           <TypeIcon
-             title={transportation.type}
-             style={{
-               color: 'var(--mantine-primary-color-4)',
-               width: rem(20),
-               height: rem(20),
-             }}
-           />
-         </Box>
+          <Box visibleFrom={'md'}>
+            <TypeIcon
+              title={transportation.type}
+              style={{
+                color: 'var(--mantine-primary-color-4)',
+                width: rem(20),
+                height: rem(20),
+              }}
+            />
+          </Box>
 
           {showStartTime && <Badge radius={'xs'}>{formatTime(transportation.departureTime)}</Badge>}
           <Text>{`${transportation.origin} to ${transportation.destination}`}</Text>
@@ -56,7 +56,7 @@ const CarRentalLine = ({
 
   return (
     <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-      <Box visibleFrom={"md"}>
+      <Box visibleFrom={'md'}>
         <IconCar
           title={rental.type}
           style={{
@@ -65,7 +65,6 @@ const CarRentalLine = ({
             height: rem(20),
           }}
         />
-
       </Box>
       {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime)}</Badge>}
       {showStartTime && <Text>{`Pickup rental car from ${rental.origin}`}</Text>}
