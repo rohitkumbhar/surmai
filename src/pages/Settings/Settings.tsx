@@ -4,6 +4,7 @@ import { useDocumentTitle } from '@mantine/hooks';
 import { Header } from '../../components/nav/Header.tsx';
 import { UsersSettings } from '../../components/settings/UsersSettings.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
+import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx';
 
 export const Settings = () => {
   const { t } = useTranslation();
@@ -17,6 +18,7 @@ export const Settings = () => {
         </Text>
       </Header>
       <Datasets />
+      <SmtpSettingsForm />
       <UsersSettings />
     </Container>
   );

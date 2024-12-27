@@ -19,7 +19,7 @@ export const UsersSettings = () => {
         Manage site users
       </Text>
 
-      <Group justify="space-between" className={classes.item} wrap="nowrap" gap="xl" key={'cities_dataset'}>
+      <Group justify="space-between" className={classes.item}  gap="xl" key={'cities_dataset'}>
         <div>
           <Text>New User Signups</Text>
           <Text size="sm" c="dimmed">

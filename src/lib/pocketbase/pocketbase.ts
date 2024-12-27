@@ -12,3 +12,5 @@ export const pocketBaseClients = {
 
 export const pb = pocketBaseClients.user;
 export const pbAdmin = pocketBaseClients.admin;
+
+pbAdmin.autoCancellation(false);

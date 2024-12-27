@@ -38,7 +38,6 @@ export const UserSettingsForm = () => {
         reloadUser?.();
       });
     }
-    // mantineTheme.primaryColor = "green"
   };
 
   return (
