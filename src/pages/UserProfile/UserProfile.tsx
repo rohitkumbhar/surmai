@@ -1,16 +1,13 @@
-import { AspectRatio, Avatar, Button, Container, Group, Paper, Text } from '@mantine/core';
+import { Container, Paper, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { openContextModal } from '@mantine/modals';
-import { useDocumentTitle, useMediaQuery } from '@mantine/hooks';
-import { getAttachmentUrl, updateUserAvatar } from '../../lib';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { useDocumentTitle } from '@mantine/hooks';
 import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
 import { Header } from '../../components/nav/Header.tsx';
+import { UserAvatarForm } from '../../components/account/UserAvatarForm.tsx';
+import { ChangePasswordForm } from '../../components/account/ChangePasswordForm.tsx';
 
 export const UserProfile = () => {
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 50em)');
-  const { user, reloadUser } = useCurrentUser();
   useDocumentTitle(t('settings', 'Settings'));
 
   return (
@@ -21,45 +18,24 @@ export const UserProfile = () => {
         </Text>
       </Header>
       <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'}>
-        <Group mt={'sm'}>
-          <AspectRatio ratio={400 / 400}>
-            <Avatar
-              name={user?.name}
-              color={'initials'}
-              src={user?.avatar && getAttachmentUrl(user, user.avatar)}
-              size={100}
-              radius="md"
-            />
-          </AspectRatio>
-
-          {user && (
-            <Button
-              onClick={() => {
-                openContextModal({
-                  modal: 'uploadImageForm',
-                  title: t('basic.add_cover_image', 'Add Cover Image'),
-                  radius: 'md',
-                  withCloseButton: false,
-                  size: 'auto',
-                  fullScreen: isMobile,
-                  innerProps: {
-                    aspectRatio: 400 / 400,
-                    saveUploadedImage: (uploadedImage: File | Blob) => {
-                      updateUserAvatar(user.id, uploadedImage).then(() => {
-                        reloadUser && reloadUser();
-                      });
-                    },
-                  },
-                });
-              }}
-            >
-              {t('change_avatar', 'Change Avatar')}
-            </Button>
-          )}
-        </Group>
+        <Title order={3} fw={500}>
+          {t('user.basic_info', 'Basic Information')}
+        </Title>
+        <Text fz="xs" c="dimmed" mt={3} mb="xl">
+          {t('user.basic_info_desc', 'Update your basic information and preferences')}
+        </Text>
+        <UserAvatarForm />
         <UserSettingsForm />
+      </Paper>
 
-        <Group wrap="nowrap" gap={10} mt={3}></Group>
+      <Paper withBorder radius="md" mt={'sm'} p="xl" bg={'var(--mantine-color-body)'}>
+        <Title order={3} fw={500}>
+          {t('user.security_info', 'Security')}
+        </Title>
+        <Text fz="xs" c="dimmed" mt={3} mb="xl">
+          {t('user.security_info_desc', 'Update your security preferences')}
+        </Text>
+        <ChangePasswordForm />
       </Paper>
     </Container>
   );

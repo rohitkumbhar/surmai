@@ -1,5 +1,5 @@
 import { Alert, Button, Container, Paper, Text, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithPassword } from '../../lib';
@@ -82,7 +82,7 @@ export const SignUp = () => {
               {...form.getInputProps('email')}
             />
 
-            {<FancyPasswordInput fieldName={'password'} form={form} />}
+            {<FancyPasswordInput fieldName={'password'} form={form as UseFormReturnType<unknown>} />}
 
             <Button fullWidth mt="xl" type={'submit'}>
               {t('create_account', 'Create An Account')}

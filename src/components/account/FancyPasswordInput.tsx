@@ -4,9 +4,18 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getStrength, passwordRequirements } from './util.ts';
 import { UseFormReturnType } from '@mantine/form';
-import { SignUpForm } from '../../types/auth.ts';
 
-export const FancyPasswordInput = ({ fieldName, form }: { fieldName: string; form: UseFormReturnType<SignUpForm> }) => {
+export const FancyPasswordInput = ({
+  fieldName,
+  form,
+  label,
+  description,
+}: {
+  fieldName: string;
+  form: UseFormReturnType<unknown>;
+  label?: string;
+  description?: string;
+}) => {
   const { t } = useTranslation();
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [currentPasswordValue, setCurrentPasswordValue] = useState('');
@@ -29,7 +38,8 @@ export const FancyPasswordInput = ({ fieldName, form }: { fieldName: string; for
         <div onFocusCapture={() => setPopoverOpened(true)} onBlurCapture={() => setPopoverOpened(false)}>
           <PasswordInput
             mt="md"
-            label={t('password', 'Password')}
+            label={label || t('password', 'Password')}
+            description={description}
             withAsterisk
             key={form.key(fieldName)}
             {...form.getInputProps(fieldName)}

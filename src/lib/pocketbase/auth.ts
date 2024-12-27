@@ -103,6 +103,14 @@ export const updateUser = (userId: string, data: object) => {
   return pb.collection('users').update(userId, data);
 };
 
+export const updateAdminUser = (data: object) => {
+  if (pbAdmin?.authStore?.record?.id) {
+    return pbAdmin.collection('_superusers').update(pbAdmin.authStore.record.id, data);
+  } else {
+    throw Error('Not an admin');
+  }
+};
+
 export const areSignupsEnabled = () => {
   return pbAdmin.collections.getOne('users').then((usersCollection) => {
     return usersCollection.createRule != null;
