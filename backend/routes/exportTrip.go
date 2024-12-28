@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
+	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/types"
 	"io"
@@ -24,11 +25,14 @@ type Participant struct {
 	Name string `json:"name"`
 }
 
-
 type Transportation struct {
-
+	Id          string           `json:"id"`
+	Origin      string           `json:"origin"`
+	Destination string           `json:"destination"`
+	Departure   types.DateTime   `json:"departure"`
+	Arrival     types.DateTime   `json:"arrival"`
+	Attachments *[]*UploadedFile `json:"attachments"`
 }
-
 
 type Trip struct {
 	Id           string         `json:"id"`
@@ -42,9 +46,6 @@ type Trip struct {
 	Participants []Participant  `json:"participants"`
 	CoverImage   *UploadedFile  `json:"coverImage"`
 }
-
-
-
 
 func ExportTrip(e *core.RequestEvent) error {
 
@@ -75,7 +76,30 @@ func ExportTrip(e *core.RequestEvent) error {
 		Participants: getParticipants(trip),
 	}
 
-	return e.JSON(http.StatusOK, t)
+	transportations := buildTransportations(e, trip)
+	return e.JSON(http.StatusOK, map[string]any{"trip": t, "transportations": transportations})
+}
+
+func buildTransportations(e *core.RequestEvent, trip *core.Record) *[]Transportation {
+
+	transportations, _ := e.App.FindAllRecords("transportations",
+		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
+
+	var payload []Transportation
+
+	for _, tr := range transportations {
+
+		ct := Transportation{
+			Id:          tr.Id,
+			Origin:      tr.GetString("origin"),
+			Destination: tr.GetString("destination"),
+			Departure:   tr.GetDateTime("departureTime"),
+			Arrival:     tr.GetDateTime("arrivalTime"),
+		}
+		payload = append(payload, ct)
+	}
+
+	return &payload
 }
 
 func getUploadedFile(e *core.RequestEvent, record *core.Record, fileName string) *UploadedFile {
