@@ -25,13 +25,20 @@ type Participant struct {
 	Name string `json:"name"`
 }
 
+type Cost struct {
+	Value    float64 `json:"value"`
+	Currency string  `json:"currency"`
+}
+
 type Transportation struct {
-	Id          string           `json:"id"`
-	Origin      string           `json:"origin"`
-	Destination string           `json:"destination"`
-	Departure   types.DateTime   `json:"departure"`
-	Arrival     types.DateTime   `json:"arrival"`
-	Attachments *[]*UploadedFile `json:"attachments"`
+	Id          string          `json:"id"`
+	Origin      string          `json:"origin"`
+	Destination string          `json:"destination"`
+	Cost        *Cost           `json:"cost"`
+	Departure   types.DateTime  `json:"departure"`
+	Arrival     types.DateTime  `json:"arrival"`
+	Attachments []*UploadedFile `json:"attachments"`
+	Metadata    *map[string]any `json:"metadata"`
 }
 
 type Trip struct {
@@ -95,11 +102,24 @@ func buildTransportations(e *core.RequestEvent, trip *core.Record) *[]Transporta
 			Destination: tr.GetString("destination"),
 			Departure:   tr.GetDateTime("departureTime"),
 			Arrival:     tr.GetDateTime("arrivalTime"),
+			Metadata:    getMetadata(tr),
+			Cost:        getCost(tr),
+			Attachments: getAttachments(e, tr),
 		}
 		payload = append(payload, ct)
 	}
 
 	return &payload
+}
+
+func getAttachments(e *core.RequestEvent, r *core.Record) []*UploadedFile {
+
+	attachments := r.GetStringSlice("attachments")
+	var payload []*UploadedFile
+	for _, attachmentName := range attachments {
+		payload = append(payload, getUploadedFile(e, r, attachmentName))
+	}
+	return payload
 }
 
 func getUploadedFile(e *core.RequestEvent, record *core.Record, fileName string) *UploadedFile {
@@ -113,11 +133,11 @@ func getUploadedFile(e *core.RequestEvent, record *core.Record, fileName string)
 	return nil
 }
 
-func getFileAsBase64(e *core.RequestEvent, trip *core.Record, fileName string) string {
+func getFileAsBase64(e *core.RequestEvent, record *core.Record, fileName string) string {
 
 	if fileName != "" {
 
-		fileKey := trip.BaseFilesPath() + "/" + fileName
+		fileKey := record.BaseFilesPath() + "/" + fileName
 		fsys, _ := e.App.NewFilesystem()
 		defer fsys.Close()
 
@@ -134,13 +154,36 @@ func getFileAsBase64(e *core.RequestEvent, trip *core.Record, fileName string) s
 	return ""
 }
 
+func getCost(record *core.Record) *Cost {
+	destinationsString := record.GetString("cost")
+	var payload Cost
+
+	err := json.Unmarshal([]byte(destinationsString), &payload)
+	if err != nil {
+		log.Fatal("Error during Cost Unmarshal(): ", err)
+	}
+
+	return &payload
+}
+
+func getMetadata(record *core.Record) *map[string]any {
+	metadataString := record.GetString("metadata")
+	payload := make(map[string]any)
+	err := json.Unmarshal([]byte(metadataString), &payload)
+	if err != nil {
+		log.Fatal("Error during Metadata Unmarshal(): ", err)
+	}
+
+	return &payload
+}
+
 func getDestinations(trip *core.Record) []Destination {
 	destinationsString := trip.GetString("destinations")
 	var payload []Destination
 
 	err := json.Unmarshal([]byte(destinationsString), &payload)
 	if err != nil {
-		log.Fatal("Error during Unmarshal(): ", err)
+		log.Fatal("Error during Destinations Unmarshal(): ", err)
 	}
 
 	return payload
@@ -152,7 +195,7 @@ func getParticipants(trip *core.Record) []Participant {
 
 	err := json.Unmarshal([]byte(participantString), &payload)
 	if err != nil {
-		log.Fatal("Error during Unmarshal(): ", err)
+		log.Fatal("Error during Participants Unmarshal(): ", err)
 	}
 
 	return payload
