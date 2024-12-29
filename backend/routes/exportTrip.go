@@ -32,6 +32,7 @@ type Cost struct {
 
 type Transportation struct {
 	Id          string          `json:"id"`
+	Type        string          `json:"type"`
 	Origin      string          `json:"origin"`
 	Destination string          `json:"destination"`
 	Cost        *Cost           `json:"cost"`
@@ -39,6 +40,31 @@ type Transportation struct {
 	Arrival     types.DateTime  `json:"arrival"`
 	Attachments []*UploadedFile `json:"attachments"`
 	Metadata    *map[string]any `json:"metadata"`
+}
+
+type Lodging struct {
+	Id               string          `json:"id"`
+	Type             string          `json:"type"`
+	Name             string          `json:"name"`
+	Address          string          `json:"address"`
+	ConfirmationCode string          `json:"confirmationCode"`
+	Cost             *Cost           `json:"cost"`
+	StartDate        types.DateTime  `json:"startDate"`
+	EndDate          types.DateTime  `json:"endDate"`
+	Attachments      []*UploadedFile `json:"attachments"`
+	Metadata         *map[string]any `json:"metadata"`
+}
+
+type Activity struct {
+	Id               string          `json:"id"`
+	Name             string          `json:"name"`
+	Description      string          `json:"description"`
+	Address          string          `json:"address"`
+	ConfirmationCode string          `json:"confirmationCode"`
+	Cost             *Cost           `json:"cost"`
+	StartDate        types.DateTime  `json:"startDate"`
+	Attachments      []*UploadedFile `json:"attachments"`
+	Metadata         *map[string]any `json:"metadata"`
 }
 
 type Trip struct {
@@ -84,7 +110,67 @@ func ExportTrip(e *core.RequestEvent) error {
 	}
 
 	transportations := buildTransportations(e, trip)
-	return e.JSON(http.StatusOK, map[string]any{"trip": t, "transportations": transportations})
+	lodgings := buildLodgings(e, trip)
+	activities := buildActivities(e, trip)
+
+	return e.JSON(http.StatusOK, map[string]any{
+		"trip":            t,
+		"transportations": transportations,
+		"lodgings":        lodgings,
+		"activities":      activities})
+}
+
+func buildActivities(e *core.RequestEvent, trip *core.Record) *[]Activity {
+
+	activities, _ := e.App.FindAllRecords("activities",
+		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
+
+	var payload []Activity
+	for _, l := range activities {
+
+		ct := Activity{
+			Id:               l.Id,
+			Name:             l.GetString("name"),
+			Description:      l.GetString("description"),
+			Address:          l.GetString("address"),
+			StartDate:        l.GetDateTime("startDate"),
+			ConfirmationCode: l.GetString("confirmationCode"),
+			Metadata:         getMetadata(l),
+			Cost:             getCost(l),
+			Attachments:      getAttachments(e, l),
+		}
+		payload = append(payload, ct)
+	}
+
+	return &payload
+
+}
+
+func buildLodgings(e *core.RequestEvent, trip *core.Record) *[]Lodging {
+
+	lodgings, _ := e.App.FindAllRecords("lodgings",
+		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
+
+	var payload []Lodging
+	for _, l := range lodgings {
+
+		ct := Lodging{
+			Id:               l.Id,
+			Name:             l.GetString("name"),
+			Address:          l.GetString("address"),
+			StartDate:        l.GetDateTime("startDate"),
+			EndDate:          l.GetDateTime("endDate"),
+			ConfirmationCode: l.GetString("confirmationCode"),
+			Type:             l.GetString("type"),
+			Metadata:         getMetadata(l),
+			Cost:             getCost(l),
+			Attachments:      getAttachments(e, l),
+		}
+		payload = append(payload, ct)
+	}
+
+	return &payload
+
 }
 
 func buildTransportations(e *core.RequestEvent, trip *core.Record) *[]Transportation {
@@ -93,11 +179,11 @@ func buildTransportations(e *core.RequestEvent, trip *core.Record) *[]Transporta
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
 	var payload []Transportation
-
 	for _, tr := range transportations {
 
 		ct := Transportation{
 			Id:          tr.Id,
+			Type:        tr.GetString("type"),
 			Origin:      tr.GetString("origin"),
 			Destination: tr.GetString("destination"),
 			Departure:   tr.GetDateTime("departureTime"),
