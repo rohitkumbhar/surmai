@@ -1,16 +1,15 @@
 import { ContextModalProps } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
-import { Button, Center, Container } from '@mantine/core';
+import { Button, Center, Container, Text } from '@mantine/core';
 import { useState } from 'react';
 import { exportTripData } from '../../../lib';
 
-export const ExportTripModal = ({
-  /*  context,
-                                  id,*/
-  innerProps,
-}: ContextModalProps<{
-  trip: Trip;
-}>) => {
+export const ExportTripModal = (
+  {
+    innerProps,
+  }: ContextModalProps<{
+    trip: Trip;
+  }>) => {
   const { trip } = innerProps;
 
   const [downloadLink, setDownloadLink] = useState<string | undefined>();
@@ -21,28 +20,9 @@ export const ExportTripModal = ({
     });
   };
 
-  const replacer = (key: string, value: any) => {
-    console.log('key ==> ', key);
-
-    if (key === 'attachmentData') {
-      console.log('vvvv', value);
-
-      for (const [k, v] of Object.entries(value)) {
-        console.log('k =>', k);
-        console.log('v =>', v);
-        console.log('json-v =>', JSON.stringify(v));
-      }
-    }
-    return value;
-  };
-
   const prepareDownload = (tripData: any) => {
-    console.log('download data => ', tripData);
-
-    console.log('download data => ', JSON.stringify(tripData, replacer));
 
     const blob = new Blob([JSON.stringify(tripData)], { type: 'application/json' });
-    console.log('download data => ', blob);
 
     // If we are replacing a previously generated file we need to
     // manually revoke the object URL to avoid memory leaks.
@@ -51,13 +31,14 @@ export const ExportTripModal = ({
     }
 
     const dataUrl = window.URL.createObjectURL(blob);
-
-    // returns a URL you can use as a href
     setDownloadLink(dataUrl);
   };
 
   return (
     <Container>
+      <Text>
+        Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.
+      </Text>
       <Center>
         {!downloadLink && <Button onClick={prepareExport}>Prepare</Button>}
         {downloadLink && (

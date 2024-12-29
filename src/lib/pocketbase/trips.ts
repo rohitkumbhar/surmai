@@ -222,34 +222,9 @@ export const loadEverything = (tripId: string) => {
     });
 };
 
-//type ExportedTrip = Trip & { coverImageData: string | ArrayBuffer | null }
-//type ExportedTransportation = Transportation & { attachmentData: object }
-
 export const exportTripData = async (tripId: string) => {
-
-      const result = await pb.send('/export-trip', {
-        method: 'POST',
-        body: { tripId },
-      });
-
-
-     return result;
-  /*let lodgings: Lodging[] = await listLodgings(tripId);
-  lodgings.forEach((l) => {
-    l.attachments?.forEach((attachment) => {
-      const attachmentUrl = getAttachmentUrl(l, attachment);
-      fetch(attachmentUrl).then(() => {
-        console.log('Attachment ', attachment, ' downloaded');
-      });
-    });
+  return await pb.send('/export-trip', {
+    method: 'POST',
+    body: { tripId },
   });
-  let activities: Activity[] = await listActivities(tripId);
-  activities.forEach((l) => {
-    l.attachments?.forEach((attachment) => {
-      const attachmentUrl = getAttachmentUrl(l, attachment);
-      fetch(attachmentUrl).then(() => {
-        console.log('Attachment ', attachment, ' downloaded');
-      });
-    });
-  });*/
 };

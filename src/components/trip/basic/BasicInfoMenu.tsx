@@ -132,8 +132,8 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           onClick={() => {
             openContextModal({
               modal: 'exportTripModal',
-              title: t('basic.export', 'Export'),
-              withCloseButton: false,
+              title: t('basic.export', 'Export Trip Data'),
+              withCloseButton: true,
               fullScreen: isMobile,
               size: 'lg',
               innerProps: {
