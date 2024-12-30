@@ -11,12 +11,16 @@ export const ExportTripModal = ({
 }>) => {
   const { trip } = innerProps;
 
+  const [preparing, setPreparing] = useState<boolean>(false);
   const [downloadLink, setDownloadLink] = useState<string | undefined>();
 
   const prepareExport = () => {
-    exportTripData(trip.id).then((data) => {
-      prepareDownload(data);
-    });
+    setPreparing(true);
+    exportTripData(trip.id)
+      .then((data) => {
+        prepareDownload(data);
+      })
+      .finally(() => setPreparing(false));
   };
 
   const prepareDownload = (tripData: any) => {
@@ -36,7 +40,11 @@ export const ExportTripModal = ({
     <Container>
       <Text>Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.</Text>
       <Center>
-        {!downloadLink && <Button onClick={prepareExport}>Prepare</Button>}
+        {!downloadLink && (
+          <Button loading={preparing} onClick={prepareExport}>
+            Prepare
+          </Button>
+        )}
         {downloadLink && (
           <Button component={'a'} href={downloadLink} download={`trip-${trip.name}-${trip.id}.json`}>
             Download

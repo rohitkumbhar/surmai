@@ -1,7 +1,7 @@
 import { Accordion, Button, Container, FileButton, Group, rem, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconInfoSquare } from '@tabler/icons-react';
-import { createTrip, currentUser, importTripData } from '../../lib';
+import { createTrip, importTripData } from '../../lib';
 import { useNavigate } from 'react-router-dom';
 import { CreateTripForm, NewTrip } from '../../types/trips.ts';
 import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
@@ -10,11 +10,15 @@ import { useTranslation } from 'react-i18next';
 import { Header } from '../../components/nav/Header.tsx';
 import { useEffect, useState } from 'react';
 import { notifications } from '@mantine/notifications';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [tripDataFile, setTripDataFile] = useState<File | null>(null);
+  const [importing, setImporting] = useState<boolean>(false);
+  const [creatingTrip, setCreatingTrip] = useState<boolean>(false);
+  const { user } = useCurrentUser();
 
   const form = useForm<CreateTripForm>({
     mode: 'uncontrolled',
@@ -30,16 +34,20 @@ export const CreateNewTrip = () => {
 
   useEffect(() => {
     if (tripDataFile) {
+      setImporting(true);
       importTripData(tripDataFile)
         .then((res) => {
-          console.log('after import', res);
           navigate(`/trips/${res.tripId}`);
         })
         .catch((err) => {
           notifications.show({
             title: 'Import failed',
             message: `Import failed:${err.message}`,
+            position: 'top-right',
           });
+        })
+        .finally(() => {
+          setImporting(false);
         });
     }
   }, [tripDataFile]);
@@ -54,14 +62,14 @@ export const CreateNewTrip = () => {
 
       <form
         onSubmit={form.onSubmit(async (values) => {
-          const user = await currentUser();
+          setCreatingTrip(true);
           const { name, description, dateRange, participants, destinations } = values;
           const data: NewTrip = {
             name: name,
             description: description,
             startDate: dateRange[0] || new Date(),
             endDate: dateRange[1] || new Date(),
-            ownerId: user.id,
+            ownerId: user?.id || '',
             participants: participants?.map((p) => {
               return { name: p };
             }),
@@ -77,9 +85,20 @@ export const CreateNewTrip = () => {
             }),
           };
 
-          createTrip(data).then((trip) => {
-            navigate(`/trips/${trip.id}`);
-          });
+          createTrip(data)
+            .then((trip) => {
+              navigate(`/trips/${trip.id}`);
+            })
+            .catch((err) => {
+              notifications.show({
+                title: 'Unable to create trip',
+                message: `Error: ${err.message}`,
+                position: 'top-right',
+              });
+            })
+            .finally(() => {
+              setCreatingTrip(false);
+            });
         })}
       >
         <Accordion chevronPosition="right" variant="contained" value="basic_info">
@@ -110,14 +129,15 @@ export const CreateNewTrip = () => {
                 <FileButton onChange={setTripDataFile} accept="application/json" form={'tripData'} name={'tripData'}>
                   {(props) => {
                     return (
-                      <Button {...props} variant={'subtle'}>
+                      <Button {...props} loading={importing} variant={'subtle'}>
                         {t('import_trip', 'Import Trip')}
                       </Button>
                     );
                   }}
                 </FileButton>
-
-                <Button type={'submit'}>Create Trip</Button>
+                <Button disabled={importing && !form.isValid()} loading={creatingTrip} type={'submit'}>
+                  Create Trip
+                </Button>
               </Group>
             </Accordion.Panel>
           </Accordion.Item>

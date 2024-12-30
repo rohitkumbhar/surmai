@@ -27,7 +27,7 @@ export const GenericTransportationModeForm = ({
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
-
+  const [saving, setSaving] = useState<boolean>(false);
   const form = useForm<TransportationFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -45,6 +45,7 @@ export const GenericTransportationModeForm = ({
 
   // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
+    setSaving(true);
     const payload: CreateTransportation = {
       type: transportationType,
       origin: values.origin,
@@ -83,6 +84,8 @@ export const GenericTransportationModeForm = ({
         }
       });
     }
+
+    setSaving(false);
   };
 
   return (
@@ -216,7 +219,7 @@ export const GenericTransportationModeForm = ({
           </Stack>
         </Group>
         <Group justify={'flex-end'}>
-          <Button type={'submit'} w={'min-content'}>
+          <Button type={'submit'} w={'min-content'} loading={saving}>
             {t('save', 'Save')}
           </Button>
           <Button

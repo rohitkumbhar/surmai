@@ -23,6 +23,7 @@ export const CarRentalForm = ({
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
+  const [saving, setSaving] = useState<boolean>(false);
 
   const form = useForm<CarRentalFormSchema>({
     mode: 'uncontrolled',
@@ -41,6 +42,7 @@ export const CarRentalForm = ({
 
   // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
+    setSaving(true);
     const carRentalData: CreateTransportation = {
       type: 'rental_car',
       trip: trip.id,
@@ -79,6 +81,8 @@ export const CarRentalForm = ({
         }
       });
     }
+
+    setSaving(false);
   };
 
   return (
@@ -195,7 +199,7 @@ export const CarRentalForm = ({
             </Stack>
           </Group>
           <Group justify={'flex-end'}>
-            <Button type={'submit'} w={'min-content'}>
+            <Button type={'submit'} w={'min-content'} loading={saving}>
               {t('save', 'Save')}
             </Button>
             <Button

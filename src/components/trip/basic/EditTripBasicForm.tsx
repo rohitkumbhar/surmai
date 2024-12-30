@@ -33,19 +33,6 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
 
       <DestinationSelect propName={'destinations'} form={form as UseFormReturnType<unknown>} />
 
-      {/*<TagsInput
-        label={t('basic.trip_destinations', 'Destinations')}
-        required
-        key={form.key('destinations')}
-        {...form.getInputProps('destinations')}
-        acceptValueOnBlur
-        description={t(
-          'basic.trip_destinations_description',
-          'Enter the destinations in this trip e.g. San Jose, Guanacaste'
-        )}
-        placeholder="Enter names"
-      />*/}
-
       <DatePickerInput
         type="range"
         required

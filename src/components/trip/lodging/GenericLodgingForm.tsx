@@ -25,6 +25,7 @@ export const GenericLodgingForm = ({
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
+  const [saving, setSaving] = useState<boolean>(false);
   const form = useForm<LodgingFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -40,6 +41,7 @@ export const GenericLodgingForm = ({
   });
 
   const handleFormSubmit = (values: LodgingFormSchema) => {
+    setSaving(true);
     const data = {
       type: type,
       name: values.name,
@@ -77,6 +79,7 @@ export const GenericLodgingForm = ({
       });
     }
 
+    setSaving(false);
     onSuccess();
   };
 
@@ -183,7 +186,7 @@ export const GenericLodgingForm = ({
             </Stack>
           </Group>
           <Group justify={'flex-end'}>
-            <Button type={'submit'} w={'min-content'}>
+            <Button type={'submit'} w={'min-content'} loading={saving}>
               {t('save', 'Save')}
             </Button>
             <Button

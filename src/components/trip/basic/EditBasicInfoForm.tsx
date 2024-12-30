@@ -7,6 +7,8 @@ import { EditTripBasicForm } from './EditTripBasicForm.tsx';
 import { Button, Group } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { nanoid } from 'nanoid';
+import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
 
 export const EditBasicInfoForm = ({
   context,
@@ -20,6 +22,7 @@ export const EditBasicInfoForm = ({
 }>) => {
   const { trip, onSave } = innerProps;
   const { t } = useTranslation();
+  const [saving, setSaving] = useState<boolean>(false);
   const initialValues: CreateTripForm = {
     name: trip.name,
     description: trip.description,
@@ -46,6 +49,7 @@ export const EditBasicInfoForm = ({
   return (
     <form
       onSubmit={form.onSubmit((values) => {
+        setSaving(true);
         const data = {
           name: values.name,
           description: values.description,
@@ -65,15 +69,26 @@ export const EditBasicInfoForm = ({
             return { name: name };
           }),
         };
-        updateTrip(trip.id, data).then(() => {
-          context.closeModal(id);
-          onSave();
-        });
+        updateTrip(trip.id, data)
+          .then(() => {
+            setSaving(false);
+            context.closeModal(id);
+            onSave();
+          })
+          .catch((err) => {
+            notifications.show({
+              title: t('failed_save', 'Update failed'),
+              message: err.message,
+              position: 'top-right',
+            });
+          })
+          .finally(() => setSaving(false));
       })}
     >
       <EditTripBasicForm form={form} />
       <Group justify={'flex-end'}>
         <Button
+          loading={saving}
           mt="xl"
           type={'button'}
           variant={'default'}

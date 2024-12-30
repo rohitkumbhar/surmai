@@ -23,6 +23,7 @@ export const GenericActivityForm = ({
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
+  const [saving, setSaving] = useState<boolean>(false);
   const form = useForm<ActivityFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -36,6 +37,7 @@ export const GenericActivityForm = ({
   });
 
   const handleFormSubmit = (values: ActivityFormSchema) => {
+    setSaving(true);
     const data = {
       name: values.name,
       description: values.description,
@@ -70,7 +72,7 @@ export const GenericActivityForm = ({
         }
       });
     }
-
+    setSaving(false);
     onSuccess();
   };
 
@@ -163,7 +165,7 @@ export const GenericActivityForm = ({
             </Stack>
           </Group>
           <Group justify={'flex-end'}>
-            <Button type={'submit'} w={'min-content'}>
+            <Button type={'submit'} loading={saving} w={'min-content'}>
               {t('save', 'Save')}
             </Button>
             <Button
