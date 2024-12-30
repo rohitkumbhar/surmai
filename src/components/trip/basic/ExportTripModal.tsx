@@ -4,12 +4,11 @@ import { Button, Center, Container, Text } from '@mantine/core';
 import { useState } from 'react';
 import { exportTripData } from '../../../lib';
 
-export const ExportTripModal = (
-  {
-    innerProps,
-  }: ContextModalProps<{
-    trip: Trip;
-  }>) => {
+export const ExportTripModal = ({
+  innerProps,
+}: ContextModalProps<{
+  trip: Trip;
+}>) => {
   const { trip } = innerProps;
 
   const [downloadLink, setDownloadLink] = useState<string | undefined>();
@@ -21,7 +20,6 @@ export const ExportTripModal = (
   };
 
   const prepareDownload = (tripData: any) => {
-
     const blob = new Blob([JSON.stringify(tripData)], { type: 'application/json' });
 
     // If we are replacing a previously generated file we need to
@@ -36,9 +34,7 @@ export const ExportTripModal = (
 
   return (
     <Container>
-      <Text>
-        Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.
-      </Text>
+      <Text>Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.</Text>
       <Center>
         {!downloadLink && <Button onClick={prepareExport}>Prepare</Button>}
         {downloadLink && (

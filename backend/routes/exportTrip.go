@@ -73,11 +73,16 @@ type Trip struct {
 	Description  string         `json:"description"`
 	StartDate    types.DateTime `json:"startDate"`
 	EndDate      types.DateTime `json:"endDate"`
-	Created      types.DateTime `json:"created"`
-	Updated      types.DateTime `json:"updated"`
 	Destinations []Destination  `json:"destinations"`
 	Participants []Participant  `json:"participants"`
 	CoverImage   *UploadedFile  `json:"coverImage"`
+}
+
+type ExportedTrip struct {
+	Trip            *Trip             `json:"trip"`
+	Transportations []*Transportation `json:"transportations"`
+	Lodgings        []*Lodging        `json:"lodgings"`
+	Activities      []*Activity       `json:"activities"`
 }
 
 func ExportTrip(e *core.RequestEvent) error {
@@ -113,19 +118,22 @@ func ExportTrip(e *core.RequestEvent) error {
 	lodgings := buildLodgings(e, trip)
 	activities := buildActivities(e, trip)
 
-	return e.JSON(http.StatusOK, map[string]any{
-		"trip":            t,
-		"transportations": transportations,
-		"lodgings":        lodgings,
-		"activities":      activities})
+	exportedTrip := ExportedTrip{
+		Trip:            &t,
+		Transportations: transportations,
+		Lodgings:        lodgings,
+		Activities:      activities,
+	}
+
+	return e.JSON(http.StatusOK, exportedTrip)
 }
 
-func buildActivities(e *core.RequestEvent, trip *core.Record) *[]Activity {
+func buildActivities(e *core.RequestEvent, trip *core.Record) []*Activity {
 
 	activities, _ := e.App.FindAllRecords("activities",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
-	var payload []Activity
+	var payload []*Activity
 	for _, l := range activities {
 
 		ct := Activity{
@@ -139,19 +147,19 @@ func buildActivities(e *core.RequestEvent, trip *core.Record) *[]Activity {
 			Cost:             getCost(l),
 			Attachments:      getAttachments(e, l),
 		}
-		payload = append(payload, ct)
+		payload = append(payload, &ct)
 	}
 
-	return &payload
+	return payload
 
 }
 
-func buildLodgings(e *core.RequestEvent, trip *core.Record) *[]Lodging {
+func buildLodgings(e *core.RequestEvent, trip *core.Record) []*Lodging {
 
 	lodgings, _ := e.App.FindAllRecords("lodgings",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
-	var payload []Lodging
+	var payload []*Lodging
 	for _, l := range lodgings {
 
 		ct := Lodging{
@@ -166,19 +174,19 @@ func buildLodgings(e *core.RequestEvent, trip *core.Record) *[]Lodging {
 			Cost:             getCost(l),
 			Attachments:      getAttachments(e, l),
 		}
-		payload = append(payload, ct)
+		payload = append(payload, &ct)
 	}
 
-	return &payload
+	return payload
 
 }
 
-func buildTransportations(e *core.RequestEvent, trip *core.Record) *[]Transportation {
+func buildTransportations(e *core.RequestEvent, trip *core.Record) []*Transportation {
 
 	transportations, _ := e.App.FindAllRecords("transportations",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
-	var payload []Transportation
+	var payload []*Transportation
 	for _, tr := range transportations {
 
 		ct := Transportation{
@@ -192,10 +200,10 @@ func buildTransportations(e *core.RequestEvent, trip *core.Record) *[]Transporta
 			Cost:        getCost(tr),
 			Attachments: getAttachments(e, tr),
 		}
-		payload = append(payload, ct)
+		payload = append(payload, &ct)
 	}
 
-	return &payload
+	return payload
 }
 
 func getAttachments(e *core.RequestEvent, r *core.Record) []*UploadedFile {

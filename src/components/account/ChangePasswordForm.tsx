@@ -45,7 +45,7 @@ export const ChangePasswordForm = () => {
         notifications.show({
           title: t('admin_password_changed', 'Admin Password Changed'),
           message: t('admin_password_changed', 'Admin Password Changed'),
-          position: 'top-right'
+          position: 'top-right',
         });
       });
     }
@@ -58,7 +58,7 @@ export const ChangePasswordForm = () => {
       notifications.show({
         title: t('password_changed', 'Password Changed'),
         message: t('password_changed', 'Password Changed'),
-        position: 'top-right'
+        position: 'top-right',
       });
     });
   };

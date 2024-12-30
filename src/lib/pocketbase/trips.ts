@@ -228,3 +228,12 @@ export const exportTripData = async (tripId: string) => {
     body: { tripId },
   });
 };
+
+export const importTripData = async (file: File) => {
+  const formData = new FormData();
+  formData.append('tripData', file);
+  return await pb.send('/import-trip', {
+    method: 'POST',
+    body: formData,
+  });
+};

@@ -63,8 +63,9 @@ func init() {
 				MaxSize: 10000,
 			},
 			&core.RelationField{
-				Name:         "trip",
-				CollectionId: tripsCollectionId,
+				Name:          "trip",
+				CollectionId:  tripsCollectionId,
+				CascadeDelete: true,
 			},
 			&core.FileField{
 				Name:      "attachments",

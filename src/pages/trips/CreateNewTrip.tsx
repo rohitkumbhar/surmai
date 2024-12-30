@@ -1,17 +1,21 @@
-import { Accordion, Button, Container, Group, rem, Text } from '@mantine/core';
+import { Accordion, Button, Container, FileButton, Group, rem, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconInfoSquare } from '@tabler/icons-react';
-import { createTrip, currentUser } from '../../lib';
+import { createTrip, currentUser, importTripData } from '../../lib';
 import { useNavigate } from 'react-router-dom';
 import { CreateTripForm, NewTrip } from '../../types/trips.ts';
 import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
 import { basicInfoFormValidation } from '../../components/trip/basic/validation.ts';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../../components/nav/Header.tsx';
+import { useEffect, useState } from 'react';
+import { notifications } from '@mantine/notifications';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [tripDataFile, setTripDataFile] = useState<File | null>(null);
+
   const form = useForm<CreateTripForm>({
     mode: 'uncontrolled',
     initialValues: {
@@ -23,6 +27,22 @@ export const CreateNewTrip = () => {
     },
     validate: basicInfoFormValidation,
   });
+
+  useEffect(() => {
+    if (tripDataFile) {
+      importTripData(tripDataFile)
+        .then((res) => {
+          console.log('after import', res);
+          navigate(`/trips/${res.tripId}`);
+        })
+        .catch((err) => {
+          notifications.show({
+            title: 'Import failed',
+            message: `Import failed:${err.message}`,
+          });
+        });
+    }
+  }, [tripDataFile]);
 
   return (
     <Container py="xl">
@@ -86,12 +106,22 @@ export const CreateNewTrip = () => {
             </Accordion.Control>
             <Accordion.Panel>
               <EditTripBasicForm form={form} />
+              <Group mt="xl" justify={'flex-end'}>
+                <FileButton onChange={setTripDataFile} accept="application/json" form={'tripData'} name={'tripData'}>
+                  {(props) => {
+                    return (
+                      <Button {...props} variant={'subtle'}>
+                        {t('import_trip', 'Import Trip')}
+                      </Button>
+                    );
+                  }}
+                </FileButton>
+
+                <Button type={'submit'}>Create Trip</Button>
+              </Group>
             </Accordion.Panel>
           </Accordion.Item>
         </Accordion>
-        <Button fullWidth mt="xl" type={'submit'}>
-          Create Trip
-        </Button>
       </form>
     </Container>
   );
