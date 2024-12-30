@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/jobs"
 	_ "backend/migrations"
 	R "backend/routes"
 	"github.com/pocketbase/pocketbase"
@@ -27,6 +28,12 @@ func main() {
 		// (the isGoRun check is to enable it only during development)
 		Automigrate: isGoRun,
 	})
+
+	// 0 0 * * * *
+	if os.Getenv("SURMAI_DEMO_MODE") == "true" {
+		app.Cron().MustAdd("ImportDemoDataJob", "* * * * *", jobs.ImportDemoDataJob)
+	}
+
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 
 		se.Router.POST("/impersonate", R.ImpersonateAction).Bind(apis.RequireSuperuserAuth())
