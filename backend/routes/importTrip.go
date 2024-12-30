@@ -155,7 +155,7 @@ func createTrip(app core.App, userId string, data *ExportedTrip) (*core.Record, 
 	record := core.NewRecord(trips)
 
 	tripData := data.Trip
-	record.Set("name", "Imported"+tripData.Name)
+	record.Set("name", tripData.Name)
 	record.Set("description", tripData.Description)
 	record.Set("startDate", tripData.StartDate)
 	record.Set("endDate", tripData.EndDate)
