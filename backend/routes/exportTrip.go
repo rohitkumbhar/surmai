@@ -92,11 +92,13 @@ func ExportTrip(e *core.RequestEvent) error {
 
 	trip, err := e.App.FindRecordById("trips", tripId)
 	if err != nil {
+		e.App.Logger().Error("Unable to find trip record", "id", tripId)
 		return err
 	}
 
 	canAccess, err := e.App.CanAccessRecord(trip, requestInfo, trip.Collection().ViewRule)
 	if err != nil {
+		e.App.Logger().Error("UUser cannot access trip", "id", tripId)
 		return err
 	}
 	if !canAccess {
@@ -113,6 +115,8 @@ func ExportTrip(e *core.RequestEvent) error {
 		Destinations: getDestinations(trip),
 		Participants: getParticipants(trip),
 	}
+
+	e.App.Logger().Debug("Exported Basic trip data", "id", trip.Id)
 
 	transportations := buildTransportations(e, trip)
 	lodgings := buildLodgings(e, trip)
@@ -148,6 +152,8 @@ func buildActivities(e *core.RequestEvent, trip *core.Record) []*Activity {
 			Attachments:      getAttachments(e, l),
 		}
 		payload = append(payload, &ct)
+		e.App.Logger().Debug("Exported Activity  data", "id", l.Id)
+
 	}
 
 	return payload
@@ -175,6 +181,8 @@ func buildLodgings(e *core.RequestEvent, trip *core.Record) []*Lodging {
 			Attachments:      getAttachments(e, l),
 		}
 		payload = append(payload, &ct)
+		e.App.Logger().Debug("Exported Lodging  data", "id", l.Id)
+
 	}
 
 	return payload
@@ -201,6 +209,8 @@ func buildTransportations(e *core.RequestEvent, trip *core.Record) []*Transporta
 			Attachments: getAttachments(e, tr),
 		}
 		payload = append(payload, &ct)
+		e.App.Logger().Debug("Exported Transportation  data", "id", tr.Id)
+
 	}
 
 	return payload
