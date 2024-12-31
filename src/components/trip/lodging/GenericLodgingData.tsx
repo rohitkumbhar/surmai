@@ -98,7 +98,7 @@ export const GenericLodgingData = ({
           </Box>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
             {t('lodging.check_in', 'Check-In')}
           </Text>
