@@ -49,7 +49,7 @@ func (surmai *SurmaiApp) startDemoMode() {
 			DemoPassword: password,
 		}
 
-		surmai.pb.Cron().MustAdd("ImportDemoDataJob", "@daily", func() {
+		surmai.pb.Cron().MustAdd("ImportDemoDataJob", "0 * * * *", func() {
 			job.Execute()
 		})
 	}
