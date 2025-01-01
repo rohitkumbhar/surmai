@@ -33,17 +33,17 @@ to install it as a regular app on mobile phones. [Installation Instructions](htt
 ### Screenshots / Screencasts
 
 #### Home
-<img src="screenshots/desktop_home.png" alt="Home page on desktop" width="800px"/>
+* <img src="screenshots/desktop_home.png" alt="Home page on desktop" width="800px"/>
 
-<img src="screenshots/mobile_home.png" alt="Home page on mobile" width="400px"/>
+* <img src="screenshots/mobile_home.png" alt="Home page on mobile" width="400px"/>
 
 #### Desktop Admin Settings
 <img src="screenshots/desktop_admin_settings.png" alt="Site Settings on desktop" width="800px"/>
 
 #### Organization
-<img src="screenshots/mobile_organization.png" alt="Trip Organization page on mobile" width="400px"/>
+* <img src="screenshots/mobile_organization.png" alt="Trip Organization page on mobile" width="400px"/>
 
-<img src="screenshots/desktop_organization.png" alt="Trip Organization page on desktop" width="800px"/>
+* <img src="screenshots/desktop_organization.png" alt="Trip Organization page on desktop" width="800px"/>
 
 #### Itinerary
 <img src="screenshots/desktop_itinerary.png" alt="Itinerary page on desktop" width="800px"/>
