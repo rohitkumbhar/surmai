@@ -16,11 +16,11 @@ export const Settings = () => {
 
   useEffect(() => {
     adminAuthRefresh().catch(() => {
-      console.error("Could not refresh admin credentials. Logging out");
+      console.error('Could not refresh admin credentials. Logging out');
       logoutCurrentUser().then(() => {
         navigate(0);
       });
-    })
+    });
   }, [navigate]);
 
   return (

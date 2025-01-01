@@ -13,7 +13,7 @@ export {
   enableUserSignups,
   disableUserSignups,
   updateAdminUser,
-  adminAuthRefresh
+  adminAuthRefresh,
 } from './pocketbase/auth';
 export {
   getTrip,
