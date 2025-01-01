@@ -93,6 +93,11 @@ export const authRefresh = () => {
   return pb.collection('users').authRefresh();
 };
 
+export const adminAuthRefresh = () => {
+  return pbAdmin.collection("_superusers").authRefresh();
+};
+
+
 export const updateUserAvatar = (userId: string, file: File | Blob) => {
   const formData = new FormData();
   formData.append('avatar', file);
