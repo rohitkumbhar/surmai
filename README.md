@@ -1,3 +1,30 @@
+<!-- TOC -->
+* [Surmai](#surmai)
+* [Features](#features)
+* [Rationale](#rationale)
+    * [Mobile Apps](#mobile-apps)
+    * [Screenshots / Screencasts](#screenshots--screencasts)
+      * [Home](#home)
+      * [Desktop Admin Settings](#desktop-admin-settings)
+      * [Organization](#organization)
+      * [Itinerary](#itinerary)
+      * [User Preferences](#user-preferences)
+    * [Demo](#demo)
+* [Installation](#installation)
+  * [By cloning the repository](#by-cloning-the-repository)
+    * [Required Environment Variables](#required-environment-variables)
+* [Credits](#credits)
+  * [PocketBase](#pocketbase)
+  * [Mantine](#mantine)
+  * [Icon](#icon)
+  * [Bundled Data](#bundled-data)
+    * [Airports](#airports)
+    * [Cities](#cities)
+* [Possibly FAQ](#possibly-faq)
+    * [Why so ugly tho?](#why-so-ugly-tho)
+    * [Why not use ${other_thing}?](#why-not-use-other_thing)
+<!-- TOC -->
+
 # Surmai
 Surmai is a personal/family travel organizer.
 The app is built to solve 3 particular challenges while planning a trip:
@@ -12,7 +39,6 @@ The app is built to solve 3 particular challenges while planning a trip:
 - Offline access
 - Privacy
 - Mobile friendly
-
 
 # Rationale
 As avid travellers, we (me & SO) split up the planning tasks e.g. booking plane tickets and
