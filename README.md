@@ -33,8 +33,8 @@ to install it as a regular app on mobile phones. [Installation Instructions](htt
 ### Screenshots / Screencasts
 
 #### Home
-![desktop_home.png](screenshots/desktop_home.png)
-![mobile_home.png](screenshots/mobile_home.png)
+<img src="screenshots/desktop_home.png" alt="Home page on desktop" width="400px"/>
+<img src="screenshots/mobile_home.png" alt="Home page on mobile" width="400px"/>
 
 #### Desktop Admin Settings
 ![desktop_admin_settings.png](screenshots/desktop_admin_settings.png)
@@ -51,13 +51,16 @@ to install it as a regular app on mobile phones. [Installation Instructions](htt
 
 ### Demo
 A demo is available at https://demo.surmai.app/
+
 Demo Account:
+
 Email: `demo@surmai.app`
+
 Password: `vi#c8Euuf16idhbG`
 
 Feel free to create an account and explore.
 
-NOTE: The demo site is cleaned up every hour
+NOTE: The demo site is cleaned up every hour.
 
 
 # Installation
