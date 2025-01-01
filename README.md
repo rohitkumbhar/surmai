@@ -33,6 +33,8 @@ The app is built to solve 3 particular challenges while planning a trip:
 2. Allow easy access to all the necessary artifacts during the course of the trip.
 3. Keep the data private.
 
+NOTE: This is a very very alpha stage project and under active development. Please report any issues using Github Issues.
+
 # Features
 - Organize a trip in one place
 - Allow collaboration between multiple users
@@ -116,6 +118,8 @@ docker compose build
 # Run the docker image
 docker compose up -d
 ```
+
+GHCR based Docker image to be released soon...
 
 # Credits
 
