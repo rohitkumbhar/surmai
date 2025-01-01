@@ -33,21 +33,24 @@ to install it as a regular app on mobile phones. [Installation Instructions](htt
 ### Screenshots / Screencasts
 
 #### Home
-<img src="screenshots/desktop_home.png" alt="Home page on desktop" width="400px"/>
+<img src="screenshots/desktop_home.png" alt="Home page on desktop" width="800px"/>
+
 <img src="screenshots/mobile_home.png" alt="Home page on mobile" width="400px"/>
 
 #### Desktop Admin Settings
-![desktop_admin_settings.png](screenshots/desktop_admin_settings.png)
+<img src="screenshots/desktop_admin_settings.png" alt="Site Settings on desktop" width="800px"/>
 
 #### Organization
-![mobile_organization.png](screenshots/mobile_organization.png)
-![desktop_organization.png](screenshots/desktop_organization.png)
+<img src="screenshots/mobile_organization.png" alt="Trip Organization page on mobile" width="400px"/>
+
+<img src="screenshots/desktop_organization.png" alt="Trip Organization page on desktop" width="800px"/>
 
 #### Itinerary
-![desktop_itinerary.png](screenshots/desktop_itinerary.png)
+<img src="screenshots/desktop_itinerary.png" alt="Itinerary page on desktop" width="800px"/>
 
-#### User Profile
-![mobile_user_profile.png](screenshots/mobile_user_profile.png)
+#### User Preferences
+<img src="screenshots/mobile_user_profile.png" alt="User Preferences page on mobile" width="400px"/>
+
 
 ### Demo
 A demo is available at https://demo.surmai.app/
