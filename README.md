@@ -1,5 +1,18 @@
 # Surmai
-Surmai is a personal travel planning application. 
+Surmai is a personal/family travel organizer.
+The app is built to solve 3 particular challenges while planning a trip:
+
+1. Allow collaborative planning between multiple people.
+2. Allow easy access to all the necessary artifacts during the course of the trip.
+3. Keep the data private.
+
+# Features
+- Organize a trip in one place
+- Allow collaboration between multiple users
+- Offline access
+- Privacy
+- Mobile friendly
+
 
 # Rationale
 As avid travellers, we (me & SO) split up the planning tasks e.g. booking plane tickets and
@@ -13,26 +26,38 @@ pre jQuery days when Internet Explorer 5 demanded we test the `navigator` every 
 been exposed to the "new" Javascript at my current job as a necessity and decided to use this project as a learning
 opportunity.
 
-Surmai was built to solve 3 particular challenges while planning a trip:
-
-1. Allow collaborative planning between multiple people.
-2. Allow easy access to all the necessary artifacts during the course of the trip.
-3. Keep the data private.
-
-# Features
-- Organize a trip in one place
-- Allow collaboration between multiple users
-- Offline access
-- Privacy
-- Mobile friendly
-
 ### Mobile Apps
 Surmai is built as a [Progressive Web App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/What_is_a_progressive_web_app). It's possible 
 to install it as a regular app on mobile phones. [Installation Instructions](https://support.google.com/chrome/answer/9658361?hl=en&co=GENIE.Platform%3DAndroid&oco=1)
 
 ### Screenshots / Screencasts
-TBD
 
+#### Home
+![desktop_home.png](screenshots/desktop_home.png)
+![mobile_home.png](screenshots/mobile_home.png)
+
+#### Desktop Admin Settings
+![desktop_admin_settings.png](screenshots/desktop_admin_settings.png)
+
+#### Organization
+![mobile_organization.png](screenshots/mobile_organization.png)
+![desktop_organization.png](screenshots/desktop_organization.png)
+
+#### Itinerary
+![desktop_itinerary.png](screenshots/desktop_itinerary.png)
+
+#### User Profile
+![mobile_user_profile.png](screenshots/mobile_user_profile.png)
+
+### Demo
+A demo is available at https://demo.surmai.app/
+Demo Account:
+Email: `demo@surmai.app`
+Password: `vi#c8Euuf16idhbG`
+
+Feel free to create an account and explore.
+
+NOTE: The demo site is cleaned up every hour
 
 
 # Installation
@@ -54,10 +79,10 @@ Backend
 git clone https://github.com/rohitkumbhar/surmai.git
 
 # Build a docker image locally
-docker-compose build
+docker compose build
 
 # Run the docker image
-docker-compose up -d
+docker compose up -d
 ```
 
 # Credits
@@ -80,13 +105,11 @@ From [OurAirports](https://ourairports.com/data/)
 ### Cities
 From [countries-states-cities-database](https://github.com/dr5hn/countries-states-cities-database)
 
-### Airlines
-From [airlines-logos-dataset](https://github.com/imgmongelli/airlines-logos-dataset)
-
 
 # Possibly FAQ
 ### Why so ugly tho?
 ~20 years as a backend dev, I have a tendency to lean towards function over form.
 
-### Why not ${other_thing}?
-I wanted to learn React/Typescript, that's about it.
+### Why not use ${other_thing}?
+I wanted to learn React/Typescript, that's about it. So many side projects have languished because I gave up when it came
+to building the UI. I wanted this one to be different.

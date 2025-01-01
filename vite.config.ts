@@ -47,7 +47,7 @@ export default defineConfig(() => {
           screenshots: [
             {
 
-              src: "screenshots/wide.jpg",
+              src: "screenshots/desktop_home.jpg",
               sizes: "1303x569",
               type: "image/jpeg",
               form_factor: "wide",
@@ -55,7 +55,7 @@ export default defineConfig(() => {
             },
             {
 
-              src: "screenshots/mobile.jpg",
+              src: "screenshots/mobile_home.jpg",
               sizes: "379x597",
               type: "image/jpeg",
               form_factor: "narrow",
