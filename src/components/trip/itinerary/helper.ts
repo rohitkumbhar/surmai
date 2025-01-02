@@ -48,7 +48,6 @@ export const buildActivitiesIndex = (activities: Activity[]) => {
   activities?.forEach((activity) => {
     const start = dayjs(activity.startDate).startOf('day');
 
-    // for (let m = dayjs(start); m.isBefore(end); m = m.add(1, 'day')) {
     const key = start.toISOString();
     let value = lodgingIndex[key];
     if (!value) {
@@ -59,7 +58,6 @@ export const buildActivitiesIndex = (activities: Activity[]) => {
     if (!exists) {
       lodgingIndex[key].push(activity);
     }
-    // }
   });
   return lodgingIndex;
 };
@@ -72,3 +70,40 @@ export function chunk<T>(array: T[], size: number): T[][] {
   const tail = array.slice(size);
   return [head, ...chunk(tail, size)];
 }
+
+export const buildCalendarEvents = (
+  activities: Activity[],
+  lodgings: Lodging[],
+  transportations: Transportation[]
+) => {
+  const events: any[] = [];
+
+  activities?.forEach((activity) => {
+    events.push({
+      title: activity.name,
+      start: new Date(activity.startDate),
+      end: new Date(activity.endDate),
+      type: 'activity',
+    });
+  });
+
+  transportations?.forEach((transportation) => {
+    events.push({
+      title: transportation.name,
+      start: new Date(transportation.departureTime),
+      end: new Date(transportation.arrivalTime),
+      type: 'transportation',
+    });
+  });
+
+  lodgings?.forEach((lodging) => {
+    events.push({
+      title: lodging.name,
+      start: new Date(lodging.startDate),
+      end: new Date(lodging.endDate),
+      type: 'lodging',
+    });
+  });
+
+  return events;
+};
