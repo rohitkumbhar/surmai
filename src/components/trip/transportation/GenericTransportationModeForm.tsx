@@ -118,6 +118,8 @@ export const GenericTransportationModeForm = ({
             label={t('transportation.departure_time', 'Departure Time')}
             clearable
             required
+            minDate={trip.startDate}
+            maxDate={trip.endDate}
             key={form.key('departureTime')}
             {...form.getInputProps('departureTime')}
           />
@@ -147,6 +149,8 @@ export const GenericTransportationModeForm = ({
             label={t('transportation.arrival_time', 'Arrival Time')}
             required
             miw={rem('200px')}
+            minDate={trip.startDate}
+            maxDate={trip.endDate}
             clearable
             key={form.key('arrivalTime')}
             {...form.getInputProps('arrivalTime')}

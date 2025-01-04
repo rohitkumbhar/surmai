@@ -112,6 +112,8 @@ export const GenericLodgingForm = ({
               label={t('lodging.start_date', 'Check-In')}
               clearable
               required
+              minDate={trip.startDate}
+              maxDate={trip.endDate}
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
               miw={rem(200)}
@@ -124,6 +126,8 @@ export const GenericLodgingForm = ({
               required
               miw={rem('200px')}
               clearable
+              minDate={trip.startDate}
+              maxDate={trip.endDate}
               key={form.key('endDate')}
               {...form.getInputProps('endDate')}
             />
