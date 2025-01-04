@@ -110,6 +110,8 @@ export const GenericActivityForm = ({
               label={t('activity.start_date', 'Date/Time')}
               clearable
               required
+              minDate={trip.startDate}
+              maxDate={trip.endDate}
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
               miw={rem(200)}
