@@ -8,7 +8,6 @@ import path from 'path';
 export default defineConfig(() => {
   return {
     root: path.join(__dirname, 'site'),
-    base: '/surmai',
     build: {
       outDir: path.join(__dirname, 'docs'),
     },
