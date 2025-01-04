@@ -2,17 +2,15 @@
 * [Surmai](#surmai)
 * [Features](#features)
 * [Rationale](#rationale)
-    * [Mobile Apps](#mobile-apps)
-    * [Screenshots / Screencasts](#screenshots--screencasts)
-      * [Home](#home)
-      * [Desktop Admin Settings](#desktop-admin-settings)
-      * [Organization](#organization)
-      * [Itinerary](#itinerary)
-      * [User Preferences](#user-preferences)
-    * [Demo](#demo)
+* [Mobile Apps](#mobile-apps)
+* [Screenshots / Screencasts](#screenshots--screencasts)
+  * [Desktop](#desktop)
+  * [Mobile](#mobile)
+* [Demo](#demo)
 * [Installation](#installation)
   * [By cloning the repository](#by-cloning-the-repository)
     * [Required Environment Variables](#required-environment-variables)
+  * [Docker Image](#docker-image)
 * [Credits](#credits)
   * [PocketBase](#pocketbase)
   * [Mantine](#mantine)
@@ -54,33 +52,26 @@ pre jQuery days when Internet Explorer 5 demanded we test the `navigator` every 
 been exposed to the "new" Javascript at my current job as a necessity and decided to use this project as a learning
 opportunity.
 
-### Mobile Apps
+# Mobile Apps
 Surmai is built as a [Progressive Web App](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/What_is_a_progressive_web_app). It's possible 
 to install it as a regular app on mobile phones. [Installation Instructions](https://support.google.com/chrome/answer/9658361?hl=en&co=GENIE.Platform%3DAndroid&oco=1)
 
-### Screenshots / Screencasts
+# Screenshots / Screencasts
 
-#### Home
-* <img src="screenshots/desktop_home.png" alt="Home page on desktop" width="800px"/>
+## Desktop
+<img src="screenshots/desktop_home.png" alt="Home page on desktop" width="400px" height="300px"/>
+<img src="screenshots/desktop_admin_settings.png" alt="Site Settings on desktop" width="400px" height="300px" />
+<img src="screenshots/desktop_organization.png" alt="Trip Organization page on desktop" width="400px" height="300px"/>
+<img src="screenshots/desktop_itinerary.png" alt="Itinerary page on desktop" width="400px" height="300px"/>
 
-* <img src="screenshots/mobile_home.png" alt="Home page on mobile" width="400px"/>
-
-#### Desktop Admin Settings
-<img src="screenshots/desktop_admin_settings.png" alt="Site Settings on desktop" width="800px"/>
-
-#### Organization
-* <img src="screenshots/mobile_organization.png" alt="Trip Organization page on mobile" width="400px"/>
-
-* <img src="screenshots/desktop_organization.png" alt="Trip Organization page on desktop" width="800px"/>
-
-#### Itinerary
-<img src="screenshots/desktop_itinerary.png" alt="Itinerary page on desktop" width="800px"/>
-
-#### User Preferences
-<img src="screenshots/mobile_user_profile.png" alt="User Preferences page on mobile" width="400px"/>
+## Mobile
+<img src="screenshots/mobile_home.png" alt="Home page on mobile" width="200px" height="450px"/>
+<img src="screenshots/mobile_organization.png" alt="Trip Organization page on mobile" width="200px" height="450px"/>
+<img src="screenshots/mobile_user_profile.png" alt="User Preferences page on mobile" width="200px" height="450px"/>
+<img src="screenshots/mobile_offline_ready.png" alt="Offline readiness on mobile" width="200px" height="450px"/>
 
 
-### Demo
+# Demo
 A demo is available at https://demo.surmai.app/
 
 Demo Account:
@@ -118,7 +109,7 @@ docker compose build
 # Run the docker image
 docker compose up -d
 ```
-
+## Docker Image
 GHCR based Docker image to be released soon...
 
 # Credits
