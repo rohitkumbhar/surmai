@@ -3,10 +3,12 @@ import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 
-import { Container, Text } from '@mantine/core';
+import { Container, MantineProvider, Text } from '@mantine/core';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Container>
-    <Text>Hello Surmai Site</Text>
-  </Container>
+  <MantineProvider defaultColorScheme="auto">
+    <Container>
+      <Text>Hello Surmai Site</Text>
+    </Container>
+  </MantineProvider>
 );
