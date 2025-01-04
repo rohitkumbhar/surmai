@@ -109,8 +109,27 @@ docker compose build
 # Run the docker image
 docker compose up -d
 ```
-## Docker Image
-GHCR based Docker image to be released soon...
+## Docker Compose
+```yaml
+volumes:
+  surmai_data:
+
+services:
+  surmai_server:
+    container_name: surmai_server
+    image: ghcr.io/rohitkumbhar/surmai:v0.0.1
+    volumes:
+      - surmai_data:/pb_data
+    ports:
+      - "9090:8080"
+    restart: always
+    environment:
+      SURMAI_ADMIN_EMAIL: admin@example.com # Add your default administrator email
+      SURMAI_ADMIN_PASSWORD: ChangeMe123#@! # Admin password. Min 9 characters with all the fixings
+      PB_DATA_DIRECTORY: /pb_data # Must match volume directory above
+
+```
+
 
 # Credits
 
