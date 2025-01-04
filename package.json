@@ -8,6 +8,7 @@
     "dev": "vite --host 0.0.0.0 --cors",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/icons/fish-2.svg",
     "build": "tsc -b && vite build",
+    "build-site": " vite build -c vite.site.config.ts --emptyOutDir",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "format": "prettier --write ./src"
