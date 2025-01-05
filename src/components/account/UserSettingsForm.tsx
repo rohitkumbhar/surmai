@@ -63,6 +63,7 @@ export const UserSettingsForm = () => {
           key={form.key('currencyCode')}
           {...form.getInputProps('currencyCode')}
           data={currencyCodes}
+          searchable
           withCheckIcon={false}
         />
 

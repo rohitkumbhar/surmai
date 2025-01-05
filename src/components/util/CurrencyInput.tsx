@@ -20,6 +20,7 @@ export const CurrencyInput = ({
       key={currencyCodeKey}
       {...currencyCodeProps}
       data={currencyCodes}
+      searchable
       rightSectionWidth={28}
       withCheckIcon={false}
       styles={{
