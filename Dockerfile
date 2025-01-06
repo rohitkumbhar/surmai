@@ -1,5 +1,6 @@
-FROM node:20 AS frontend
-
+FROM --platform=$BUILDPLATFORM node:20 AS frontend
+ARG TARGETOS
+ARG TARGETARCH
 
 WORKDIR /surmai
 RUN mkdir node_modules
@@ -18,7 +19,9 @@ RUN npm install -g npm@10.3.0 # For windows
 RUN npm install --no-audit
 RUN npm run build
 
-FROM golang:1.23.4-alpine3.21 AS backend
+FROM --platform=$BUILDPLATFORM golang:1.23.4-alpine3.21 AS backend
+ARG TARGETOS
+ARG TARGETARCH
 
 WORKDIR /build
 
@@ -28,14 +31,10 @@ COPY backend/go.sum .
 RUN go mod download
 
 COPY backend .
-RUN go build -o surmai-backend
+RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o surmai-backend
 
 
 FROM alpine:3.21
-
-RUN apk add --no-cache \
-    unzip \
-    ca-certificates
 
 COPY backend/init.sh /pb/init.sh
 COPY backend/datasets /datasets
