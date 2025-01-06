@@ -26,11 +26,14 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.GHCR_PACKAGE_PAT }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
     - name: Build and push Docker image
       uses: docker/build-push-action@v6
       with:
         context: .
         file: ./Dockerfile
+        platforms: linux/amd64,linux/arm64
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
