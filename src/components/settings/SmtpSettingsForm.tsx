@@ -28,6 +28,8 @@ export type SmtpSettings = {
   tls?: boolean;
   localName?: string;
   authMethod?: 'PLAIN' | 'LOGIN';
+  senderName?: string,
+  senderAddress?: string
 };
 
 export const SmtpSettingsForm = () => {
@@ -38,6 +40,8 @@ export const SmtpSettingsForm = () => {
   const { t } = useTranslation();
 
   const initialValues: SmtpSettings = {
+    senderName: settings?.senderName,
+    senderAddress: settings?.senderAddress,
     enabled: settings?.enabled,
     host: settings?.host,
     localName: settings?.localName || (window.location.hostname !== 'localhost' ? window.location.hostname : undefined),
@@ -59,6 +63,12 @@ export const SmtpSettingsForm = () => {
         notifications.show({
           title: t('smtp_settings', 'SMTP Settings'),
           message: t('smtp_settings_updated', 'SMTP Settings updated'),
+          position: 'top-right',
+        });
+      }).catch(() => {
+        notifications.show({
+          title: t('smtp_settings', 'SMTP Settings'),
+          message: t('smtp_settings_update_failed', 'SMTP Settings could not be updated'),
           position: 'top-right',
         });
       });
@@ -100,7 +110,27 @@ export const SmtpSettingsForm = () => {
                 {...form.getInputProps('enabled', { type: 'checkbox' })}
               />
             </Group>
-            <Group>
+            <Group mt={'sm'}>
+              <TextInput
+                name={'senderName'}
+                label={t('smtp_sender_name', 'Sender Name')}
+                description={t('smtp_sender_name_description', 'Name of the sender')}
+                required
+                key={form.key('senderName')}
+                {...form.getInputProps('senderName')}
+              />
+
+              <TextInput
+                name={'senderAddress'}
+                label={t('smtp_sender_address', 'Sender Address')}
+                description={t('smtp_sender_name_description', 'Email address of the sender')}
+                required
+                type={'email'}
+                key={form.key('senderAddress')}
+                {...form.getInputProps('senderAddress')}
+              />
+            </Group>
+            <Group mt={'sm'}>
               <TextInput
                 name={'host'}
                 label={t('smtp_host', 'Host')}
@@ -124,6 +154,7 @@ export const SmtpSettingsForm = () => {
                 label={t('smtp_local_name', 'Local Server Name')}
                 description={t('smtp_local_name', 'Local domain name. Default is localhost')}
                 required
+                type={'domain'}
                 key={form.key('localName')}
                 {...form.getInputProps('localName')}
               />
