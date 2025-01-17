@@ -51,7 +51,7 @@ export {
 
 export { loadCities, loadAirports, countPlaces, countAirports, searchPlaces, searchAirports } from './pocketbase/lists';
 
-export { getSmtpSettings, updateSmtpSettings } from './pocketbase/settings';
+export { getSmtpSettings, updateSmtpSettings, sendTestEmail } from './pocketbase/settings';
 
 export const formatDate = (locale: string, input: Date) => {
   return input.toLocaleDateString(locale, {

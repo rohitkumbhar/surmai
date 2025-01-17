@@ -14,10 +14,11 @@ import {
 import classes from '../../pages/Settings/Settings.module.css';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { getSmtpSettings, updateSmtpSettings } from '../../lib';
+import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib';
 import { useQuery } from '@tanstack/react-query';
 import { notifications } from '@mantine/notifications';
 import { useEffect } from 'react';
+import { IconDeviceFloppy, IconMail } from '@tabler/icons-react';
 
 export type SmtpSettings = {
   enabled?: boolean;
@@ -28,12 +29,17 @@ export type SmtpSettings = {
   tls?: boolean;
   localName?: string;
   authMethod?: 'PLAIN' | 'LOGIN';
-  senderName?: string,
-  senderAddress?: string
+  senderName?: string;
+  senderAddress?: string;
+  applicationUrl?: string;
 };
 
 export const SmtpSettingsForm = () => {
-  const { isPending, data: settings } = useQuery<SmtpSettings | undefined>({
+  const {
+    isPending,
+    data: settings,
+    refetch,
+  } = useQuery<SmtpSettings | undefined>({
     queryKey: ['getSmtpSettings'],
     queryFn: () => getSmtpSettings(),
   });
@@ -50,6 +56,7 @@ export const SmtpSettingsForm = () => {
     tls: settings?.tls,
     username: settings?.username,
     authMethod: settings?.authMethod || 'PLAIN',
+    applicationUrl: settings?.applicationUrl || 'http://surmai.local',
   };
 
   const form = useForm<SmtpSettings & { tlsValue?: string }>({
@@ -59,19 +66,23 @@ export const SmtpSettingsForm = () => {
 
   const handleSubmission = (values: SmtpSettings & { tlsValue?: string }) => {
     if (settings) {
-      updateSmtpSettings(values).then(() => {
-        notifications.show({
-          title: t('smtp_settings', 'SMTP Settings'),
-          message: t('smtp_settings_updated', 'SMTP Settings updated'),
-          position: 'top-right',
+      updateSmtpSettings(values)
+        .then(() => {
+          refetch().then(() => {
+            notifications.show({
+              title: t('smtp_settings', 'SMTP Settings'),
+              message: t('smtp_settings_updated', 'SMTP Settings updated'),
+              position: 'top-right',
+            });
+          });
+        })
+        .catch(() => {
+          notifications.show({
+            title: t('smtp_settings', 'SMTP Settings'),
+            message: t('smtp_settings_update_failed', 'SMTP Settings could not be updated'),
+            position: 'top-right',
+          });
         });
-      }).catch(() => {
-        notifications.show({
-          title: t('smtp_settings', 'SMTP Settings'),
-          message: t('smtp_settings_update_failed', 'SMTP Settings could not be updated'),
-          position: 'top-right',
-        });
-      });
     }
   };
 
@@ -129,6 +140,17 @@ export const SmtpSettingsForm = () => {
                 key={form.key('senderAddress')}
                 {...form.getInputProps('senderAddress')}
               />
+              <TextInput
+                name={'applicationUrl'}
+                label={t('application_url', 'Application URL')}
+                type={'url'}
+                description={t(
+                  'application_url_description',
+                  'Base URL for this installation. Used to generate links in an email.'
+                )}
+                key={form.key('applicationUrl')}
+                {...form.getInputProps('applicationUrl')}
+              />
             </Group>
             <Group mt={'sm'}>
               <TextInput
@@ -164,7 +186,6 @@ export const SmtpSettingsForm = () => {
                 name={'username'}
                 label={t('smtp_username', 'Username')}
                 description={t('smtp_username_desc', 'Username for the SMTP server')}
-                required
                 key={form.key('username')}
                 {...form.getInputProps('username')}
               />
@@ -172,7 +193,6 @@ export const SmtpSettingsForm = () => {
                 name={'password'}
                 label={t('smtp_password', 'Password')}
                 description={t('smtp_password_desc', 'Password for the SMTP server')}
-                required
                 key={form.key('password')}
                 {...form.getInputProps('password')}
               />
@@ -201,9 +221,28 @@ export const SmtpSettingsForm = () => {
             </Group>
             <Group mt={'md'} justify="space-between">
               <div></div>
-              <Button type={'submit'} w={'min-content'}>
-                {t('save', 'Save')}
-              </Button>
+              <Group>
+                <Button
+                  type={'button'}
+                  w={'min-content'}
+                  leftSection={<IconMail />}
+                  disabled={!settings?.enabled}
+                  onClick={() => {
+                    sendTestEmail().then(() => {
+                      notifications.show({
+                        title: t('smtp_test_email', 'Test Email'),
+                        message: t('smtp_test_email_queued', 'Test email has been queued.'),
+                        position: 'top-right',
+                      });
+                    });
+                  }}
+                >
+                  {t('send_test_email', 'Send test email')}
+                </Button>
+                <Button type={'submit'} w={'min-content'} leftSection={<IconDeviceFloppy />}>
+                  {t('save', 'Save')}
+                </Button>
+              </Group>
             </Group>
           </form>
         </div>
