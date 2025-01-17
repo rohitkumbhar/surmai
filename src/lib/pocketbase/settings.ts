@@ -6,21 +6,28 @@ export const getSmtpSettings = (): Promise<SmtpSettings | undefined> => {
     return {
       senderName: settings.meta.senderName,
       senderAddress: settings.meta.senderAddress,
+      applicationUrl: settings.meta.appURL,
       ...settings.smtp,
     } as SmtpSettings;
   });
 };
 
 export const updateSmtpSettings = (settings: SmtpSettings) => {
-
-  const { senderName, senderAddress, ...smtpsettings } = settings;
+  const { senderName, senderAddress, applicationUrl, ...smtpsettings } = settings;
 
   const payload = {
     meta: {
       senderName: senderName,
       senderAddress: senderAddress,
+      appURL: applicationUrl,
     },
     smtp: { ...smtpsettings },
   };
   return pbAdmin.settings.update(payload).then((settings) => settings.smtp as SmtpSettings);
+};
+
+export const sendTestEmail = () => {
+  const email = pbAdmin.authStore.record?.email;
+  console.log('memail, emai', email);
+  return pbAdmin.settings.testEmail('_superusers', email, 'verification');
 };
