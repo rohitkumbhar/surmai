@@ -41,6 +41,7 @@ export const Attachments = ({
           {(entity.attachments || []).map((attachmentName: string) => {
             return (
               <Badge
+                key={attachmentName}
                 variant={'transparent'}
                 size={'md'}
                 tt={'none'}
@@ -67,7 +68,7 @@ export const Attachments = ({
                           confirm: t('delete', 'Delete'),
                           cancel: t('cancel', 'Cancel'),
                         },
-                        onCancel: () => console.log('Cancel'),
+                        onCancel: () => {},
                         onConfirm: () => {
                           onDelete(attachmentName).then(() => {
                             notifications.show({

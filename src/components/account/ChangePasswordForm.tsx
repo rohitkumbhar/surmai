@@ -3,9 +3,9 @@ import { FancyPasswordInput } from './FancyPasswordInput.tsx';
 import { useTranslation } from 'react-i18next';
 import { Button, Group, PasswordInput } from '@mantine/core';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { isAdmin, updateUser } from '../../lib';
+import { isAdmin, updateAdminUser, updateUser } from '../../lib';
 import { notifications } from '@mantine/notifications';
-import { updateAdminUser } from '../../lib';
+import { IconRefreshDot } from '@tabler/icons-react';
 
 export type ChangePasswordFormSchema = {
   newPassword: string;
@@ -91,7 +91,7 @@ export const ChangePasswordForm = () => {
         {...form.getInputProps('newPasswordConfirm')}
       />
       <Group justify={'flex-end'}>
-        <Button mt="xl" type={'submit'}>
+        <Button mt="xl" type={'submit'} leftSection={<IconRefreshDot />}>
           {t('change_password_btm', 'Change Password')}
         </Button>
       </Group>

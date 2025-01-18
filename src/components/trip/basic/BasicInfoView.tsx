@@ -1,9 +1,10 @@
 import { Trip } from '../../../types/trips.ts';
 import { useTranslation } from 'react-i18next';
-import { Divider, Flex, Group, Paper, Stack, Text, Title } from '@mantine/core';
+import { Divider, Flex, Group, Stack, Text, Title } from '@mantine/core';
 import { formatDate } from '../../../lib';
 import { ParticipantData } from './ParticipantData.tsx';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
+import { DestinationCard } from './DestinationCard.tsx';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t, i18n } = useTranslation();
@@ -27,23 +28,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         {(trip.destinations || []).map((destination) => {
           return (
             <Group wrap={'nowrap'} key={destination.id}>
-              <Paper
-                shadow="sm"
-                p={'xs'}
-                radius="xs"
-                mih={75}
-                miw={'250px'}
-                bd={'1px solid var(--mantine-primary-color-2)'}
-              >
-                <Text>{destination.name}</Text>
-                {
-                  <Text
-                    mt={'xs'}
-                    c={'dimmed'}
-                    size={'xs'}
-                  >{`${destination.stateName || ''} ${destination.countryName || ''} `}</Text>
-                }
-              </Paper>
+              <DestinationCard destination={destination} trip={trip} />
             </Group>
           );
         })}

@@ -2,7 +2,11 @@ module backend
 
 go 1.23
 
-require github.com/pocketbase/pocketbase v0.23.8
+require (
+	github.com/pocketbase/dbx v1.11.0
+	github.com/pocketbase/pocketbase v0.23.8
+	github.com/ringsaturn/tzf v0.16.0
+)
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7 // indirect
@@ -43,12 +47,19 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mgutz/ansi v0.0.0-20200706080929-d51e80ef957d // indirect
+	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
-	github.com/pocketbase/dbx v1.11.0 // indirect
+	github.com/paulmach/orb v0.11.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
+	github.com/ringsaturn/tzf-rel-lite v0.0.2024-b // indirect
 	github.com/spf13/cast v1.7.0 // indirect
 	github.com/spf13/cobra v1.8.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/tidwall/geoindex v1.7.0 // indirect
+	github.com/tidwall/geojson v1.4.5 // indirect
+	github.com/tidwall/rtree v1.10.0 // indirect
+	github.com/twpayne/go-polyline v1.1.1 // indirect
+	go.mongodb.org/mongo-driver v1.14.0 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	gocloud.dev v0.40.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect

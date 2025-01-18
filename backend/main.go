@@ -1,6 +1,7 @@
 package main
 
 import (
+	"backend/app"
 	_ "backend/migrations"
 	"github.com/pocketbase/pocketbase"
 	"log"
@@ -8,18 +9,13 @@ import (
 	"strings"
 )
 
-type SurmaiApp struct {
-	pb         *pocketbase.PocketBase
-	DemoMode   bool
-	AdminEmail string
-}
-
 func main() {
 
 	// loosely check if it was executed using "go run"
 	isGoRun := strings.HasPrefix(os.Args[0], os.TempDir())
-	surmai := &SurmaiApp{
-		pb: pocketbase.NewWithConfig(pocketbase.Config{
+
+	surmai := &app.SurmaiApp{
+		Pb: pocketbase.NewWithConfig(pocketbase.Config{
 			DefaultDev:     isGoRun,
 			DefaultDataDir: os.Getenv("PB_DATA_DIRECTORY"),
 		}),
@@ -27,11 +23,12 @@ func main() {
 		AdminEmail: os.Getenv("SURMAI_ADMIN_EMAIL"),
 	}
 
-	surmai.bindMigrations(isGoRun)
-	surmai.bindRoutes()
-	surmai.startDemoMode()
+	surmai.BuildTimezoneFinder()
+	surmai.BindMigrations(isGoRun)
+	surmai.BindRoutes()
+	surmai.StartDemoMode()
 
-	if err := surmai.pb.Start(); err != nil {
+	if err := surmai.Pb.Start(); err != nil {
 		log.Fatal(err)
 	}
 }

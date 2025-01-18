@@ -24,6 +24,15 @@ export const countAirports = async () => {
   return totalItems;
 };
 
+export const getTimezone = (latitude: string, longitude: string): Promise<string> => {
+  return pb
+    .send('/get-timezone', {
+      method: 'GET',
+      query: { latitude: latitude, longitude: longitude },
+    })
+    .then((result) => result.value);
+};
+
 export const searchPlaces = (query: string) => {
   return pb.collection('places').getList(1, 20, {
     filter: `name~"${query}"`,

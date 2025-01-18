@@ -38,7 +38,7 @@ export const GenericActivityData = ({
             confirm: t('delete', 'Delete'),
             cancel: t('cancel', 'Cancel'),
           },
-          onCancel: () => console.log('Cancel'),
+          onCancel: () => {},
           onConfirm: () => {
             deleteActivity(activity.id).then(() => {
               notifications.show({

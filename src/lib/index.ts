@@ -49,7 +49,15 @@ export {
   deleteActivity,
 } from './pocketbase/activities';
 
-export { loadCities, loadAirports, countPlaces, countAirports, searchPlaces, searchAirports } from './pocketbase/lists';
+export {
+  loadCities,
+  loadAirports,
+  countPlaces,
+  countAirports,
+  searchPlaces,
+  searchAirports,
+  getTimezone,
+} from './pocketbase/lists';
 
 export { getSmtpSettings, updateSmtpSettings, sendTestEmail } from './pocketbase/settings';
 

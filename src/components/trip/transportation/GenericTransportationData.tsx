@@ -41,7 +41,7 @@ export const GenericTransportationData = ({
             confirm: t('delete', 'Delete'),
             cancel: t('cancel', 'Cancel'),
           },
-          onCancel: () => console.log('Cancel'),
+          onCancel: () => {},
           onConfirm: () => {
             deleteTransportation(transportation.id).then(() => {
               notifications.show({

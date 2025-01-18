@@ -41,7 +41,7 @@ export const GenericLodgingData = ({
             confirm: t('delete', 'Delete'),
             cancel: t('cancel', 'Cancel'),
           },
-          onCancel: () => console.log('Cancel'),
+          onCancel: () => {},
           onConfirm: () => {
             deleteLodging(lodging.id).then(() => {
               notifications.show({

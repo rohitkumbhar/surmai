@@ -4,6 +4,7 @@ import { openContextModal } from '@mantine/modals';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from '@mantine/hooks';
+import { IconUserHexagon } from '@tabler/icons-react';
 
 export const UserAvatarForm = () => {
   const { user, reloadUser } = useCurrentUser();
@@ -24,6 +25,7 @@ export const UserAvatarForm = () => {
 
       {user && (
         <Button
+          leftSection={<IconUserHexagon />}
           onClick={() => {
             openContextModal({
               modal: 'uploadImageForm',

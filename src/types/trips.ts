@@ -15,6 +15,7 @@ export type Destination = {
   longitude?: string;
   name: string;
   category?: string;
+  timezone?: string;
 };
 
 export type Trip = {

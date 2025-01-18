@@ -33,7 +33,7 @@
     "trip_destinations": "Destinations",
     "trip_destinations_description": "Enter the destinations in this trip e.g. San Jose, Guanacaste",
     "trip_dates": "Trip Dates",
-    "trip_dates_description": "Select the start and end dates of the trip",
+    "trip_dates_description": "Select the start and end dates of the trip, These dates are in your timezone",
     "travellers_description": "Enter the names of travellers on this trip. Multiple names can be separated by a comma"
   },
   "transportation": {
