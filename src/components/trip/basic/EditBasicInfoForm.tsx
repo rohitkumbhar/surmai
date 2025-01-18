@@ -35,6 +35,7 @@ export const EditBasicInfoForm = ({
         countryName: item.countryName,
         latitude: item.latitude,
         longitude: item.longitude,
+        timezone: item.timezone,
       };
     }),
     participants: trip.participants?.map((item) => item.name),
@@ -63,6 +64,7 @@ export const EditBasicInfoForm = ({
               countryName: d.countryName,
               latitude: d.latitude,
               longitude: d.longitude,
+              timezone: d.timezone,
             };
           }),
           participants: values.participants?.map((name) => {

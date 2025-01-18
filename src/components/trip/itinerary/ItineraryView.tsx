@@ -91,15 +91,15 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
               <Accordion.Panel>
                 <Stack>
                   {(transportationItinerary[day.value.toISOString()] || []).map((tr) => {
-                    return <TransportationLine transportation={tr} day={day.value} />;
+                    return <TransportationLine transportation={tr} day={day.value} key={day.id} />;
                   })}
 
                   {(lodgingsItinerary[day.value.toISOString()] || []).map((tr) => {
-                    return <LodgingLine lodging={tr} day={day.value} />;
+                    return <LodgingLine lodging={tr} day={day.value} key={day.id} />;
                   })}
 
                   {(activitiesItinerary[day.value.toISOString()] || []).map((tr) => {
-                    return <ActivityLine activity={tr} day={day.value} />;
+                    return <ActivityLine activity={tr} day={day.value} key={day.id} />;
                   })}
                 </Stack>
               </Accordion.Panel>

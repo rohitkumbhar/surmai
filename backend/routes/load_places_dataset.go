@@ -25,7 +25,7 @@ func LoadPlacesDataset(e *core.RequestEvent) error {
 		return e.BadRequestError("Collection `places` does not exists", nil)
 	}
 
-	content, err := os.ReadFile("/datasets/places.json")
+	content, err := os.ReadFile("./datasets/places.json")
 	if err != nil {
 		log.Fatal("Error when opening file: ", err)
 	}

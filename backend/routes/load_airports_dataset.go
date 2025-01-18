@@ -23,7 +23,7 @@ func LoadAirportsDataset(e *core.RequestEvent) error {
 		return e.BadRequestError("Collection `airports` does not exists", nil)
 	}
 
-	content, err := os.ReadFile("/datasets/airports.json")
+	content, err := os.ReadFile("./datasets/airports.json")
 	if err != nil {
 		log.Fatal("Error when opening file: ", err)
 	}

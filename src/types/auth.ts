@@ -7,6 +7,8 @@ export interface User extends RecordModel {
   currencyCode?: string;
   colorScheme?: string;
   avatar?: string;
+  timezone?: string;
+  mapsProvider?: string;
 }
 
 export type SignUpForm = {
@@ -19,13 +21,6 @@ export interface UserSettingsFormType {
   name?: string;
   currencyCode?: string;
   colorScheme?: string;
+  timezone?: string;
+  mapsProvider?: string;
 }
-
-export type AdminSettingsForm = {
-  signupsEnabled: boolean;
-  smtpServer: string;
-  smtpPort: string;
-  smtpTls: string;
-  smtpUser: string;
-  smtpPassword: string;
-};

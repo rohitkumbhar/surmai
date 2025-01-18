@@ -41,6 +41,7 @@ export const Attachments = ({
           {(entity.attachments || []).map((attachmentName: string) => {
             return (
               <Badge
+                key={attachmentName}
                 variant={'transparent'}
                 size={'md'}
                 tt={'none'}

@@ -9,6 +9,8 @@ import { SurmaiContext } from '../../app/Surmai.tsx';
 import { updateUser } from '../../lib';
 
 import { currencyCodes } from '../util/currencyCodes.ts';
+import { IconDeviceFloppy } from '@tabler/icons-react';
+import dayjs from 'dayjs';
 
 export const UserSettingsForm = () => {
   const { user, reloadUser } = useCurrentUser();
@@ -20,6 +22,8 @@ export const UserSettingsForm = () => {
     name: user?.name,
     colorScheme: user?.colorScheme,
     currencyCode: user?.currencyCode || 'USD',
+    timezone: user?.timezone || dayjs.tz.guess(),
+    mapsProvider: user?.mapsProvider || 'openstreetmap',
   };
 
   const form = useForm<UserSettingsFormType>({
@@ -33,6 +37,8 @@ export const UserSettingsForm = () => {
         name: values.name,
         colorScheme: values.colorScheme,
         currencyCode: values.currencyCode,
+        timezone: values.timezone,
+        mapsProvider: values.mapsProvider,
       }).then(() => {
         appCtx.changeColor?.(values.colorScheme);
         reloadUser?.();
@@ -67,8 +73,41 @@ export const UserSettingsForm = () => {
           withCheckIcon={false}
         />
 
+        <Select
+          mt={'sm'}
+          name={'timezone'}
+          label={t('timezone', 'Timezone')}
+          description={t('timezone_desc', 'Your preferred timezone.')}
+          data={
+            // @ts-expect-error it exists may be
+            Intl.supportedValuesOf('timeZone')
+          }
+          key={form.key('timezone')}
+          {...form.getInputProps('timezone')}
+          searchable
+          withCheckIcon={false}
+        ></Select>
+
+        <Select
+          mt={'sm'}
+          name={'mapsProvider'}
+          label={t('maps_provider', 'Preferred Maps')}
+          description={t(
+            'maps_provider_desc',
+            'Your preferred Maps provider. This is used to generate links to different locations.'
+          )}
+          data={[
+            { value: 'google', label: 'Google Maps' },
+            { value: 'openstreetmap', label: 'Open Street Map (default)' },
+          ]}
+          key={form.key('mapsProvider')}
+          {...form.getInputProps('mapsProvider')}
+          searchable
+          withCheckIcon={false}
+        ></Select>
+
         <Group justify={'flex-end'}>
-          <Button mt="xl" type={'submit'}>
+          <Button mt="xl" type={'submit'} leftSection={<IconDeviceFloppy />}>
             {t('save', 'Save')}
           </Button>
         </Group>
