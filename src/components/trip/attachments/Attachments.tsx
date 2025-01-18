@@ -68,7 +68,7 @@ export const Attachments = ({
                           confirm: t('delete', 'Delete'),
                           cancel: t('cancel', 'Cancel'),
                         },
-                        onCancel: () => console.log('Cancel'),
+                        onCancel: () => {},
                         onConfirm: () => {
                           onDelete(attachmentName).then(() => {
                             notifications.show({

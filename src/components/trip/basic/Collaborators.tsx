@@ -108,7 +108,7 @@ const CollaboratorButton = forwardRef<HTMLDivElement, { trip: Trip; user: User; 
                   confirm: t('delete', 'Delete'),
                   cancel: t('cancel', 'Cancel'),
                 },
-                onCancel: () => console.log('Cancel'),
+                onCancel: () => {},
                 onConfirm: () => {
                   deleteCollaborator(trip.id, user.id).then(() => {
                     onSave();

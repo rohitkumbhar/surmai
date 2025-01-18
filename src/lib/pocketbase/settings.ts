@@ -28,6 +28,5 @@ export const updateSmtpSettings = (settings: SmtpSettings) => {
 
 export const sendTestEmail = () => {
   const email = pbAdmin.authStore.record?.email;
-  console.log('memail, emai', email);
   return pbAdmin.settings.testEmail('_superusers', email, 'verification');
 };

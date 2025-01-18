@@ -23,7 +23,7 @@ export const Datasets = () => {
         </Text>
       ),
       labels: { confirm: 'Confirm', cancel: 'Cancel' },
-      onCancel: () => console.log('Cancel'),
+      onCancel: () => {},
       onConfirm: () => {
         loadCities().then((results) => {
           notifications.show({
@@ -42,7 +42,7 @@ export const Datasets = () => {
         <Text size="sm">This action will load airport information into your database and will take a long time.</Text>
       ),
       labels: { confirm: 'Confirm', cancel: 'Cancel' },
-      onCancel: () => console.log('Cancel'),
+      onCancel: () => {},
       onConfirm: () => {
         loadAirports().then((results) => {
           notifications.show({

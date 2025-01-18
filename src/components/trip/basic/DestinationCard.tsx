@@ -31,7 +31,7 @@ export const DestinationCard = ({ destination }: { destination: Destination; tri
     if (destination.timezone) {
       setTimezoneDiff(calculateTimezoneDifference(destination.timezone));
     }
-  }, [user]);
+  }, [user, calculateTimezoneDifference]);
 
   return (
     <Card withBorder radius="xs" className={classes.card} p={'xs'}>

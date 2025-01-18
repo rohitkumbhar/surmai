@@ -30,8 +30,7 @@ export const MyTrips = () => {
 
   const logError = (error: Error, info: ErrorInfo) => {
     // Do something with the error, e.g. log to an external API
-    console.log(error);
-    console.log(' info', info);
+    console.log(error, info);
   };
 
   const cards = () => {
