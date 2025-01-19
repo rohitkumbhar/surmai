@@ -12,10 +12,10 @@ import {
 } from '@tabler/icons-react';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
-import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib';
-import { notifications } from '@mantine/notifications';
+import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
 
 export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
@@ -105,21 +105,21 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
             loadEverything(trip.id)
               .then(() => {
                 setOfflineCacheTimestamp(dayjs().format('L LT'));
-                notifications.show({
-                  title: 'Offline',
-                  message: `Data for ${trip.name} has been added to cache`,
-                  position: 'top-right',
+                showInfoNotification({
+                  title: t('offline_access', 'Offline Access'),
+                  message: t('offline_access_enabled', 'Data for {{tripName}} has been added to the cache', {
+                    tripName: trip.name,
+                  }),
                 });
               })
               .catch((err) => {
-                console.log('Error', err);
                 setOfflineCacheTimestamp(null);
-
-                notifications.show({
-                  title: 'Downloaded',
-                  variant: 'error',
-                  message: `Data for ${trip.name} could not be downloaded`,
-                  position: 'top-right',
+                showErrorNotification({
+                  error: err,
+                  title: t('offline_access', 'Offline Access'),
+                  message: t('offline_access_failed', 'Data for {{tripName}} could not added to the cache', {
+                    tripName: trip.name,
+                  }),
                 });
               });
           }}
@@ -160,10 +160,9 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               onCancel: () => {},
               onConfirm: () => {
                 deleteTrip(trip.id).then(() => {
-                  notifications.show({
-                    title: 'Deleted',
-                    message: `Trip ${trip.name} has been deleted`,
-                    position: 'top-right',
+                  showDeleteNotification({
+                    title: t('trip_deleted', 'Trip Deleted'),
+                    message: t('trip_deleted_detail', 'Trip {{name}} has been deleted', { name: trip.name }),
                   });
                   refetch();
                   navigate('/');

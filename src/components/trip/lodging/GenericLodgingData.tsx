@@ -6,11 +6,11 @@ import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteLodging, formatDate } from '../../../lib';
-import { formatTime } from '../common/util.ts';
-import { notifications } from '@mantine/notifications';
+import { deleteLodging } from '../../../lib/api';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
+import { formatDate, formatTime } from '../../../lib/time.ts';
+import { showDeleteNotification } from '../../../lib/notifications.tsx';
 
 export const GenericLodgingData = ({
   trip,
@@ -44,10 +44,9 @@ export const GenericLodgingData = ({
           onCancel: () => {},
           onConfirm: () => {
             deleteLodging(lodging.id).then(() => {
-              notifications.show({
-                title: 'Deleted',
-                message: `Lodging at ${lodging.name} has been deleted`,
-                position: 'top-right',
+              showDeleteNotification({
+                title: t('lodging.section_name', 'Lodging'),
+                message: t('lodging_deleted', 'Lodging at {{name}} has been deleted', { name: lodging.name }),
               });
               refetch();
             });

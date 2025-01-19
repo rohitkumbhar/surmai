@@ -3,9 +3,9 @@ import { FancyPasswordInput } from './FancyPasswordInput.tsx';
 import { useTranslation } from 'react-i18next';
 import { Button, Group, PasswordInput } from '@mantine/core';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { isAdmin, updateAdminUser, updateUser } from '../../lib';
-import { notifications } from '@mantine/notifications';
+import { isAdmin, updateAdminUser, updateUser } from '../../lib/api';
 import { IconRefreshDot } from '@tabler/icons-react';
+import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 export type ChangePasswordFormSchema = {
   newPassword: string;
@@ -41,26 +41,40 @@ export const ChangePasswordForm = () => {
         oldPassword: values.oldPassword,
         password: values.newPassword,
         passwordConfirm: values.newPasswordConfirm,
-      }).then(() => {
-        notifications.show({
-          title: t('admin_password_changed', 'Admin Password Changed'),
-          message: t('admin_password_changed', 'Admin Password Changed'),
-          position: 'top-right',
+      })
+        .then(() => {
+          showSaveSuccessNotification({
+            title: t('user_settings_page', 'User Settings'),
+            message: t('admin_password_changed', 'Admin Password Changed'),
+          });
+        })
+        .catch((err) => {
+          showErrorNotification({
+            error: err,
+            title: t('user_settings_page', 'User Settings'),
+            message: t('admin_password_not_changed', 'Admin Password could not be changed'),
+          });
         });
-      });
     }
 
     updateUser(user.id, {
       oldPassword: values.oldPassword,
       password: values.newPassword,
       passwordConfirm: values.newPasswordConfirm,
-    }).then(() => {
-      notifications.show({
-        title: t('password_changed', 'Password Changed'),
-        message: t('password_changed', 'Password Changed'),
-        position: 'top-right',
+    })
+      .then(() => {
+        showSaveSuccessNotification({
+          title: t('user_settings_page', 'User Settings'),
+          message: t('password_changed', 'Password Changed'),
+        });
+      })
+      .catch((err) => {
+        showErrorNotification({
+          error: err,
+          title: t('user_settings_page', 'User Settings'),
+          message: t('password_not_changed', 'Password could not be changed'),
+        });
       });
-    });
   };
 
   return (

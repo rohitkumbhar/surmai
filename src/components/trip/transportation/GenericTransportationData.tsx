@@ -1,16 +1,16 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
 import { IconCar } from '@tabler/icons-react';
-import { deleteTransportation, deleteTransportationAttachment } from '../../../lib';
-import { formatDate, formatTime } from '../common/util.ts';
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { notifications } from '@mantine/notifications';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { typeIcons } from './typeIcons.ts';
+import { formatDate, formatTime } from '../../../lib/time.ts';
+import { showDeleteNotification } from '../../../lib/notifications.tsx';
 
 export const GenericTransportationData = ({
   trip,
@@ -44,10 +44,16 @@ export const GenericTransportationData = ({
           onCancel: () => {},
           onConfirm: () => {
             deleteTransportation(transportation.id).then(() => {
-              notifications.show({
-                title: 'Deleted',
-                message: `Transportation from ${transportation.origin} to ${transportation.destination} has been deleted`,
-                position: 'top-right',
+              showDeleteNotification({
+                title: t('transportation.section_name', 'Transportation'),
+                message: t(
+                  'transportation_deleted',
+                  'Transportation from {{origin}} to {{destination}} has been deleted',
+                  {
+                    origin: transportation.origin,
+                    destination: transportation.destination,
+                  }
+                ),
               });
               refetch();
             });

@@ -1,8 +1,8 @@
 import { Lodging } from '../../../types/trips.ts';
 import dayjs, { Dayjs } from 'dayjs';
 import { Badge, Box, Group, rem, Text } from '@mantine/core';
-import { formatTime } from '../common/util.ts';
 import { typeIcons } from '../lodging/typeIcons.ts';
+import { formatTime } from '../../../lib/time.ts';
 
 export const LodgingLine = ({ lodging, day }: { lodging: Lodging; day: Dayjs }) => {
   // @ts-expect-error Icon type

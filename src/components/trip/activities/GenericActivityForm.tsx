@@ -6,8 +6,9 @@ import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createActivityEntry, saveActivityAttachments, updateActivityEntry } from '../../../lib';
-import { fakeAsUtcString } from '../common/util.ts';
+import { createActivityEntry, saveActivityAttachments, updateActivityEntry } from '../../../lib/api';
+
+import { fakeAsUtcString } from '../../../lib/time.ts';
 
 export const GenericActivityForm = ({
   trip,

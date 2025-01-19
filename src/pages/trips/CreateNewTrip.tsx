@@ -1,7 +1,7 @@
 import { Accordion, Button, Container, FileButton, Group, rem, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconInfoSquare } from '@tabler/icons-react';
-import { createTrip, importTripData } from '../../lib';
+import { createTrip, importTripData } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { CreateTripForm, NewTrip } from '../../types/trips.ts';
 import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
@@ -9,8 +9,8 @@ import { basicInfoFormValidation } from '../../components/trip/basic/validation.
 import { useTranslation } from 'react-i18next';
 import { Header } from '../../components/nav/Header.tsx';
 import { useEffect, useState } from 'react';
-import { notifications } from '@mantine/notifications';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { showErrorNotification } from '../../lib/notifications.tsx';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
@@ -40,17 +40,17 @@ export const CreateNewTrip = () => {
           navigate(`/trips/${res.tripId}`);
         })
         .catch((err) => {
-          notifications.show({
-            title: 'Import failed',
-            message: `Import failed:${err.message}`,
-            position: 'top-right',
+          showErrorNotification({
+            error: err,
+            title: t('import_failed', 'Import failed'),
+            message: t('import_failed_details', 'Unable to import {{name}}', { name: tripDataFile.name }),
           });
         })
         .finally(() => {
           setImporting(false);
         });
     }
-  }, [tripDataFile]);
+  }, [tripDataFile, t, navigate]);
 
   return (
     <Container py="xl">
@@ -90,10 +90,10 @@ export const CreateNewTrip = () => {
               navigate(`/trips/${trip.id}`);
             })
             .catch((err) => {
-              notifications.show({
-                title: 'Unable to create trip',
-                message: `Error: ${err.message}`,
-                position: 'top-right',
+              showErrorNotification({
+                error: err,
+                title: t('trip_failed', 'Error'),
+                message: t('trip_failed_details', 'Unable to create trip'),
               });
             })
             .finally(() => {

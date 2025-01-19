@@ -2,7 +2,7 @@ import { ContextModalProps } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
 import { Button, Center, Container, Text } from '@mantine/core';
 import { useState } from 'react';
-import { exportTripData } from '../../../lib';
+import { exportTripData } from '../../../lib/api';
 
 export const ExportTripModal = ({
   innerProps,

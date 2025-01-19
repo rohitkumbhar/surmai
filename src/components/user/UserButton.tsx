@@ -1,7 +1,7 @@
 import { Avatar, Group, Menu, rem, UnstyledButton } from '@mantine/core';
 import { IconLogout, IconUser } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { getAttachmentUrl, logoutCurrentUser } from '../../lib';
+import { getAttachmentUrl, logoutCurrentUser } from '../../lib/api';
 import { useState } from 'react';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { useTranslation } from 'react-i18next';

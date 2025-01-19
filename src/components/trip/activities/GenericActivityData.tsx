@@ -5,11 +5,11 @@ import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteActivity, formatDate } from '../../../lib';
-import { formatTime } from '../common/util.ts';
+import { deleteActivity } from '../../../lib/api';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
-import { notifications } from '@mantine/notifications';
 import { IconActivity } from '@tabler/icons-react';
+import { formatDate, formatTime } from '../../../lib/time.ts';
+import { showDeleteNotification } from '../../../lib/notifications.tsx';
 
 export const GenericActivityData = ({
   trip,
@@ -41,10 +41,9 @@ export const GenericActivityData = ({
           onCancel: () => {},
           onConfirm: () => {
             deleteActivity(activity.id).then(() => {
-              notifications.show({
-                title: 'Deleted',
-                message: `Activity ${activity.name} has been deleted`,
-                position: 'top-right',
+              showDeleteNotification({
+                title: t('activity', 'Activity'),
+                message: t('activity_deleted', 'Activity {{name}} has been deleted', { name: activity.name }),
               });
               refetch();
             });

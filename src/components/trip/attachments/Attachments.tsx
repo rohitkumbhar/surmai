@@ -1,11 +1,11 @@
 import { Activity, Lodging, Transportation } from '../../../types/trips.ts';
 import { Anchor, Badge, CloseButton, Divider, Group, Text } from '@mantine/core';
-import { getAttachmentUrl } from '../../../lib';
+import { getAttachmentUrl } from '../../../lib/api';
 import { IconFile, IconFileTypeBmp, IconFileTypeJpg, IconFileTypePdf, IconFileTypePng } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
-import { notifications } from '@mantine/notifications';
 import { useMediaQuery } from '@mantine/hooks';
+import { showDeleteNotification } from '../../../lib/notifications.tsx';
 
 export const Attachments = ({
   entity,
@@ -71,10 +71,11 @@ export const Attachments = ({
                         onCancel: () => {},
                         onConfirm: () => {
                           onDelete(attachmentName).then(() => {
-                            notifications.show({
-                              title: 'Attachment deleted',
-                              message: `${attachmentName} has been deleted`,
-                              position: 'top-right',
+                            showDeleteNotification({
+                              title: t('attachments', 'Attachments'),
+                              message: t('attachment_deleted', 'Attachment {{name}} has been deleted', {
+                                name: attachmentName,
+                              }),
                             });
                             refetch();
                           });

@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Combobox, Group, Pill, PillsInput, Text, useCombobox } from '@mantine/core';
 import { useClickOutside, useDebouncedState } from '@mantine/hooks';
-import { getTimezone, searchPlaces } from '../../lib';
+import { getTimezone, searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
 import { UseFormReturnType } from '@mantine/form';
 import { Destination } from '../../types/trips.ts';
@@ -31,7 +31,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
         combobox.openDropdown();
       });
     }
-  }, [search]);
+  }, [search, combobox]);
 
   const options = searchResults.map((item) => (
     <Combobox.Option value={item.id} key={item.id}>

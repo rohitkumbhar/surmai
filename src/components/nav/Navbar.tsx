@@ -4,7 +4,7 @@ import classes from './Navbar.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FishOne } from '../logo/FishOne.tsx';
 import { useClickOutside } from '@mantine/hooks';
-import { isAdmin, logoutCurrentUser } from '../../lib';
+import { isAdmin, logoutCurrentUser } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 
 interface NavbarLinkProps {

@@ -3,7 +3,7 @@ import { Transportation, Trip } from '../../../types/trips.ts';
 import { AddTransportationMenu } from './AddTransportationMenu.tsx';
 import { Fragment, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { listTransportations } from '../../../lib';
+import { listTransportations } from '../../../lib/api';
 import { CarRentalData } from './CarRentalData.tsx';
 import { GenericTransportationData } from './GenericTransportationData.tsx';
 import { useTranslation } from 'react-i18next';

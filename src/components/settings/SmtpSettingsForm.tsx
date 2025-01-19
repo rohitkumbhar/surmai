@@ -14,25 +14,13 @@ import {
 import classes from '../../pages/Settings/Settings.module.css';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib';
+import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib/api';
 import { useQuery } from '@tanstack/react-query';
-import { notifications } from '@mantine/notifications';
 import { useEffect } from 'react';
 import { IconDeviceFloppy, IconMail } from '@tabler/icons-react';
+import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
-export type SmtpSettings = {
-  enabled?: boolean;
-  host?: string;
-  port?: number;
-  username?: string;
-  password?: string;
-  tls?: boolean;
-  localName?: string;
-  authMethod?: 'PLAIN' | 'LOGIN';
-  senderName?: string;
-  senderAddress?: string;
-  applicationUrl?: string;
-};
+import { SmtpSettings } from '../../types/settings.ts';
 
 export const SmtpSettingsForm = () => {
   const {
@@ -69,18 +57,17 @@ export const SmtpSettingsForm = () => {
       updateSmtpSettings(values)
         .then(() => {
           refetch().then(() => {
-            notifications.show({
+            showSaveSuccessNotification({
               title: t('smtp_settings', 'SMTP Settings'),
               message: t('smtp_settings_updated', 'SMTP Settings updated'),
-              position: 'top-right',
             });
           });
         })
-        .catch(() => {
-          notifications.show({
+        .catch((err) => {
+          showErrorNotification({
+            error: err,
             title: t('smtp_settings', 'SMTP Settings'),
             message: t('smtp_settings_update_failed', 'SMTP Settings could not be updated'),
-            position: 'top-right',
           });
         });
     }
@@ -94,10 +81,10 @@ export const SmtpSettingsForm = () => {
   return (
     <Card withBorder radius="md" p="xl" mt={'md'}>
       <Title order={3} fw={500}>
-        SMTP Settings
+        {t('smtp_settings', 'SMTP Settings')}
       </Title>
       <Text fz="xs" c="dimmed" mt={3} mb="xl">
-        Manage your mail server configuration
+        {t('smtp_settings_description', 'Manage your mail server configuration')}
       </Text>
 
       <Group justify="space-between" className={classes.item} gap="xl" key={'smtp_settings'}>
@@ -229,10 +216,9 @@ export const SmtpSettingsForm = () => {
                   disabled={!settings?.enabled}
                   onClick={() => {
                     sendTestEmail().then(() => {
-                      notifications.show({
-                        title: t('smtp_test_email', 'Test Email'),
+                      showInfoNotification({
+                        title: t('smtp_test_email', 'SMTP Settings'),
                         message: t('smtp_test_email_queued', 'Test email has been queued.'),
-                        position: 'top-right',
                       });
                     });
                   }}

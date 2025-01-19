@@ -5,8 +5,8 @@ import { useForm } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { createTransportationEntry, saveTransportationAttachments } from '../../../lib';
-import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
+import { createTransportationEntry, saveTransportationAttachments } from '../../../lib/api';
+import { updateTransportation } from '../../../lib/api/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const CarRentalForm = ({

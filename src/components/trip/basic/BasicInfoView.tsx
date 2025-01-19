@@ -1,10 +1,10 @@
 import { Trip } from '../../../types/trips.ts';
 import { useTranslation } from 'react-i18next';
 import { Divider, Flex, Group, Stack, Text, Title } from '@mantine/core';
-import { formatDate } from '../../../lib';
 import { ParticipantData } from './ParticipantData.tsx';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
+import { formatDate } from '../../../lib/time.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t, i18n } = useTranslation();

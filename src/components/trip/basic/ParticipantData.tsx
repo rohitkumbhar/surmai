@@ -3,7 +3,7 @@ import { Avatar, Box, Group, Paper, Popover, Text, TextInput } from '@mantine/co
 import { forwardRef, useState } from 'react';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useForm } from '@mantine/form';
-import { updateTrip } from '../../../lib';
+import { updateTrip } from '../../../lib/api';
 
 const ParticipantButton = forwardRef<HTMLDivElement, { name: string; email?: string }>((props, ref) => {
   const { name, email } = props;

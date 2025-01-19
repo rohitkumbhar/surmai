@@ -2,13 +2,13 @@ import { CreateTripForm, Trip } from '../../../types/trips.ts';
 import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
 import { basicInfoFormValidation } from './validation.ts';
-import { updateTrip } from '../../../lib';
+import { updateTrip } from '../../../lib/api';
 import { EditTripBasicForm } from './EditTripBasicForm.tsx';
 import { Button, Group } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
-import { notifications } from '@mantine/notifications';
+import { showErrorNotification } from '../../../lib/notifications.tsx';
 
 export const EditBasicInfoForm = ({
   context,
@@ -71,17 +71,17 @@ export const EditBasicInfoForm = ({
             return { name: name };
           }),
         };
-        updateTrip(trip.id, data)
+        updateTrip(trip.id, data as Trip)
           .then(() => {
             setSaving(false);
             context.closeModal(id);
             onSave();
           })
           .catch((err) => {
-            notifications.show({
-              title: t('failed_save', 'Update failed'),
-              message: err.message,
-              position: 'top-right',
+            showErrorNotification({
+              error: err,
+              title: t('edit_trip', 'Edit Trip'),
+              message: t('trip_update_failed', 'Failed to update trip.'),
             });
           })
           .finally(() => setSaving(false));

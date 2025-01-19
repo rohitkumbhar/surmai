@@ -6,7 +6,7 @@ import { UsersSettings } from '../../components/settings/UsersSettings.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
 import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx';
 import { useEffect } from 'react';
-import { adminAuthRefresh, logoutCurrentUser } from '../../lib';
+import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 
 export const Settings = () => {

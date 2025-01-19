@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { Accordion, Alert, Container, Group, LoadingOverlay, rem, Tabs, Text } from '@mantine/core';
 import { IconBed, IconCalendar, IconInfoSquare, IconPlane, IconRefresh, IconWifiOff } from '@tabler/icons-react';
 import { Trip } from '../../types/trips.ts';
-import { formatDate, getTrip } from '../../lib';
+import { getTrip } from '../../lib/api';
 import { Header } from '../../components/nav/Header.tsx';
 import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
 import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
+import { formatDate } from '../../lib/time.ts';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
