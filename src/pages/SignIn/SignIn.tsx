@@ -3,7 +3,7 @@ import classes from './SignIn.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { authWithUsernameAndPassword } from '../../lib';
+import { authWithUsernameAndPassword } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { useDocumentTitle } from '@mantine/hooks';
 

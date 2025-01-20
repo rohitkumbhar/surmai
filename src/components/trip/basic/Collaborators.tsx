@@ -3,7 +3,7 @@ import { Trip } from '../../../types/trips.ts';
 import { forwardRef, useEffect, useState } from 'react';
 import { ActionIcon, Avatar, Button, ComboboxItem, Container, Group, MultiSelect, Paper, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { addCollaborators, currentUser as getCurrentUser, deleteCollaborator, listAllUsers } from '../../../lib';
+import { addCollaborators, currentUser as getCurrentUser, deleteCollaborator, listAllUsers } from '../../../lib/api';
 import { User } from '../../../types/auth.ts';
 import { IconTrash, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';

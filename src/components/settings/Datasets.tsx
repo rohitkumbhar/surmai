@@ -1,14 +1,14 @@
-import { Button, Card, Group, Text, Title } from '@mantine/core';
-import classes from '../../pages/Settings/Settings.module.css';
+import { Box, Button, Card, Grid, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { countAirports, countPlaces, loadAirports, loadCities } from '../../lib';
+import { countAirports, countPlaces, loadAirports, loadCities } from '../../lib/api';
 import { modals } from '@mantine/modals';
-import { notifications } from '@mantine/notifications';
+import { clearLoadingNotification, showLoadingNotification } from '../../lib/notifications.tsx';
+import { useTranslation } from 'react-i18next';
 
 export const Datasets = () => {
   const [cityCount, setCityCount] = useState<number>(0);
   const [airportCount, setAirportCount] = useState<number>(0);
-
+  const { t } = useTranslation();
   useEffect(() => {
     countPlaces().then((count) => setCityCount(count));
     countAirports().then((count) => setAirportCount(count));
@@ -19,17 +19,24 @@ export const Datasets = () => {
       title: 'Loading Places Dataset',
       children: (
         <Text size="sm">
-          This action will load approximately 150000 places into your database and will take a long time.
+          {t(
+            'places_loading_info',
+            'This action will load approximately 150000 places into your database and will take a long time.'
+          )}
         </Text>
       ),
       labels: { confirm: 'Confirm', cancel: 'Cancel' },
       onCancel: () => {},
       onConfirm: () => {
+        const notificationId = showLoadingNotification({
+          title: t('dataset', 'Dataset'),
+          message: t('loading_places_dataset', 'Loading Places dataset'),
+        });
         loadCities().then((results) => {
-          notifications.show({
-            title: 'Places Dataset Loaded',
-            message: `Number of places loaded: ${results.count}`,
-            position: 'top-right',
+          clearLoadingNotification({
+            id: notificationId,
+            title: t('dataset', 'Dataset'),
+            message: t('places_loaded', 'Number of places loaded: {{count}}', { count: results.count }),
           });
         });
       },
@@ -39,16 +46,26 @@ export const Datasets = () => {
     modals.openConfirmModal({
       title: 'Loading Airports Dataset',
       children: (
-        <Text size="sm">This action will load airport information into your database and will take a long time.</Text>
+        <Text size="sm">
+          {t(
+            'loading_airports_info',
+            'This action will load airport information into your database and will take a long time.'
+          )}
+        </Text>
       ),
       labels: { confirm: 'Confirm', cancel: 'Cancel' },
       onCancel: () => {},
       onConfirm: () => {
+        const notificationId = showLoadingNotification({
+          title: t('dataset', 'Dataset'),
+          message: t('loading_airports_dataset', 'Loading Airports dataset'),
+        });
+
         loadAirports().then((results) => {
-          notifications.show({
-            title: 'Airports Dataset Loaded',
-            message: `Number of airports loaded: ${results.count}`,
-            position: 'top-right',
+          clearLoadingNotification({
+            id: notificationId,
+            title: t('dataset', 'Dataset'),
+            message: t('airports_loaded', 'Number of airports loaded: {{count}}', { count: results.count }),
           });
         });
       },
@@ -57,54 +74,58 @@ export const Datasets = () => {
   return (
     <Card withBorder radius="md" p="xl">
       <Title order={3} fw={500}>
-        Configure Data
+        {t('dataset_section_title', 'Datasets')}
       </Title>
       <Text fz="xs" c="dimmed" mt={3} mb="xl">
-        Load available datasets
+        {t('dataset_section_description', 'Load available datasets')}
       </Text>
 
-      <Group justify="space-between" className={classes.item} gap="xl" key={'places_dataset'}>
-        <div>
-          <Text>World Places</Text>
-          <Text size="sm" c="dimmed">
-            A list of possible destinations. This list requires a manual loading action since it may take a long time to
-            load.
-          </Text>
-          {/*<Text size="sm" c="dimmed">
-            Currently loaded places: {cityCount || 0}
-          </Text>*/}
-        </div>
-        {cityCount > 0 && (
-          <Text component={'div'} size="md">
-            {cityCount || 0}
+      <Grid grow={false}>
+        <Grid.Col span={{ base: 12, sm: 12, md: 8, lg: 10 }}>
+          <div>
+            <Text>{t('world_places_dataset', 'World Places')}</Text>
             <Text size="sm" c="dimmed">
-              Places Available
+              {t(
+                'places_dataset_info',
+                'A list of possible destinations. This list requires a manual loading action since it may take a long time to load.'
+              )}
             </Text>
-          </Text>
-        )}
-        {cityCount === 0 && <Button onClick={cityLoadConfirmationModal}>Load Places</Button>}
-      </Group>
+          </div>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 12, md: 4, lg: 2 }}>
+          {cityCount > 0 && (
+            <Box size="md">
+              {cityCount}
+              <Text size="sm" c="dimmed">
+                {t('places_available_suffix', 'Places Available')}
+              </Text>
+            </Box>
+          )}
+          {cityCount === 0 && <Button onClick={cityLoadConfirmationModal}>{t('load_places', 'Load Places')}</Button>}
+        </Grid.Col>
 
-      <Group justify="space-between" className={classes.item} gap="xl" key={'airports_dataset'}>
-        <div>
-          <Text>World Airports</Text>
-          <Text size="sm" c="dimmed">
-            A list of medium and large airports around the world.
-          </Text>
-          {/*<Text size="sm" c="dimmed">
-            Currently loaded airports: {airportCount || 0}
-          </Text>*/}
-        </div>
-        {airportCount > 0 && (
-          <Text component={'div'} size="md">
-            {airportCount || 0}
+        <Grid.Col span={{ base: 12, sm: 12, md: 8, lg: 10 }}>
+          <div>
+            <Text>{t('world_airports_dataset', 'World Airports')}</Text>
             <Text size="sm" c="dimmed">
-              Airports Available
+              {t('airport_dataset_info', 'A list of medium and large airports around the world.')}
             </Text>
-          </Text>
-        )}
-        {airportCount === 0 && <Button onClick={airportsLoadConfirmationModal}>Load Airports</Button>}
-      </Group>
+          </div>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 12, md: 4, lg: 2 }}>
+          {airportCount > 0 && (
+            <Text component={'div'} size="md">
+              {airportCount || 0}
+              <Text size="sm" c="dimmed">
+                {t('airports_available_suffix', 'Airports Available')}
+              </Text>
+            </Text>
+          )}
+          {airportCount === 0 && (
+            <Button onClick={airportsLoadConfirmationModal}>{t('load_airports', 'Load Airports')}</Button>
+          )}
+        </Grid.Col>
+      </Grid>
     </Card>
   );
 };

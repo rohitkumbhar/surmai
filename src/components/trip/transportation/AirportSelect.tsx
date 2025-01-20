@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { CloseButton, Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
-import { searchAirports } from '../../../lib';
+import { searchAirports } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
 import { Airport } from '../../../types/trips.ts';
 
@@ -36,7 +36,7 @@ export const AirportSelect = ({
         combobox.openDropdown();
       });
     }
-  }, [search]);
+  }, [search, combobox]);
 
   const options = searchResults
     .filter((item) => item.iataCode && item.iataCode !== '')

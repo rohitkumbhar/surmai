@@ -1,5 +1,5 @@
 import { AspectRatio, Avatar, Button, Group } from '@mantine/core';
-import { getAttachmentUrl, updateUserAvatar } from '../../lib';
+import { getAttachmentUrl, updateUserAvatar } from '../../lib/api';
 import { openContextModal } from '@mantine/modals';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { useTranslation } from 'react-i18next';

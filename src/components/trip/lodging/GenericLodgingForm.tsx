@@ -5,9 +5,10 @@ import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title
 import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
-import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '../../../lib';
+import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '../../../lib/api';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { fakeAsUtcString } from '../common/util.ts';
+
+import { fakeAsUtcString } from '../../../lib/time.ts';
 
 export const GenericLodgingForm = ({
   trip,

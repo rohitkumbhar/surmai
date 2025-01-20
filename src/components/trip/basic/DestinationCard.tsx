@@ -3,35 +3,21 @@ import { IconClock, IconMapPin } from '@tabler/icons-react';
 import { Anchor, Badge, Card, Group, HoverCard, Stack, Text } from '@mantine/core';
 import classes from './DestinationCard.module.css';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { calculateTimezoneDifference } from '../../../lib/time.ts';
+import { getMapsUrl } from '../../../lib/places.ts';
 
 export const DestinationCard = ({ destination }: { destination: Destination; trip: Trip }) => {
   const { user } = useCurrentUser();
   const { t } = useTranslation();
   const [timezoneDiff, setTimezoneDiff] = useState<number>(0);
 
-  const getMapsUrl = (destination: Destination): string => {
-    if (user?.mapsProvider === 'google') {
-      return `https://www.google.com/maps/place/${destination.name},${destination.stateName ? `+${destination.stateName},` : ''},${destination.countryName ? `+${destination.countryName}` : ''}`;
-    }
-    return `https://www.openstreetmap.org/search?query=${destination.name},${destination.stateName || ''},${destination.countryName}`;
-  };
-
-  const calculateTimezoneDifference = (timezone: string) => {
-    const baseline = dayjs().format('YYYY-MM-DD HH:mm:ss');
-    const userTimezone = user?.timezone || dayjs.tz.guess();
-    const destinationTimezoneInstant = dayjs.tz(baseline, timezone);
-    const userTimezoneInstant = dayjs.tz(baseline, userTimezone);
-    return destinationTimezoneInstant.diff(userTimezoneInstant, 'hours', true);
-  };
-
   useEffect(() => {
     if (destination.timezone) {
-      setTimezoneDiff(calculateTimezoneDifference(destination.timezone));
+      setTimezoneDiff(calculateTimezoneDifference(user, destination.timezone));
     }
-  }, [user, calculateTimezoneDifference]);
+  }, [user, destination]);
 
   return (
     <Card withBorder radius="xs" className={classes.card} p={'xs'}>
@@ -42,7 +28,7 @@ export const DestinationCard = ({ destination }: { destination: Destination; tri
             {`${destination.stateName ? destination.stateName + ',' : ' '} ${destination.countryName || 'Unspecified'} `}
           </Text>
         </div>
-        <Anchor href={getMapsUrl(destination)} target={'_blank'}>
+        <Anchor href={getMapsUrl(user, destination)} target={'_blank'}>
           <IconMapPin stroke={1.5} />
         </Anchor>
       </Group>

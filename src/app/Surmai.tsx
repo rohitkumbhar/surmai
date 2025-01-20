@@ -3,7 +3,7 @@ import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 import { RouterProvider } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-import { currentUser } from '../lib';
+import { currentUser } from '../lib/api';
 import { buildTheme } from './theme.ts';
 import { buildRouter } from './routes.tsx';
 import { modals } from './modals.ts';
@@ -37,7 +37,7 @@ export const SurmaiApp = () => {
   return (
     <SurmaiContext.Provider value={value}>
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <Notifications />
+        <Notifications position={'top-right'} autoClose={5000} />
         <ModalsProvider modals={modals}>
           <RouterProvider router={buildRouter()} />
         </ModalsProvider>

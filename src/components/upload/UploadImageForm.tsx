@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Center, Stack, Stepper } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { CroppedImage } from '../../types/trips.ts';
-import { getCroppedImg } from './util.ts';
+import { getCroppedImg } from '../../lib/image.ts';
 import { ImageDropZone } from './ImageDropZone.tsx';
 import { CropModal } from './CropModal.tsx';
 

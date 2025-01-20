@@ -14,7 +14,7 @@ export {
   disableUserSignups,
   updateAdminUser,
   adminAuthRefresh,
-} from './pocketbase/auth';
+} from './pocketbase/auth.ts';
 export {
   getTrip,
   listTrips,
@@ -39,7 +39,7 @@ export {
   loadEverything,
   exportTripData,
   importTripData,
-} from './pocketbase/trips';
+} from './pocketbase/trips.ts';
 
 export {
   listActivities,
@@ -47,7 +47,7 @@ export {
   saveActivityAttachments,
   updateActivityEntry,
   deleteActivity,
-} from './pocketbase/activities';
+} from './pocketbase/activities.ts';
 
 export {
   loadCities,
@@ -57,14 +57,6 @@ export {
   searchPlaces,
   searchAirports,
   getTimezone,
-} from './pocketbase/lists';
+} from './pocketbase/lists.ts';
 
-export { getSmtpSettings, updateSmtpSettings, sendTestEmail } from './pocketbase/settings';
-
-export const formatDate = (locale: string, input: Date) => {
-  return input.toLocaleDateString(locale, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
-};
+export { getSmtpSettings, updateSmtpSettings, sendTestEmail } from './pocketbase/settings.ts';

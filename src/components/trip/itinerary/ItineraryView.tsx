@@ -4,7 +4,7 @@ import { IconCalendar } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import dayjs, { Dayjs } from 'dayjs';
 import { useQuery } from '@tanstack/react-query';
-import { listActivities, listLodgings, listTransportations } from '../../../lib';
+import { listActivities, listLodgings, listTransportations } from '../../../lib/api';
 import { buildActivitiesIndex, buildLodgingIndex, buildTransportationIndex, chunk } from './helper.ts';
 import { TransportationLine } from './TransportationLine.tsx';
 import { LodgingLine } from './LodgingLine.tsx';

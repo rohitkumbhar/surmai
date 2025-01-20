@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
 import { useContext } from 'react';
 import { SurmaiContext } from '../../app/Surmai.tsx';
-import { updateUser } from '../../lib';
+import { updateUser } from '../../lib/api';
 
 import { currencyCodes } from '../util/currencyCodes.ts';
 import { IconDeviceFloppy } from '@tabler/icons-react';

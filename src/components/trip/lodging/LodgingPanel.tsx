@@ -1,6 +1,6 @@
 import { Lodging, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
-import { listLodgings } from '../../../lib';
+import { listLodgings } from '../../../lib/api';
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
 import { AddLodgingMenu } from './AddLodgingMenu.tsx';
 import { Fragment, useState } from 'react';

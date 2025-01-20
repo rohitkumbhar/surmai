@@ -2,7 +2,7 @@ import { ActionIcon, AspectRatio, Card, Container, Divider, LoadingOverlay, Simp
 import classes from './MyTrips.module.css';
 import { IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
-import { listTrips } from '../../lib';
+import { listTrips } from '../../lib/api';
 import { useQuery } from '@tanstack/react-query';
 import { Trip } from '../../types/trips.ts';
 import { TripCard } from '../../components/trip/TripCard.tsx';

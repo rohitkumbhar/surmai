@@ -1,8 +1,8 @@
 import { Activity } from '../../../types/trips.ts';
 import dayjs, { Dayjs } from 'dayjs';
 import { Badge, Box, Group, rem, Text } from '@mantine/core';
-import { formatTime } from '../common/util.ts';
 import { IconActivity } from '@tabler/icons-react';
+import { formatTime } from '../../../lib/time.ts';
 
 export const ActivityLine = ({ activity, day }: { activity: Activity; day: Dayjs }) => {
   const showStartTime = dayjs(activity.startDate).startOf('day').isSame(day);

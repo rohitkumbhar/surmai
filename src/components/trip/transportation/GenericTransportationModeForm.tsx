@@ -3,13 +3,14 @@ import { DateTimePicker } from '@mantine/dates';
 import { CreateTransportation, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { createTransportationEntry, saveTransportationAttachments } from '../../../lib';
+import { createTransportationEntry, saveTransportationAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { updateTransportation } from '../../../lib/pocketbase/trips.ts';
+import { updateTransportation } from '../../../lib/api/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { AirportSelect } from './AirportSelect.tsx';
-import { fakeAsUtcString } from '../common/util.ts';
+
+import { fakeAsUtcString } from '../../../lib/time.ts';
 
 export const GenericTransportationModeForm = ({
   transportationType,

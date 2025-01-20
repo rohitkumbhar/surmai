@@ -8,9 +8,10 @@ import {
   Transportation,
   Trip,
   TripResponse,
-} from '../../types/trips.ts';
+} from '../../../types/trips.ts';
 import { listActivities } from './activities.ts';
-import { convertSavedToBrowserDate } from '../../components/trip/common/util.ts';
+
+import { convertSavedToBrowserDate } from '../../time.ts';
 // import { downloadAsBase64 } from '../../components/trip/common/util.ts';
 
 export const createTrip = async (data: NewTrip) => {
@@ -48,7 +49,7 @@ export const listTrips = async (): Promise<Trip[]> => {
   });
 };
 
-export const updateTrip = (tripId: string, data: { [key: string]: any }) => {
+export const updateTrip = (tripId: string, data: Trip) => {
   return pb.collection('trips').update(tripId, data);
 };
 

@@ -3,7 +3,8 @@ import { Badge, Box, Group, rem, Text } from '@mantine/core';
 import { typeIcons } from '../transportation/typeIcons.ts';
 import { IconCar } from '@tabler/icons-react';
 import dayjs, { Dayjs } from 'dayjs';
-import { formatTime } from '../common/util.ts';
+
+import { formatTime } from '../../../lib/time.ts';
 
 export const TransportationLine = ({ transportation, day }: { transportation: Transportation; day: Dayjs }) => {
   const type = transportation.type;

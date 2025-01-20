@@ -1,6 +1,6 @@
 import { Activity, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
-import { listActivities } from '../../../lib';
+import { listActivities } from '../../../lib/api';
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Title, Text } from '@mantine/core';
 import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
 import { Fragment } from 'react';
