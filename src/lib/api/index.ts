@@ -14,6 +14,9 @@ export {
   disableUserSignups,
   updateAdminUser,
   adminAuthRefresh,
+  listAuthMethods,
+  disableOAuth2Provider,
+  setOAuth2Provider,
 } from './pocketbase/auth.ts';
 export {
   getTrip,

@@ -24,3 +24,14 @@ export interface UserSettingsFormType {
   timezone?: string;
   mapsProvider?: string;
 }
+
+export interface OAuth2Provider {
+  enabled: boolean;
+  name: string;
+  displayName: string;
+  clientId: string;
+  clientSecret: string;
+  authUrl?: string;
+  tokenUrl?: string;
+  userInfoUrl?: string;
+}

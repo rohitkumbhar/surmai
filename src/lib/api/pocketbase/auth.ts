@@ -1,5 +1,5 @@
 import { pb, pbAdmin } from './pocketbase.ts';
-import { User } from '../../../types/auth.ts';
+import { OAuth2Provider, User } from '../../../types/auth.ts';
 import { ClientResponseError } from 'pocketbase';
 
 export const authWithUsernameAndPassword = async ({ email, password }: { email: string; password: string }) => {
@@ -130,5 +130,36 @@ export const disableUserSignups = () => {
 export const enableUserSignups = () => {
   return pbAdmin.collections.update('users', {
     createRule: '',
+  });
+};
+
+export const listAuthMethods = () => {
+  return pb.collection('users').listAuthMethods();
+};
+
+export const disableOAuth2Provider = () => {
+  return pbAdmin.collections.update('users', {
+    oauth2: {
+      enabled: false
+    }
+  });
+};
+
+export const setOAuth2Provider = (provider: OAuth2Provider) => {
+  return pbAdmin.collections.update('users', {
+    oauth2: {
+      enabled: provider.enabled,
+      providers: [
+        {
+          name: provider.name,
+          displayName: provider.displayName,
+          clientId: provider.clientId,
+          clientSecret: provider.clientSecret,
+          authUrl: provider.authUrl,
+          tokenUrl: provider.tokenUrl,
+          userApiUrl: provider.userInfoUrl,
+        },
+      ],
+    },
   });
 };
