@@ -140,8 +140,8 @@ export const listAuthMethods = () => {
 export const disableOAuth2Provider = () => {
   return pbAdmin.collections.update('users', {
     oauth2: {
-      enabled: false
-    }
+      enabled: false,
+    },
   });
 };
 
@@ -160,6 +160,15 @@ export const setOAuth2Provider = (provider: OAuth2Provider) => {
           userApiUrl: provider.userInfoUrl,
         },
       ],
+    },
+  });
+};
+
+export const startOAuthFlow = (name: string) => {
+  return pb.collection('users').authWithOAuth2({
+    provider: name,
+    createData: {
+      emailVisibility: true,
     },
   });
 };

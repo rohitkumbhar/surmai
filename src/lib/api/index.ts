@@ -17,6 +17,7 @@ export {
   listAuthMethods,
   disableOAuth2Provider,
   setOAuth2Provider,
+  startOAuthFlow,
 } from './pocketbase/auth.ts';
 export {
   getTrip,

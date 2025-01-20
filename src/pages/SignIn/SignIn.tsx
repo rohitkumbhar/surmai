@@ -1,9 +1,20 @@
-import { Anchor, Button, Container, Notification, Paper, PasswordInput, Text, TextInput } from '@mantine/core';
+import {
+  Anchor,
+  Button,
+  Container,
+  Divider,
+  Group,
+  Notification,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import classes from './SignIn.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
-import { useState } from 'react';
-import { authWithUsernameAndPassword } from '../../lib/api';
+import { useEffect, useState } from 'react';
+import { authWithUsernameAndPassword, listAuthMethods, startOAuthFlow } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { useDocumentTitle } from '@mantine/hooks';
 
@@ -12,6 +23,7 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [apiError, setApiError] = useState<string>();
+  const [oauthInfo, setOAuthInfo] = useState<{ name: string; displayName: string } | undefined>();
 
   const signInWithEmailAndPassword = (values: { email: string; password: string }) => {
     authWithUsernameAndPassword({
@@ -26,6 +38,14 @@ export const SignIn = () => {
         setApiError(err.message);
       });
   };
+
+  useEffect(() => {
+    listAuthMethods().then((result) => {
+      if (result.oauth2.enabled && result.oauth2.providers.length > 0) {
+        setOAuthInfo(result.oauth2.providers[0]);
+      }
+    });
+  }, []);
 
   const form = useForm({
     mode: 'uncontrolled',
@@ -45,8 +65,24 @@ export const SignIn = () => {
       <Container size={420} my={40}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
           <Text size="lg" ta="center" mt={5}>
-            {t('sign_in', 'Sign In')}
+            Welcome to Surmai
           </Text>
+          {oauthInfo && (
+            <>
+              <Group grow mb="md" mt="md">
+                <Button
+                  onClick={() => {
+                    startOAuthFlow(oauthInfo.name).then(() => {
+                      navigate('/');
+                    });
+                  }}
+                >
+                  Sign in with {oauthInfo.displayName}
+                </Button>
+              </Group>
+              <Divider label="Or continue with email" labelPosition="center" my="lg" />
+            </>
+          )}
 
           {apiError && (
             <Notification withBorder color="red" title="Unable to sign in" onClose={() => setApiError(undefined)}>
