@@ -117,7 +117,7 @@ volumes:
 services:
   surmai_server:
     container_name: surmai_server
-    image: ghcr.io/rohitkumbhar/surmai:v0.0.1
+    image: ghcr.io/rohitkumbhar/surmai:v0.0.2
     volumes:
       - surmai_data:/pb_data
     ports:

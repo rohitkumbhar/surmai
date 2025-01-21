@@ -1,14 +1,14 @@
 {
   "name": "surmai",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --cors",
     "site": "vite -c vite.site.config.ts --host 0.0.0.0 --port 2030 --cors",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/icons/fish-2.svg",
-    "build": "tsc -b && vite build",
+    "build": "   tsc -b && vite build",
     "build-site": " vite build -c vite.site.config.ts --emptyOutDir",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
