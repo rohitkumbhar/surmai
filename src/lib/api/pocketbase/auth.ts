@@ -103,32 +103,15 @@ export const updateUserAvatar = (userId: string, file: File | Blob) => {
   return pb.collection('users').update(userId, formData);
 };
 
-export const updateUser = (userId: string, data: object) => {
-  return pb.collection('users').update(userId, data);
+export const listAuthMethods = () => {
+  return pb.collection('users').listAuthMethods();
 };
 
-export const updateAdminUser = (data: object) => {
-  if (pbAdmin?.authStore?.record?.id) {
-    return pbAdmin.collection('_superusers').update(pbAdmin.authStore.record.id, data);
-  } else {
-    throw Error('Not an admin');
-  }
-};
-
-export const areSignupsEnabled = () => {
-  return pbAdmin.collections.getOne('users').then((usersCollection) => {
-    return usersCollection.createRule != null;
-  });
-};
-
-export const disableUserSignups = () => {
-  return pbAdmin.collections.update('users', {
-    createRule: null,
-  });
-};
-
-export const enableUserSignups = () => {
-  return pbAdmin.collections.update('users', {
-    createRule: '',
+export const startOAuthFlow = (name: string) => {
+  return pb.collection('users').authWithOAuth2({
+    provider: name,
+    createData: {
+      emailVisibility: true,
+    },
   });
 };

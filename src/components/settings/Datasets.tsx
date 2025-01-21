@@ -72,7 +72,7 @@ export const Datasets = () => {
     });
 
   return (
-    <Card withBorder radius="md" p="xl">
+    <Card withBorder radius="md" p="xl" mt={'md'}>
       <Title order={3} fw={500}>
         {t('dataset_section_title', 'Datasets')}
       </Title>

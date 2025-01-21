@@ -24,3 +24,29 @@ export interface UserSettingsFormType {
   timezone?: string;
   mapsProvider?: string;
 }
+
+export interface OAuthProvider {
+  name?: string;
+  displayName?: string;
+  clientId?: string;
+  clientSecret?: string;
+  authURL?: string;
+  tokenURL?: string;
+  userInfoURL?: string;
+}
+
+export interface OAuthSettings {
+  enabled: boolean;
+  providers?: OAuthProvider[];
+}
+// We only allow 1 OAuth2 provider
+export interface OAuthSettingsFormType {
+  enabled: boolean;
+  name?: string;
+  displayName?: string;
+  clientId?: string;
+  clientSecret?: string;
+  authURL?: string;
+  tokenURL?: string;
+  userInfoURL?: string;
+}
