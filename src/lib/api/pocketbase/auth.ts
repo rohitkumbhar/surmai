@@ -1,5 +1,5 @@
 import { pb, pbAdmin } from './pocketbase.ts';
-import { OAuth2Provider, User } from '../../../types/auth.ts';
+import { User } from '../../../types/auth.ts';
 import { ClientResponseError } from 'pocketbase';
 
 export const authWithUsernameAndPassword = async ({ email, password }: { email: string; password: string }) => {
@@ -103,65 +103,8 @@ export const updateUserAvatar = (userId: string, file: File | Blob) => {
   return pb.collection('users').update(userId, formData);
 };
 
-export const updateUser = (userId: string, data: object) => {
-  return pb.collection('users').update(userId, data);
-};
-
-export const updateAdminUser = (data: object) => {
-  if (pbAdmin?.authStore?.record?.id) {
-    return pbAdmin.collection('_superusers').update(pbAdmin.authStore.record.id, data);
-  } else {
-    throw Error('Not an admin');
-  }
-};
-
-export const areSignupsEnabled = () => {
-  return pbAdmin.collections.getOne('users').then((usersCollection) => {
-    return usersCollection.createRule != null;
-  });
-};
-
-export const disableUserSignups = () => {
-  return pbAdmin.collections.update('users', {
-    createRule: null,
-  });
-};
-
-export const enableUserSignups = () => {
-  return pbAdmin.collections.update('users', {
-    createRule: '',
-  });
-};
-
 export const listAuthMethods = () => {
   return pb.collection('users').listAuthMethods();
-};
-
-export const disableOAuth2Provider = () => {
-  return pbAdmin.collections.update('users', {
-    oauth2: {
-      enabled: false,
-    },
-  });
-};
-
-export const setOAuth2Provider = (provider: OAuth2Provider) => {
-  return pbAdmin.collections.update('users', {
-    oauth2: {
-      enabled: provider.enabled,
-      providers: [
-        {
-          name: provider.name,
-          displayName: provider.displayName,
-          clientId: provider.clientId,
-          clientSecret: provider.clientSecret,
-          authUrl: provider.authUrl,
-          tokenUrl: provider.tokenUrl,
-          userApiUrl: provider.userInfoUrl,
-        },
-      ],
-    },
-  });
 };
 
 export const startOAuthFlow = (name: string) => {

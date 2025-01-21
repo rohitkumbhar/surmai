@@ -1,6 +1,7 @@
-import { pbAdmin } from './pocketbase.ts';
+import { pb, pbAdmin } from './pocketbase.ts';
 
 import { SmtpSettings } from '../../../types/settings.ts';
+import { OAuthSettingsFormType } from '../../../types/auth.ts';
 
 export const getSmtpSettings = async (): Promise<SmtpSettings | undefined> => {
   const settings = await pbAdmin.settings.getAll();
@@ -30,4 +31,73 @@ export const updateSmtpSettings = async (settings: SmtpSettings) => {
 export const sendTestEmail = () => {
   const email = pbAdmin.authStore.record?.email;
   return pbAdmin.settings.testEmail('_superusers', email, 'verification');
+};
+
+export const getUsersMetadata = () => {
+  return pbAdmin.collections.getOne('users');
+};
+
+export const updateUser = (userId: string, data: object) => {
+  return pb.collection('users').update(userId, data);
+};
+
+export const updateAdminUser = (data: object) => {
+  if (pbAdmin?.authStore?.record?.id) {
+    return pbAdmin.collection('_superusers').update(pbAdmin.authStore.record.id, data);
+  } else {
+    throw Error('Not an admin');
+  }
+};
+
+export const areSignupsEnabled = () => {
+  return pbAdmin.collections.getOne('users').then((usersCollection) => {
+    return usersCollection.createRule != null;
+  });
+};
+
+export const disableUserSignups = () => {
+  return pbAdmin.collections.update('users', {
+    createRule: null,
+  });
+};
+
+export const enableUserSignups = () => {
+  return pbAdmin.collections.update('users', {
+    createRule: '',
+  });
+};
+
+export const disableOAuth2Provider = () => {
+  return pbAdmin.collections.update('users', {
+    oauth2: {
+      enabled: false,
+    },
+  });
+};
+
+export const setOAuth2Provider = (provider: OAuthSettingsFormType) => {
+  if (provider.enabled) {
+    return pbAdmin.collections.update('users', {
+      oauth2: {
+        enabled: provider.enabled,
+        providers: [
+          {
+            name: provider.name,
+            displayName: provider.displayName,
+            clientId: provider.clientId,
+            clientSecret: provider.clientSecret,
+            authURL: provider.authURL,
+            tokenURL: provider.tokenURL,
+            userInfoURL: provider.userInfoURL,
+          },
+        ],
+      },
+    });
+  } else {
+    return pbAdmin.collections.update('users', {
+      oauth2: {
+        enabled: provider.enabled,
+      },
+    });
+  }
 };

@@ -8,15 +8,8 @@ export {
   listAllUsers,
   authRefresh,
   updateUserAvatar,
-  updateUser,
-  areSignupsEnabled,
-  enableUserSignups,
-  disableUserSignups,
-  updateAdminUser,
   adminAuthRefresh,
   listAuthMethods,
-  disableOAuth2Provider,
-  setOAuth2Provider,
   startOAuthFlow,
 } from './pocketbase/auth.ts';
 export {
@@ -63,4 +56,16 @@ export {
   getTimezone,
 } from './pocketbase/lists.ts';
 
-export { getSmtpSettings, updateSmtpSettings, sendTestEmail } from './pocketbase/settings.ts';
+export {
+  getSmtpSettings,
+  updateSmtpSettings,
+  sendTestEmail,
+  getUsersMetadata,
+  setOAuth2Provider,
+  updateUser,
+  updateAdminUser,
+  areSignupsEnabled,
+  disableUserSignups,
+  enableUserSignups,
+  disableOAuth2Provider,
+} from './pocketbase/settings.ts';

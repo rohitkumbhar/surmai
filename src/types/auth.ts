@@ -25,13 +25,28 @@ export interface UserSettingsFormType {
   mapsProvider?: string;
 }
 
-export interface OAuth2Provider {
+export interface OAuthProvider {
+  name?: string;
+  displayName?: string;
+  clientId?: string;
+  clientSecret?: string;
+  authURL?: string;
+  tokenURL?: string;
+  userInfoURL?: string;
+}
+
+export interface OAuthSettings {
   enabled: boolean;
-  name: string;
-  displayName: string;
-  clientId: string;
-  clientSecret: string;
-  authUrl?: string;
-  tokenUrl?: string;
-  userInfoUrl?: string;
+  providers?: OAuthProvider[];
+}
+// We only allow 1 OAuth2 provider
+export interface OAuthSettingsFormType {
+  enabled: boolean;
+  name?: string;
+  displayName?: string;
+  clientId?: string;
+  clientSecret?: string;
+  authURL?: string;
+  tokenURL?: string;
+  userInfoURL?: string;
 }
