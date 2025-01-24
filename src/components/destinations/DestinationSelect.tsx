@@ -31,7 +31,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
         combobox.openDropdown();
       });
     }
-  }, [search, combobox]);
+  }, [search]);
 
   const options = searchResults.map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
