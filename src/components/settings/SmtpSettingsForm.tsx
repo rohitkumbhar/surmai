@@ -232,12 +232,20 @@ export const SmtpSettingsForm = () => {
                   leftSection={<IconMail />}
                   disabled={!settings?.enabled}
                   onClick={() => {
-                    sendTestEmail().then(() => {
-                      showInfoNotification({
-                        title: t('smtp_test_email', 'SMTP Settings'),
-                        message: t('smtp_test_email_queued', 'Test email has been queued.'),
+                    sendTestEmail()
+                      .then(() => {
+                        showInfoNotification({
+                          title: t('smtp_test_email', 'SMTP Settings'),
+                          message: t('smtp_test_email_queued', 'Test email has been queued.'),
+                        });
+                      })
+                      .catch((err) => {
+                        showErrorNotification({
+                          error: err,
+                          title: t('smtp_test_email', 'SMTP Settings'),
+                          message: t('smtp_test_email_not_queued', 'Test email could not be sent.'),
+                        });
                       });
-                    });
                   }}
                 >
                   {t('send_test_email', 'Send test email')}

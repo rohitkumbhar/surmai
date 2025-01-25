@@ -63,6 +63,8 @@ export {
   getUsersMetadata,
   setOAuth2Provider,
   updateUser,
+  updateUserAdminAction,
+  deleteUserAdminAction,
   updateAdminUser,
   areSignupsEnabled,
   disableUserSignups,

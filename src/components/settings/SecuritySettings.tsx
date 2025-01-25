@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { OAuth2SettingsForm } from './OAuth2SettingsForm.tsx';
 import { useQuery } from '@tanstack/react-query';
 
-export const UsersSettings = () => {
+export const SecuritySettings = () => {
   const {
     isPending,
     data: userModel,
@@ -22,10 +22,10 @@ export const UsersSettings = () => {
   return (
     <Card withBorder radius="md" p="xl" mt={'md'}>
       <Title order={3} fw={500}>
-        {t('users_section', 'Users')}
+        {t('security_section', 'Security')}
       </Title>
       <Text fz="xs" c="dimmed" mt={3} mb="xl">
-        {t('users_section_description', 'Manage site users')}
+        {t('security_section_description', 'Manage authentication options')}
       </Text>
 
       <div style={{ width: '100%', position: 'relative' }}>
