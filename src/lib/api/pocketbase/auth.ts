@@ -22,7 +22,7 @@ export const authWithUsernameAndPassword = async ({ email, password }: { email: 
 export const currentUser = async () => {
   return new Promise<User>((resolve, reject) => {
     if (pb.authStore.isValid) {
-      resolve(pb.authStore.model as User);
+      resolve(pb.authStore.record as User);
     } else {
       reject('No logged in user');
     }
@@ -114,4 +114,8 @@ export const startOAuthFlow = (name: string) => {
       emailVisibility: true,
     },
   });
+};
+
+export const sendResetPasswordRequest = (email: string) => {
+  return pb.collection('users').requestPasswordReset(email);
 };

@@ -11,6 +11,7 @@ export {
   adminAuthRefresh,
   listAuthMethods,
   startOAuthFlow,
+  sendResetPasswordRequest,
 } from './pocketbase/auth.ts';
 export {
   getTrip,
