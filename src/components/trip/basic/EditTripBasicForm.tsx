@@ -14,6 +14,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
   return (
     <Stack align="stretch" justify="center" gap="md">
       <TextInput
+        name={'tripName'}
         label={t('basic.trip_name', 'Name')}
         placeholder="Name"
         mt={'md'}
@@ -24,6 +25,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
       />
 
       <Textarea
+        name={'tripDesc'}
         label={t('basic.trip_description', 'Brief Description')}
         description={t('basic.trip_description_description', 'Optional: Brief description of the trip')}
         placeholder=""

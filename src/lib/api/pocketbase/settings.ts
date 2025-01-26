@@ -41,6 +41,14 @@ export const updateUser = (userId: string, data: object) => {
   return pb.collection('users').update(userId, data);
 };
 
+export const updateUserAdminAction = (userId: string, data: object) => {
+  return pbAdmin.collection('users').update(userId, data);
+};
+
+export const deleteUserAdminAction = (userId: string) => {
+  return pbAdmin.collection('users').delete(userId);
+};
+
 export const updateAdminUser = (data: object) => {
   if (pbAdmin?.authStore?.record?.id) {
     return pbAdmin.collection('_superusers').update(pbAdmin.authStore.record.id, data);

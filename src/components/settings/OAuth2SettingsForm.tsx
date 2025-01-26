@@ -28,7 +28,7 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
     initialValues: {
       enabled: !!oauthConfig?.enabled,
       name: oauthConfig?.providers?.[0]?.name,
-      displayName: oauthConfig?.providers?.[0]?.displayName,
+      displayName: oauthConfig?.providers?.[0]?.displayName || oauthConfig?.providers?.[0]?.name,
       clientId: oauthConfig?.providers?.[0]?.clientId,
       clientSecret: oauthConfig?.providers?.[0]?.clientSecret,
       tokenURL: oauthConfig?.providers?.[0]?.tokenURL,
@@ -63,9 +63,6 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
       });
   };
 
-  // select for major players
-  // required id and secret
-  // 3 urls
   return (
     <div style={{ width: '100%' }}>
       <Text mb={'md'}>{t('oauth2_settings_form', 'OAuth2 Settings')}</Text>

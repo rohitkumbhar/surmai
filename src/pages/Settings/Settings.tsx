@@ -2,13 +2,14 @@ import { Container, Tabs, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useDocumentTitle } from '@mantine/hooks';
 import { Header } from '../../components/nav/Header.tsx';
-import { UsersSettings } from '../../components/settings/UsersSettings.tsx';
+import { SecuritySettings } from '../../components/settings/SecuritySettings.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
 import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx';
 import { useEffect } from 'react';
 import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
-import { IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
+import { IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
+import { UserList } from '../../components/settings/UserList.tsx';
 
 export const Settings = () => {
   const { t } = useTranslation();
@@ -40,12 +41,18 @@ export const Settings = () => {
           <Tabs.Tab value="smtp" leftSection={<IconMail size={12} />}>
             {t('smtp_settings', 'SMTP Settings')}
           </Tabs.Tab>
+          <Tabs.Tab value="security" leftSection={<IconKey size={12} />}>
+            {t('security_settings', 'Security')}
+          </Tabs.Tab>
           <Tabs.Tab value="datasets" leftSection={<IconSettings size={12} />}>
             {t('dataset_section_title', 'Datasets')}
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="users">
-          <UsersSettings />
+          <UserList />
+        </Tabs.Panel>
+        <Tabs.Panel value="security">
+          <SecuritySettings />
         </Tabs.Panel>
         <Tabs.Panel value="smtp">
           <SmtpSettingsForm />

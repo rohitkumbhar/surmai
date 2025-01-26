@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  Collapse,
   Group,
   LoadingOverlay,
   NumberInput,
@@ -22,7 +21,6 @@ import { IconDeviceFloppy, IconMail } from '@tabler/icons-react';
 import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 import { SmtpSettings } from '../../types/settings.ts';
-import { useDisclosure } from '@mantine/hooks';
 
 export const SmtpSettingsForm = () => {
   const {
@@ -34,17 +32,16 @@ export const SmtpSettingsForm = () => {
     queryFn: () => getSmtpSettings(),
   });
   const { t } = useTranslation();
-  const [opened, { open: openForm, close: closeForm }] = useDisclosure(false);
 
   const initialValues: SmtpSettings = {
     senderName: settings?.senderName,
     senderAddress: settings?.senderAddress,
-    enabled: settings?.enabled,
+    enabled: !!settings?.enabled,
     host: settings?.host,
     localName: settings?.localName || (window.location.hostname !== 'localhost' ? window.location.hostname : undefined),
     password: '',
     port: settings?.port,
-    tls: settings?.tls,
+    tls: !!settings?.tls,
     username: settings?.username,
     authMethod: settings?.authMethod || 'PLAIN',
     applicationUrl: settings?.applicationUrl || 'http://surmai.local',
@@ -52,7 +49,7 @@ export const SmtpSettingsForm = () => {
 
   const form = useForm<SmtpSettings & { tlsValue?: string }>({
     mode: 'uncontrolled',
-    initialValues: { ...initialValues, tlsValue: initialValues?.tls === true ? 'true' : 'false' },
+    initialValues: { ...initialValues, tlsValue: initialValues?.tls ? 'true' : 'false' },
   });
 
   const handleSubmission = (values: SmtpSettings & { tlsValue?: string }) => {
@@ -76,21 +73,9 @@ export const SmtpSettingsForm = () => {
     }
   };
 
-  form.watch('enabled', ({ value }) => {
-    if (value) {
-      openForm();
-    } else {
-      closeForm();
-    }
-  });
-
   useEffect(() => {
-    form.setValues(settings as SmtpSettings);
+    form.setValues({ ...(settings as SmtpSettings), tlsValue: initialValues?.tls ? 'true' : 'false' });
     form.resetDirty(settings);
-
-    if ((settings as SmtpSettings)?.enabled) {
-      openForm();
-    }
   }, [settings]);
 
   return (
@@ -123,106 +108,104 @@ export const SmtpSettingsForm = () => {
                 {...form.getInputProps('enabled', { type: 'checkbox' })}
               />
             </Group>
-            <Collapse in={opened}>
-              <Group mt={'sm'}>
-                <TextInput
-                  name={'senderName'}
-                  label={t('smtp_sender_name', 'Sender Name')}
-                  description={t('smtp_sender_name_description', 'Name of the sender')}
-                  required
-                  key={form.key('senderName')}
-                  {...form.getInputProps('senderName')}
-                />
+            <Group mt={'sm'}>
+              <TextInput
+                name={'senderName'}
+                label={t('smtp_sender_name', 'Sender Name')}
+                description={t('smtp_sender_name_description', 'Name of the sender')}
+                required
+                key={form.key('senderName')}
+                {...form.getInputProps('senderName')}
+              />
 
-                <TextInput
-                  name={'senderAddress'}
-                  label={t('smtp_sender_address', 'Sender Address')}
-                  description={t('smtp_sender_name_description', 'Email address of the sender')}
-                  required
-                  type={'email'}
-                  key={form.key('senderAddress')}
-                  {...form.getInputProps('senderAddress')}
-                />
-                <TextInput
-                  name={'applicationUrl'}
-                  label={t('application_url', 'Application URL')}
-                  type={'url'}
-                  description={t(
-                    'application_url_description',
-                    'Base URL for this installation. Used to generate links in an email.'
-                  )}
-                  key={form.key('applicationUrl')}
-                  {...form.getInputProps('applicationUrl')}
-                />
-              </Group>
-              <Group mt={'sm'}>
-                <TextInput
-                  name={'host'}
-                  label={t('smtp_host', 'Host')}
-                  description={t('smtp_host_description', 'Domain name of the SMTP server')}
-                  required
-                  key={form.key('host')}
-                  {...form.getInputProps('host')}
-                />
-                <NumberInput
-                  hideControls={true}
-                  allowDecimal={false}
-                  name={'port'}
-                  label={t('smtp_port', 'Port')}
-                  description={t('smtp_port_description', 'Server Port. Default is 587 for TLS enabled server')}
-                  required
-                  key={form.key('port')}
-                  {...form.getInputProps('port')}
-                />
-                <TextInput
-                  name={'localName'}
-                  label={t('smtp_local_name', 'Local Server Name')}
-                  description={t('smtp_local_name', 'Local domain name. Default is localhost')}
-                  required
-                  type={'domain'}
-                  key={form.key('localName')}
-                  {...form.getInputProps('localName')}
-                />
-              </Group>
-              <Group mt={'sm'}>
-                <TextInput
-                  name={'username'}
-                  label={t('smtp_username', 'Username')}
-                  description={t('smtp_username_desc', 'Username for the SMTP server')}
-                  key={form.key('username')}
-                  {...form.getInputProps('username')}
-                />
-                <PasswordInput
-                  name={'password'}
-                  label={t('smtp_password', 'Password')}
-                  description={t('smtp_password_desc', 'Password for the SMTP server')}
-                  key={form.key('password')}
-                  {...form.getInputProps('password')}
-                />
+              <TextInput
+                name={'senderAddress'}
+                label={t('smtp_sender_address', 'Sender Address')}
+                description={t('smtp_sender_name_description', 'Email address of the sender')}
+                required
+                type={'email'}
+                key={form.key('senderAddress')}
+                {...form.getInputProps('senderAddress')}
+              />
+              <TextInput
+                name={'applicationUrl'}
+                label={t('application_url', 'Application URL')}
+                type={'url'}
+                description={t(
+                  'application_url_description',
+                  'Base URL for this installation. Used to generate links in an email.'
+                )}
+                key={form.key('applicationUrl')}
+                {...form.getInputProps('applicationUrl')}
+              />
+            </Group>
+            <Group mt={'sm'}>
+              <TextInput
+                name={'host'}
+                label={t('smtp_host', 'Host')}
+                description={t('smtp_host_description', 'Domain name of the SMTP server')}
+                required
+                key={form.key('host')}
+                {...form.getInputProps('host')}
+              />
+              <NumberInput
+                hideControls={true}
+                allowDecimal={false}
+                name={'port'}
+                label={t('smtp_port', 'Port')}
+                description={t('smtp_port_description', 'Server Port. Default is 587 for TLS enabled server')}
+                required
+                key={form.key('port')}
+                {...form.getInputProps('port')}
+              />
+              <TextInput
+                name={'localName'}
+                label={t('smtp_local_name', 'Local Server Name')}
+                description={t('smtp_local_name', 'Local domain name. Default is localhost')}
+                required
+                type={'domain'}
+                key={form.key('localName')}
+                {...form.getInputProps('localName')}
+              />
+            </Group>
+            <Group mt={'sm'}>
+              <TextInput
+                name={'username'}
+                label={t('smtp_username', 'Username')}
+                description={t('smtp_username_desc', 'Username for the SMTP server')}
+                key={form.key('username')}
+                {...form.getInputProps('username')}
+              />
+              <PasswordInput
+                name={'password'}
+                label={t('smtp_password', 'Password')}
+                description={t('smtp_password_desc', 'Password for the SMTP server')}
+                key={form.key('password')}
+                {...form.getInputProps('password')}
+              />
 
-                <Select
-                  label={t('smtp_auth_method', 'Auth Method')}
-                  key={form.key('authMethod')}
-                  {...form.getInputProps('authMethod')}
-                  description={t('smtp_auth_method_desc', 'Select the AUTH method for your SMTP server')}
-                  placeholder=""
-                  data={['PLAIN', 'LOGIN']}
-                />
+              <Select
+                label={t('smtp_auth_method', 'Auth Method')}
+                key={form.key('authMethod')}
+                {...form.getInputProps('authMethod')}
+                description={t('smtp_auth_method_desc', 'Select the AUTH method for your SMTP server')}
+                placeholder=""
+                data={['PLAIN', 'LOGIN']}
+              />
 
-                <Select
-                  label={t('smtp_tls_enabled', 'TLS Encryption')}
-                  description={t('smtp_tls_enabled_description', 'Enable Secure SMTP')}
-                  placeholder=""
-                  key={form.key('tlsValue')}
-                  {...form.getInputProps('tlsValue')}
-                  data={[
-                    { value: 'false', label: '(Auto) StartTLS' },
-                    { value: 'true', label: 'Always' },
-                  ]}
-                  onChange={(_value) => form.setFieldValue('tls', _value === 'true')}
-                />
-              </Group>
-            </Collapse>
+              <Select
+                label={t('smtp_tls_enabled', 'TLS Encryption')}
+                description={t('smtp_tls_enabled_description', 'Enable Secure SMTP')}
+                placeholder=""
+                key={form.key('tlsValue')}
+                {...form.getInputProps('tlsValue')}
+                data={[
+                  { value: 'false', label: '(Auto) StartTLS' },
+                  { value: 'true', label: 'Always' },
+                ]}
+                onChange={(_value) => form.setFieldValue('tls', _value === 'true')}
+              />
+            </Group>
             <Group mt={'md'} justify="space-between">
               <div></div>
               <Group>
@@ -232,12 +215,20 @@ export const SmtpSettingsForm = () => {
                   leftSection={<IconMail />}
                   disabled={!settings?.enabled}
                   onClick={() => {
-                    sendTestEmail().then(() => {
-                      showInfoNotification({
-                        title: t('smtp_test_email', 'SMTP Settings'),
-                        message: t('smtp_test_email_queued', 'Test email has been queued.'),
+                    sendTestEmail()
+                      .then(() => {
+                        showInfoNotification({
+                          title: t('smtp_test_email', 'SMTP Settings'),
+                          message: t('smtp_test_email_queued', 'Test email has been queued.'),
+                        });
+                      })
+                      .catch((err) => {
+                        showErrorNotification({
+                          error: err,
+                          title: t('smtp_test_email', 'SMTP Settings'),
+                          message: t('smtp_test_email_not_queued', 'Test email could not be sent.'),
+                        });
                       });
-                    });
                   }}
                 >
                   {t('send_test_email', 'Send test email')}
