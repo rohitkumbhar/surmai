@@ -2,7 +2,7 @@ import { Container, Tabs, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { useDocumentTitle } from '@mantine/hooks';
 import { Header } from '../../components/nav/Header.tsx';
-import { SecuritySettings } from '../../components/settings/SecuritySettings.tsx';
+import { Configuration } from '../../components/settings/Configuration.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
 import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx';
 import { useEffect } from 'react';
@@ -42,7 +42,7 @@ export const Settings = () => {
             {t('smtp_settings', 'SMTP Settings')}
           </Tabs.Tab>
           <Tabs.Tab value="security" leftSection={<IconKey size={12} />}>
-            {t('security_settings', 'Security')}
+            {t('site_settings', 'Configuration')}
           </Tabs.Tab>
           <Tabs.Tab value="datasets" leftSection={<IconSettings size={12} />}>
             {t('dataset_section_title', 'Datasets')}
@@ -52,7 +52,7 @@ export const Settings = () => {
           <UserList />
         </Tabs.Panel>
         <Tabs.Panel value="security">
-          <SecuritySettings />
+          <Configuration />
         </Tabs.Panel>
         <Tabs.Panel value="smtp">
           <SmtpSettingsForm />

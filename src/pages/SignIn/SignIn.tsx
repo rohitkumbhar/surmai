@@ -192,19 +192,21 @@ export const SignIn = () => {
               {t('sign_in', 'Sign In')}
             </Button>
 
-            <Text c="dimmed" size="sm" ta="center" mt={25}>
-              {t('no_account', 'Do not have an account yet?')}{' '}
-              <Anchor
-                size="sm"
-                component="button"
-                type="button"
-                onClick={() => {
-                  navigate('/register');
-                }}
-              >
-                <Text>{t('create_account', 'Create An Account')}</Text>
-              </Anchor>
-            </Text>
+            {window.surmaiSettings.signupsEnabled && (
+              <Text c="dimmed" size="sm" ta="center" mt={25}>
+                {t('no_account', 'Do not have an account yet?')}{' '}
+                <Anchor
+                  size="sm"
+                  component="button"
+                  type="button"
+                  onClick={() => {
+                    navigate('/register');
+                  }}
+                >
+                  <Text>{t('create_account', 'Create An Account')}</Text>
+                </Anchor>
+              </Text>
+            )}
           </form>
         </Paper>
       </Container>

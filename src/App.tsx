@@ -1,13 +1,16 @@
-import { AppShell, Box, Burger, Container, Group, rem } from '@mantine/core';
+import { Alert, AppShell, Box, Burger, Container, Group, rem, Text } from '@mantine/core';
 import { useDisclosure, useDocumentTitle } from '@mantine/hooks';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './components/nav/Navbar.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Error } from './components/error/Error.tsx';
+import { IconInfoCircle } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
   useDocumentTitle('Surmai');
+  const { t } = useTranslation();
   return (
     <AppShell
       header={{
@@ -41,6 +44,16 @@ function App() {
       </AppShell.Navbar>
       <AppShell.Main>
         <ErrorBoundary FallbackComponent={Error}>
+          {window.surmaiSettings?.demoMode && (
+            <Container>
+              <Alert variant="light" title={t('demo_instance', 'Demo Instance')} icon={<IconInfoCircle />} mb="sm">
+                <Text>
+                  This is a demo instance which gets resets every hour. If you end up creating a trip that you would
+                  want to keep, please export it for your record.
+                </Text>
+              </Alert>
+            </Container>
+          )}
           <Outlet />
         </ErrorBoundary>
       </AppShell.Main>

@@ -53,6 +53,10 @@ export const SignUp = () => {
             {t('create_account', 'Create An Account')}
           </Text>
 
+          {!window.surmaiSettings.signupsEnabled && (
+            <Alert mt={'sm'} title={t('signups_disabled', 'Signups are disabled for this instance')}></Alert>
+          )}
+
           {apiError && (
             <Alert
               withCloseButton
@@ -84,7 +88,7 @@ export const SignUp = () => {
 
             {<FancyPasswordInput fieldName={'password'} form={form as UseFormReturnType<unknown>} />}
 
-            <Button fullWidth mt="xl" type={'submit'}>
+            <Button fullWidth mt="xl" type={'submit'} disabled={!window.surmaiSettings.signupsEnabled}>
               {t('create_account', 'Create An Account')}
             </Button>
           </form>
