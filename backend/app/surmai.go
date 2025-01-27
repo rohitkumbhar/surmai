@@ -30,6 +30,10 @@ func (surmai *SurmaiApp) BindRoutes() {
 			return R.GetTimeZone(e, surmai.TimezoneFinder)
 		}).Bind(apis.RequireAuth())
 
+		se.Router.GET("/site-settings.js", func(e *core.RequestEvent) error {
+			return R.SiteSettings(e, surmai.DemoMode)
+		}).Bind()
+
 		// serves static files from the provided public dir (if exists)
 		se.Router.GET("/{path...}", apis.Static(os.DirFS("./pb_public"), false))
 		return se.Next()
