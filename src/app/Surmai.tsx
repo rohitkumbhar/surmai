@@ -7,13 +7,16 @@ import { currentUser } from '../lib/api';
 import { buildTheme } from './theme.ts';
 import { buildRouter } from './routes.tsx';
 import { modals } from './modals.ts';
+import { SiteSettings } from '../types/settings.ts';
 
-export const SurmaiContext = createContext<{
-  primaryColor?: string;
-  changeColor?: (colorName: string | undefined) => void;
-}>({});
+export const SurmaiContext = createContext<
+  SiteSettings & {
+    primaryColor?: string;
+    changeColor?: (colorName: string | undefined) => void;
+  }
+>({ demoMode: false, emailEnabled: false, signupsEnabled: false });
 
-export const SurmaiApp = () => {
+export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');
   useEffect(() => {
     currentUser().then((user) => {
@@ -26,6 +29,7 @@ export const SurmaiApp = () => {
   const theme = buildTheme(primaryColor);
 
   const value = {
+    ...settings,
     primaryColor,
     changeColor: (colorName: string | undefined) => {
       if (colorName) {

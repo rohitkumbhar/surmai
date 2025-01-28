@@ -6,10 +6,13 @@ import { createUserWithPassword } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { FancyPasswordInput } from '../../components/account/FancyPasswordInput.tsx';
 import { SignUpForm } from '../../types/auth.ts';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const SignUp = () => {
   const [apiError, setApiError] = useState<string>();
   const navigate = useNavigate();
+  const { signupsEnabled } = useSurmaiContext();
+
   const { t } = useTranslation();
   const createAccount = async (values: {
     email: string;
@@ -53,7 +56,7 @@ export const SignUp = () => {
             {t('create_account', 'Create An Account')}
           </Text>
 
-          {!window.surmaiSettings.signupsEnabled && (
+          {!signupsEnabled && (
             <Alert mt={'sm'} title={t('signups_disabled', 'Signups are disabled for this instance')}></Alert>
           )}
 
@@ -88,7 +91,7 @@ export const SignUp = () => {
 
             {<FancyPasswordInput fieldName={'password'} form={form as UseFormReturnType<unknown>} />}
 
-            <Button fullWidth mt="xl" type={'submit'} disabled={!window.surmaiSettings.signupsEnabled}>
+            <Button fullWidth mt="xl" type={'submit'} disabled={!signupsEnabled}>
               {t('create_account', 'Create An Account')}
             </Button>
           </form>

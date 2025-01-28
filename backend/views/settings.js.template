@@ -1,6 +1,0 @@
-
-window.surmaiSettings = {
-    emailEnabled: {{.emailEnabled}},
-    demoMode: {{.demoMode}},
-    signupsEnabled: {{.signupsEnabled}}
-}

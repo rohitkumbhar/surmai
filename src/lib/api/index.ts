@@ -72,3 +72,5 @@ export {
   enableUserSignups,
   disableOAuth2Provider,
 } from './pocketbase/settings.ts';
+
+export { pocketBaseUrl as apiUrl } from './pocketbase/pocketbase.ts';

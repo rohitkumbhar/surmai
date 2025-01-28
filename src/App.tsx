@@ -6,9 +6,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { Error } from './components/error/Error.tsx';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { useSurmaiContext } from './app/useSurmaiContext.ts';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
+  const { demoMode } = useSurmaiContext();
   useDocumentTitle('Surmai');
   const { t } = useTranslation();
   return (
@@ -44,7 +46,7 @@ function App() {
       </AppShell.Navbar>
       <AppShell.Main>
         <ErrorBoundary FallbackComponent={Error}>
-          {window.surmaiSettings?.demoMode && (
+          {demoMode && (
             <Container>
               <Alert variant="light" title={t('demo_instance', 'Demo Instance')} icon={<IconInfoCircle />} mb="sm">
                 <Text>

@@ -4,19 +4,18 @@ import { UserSettingsFormType } from '../../types/auth.ts';
 import { Box, Button, Group, Select, TextInput } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
-import { useContext } from 'react';
-import { SurmaiContext } from '../../app/Surmai.tsx';
 import { updateUser } from '../../lib/api';
 
 import { currencyCodes } from '../util/currencyCodes.ts';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import dayjs from 'dayjs';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const UserSettingsForm = () => {
   const { user, reloadUser } = useCurrentUser();
   const { t } = useTranslation();
 
-  const appCtx = useContext(SurmaiContext);
+  const appCtx = useSurmaiContext();
 
   const initialValues: UserSettingsFormType = {
     name: user?.name,

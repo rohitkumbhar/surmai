@@ -14,6 +14,8 @@ import localizedFormat from 'dayjs/plugin/localizedFormat';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { SurmaiApp } from './app/Surmai.tsx';
+import { apiUrl } from './lib/api';
+import { SiteSettings } from './types/settings.ts';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -23,20 +25,14 @@ dayjs.extend(relativeTime);
 
 const queryClient = new QueryClient();
 
-declare global {
-  interface Window {
-    surmaiSettings: {
-      demoMode: boolean;
-      emailEnabled: boolean;
-      signupsEnabled: boolean;
-    };
-  }
-}
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <SurmaiApp />
-    </QueryClientProvider>
-  </React.StrictMode>
-);
+fetch(`${apiUrl}/site-settings.json`)
+  .then((result) => result.json())
+  .then((settings: SiteSettings) => {
+    ReactDOM.createRoot(document.getElementById('root')!).render(
+      <React.StrictMode>
+        <QueryClientProvider client={queryClient}>
+          <SurmaiApp settings={settings} />
+        </QueryClientProvider>
+      </React.StrictMode>
+    );
+  });
