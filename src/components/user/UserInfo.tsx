@@ -1,36 +1,26 @@
 import classes from './UserInfo.module.css';
-import { useEffect, useState } from 'react';
 import { Avatar, Group, Menu, rem, Text, UnstyledButton } from '@mantine/core';
-import { IconChevronRight, IconLogout, IconSettings } from '@tabler/icons-react';
+import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { currentUser, logoutCurrentUser } from '../../lib/api';
-import { User } from '../../types/auth.ts';
+import { getAttachmentUrl, logoutCurrentUser } from '../../lib/api';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 
 export const UserInfo = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<User>();
-  const [, setUserMenuOpened] = useState(false);
-
-  useEffect(() => {
-    currentUser().then((resolvedUser: User) => {
-      setUser(resolvedUser);
-    });
-  }, []);
+  const { user } = useCurrentUser();
 
   return (
     <Menu
-      width={260}
       position="top-end"
       transitionProps={{ transition: 'pop-top-right' }}
-      onClose={() => setUserMenuOpened(false)}
-      onOpen={() => setUserMenuOpened(true)}
+
       withinPortal
     >
       <Menu.Target>
-        <UnstyledButton className={classes.user}>
+        <UnstyledButton>
           <Group>
-            <Avatar src={user?.avatar} alt={user?.name} name={user?.name} radius="xl" />
-
+            <Avatar src={user?.avatar ? getAttachmentUrl(user, user.avatar) : null} alt={user?.name} name={user?.name}
+                    radius="xl" />
             <div style={{ flex: 1 }}>
               <Text size="sm" fw={500}>
                 {user?.name}
@@ -41,14 +31,13 @@ export const UserInfo = () => {
               </Text>
             </div>
 
-            <IconChevronRight style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
+            <IconChevronDown style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
           </Group>
         </UnstyledButton>
       </Menu.Target>
       <Menu.Dropdown>
-        <Menu.Label>Settings</Menu.Label>
         <Link to={'/profile'} className={classes.menuLink}>
-          <Menu.Item leftSection={<IconSettings style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
+          <Menu.Item leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
             Profile
           </Menu.Item>
         </Link>
