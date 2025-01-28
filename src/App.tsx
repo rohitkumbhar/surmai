@@ -7,6 +7,7 @@ import { Error } from './components/error/Error.tsx';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useSurmaiContext } from './app/useSurmaiContext.ts';
+import { UserInfo } from './components/user/UserInfo.tsx';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
@@ -28,10 +29,15 @@ function App() {
       bg={'var(--mantine-color-dark-light)'}
     >
       <AppShell.Header>
-        <Container size={'xl'} h={'100%'}>
-          <Group>
-            <Burger mt={'md'} opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Box component="div" id={'app-header'} />
+        <Container size={'xl'} h={'100%'} px={'md'}>
+          <Group justify={'space-between'}>
+            <Group justify={'flex-start'} align={'center'}>
+              <Burger mt={'md'} opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
+              <Box component="div" id={'app-header'} />
+            </Group>
+            <Group gap={'xs'} mt={'sm'}>
+              <UserInfo />
+            </Group>
           </Group>
         </Container>
       </AppShell.Header>
