@@ -8,7 +8,7 @@ services:
     volumes:
       - surmai_data:/pb_data
     ports:
-      - "9090:8080"
+      - "0090:8080"
     restart: always
     environment:
       SURMAI_ADMIN_EMAIL: admin@example.com # Add your default administrator email

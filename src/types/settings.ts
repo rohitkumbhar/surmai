@@ -11,3 +11,9 @@ export type SmtpSettings = {
   senderAddress?: string;
   applicationUrl?: string;
 };
+
+export type SiteSettings = {
+  demoMode: boolean;
+  emailEnabled: boolean;
+  signupsEnabled: boolean;
+};

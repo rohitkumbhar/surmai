@@ -19,9 +19,11 @@ import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest,
 import { useTranslation } from 'react-i18next';
 import { useDisclosure, useDocumentTitle, useMediaQuery } from '@mantine/hooks';
 import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const SignIn = () => {
   useDocumentTitle('Surmai');
+  const { signupsEnabled } = useSurmaiContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [apiError, setApiError] = useState<string>();
@@ -192,19 +194,21 @@ export const SignIn = () => {
               {t('sign_in', 'Sign In')}
             </Button>
 
-            <Text c="dimmed" size="sm" ta="center" mt={25}>
-              {t('no_account', 'Do not have an account yet?')}{' '}
-              <Anchor
-                size="sm"
-                component="button"
-                type="button"
-                onClick={() => {
-                  navigate('/register');
-                }}
-              >
-                <Text>{t('create_account', 'Create An Account')}</Text>
-              </Anchor>
-            </Text>
+            {signupsEnabled && (
+              <Text c="dimmed" size="sm" ta="center" mt={25}>
+                {t('no_account', 'Do not have an account yet?')}{' '}
+                <Anchor
+                  size="sm"
+                  component="button"
+                  type="button"
+                  onClick={() => {
+                    navigate('/register');
+                  }}
+                >
+                  <Text>{t('create_account', 'Create An Account')}</Text>
+                </Anchor>
+              </Text>
+            )}
           </form>
         </Paper>
       </Container>
