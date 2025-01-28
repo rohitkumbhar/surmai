@@ -25,7 +25,6 @@ export const UserInfo = () => {
               <Text size="sm" fw={500}>
                 {user?.name}
               </Text>
-
               <Text c="dimmed" size="xs">
                 {user?.email}
               </Text>
@@ -50,6 +49,11 @@ export const UserInfo = () => {
         >
           Logout
         </Menu.Item>
+        {import.meta.env.PACKAGE_VERSION && (<>
+          <Menu.Divider />
+          <Menu.Item>
+            <Text size={'xs'} c={'dimmed'}>{`Version ${import.meta.env.PACKAGE_VERSION}`}</Text>
+          </Menu.Item></>)}
       </Menu.Dropdown>
     </Menu>
   );
