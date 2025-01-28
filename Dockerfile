@@ -19,7 +19,7 @@ RUN npm install -g npm@10.3.0 # For windows
 RUN npm install --no-audit
 RUN npm run build
 
-FROM --platform=$BUILDPLATFORM golang:1.23.4-alpine3.21 AS backend
+FROM --platform=$BUILDPLATFORM golang:1.23.5-alpine3.21 AS backend
 ARG TARGETOS
 ARG TARGETARCH
 
