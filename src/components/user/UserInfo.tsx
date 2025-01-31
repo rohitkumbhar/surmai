@@ -4,10 +4,12 @@ import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getAttachmentUrl, logoutCurrentUser } from '../../lib/api';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { useTranslation } from 'react-i18next';
 
 export const UserInfo = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
+  const { t } = useTranslation()
 
   return (
     <Menu
@@ -37,7 +39,7 @@ export const UserInfo = () => {
       <Menu.Dropdown>
         <Link to={'/profile'} className={classes.menuLink}>
           <Menu.Item leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
-            Profile
+            {t('profile', 'Profile')}
           </Menu.Item>
         </Link>
         <Menu.Item
@@ -47,7 +49,7 @@ export const UserInfo = () => {
           }}
           leftSection={<IconLogout style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          Logout
+          {t('logout', 'Logout')}
         </Menu.Item>
         {import.meta.env.PACKAGE_VERSION && (<>
           <Menu.Divider />
