@@ -117,7 +117,10 @@ volumes:
 services:
   surmai_server:
     container_name: surmai_server
-    image: ghcr.io/rohitkumbhar/surmai:v0.0.3
+    # latest images point to released versions
+    # For the yet unreleased updates, use the main tag i.e.
+    # image: ghcr.io/rohitkumbhar/surmai:main
+    image: ghcr.io/rohitkumbhar/surmai:latest
     volumes:
       - surmai_data:/pb_data
     ports:
