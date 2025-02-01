@@ -74,8 +74,10 @@ volumes:
 services:
   surmai_server:
     container_name: surmai_server
-    image: ghcr.io/rohitkumbhar/surmai:v0.0.1 # A released version tag
-   #image: ghcr.io/rohitkumbhar/surmai:main   # Latest and greatest. May cause panic.  
+    # latest images point to released versions
+    # For the yet unreleased updates, use the main tag i.e.
+    # image: ghcr.io/rohitkumbhar/surmai:main
+    image: ghcr.io/rohitkumbhar/surmai:latest
     volumes:
       - surmai_data:/pb_data
     ports:
@@ -85,7 +87,6 @@ services:
       SURMAI_ADMIN_EMAIL: admin@example.com # Add your default administrator email
       SURMAI_ADMIN_PASSWORD: ChangeMe123#@! # Admin password. Min 9 characters with all the fixings
       PB_DATA_DIRECTORY: /pb_data # Must match volume directory above
-    # SURMAI_DEMO_MODE: true # Enable Demo mode
 `;
 
   const items = features.map((feature) => (
