@@ -36,7 +36,7 @@ export const AirportSelect = ({
         combobox.openDropdown();
       });
     }
-  }, [search, combobox]);
+  }, [search]);
 
   const options = searchResults
     .filter((item) => item.iataCode && item.iataCode !== '')
@@ -59,7 +59,15 @@ export const AirportSelect = ({
       const selection = searchResults.find((item) => item.id === val);
       if (selection) {
         setValue(selection.iataCode);
-        form.setFieldValue(propName, selection.iataCode);
+        form.setFieldValue(propName, {
+          iataCode: selection.iataCode,
+          name: selection.name,
+          id: selection.id,
+          countryCode: selection.isoCountry,
+          latitude: selection.latitude,
+          longitude: selection.longitude,
+          timezone: selection.timezone,
+        });
       }
     }
     combobox.closeDropdown();

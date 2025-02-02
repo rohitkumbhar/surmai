@@ -1,6 +1,6 @@
 import { Transportation, Trip } from '../../../types/trips.ts';
-import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
-import { IconCar } from '@tabler/icons-react';
+import { Box, Divider, Grid, Group, HoverCard, Modal, rem, Stack, Text, Title, Tooltip } from '@mantine/core';
+import { IconCar, IconInfoCircle } from '@tabler/icons-react';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { Attachments } from '../attachments/Attachments.tsx';
@@ -11,6 +11,8 @@ import { GenericTransportationModeForm } from './GenericTransportationModeForm.t
 import { typeIcons } from './typeIcons.ts';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 
 export const GenericTransportationData = ({
   trip,
@@ -24,6 +26,8 @@ export const GenericTransportationData = ({
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [opened, { open, close }] = useDisclosure(false);
+  const { user } = useCurrentUser();
+
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
 
@@ -110,7 +114,26 @@ export const GenericTransportationData = ({
           <Text size="xs" c={'dimmed'}>
             {t('transportation.from', 'From')}
           </Text>
-          <Text size="md">{transportation.origin}</Text>
+          {!transportation.metadata.origin && <Text size="md">{transportation.origin}</Text>}
+          {transportation.metadata.origin && (
+            <HoverCard withArrow width={200} shadow="lg">
+              <HoverCard.Target>
+                <Group>
+                  <Text size="md">
+                    {transportation.origin}
+                    &nbsp;
+                    <IconInfoCircle size={12} />
+                  </Text>
+                </Group>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Stack>
+                  <Text size="md">{transportation.metadata.origin.name}</Text>
+                  <TimezoneInfo user={user} timezone={transportation.metadata.origin.timezone} />
+                </Stack>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          )}
           <Text size="xs">{formatDate(i18n.language, transportation.departureTime)}</Text>
           <Text size="xs">{formatTime(transportation.departureTime)}</Text>
         </Grid.Col>
@@ -119,7 +142,27 @@ export const GenericTransportationData = ({
           <Text size="xs" c={'dimmed'}>
             {t('transportation.to', 'To')}
           </Text>
-          <Text size="md">{transportation.destination}</Text>
+
+          {!transportation.metadata.destination && <Text size="md">{transportation.destination}</Text>}
+          {transportation.metadata.destination && (
+            <HoverCard withArrow width={200} shadow="md">
+              <HoverCard.Target>
+                <Group>
+                  <Text size="md">
+                    {transportation.destination}
+                    &nbsp;
+                    <IconInfoCircle size={12} />
+                  </Text>
+                </Group>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Stack>
+                  <Text size="md">{transportation.metadata.destination.name}</Text>
+                  <TimezoneInfo user={user} timezone={transportation.metadata.destination.timezone} />
+                </Stack>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          )}
           <Text size="xs">{formatDate(i18n.language, transportation.arrivalTime)}</Text>
           <Text size="xs">{formatTime(transportation.arrivalTime)}</Text>
         </Grid.Col>

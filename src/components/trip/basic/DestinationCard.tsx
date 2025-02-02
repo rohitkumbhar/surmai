@@ -1,24 +1,13 @@
 import { Destination, Trip } from '../../../types/trips.ts';
 import { IconClock, IconMapPin } from '@tabler/icons-react';
-import { Anchor, Badge, Card, Group, HoverCard, Stack, Text } from '@mantine/core';
+import { Anchor, Badge, Card, Group, HoverCard, Text } from '@mantine/core';
 import classes from './DestinationCard.module.css';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { calculateTimezoneDifference } from '../../../lib/time.ts';
 import { getMapsUrl } from '../../../lib/places.ts';
+import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 
 export const DestinationCard = ({ destination }: { destination: Destination; trip: Trip }) => {
   const { user } = useCurrentUser();
-  const { t } = useTranslation();
-  const [timezoneDiff, setTimezoneDiff] = useState<number>(0);
-
-  useEffect(() => {
-    if (destination.timezone) {
-      setTimezoneDiff(calculateTimezoneDifference(user, destination.timezone));
-    }
-  }, [user, destination]);
-
   return (
     <Card withBorder radius="xs" className={classes.card} p={'xs'}>
       <Group justify="space-between">
@@ -42,24 +31,7 @@ export const DestinationCard = ({ destination }: { destination: Destination; tri
               </Badge>
             </HoverCard.Target>
             <HoverCard.Dropdown>
-              <Stack gap={'md'}>
-                {!destination.timezone && <Text size={'sm'}>{t('no_tz', 'Timezone information is unavailable')}</Text>}
-                {destination.timezone && timezoneDiff === 0 && (
-                  <Text size={'sm'}>
-                    {t('tz_no_diff', 'There is no difference in your timezone and the timezone at this destination')}
-                  </Text>
-                )}
-                {timezoneDiff < 0 && (
-                  <Text size={'sm'}>
-                    {t('tz_behind', 'Your timezone is {{diff}} hours behind', { diff: Math.abs(timezoneDiff) })}
-                  </Text>
-                )}
-                {timezoneDiff > 0 && (
-                  <Text size={'sm'}>
-                    {t('tz_ahead', 'Your timezone is {{diff}} hours ahead', { diff: timezoneDiff })}
-                  </Text>
-                )}
-              </Stack>
+              <TimezoneInfo user={user} timezone={destination.timezone} />
             </HoverCard.Dropdown>
           </HoverCard>
         </Group>

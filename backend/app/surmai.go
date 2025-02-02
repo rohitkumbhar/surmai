@@ -1,6 +1,7 @@
 package app
 
 import (
+	"backend/hooks"
 	"backend/jobs"
 	R "backend/routes"
 	"github.com/pocketbase/pocketbase"
@@ -79,4 +80,14 @@ func (surmai *SurmaiApp) StartDemoMode() {
 			job.Execute()
 		})
 	}
+}
+
+func (surmai *SurmaiApp) BindEventHooks() {
+	surmai.Pb.OnRecordCreate("trips").BindFunc(func(e *core.RecordEvent) error {
+		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
+	})
+
+	surmai.Pb.OnRecordUpdate("trips").BindFunc(func(e *core.RecordEvent) error {
+		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
+	})
 }

@@ -1,5 +1,4 @@
 .menuLink {
-    color: var(--mantine-color-anchor);
-    text-decoration: none;
+  color: var(--mantine-color-anchor);
+  text-decoration: none;
 }
-

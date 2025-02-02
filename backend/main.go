@@ -26,6 +26,7 @@ func main() {
 	surmai.BuildTimezoneFinder()
 	surmai.BindMigrations(isGoRun)
 	surmai.BindRoutes()
+	surmai.BindEventHooks()
 	surmai.StartDemoMode()
 
 	if err := surmai.Pb.Start(); err != nil {

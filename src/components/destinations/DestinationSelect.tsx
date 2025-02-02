@@ -1,7 +1,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Combobox, Group, Pill, PillsInput, Text, useCombobox } from '@mantine/core';
 import { useClickOutside, useDebouncedState } from '@mantine/hooks';
-import { getTimezone, searchPlaces } from '../../lib/api';
+import { searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
 import { UseFormReturnType } from '@mantine/form';
 import { Destination } from '../../types/trips.ts';
@@ -57,26 +57,11 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
       const selection = searchResults.find((item) => item.id === val);
       const existing = values.find((v) => v.id === val);
       if (!existing && selection) {
-        if (selection.latitude && selection.longitude) {
-          getTimezone(selection.latitude, selection.longitude)
-            .then((timezone) => {
-              const updatedValues = [...values, { ...selection, timezone }];
-              setValues(updatedValues);
-              form.setFieldValue(propName, updatedValues);
-            })
-            .catch(() => {
-              const updatedValues = [...values, selection];
-              setValues(updatedValues);
-              form.setFieldValue(propName, updatedValues);
-            });
-        } else {
-          const updatedValues = [...values, selection];
-          setValues(updatedValues);
-          form.setFieldValue(propName, updatedValues);
-        }
+        const updatedValues = [...values, { ...selection }];
+        setValues(updatedValues);
+        form.setFieldValue(propName, updatedValues);
       }
     }
-
     combobox.closeDropdown();
   };
 

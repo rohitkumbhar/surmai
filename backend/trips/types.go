@@ -8,7 +8,13 @@ type UploadedFile struct {
 }
 
 type Destination struct {
-	Name string `json:"name"`
+	Id          string `json:"id"`
+	Name        string `json:"name"`
+	StateName   string `json:"stateName"`
+	CountryName string `json:"countryName"`
+	TimeZone    string `json:"timezone"`
+	Latitude    string `json:"latitude"`
+	Longitude   string `json:"longitude"`
 }
 
 type Participant struct {
