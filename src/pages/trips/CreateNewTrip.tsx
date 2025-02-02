@@ -81,7 +81,7 @@ export const CreateNewTrip = () => {
                 countryName: d.countryName,
                 latitude: d.latitude,
                 longitude: d.longitude,
-                timezone: d.timezone
+                timezone: d.timezone,
               };
             }),
           };

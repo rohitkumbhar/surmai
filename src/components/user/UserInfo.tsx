@@ -9,20 +9,19 @@ import { useTranslation } from 'react-i18next';
 export const UserInfo = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
-    <Menu
-      position="top-end"
-      transitionProps={{ transition: 'pop-top-right' }}
-
-      withinPortal
-    >
+    <Menu position="top-end" transitionProps={{ transition: 'pop-top-right' }} withinPortal>
       <Menu.Target>
         <UnstyledButton>
           <Group>
-            <Avatar src={user?.avatar ? getAttachmentUrl(user, user.avatar) : null} alt={user?.name} name={user?.name}
-                    radius="xl" />
+            <Avatar
+              src={user?.avatar ? getAttachmentUrl(user, user.avatar) : null}
+              alt={user?.name}
+              name={user?.name}
+              radius="xl"
+            />
             <div style={{ flex: 1 }}>
               <Text size="sm" fw={500}>
                 {user?.name}
@@ -51,11 +50,14 @@ export const UserInfo = () => {
         >
           {t('logout', 'Logout')}
         </Menu.Item>
-        {import.meta.env.PACKAGE_VERSION && (<>
-          <Menu.Divider />
-          <Menu.Item>
-            <Text size={'xs'} c={'dimmed'}>{`Version ${import.meta.env.PACKAGE_VERSION}`}</Text>
-          </Menu.Item></>)}
+        {import.meta.env.PACKAGE_VERSION && (
+          <>
+            <Menu.Divider />
+            <Menu.Item>
+              <Text size={'xs'} c={'dimmed'}>{`Version ${import.meta.env.PACKAGE_VERSION}`}</Text>
+            </Menu.Item>
+          </>
+        )}
       </Menu.Dropdown>
     </Menu>
   );

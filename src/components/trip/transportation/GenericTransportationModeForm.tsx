@@ -49,8 +49,8 @@ export const GenericTransportationModeForm = ({
     setSaving(true);
     const payload: CreateTransportation = {
       type: transportationType,
-      origin: values.origin,
-      destination: values.destination,
+      origin: transportationType === 'flight' ? values.origin.iataCode : values.origin,
+      destination: transportationType === 'flight' ? values.destination.iataCode : values.destination,
       cost: {
         value: values.cost,
         currency: values.currencyCode,
@@ -61,6 +61,8 @@ export const GenericTransportationModeForm = ({
       metadata: {
         provider: values.provider,
         reservation: values.reservation,
+        origin: transportationType === 'flight' ? values.origin : undefined,
+        destination: transportationType === 'flight' ? values.destination : undefined,
       },
     };
 
