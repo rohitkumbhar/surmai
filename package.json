@@ -12,7 +12,9 @@
     "build-site": " vite build -c vite.site.config.ts --emptyOutDir",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "format": "prettier --write ./src"
+    "format": "prettier --write ./src",
+    "prepare": "husky",
+    "test": "echo 'TBD'"
   },
   "dependencies": {
     "@mantine/carousel": "^7.13.1",
@@ -44,6 +46,8 @@
     "react-router-dom": "^6.25.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.7.1",
+    "@commitlint/config-conventional": "^19.7.1",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
@@ -57,6 +61,7 @@
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.7",
+    "husky": "^9.1.7",
     "postcss": "^8.4.39",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
