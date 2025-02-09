@@ -1,6 +1,7 @@
 package trips
 
 import (
+	bt "backend/types"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -15,7 +16,7 @@ func Import(e core.App, file multipart.File, ownerId string) (string, error) {
 	var buff bytes.Buffer
 	_, _ = buff.ReadFrom(file)
 
-	var data ExportedTrip
+	var data bt.ExportedTrip
 	err := json.Unmarshal(buff.Bytes(), &data)
 	if err != nil {
 		return "", err
@@ -36,7 +37,7 @@ func Import(e core.App, file multipart.File, ownerId string) (string, error) {
 	return trip.Id, nil
 }
 
-func createTransportations(app core.App, tripId string, tripData *ExportedTrip) ([]*core.Record, error) {
+func createTransportations(app core.App, tripId string, tripData *bt.ExportedTrip) ([]*core.Record, error) {
 
 	collection, _ := app.FindCollectionByNameOrId("transportations")
 	records := make([]*core.Record, 0, len(tripData.Transportations))
@@ -68,7 +69,7 @@ func createTransportations(app core.App, tripId string, tripData *ExportedTrip) 
 	return records, nil
 }
 
-func createLodgings(app core.App, tripId string, tripData *ExportedTrip) ([]*core.Record, error) {
+func createLodgings(app core.App, tripId string, tripData *bt.ExportedTrip) ([]*core.Record, error) {
 
 	collection, _ := app.FindCollectionByNameOrId("lodgings")
 	records := make([]*core.Record, 0, len(tripData.Lodgings))
@@ -101,7 +102,7 @@ func createLodgings(app core.App, tripId string, tripData *ExportedTrip) ([]*cor
 	return records, nil
 }
 
-func createActivities(app core.App, tripId string, tripData *ExportedTrip) ([]*core.Record, error) {
+func createActivities(app core.App, tripId string, tripData *bt.ExportedTrip) ([]*core.Record, error) {
 
 	collection, _ := app.FindCollectionByNameOrId("activities")
 	records := make([]*core.Record, 0, len(tripData.Activities))
@@ -133,7 +134,7 @@ func createActivities(app core.App, tripId string, tripData *ExportedTrip) ([]*c
 	return records, nil
 }
 
-func createTrip(app core.App, userId string, data *ExportedTrip) (*core.Record, error) {
+func createTrip(app core.App, userId string, data *bt.ExportedTrip) (*core.Record, error) {
 	trips, _ := app.FindCollectionByNameOrId("trips")
 	record := core.NewRecord(trips)
 
@@ -162,7 +163,7 @@ func createTrip(app core.App, userId string, data *ExportedTrip) (*core.Record, 
 	return record, nil
 }
 
-func getFiles(attachments []*UploadedFile) ([]*filesystem.File, error) {
+func getFiles(attachments []*bt.UploadedFile) ([]*filesystem.File, error) {
 
 	files := make([]*filesystem.File, 0, len(attachments))
 	for _, attachment := range attachments {
@@ -172,7 +173,7 @@ func getFiles(attachments []*UploadedFile) ([]*filesystem.File, error) {
 	return files, nil
 }
 
-func getFile(uploadedFile *UploadedFile) (*filesystem.File, error) {
+func getFile(uploadedFile *bt.UploadedFile) (*filesystem.File, error) {
 
 	fileName := uploadedFile.FileName
 	encodedFileContent := uploadedFile.FileContent

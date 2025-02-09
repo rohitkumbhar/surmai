@@ -1,6 +1,7 @@
 package trips
 
 import (
+	bt "backend/types"
 	"bytes"
 	"encoding/base64"
 	"encoding/json"
@@ -10,9 +11,9 @@ import (
 	"log"
 )
 
-func Export(e core.App, trip *core.Record) *ExportedTrip {
+func Export(e core.App, trip *core.Record) *bt.ExportedTrip {
 
-	t := Trip{
+	t := bt.Trip{
 		Id:           trip.Id,
 		Name:         trip.GetString("name"),
 		Description:  trip.GetString("description"),
@@ -29,7 +30,7 @@ func Export(e core.App, trip *core.Record) *ExportedTrip {
 	lodgings := buildLodgings(e, trip)
 	activities := buildActivities(e, trip)
 
-	exportedTrip := ExportedTrip{
+	exportedTrip := bt.ExportedTrip{
 		Trip:            &t,
 		Transportations: transportations,
 		Lodgings:        lodgings,
@@ -39,15 +40,15 @@ func Export(e core.App, trip *core.Record) *ExportedTrip {
 	return &exportedTrip
 }
 
-func buildActivities(e core.App, trip *core.Record) []*Activity {
+func buildActivities(e core.App, trip *core.Record) []*bt.Activity {
 
 	activities, _ := e.FindAllRecords("activities",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
-	var payload []*Activity
+	var payload []*bt.Activity
 	for _, l := range activities {
 
-		ct := Activity{
+		ct := bt.Activity{
 			Id:               l.Id,
 			Name:             l.GetString("name"),
 			Description:      l.GetString("description"),
@@ -67,15 +68,15 @@ func buildActivities(e core.App, trip *core.Record) []*Activity {
 
 }
 
-func buildLodgings(e core.App, trip *core.Record) []*Lodging {
+func buildLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 
 	lodgings, _ := e.FindAllRecords("lodgings",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
-	var payload []*Lodging
+	var payload []*bt.Lodging
 	for _, l := range lodgings {
 
-		ct := Lodging{
+		ct := bt.Lodging{
 			Id:               l.Id,
 			Name:             l.GetString("name"),
 			Address:          l.GetString("address"),
@@ -98,15 +99,15 @@ func buildLodgings(e core.App, trip *core.Record) []*Lodging {
 
 }
 
-func buildTransportations(e core.App, trip *core.Record) []*Transportation {
+func buildTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 
 	transportations, _ := e.FindAllRecords("transportations",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
-	var payload []*Transportation
+	var payload []*bt.Transportation
 	for _, tr := range transportations {
 
-		ct := Transportation{
+		ct := bt.Transportation{
 			Id:          tr.Id,
 			Type:        tr.GetString("type"),
 			Origin:      tr.GetString("origin"),
@@ -127,20 +128,20 @@ func buildTransportations(e core.App, trip *core.Record) []*Transportation {
 	return payload
 }
 
-func getAttachments(e core.App, r *core.Record) []*UploadedFile {
+func getAttachments(e core.App, r *core.Record) []*bt.UploadedFile {
 
 	attachments := r.GetStringSlice("attachments")
-	var payload []*UploadedFile
+	var payload []*bt.UploadedFile
 	for _, attachmentName := range attachments {
 		payload = append(payload, getUploadedFile(e, r, attachmentName))
 	}
 	return payload
 }
 
-func getUploadedFile(e core.App, record *core.Record, fileName string) *UploadedFile {
+func getUploadedFile(e core.App, record *core.Record, fileName string) *bt.UploadedFile {
 
 	if fileName != "" {
-		return &UploadedFile{
+		return &bt.UploadedFile{
 			FileName:    fileName,
 			FileContent: getFileAsBase64(e, record, fileName),
 		}
@@ -169,9 +170,9 @@ func getFileAsBase64(e core.App, record *core.Record, fileName string) string {
 	return ""
 }
 
-func getDestinations(trip *core.Record) []Destination {
+func getDestinations(trip *core.Record) []bt.Destination {
 	destinationsString := trip.GetString("destinations")
-	var payload []Destination
+	var payload []bt.Destination
 
 	err := json.Unmarshal([]byte(destinationsString), &payload)
 	if err != nil {
@@ -181,9 +182,9 @@ func getDestinations(trip *core.Record) []Destination {
 	return payload
 }
 
-func getParticipants(trip *core.Record) []Participant {
+func getParticipants(trip *core.Record) []bt.Participant {
 	participantString := trip.GetString("participants")
-	var payload []Participant
+	var payload []bt.Participant
 
 	err := json.Unmarshal([]byte(participantString), &payload)
 	if err != nil {

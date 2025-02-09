@@ -1,7 +1,7 @@
 package hooks
 
 import (
-	"backend/trips"
+	bt "backend/types"
 	"encoding/json"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/ringsaturn/tzf"
@@ -13,16 +13,24 @@ func AddTimezoneToDestinations(e *core.RecordEvent, finder tzf.F) error {
 	record := e.Record
 	destinations := record.GetString("destinations")
 
-	var payload []trips.Destination
+	var payload []bt.Destination
 	err := json.Unmarshal([]byte((destinations)), &payload)
 
-	var updatedDestinations = make([]trips.Destination, len(payload))
+	var updatedDestinations = make([]bt.Destination, len(payload))
 
 	if err != nil {
 		return err
 	}
 
 	for i, destination := range payload {
+
+		updatedDestination := bt.Destination{
+			Id:   destination.Id,
+			Name: destination.Name,
+		}
+
+		updatedDestinations[i] = updatedDestination
+
 		if destination.Latitude != "" && destination.Longitude != "" {
 
 			timezone := destination.TimeZone
@@ -32,15 +40,11 @@ func AddTimezoneToDestinations(e *core.RecordEvent, finder tzf.F) error {
 				timezone = finder.GetTimezoneName(long, lat)
 			}
 
-			updatedDestinations[i] = trips.Destination{
-				Id:          destination.Id,
-				Name:        destination.Name,
-				StateName:   destination.StateName,
-				CountryName: destination.CountryName,
-				Latitude:    destination.Latitude,
-				Longitude:   destination.Longitude,
-				TimeZone:    timezone,
-			}
+			updatedDestination.CountryName = destination.CountryName
+			updatedDestination.StateName = destination.StateName
+			updatedDestination.Latitude = destination.Latitude
+			updatedDestination.Longitude = destination.Longitude
+			updatedDestination.TimeZone = timezone
 		}
 	}
 

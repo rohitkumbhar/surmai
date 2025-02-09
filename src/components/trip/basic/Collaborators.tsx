@@ -1,129 +1,13 @@
-import { ContextModalProps, openConfirmModal } from '@mantine/modals';
+import { ContextModalProps } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
-import { forwardRef, useEffect, useState } from 'react';
-import { ActionIcon, Avatar, Button, ComboboxItem, Container, Group, MultiSelect, Paper, Text } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
-import { addCollaborators, currentUser as getCurrentUser, deleteCollaborator, listAllUsers } from '../../../lib/api';
-import { User } from '../../../types/auth.ts';
-import { IconTrash, IconUser } from '@tabler/icons-react';
+import { Alert, Button, Container, Group, Text, Textarea, TextInput } from '@mantine/core';
+import { sendCollaborationInvitation } from '../../../lib/api';
+import { IconMacroOff, IconMail } from '@tabler/icons-react';
+import { useForm } from '@mantine/form';
 import { useTranslation } from 'react-i18next';
-
-const UserSearch = ({ trip, setNewCollaborators }: { trip: Trip; setNewCollaborators: (val: string[]) => void }) => {
-  const [curUser, setCurrentUser] = useState<User | undefined>();
-  const { data } = useQuery<User[]>({
-    queryKey: ['listAllUsers'],
-    queryFn: () => listAllUsers(),
-  });
-
-  const userIndex: Map<string, User> = (data || []).reduce((accumulator, obj) => {
-    return accumulator.set(obj.id, obj);
-  }, new Map<string, User>());
-
-  const renderOption = ({ option }: { option: ComboboxItem }) => {
-    const user = userIndex.get(option.value);
-    return (
-      <Group gap="sm">
-        <IconUser stroke={1} />
-        <div>
-          <Text size="sm">{option?.label}</Text>
-          <Text size="xs" opacity={0.5}>
-            {user?.email || 'No email'}
-          </Text>
-        </div>
-      </Group>
-    );
-  };
-
-  const onChange = async (value: string[]) => {
-    // await addCollaborator(trip.id, value)
-    // onSave()
-    setNewCollaborators(value);
-  };
-
-  useEffect(() => {
-    const fetchMe = async () => {
-      const me = await getCurrentUser();
-      setCurrentUser(me);
-    };
-    fetchMe();
-  }, []);
-
-  const [options, setOptions] = useState<ComboboxItem[]>([]);
-  useEffect(() => {
-    const opts =
-      data?.map((user) => {
-        const isOwner = user.id === trip.ownerId;
-        const isExistingCollaborator = trip.collaborators?.find((ec) => ec.id === user.id);
-        const isMe = curUser?.id === user.id;
-        const label = `${user.name} ${isOwner ? '(Owner)' : ''}`;
-        return {
-          value: user.id,
-          label,
-          disabled: (isExistingCollaborator || isMe || isOwner) as boolean,
-        };
-      }) || [];
-    setOptions(opts);
-  }, [data, trip, curUser]);
-
-  return (
-    <MultiSelect
-      w={'400px'}
-      label="Select Collaborator"
-      renderOption={renderOption}
-      placeholder="Pick a user"
-      data={options}
-      onChange={onChange}
-    />
-  );
-};
-
-const CollaboratorButton = forwardRef<HTMLDivElement, { trip: Trip; user: User; onSave: () => void }>((props, ref) => {
-  const { t } = useTranslation();
-  const { trip, user, onSave } = props;
-  const { name, email } = user;
-  return (
-    <div ref={ref}>
-      <Paper shadow={'sm'} p={'xs'} bd={'1px solid var(--mantine-primary-color-2)'}>
-        <Group>
-          <Avatar key={name} name={name} color="initials" />
-          <div>
-            <Text fz="md" fw={500}>
-              {name}
-            </Text>
-            <Text fz="xs" c="dimmed">
-              {email || 'No e-mail'}
-            </Text>
-          </div>
-          <ActionIcon
-            variant="subtle"
-            aria-label="Delete Collaborator"
-            style={{ height: '100%' }}
-            c={'red'}
-            onClick={() => {
-              openConfirmModal({
-                title: t('delete_collaborator', 'Delete Collaborator'),
-                confirmProps: { color: 'red' },
-                children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
-                labels: {
-                  confirm: t('delete', 'Delete'),
-                  cancel: t('cancel', 'Cancel'),
-                },
-                onCancel: () => {},
-                onConfirm: () => {
-                  deleteCollaborator(trip.id, user.id).then(() => {
-                    onSave();
-                  });
-                },
-              });
-            }}
-          >
-            <IconTrash stroke={1.5} />
-          </ActionIcon>
-        </Group>
-      </Paper>
-    </div>
-  );
-});
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { useDisclosure } from '@mantine/hooks';
+import { showErrorNotification, showSaveSuccessNotification } from '../../../lib/notifications.tsx';
 
 export const Collaborators = ({
   context,
@@ -133,41 +17,117 @@ export const Collaborators = ({
   trip: Trip;
   onSave: () => void;
 }>) => {
-  const { trip, onSave } = innerProps;
-  const [newCollaborators, setNewCollaborators] = useState<string[]>([]);
-  const saveNewCollaborators = () => {
-    addCollaborators(trip.id, newCollaborators).then(() => {
-      context.closeModal(id);
-      onSave();
-    });
+  const { trip } = innerProps;
+  const { t } = useTranslation();
+  const { emailEnabled } = useSurmaiContext();
+  const [showAlert, { close: closeAlert }] = useDisclosure(!emailEnabled);
+
+  const form = useForm<{ email: string; message: string }>({
+    mode: 'uncontrolled',
+    initialValues: {
+      email: '',
+      message: '',
+    },
+    validate: {
+      message: (value) => {
+        if (value && value.length > 200) {
+          return t(
+            'keep_it_brief',
+            'Please limit the message to 200 characters or less. Currently at {{ curVal }} characters.',
+            {
+              curVal: value.length,
+            }
+          );
+        }
+        return null;
+      },
+    },
+  });
+
+  const handleSubmit = (values: { email: string; message: string }) => {
+    const { email, message } = values;
+    sendCollaborationInvitation(email, message, trip.id)
+      .then(() => {
+        showSaveSuccessNotification({
+          title: t('invite_collaborator', 'Invite Collaborator'),
+          message: t('collaborator_invitation_success', 'Invitation sent to {{email}}', { email: email }),
+        });
+      })
+      .catch((error) => {
+        showErrorNotification({
+          title: t('invite_collaborator', 'Invite Collaborator'),
+          message: t('collaborator_invitation_failed', 'Invitation could not be sent to {{email}}', { email: email }),
+          error,
+        });
+      })
+      .finally(() => {
+        context.closeModal(id);
+      });
   };
 
   return (
-    <Container>
-      <Group>
-        <UserSearch trip={trip} setNewCollaborators={setNewCollaborators} />
-      </Group>
-      <Group mt={'md'}>
-        {(trip.collaborators || []).map((collaborator) => {
-          return (
-            <Group wrap={'nowrap'} key={collaborator.id}>
-              <CollaboratorButton trip={trip} user={collaborator} onSave={onSave} />
-            </Group>
-          );
-        })}
-      </Group>
-      <Group mt={'300px'}>
-        <Button
-          type={'button'}
-          variant={'default'}
-          onClick={() => {
-            context.closeModal(id);
-          }}
+    <Container p={'xs'}>
+      {showAlert && (
+        <Alert
+          variant="light"
+          title={t('email_setup', 'Email Setup')}
+          icon={<IconMacroOff size={18} />}
+          mb="sm"
+          onClose={closeAlert}
+          withCloseButton
+          closeButtonLabel={t('dismiss', 'Dismiss')}
         >
-          Cancel
-        </Button>
-        <Button onClick={saveNewCollaborators}>Save</Button>
-      </Group>
+          <Text size={'sm'}>
+            {t(
+              'email_is_not_enabled',
+              'Sending emails has not been enabled on this server. The recipient will not receive a notification email. They will see the invitation when they log into their account.'
+            )}
+          </Text>
+        </Alert>
+      )}
+
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <TextInput
+          miw={'500px'}
+          name={'email'}
+          leftSection={<IconMail size={18} stroke={1.5} />}
+          label={t('basic.email_address', 'Email Address')}
+          mt={'md'}
+          required
+          type={'email'}
+          description={t('basic.recipient_email_description', 'Email address for the recipient')}
+          key={form.key('email')}
+          {...form.getInputProps('email')}
+        />
+
+        <Textarea
+          mt={'md'}
+          required
+          resize={'both'}
+          name={'message'}
+          label={t('basic.invitation_message', 'Message')}
+          description={t(
+            'basic.invitation_message_description',
+            'A brief message with the invitation. 200 chars limit.'
+          )}
+          placeholder=""
+          key={form.key('message')}
+          {...form.getInputProps('message')}
+        />
+
+        <Group mt={'md'} justify={'flex-end'}>
+          <Button
+            type={'button'}
+            variant={'default'}
+            onClick={() => {
+              context.closeModal(id);
+            }}
+          >
+            {t('cancel', 'Cancel')}
+          </Button>
+          <Button type={'submit'}>{t('invite', 'Send Invitation')}</Button>
+        </Group>
+      </form>
     </Container>
   );
 };

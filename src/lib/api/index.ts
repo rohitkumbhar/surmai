@@ -73,4 +73,6 @@ export {
   disableOAuth2Provider,
 } from './pocketbase/settings.ts';
 
+export { sendCollaborationInvitation, listInvitations, invitationAction } from './pocketbase/invitations.ts';
+
 export { pocketBaseUrl as apiUrl } from './pocketbase/pocketbase.ts';

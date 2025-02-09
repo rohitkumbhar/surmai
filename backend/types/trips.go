@@ -1,4 +1,4 @@
-package trips
+package types
 
 import "github.com/pocketbase/pocketbase/tools/types"
 
