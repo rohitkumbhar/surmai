@@ -27,7 +27,7 @@ func main() {
 	surmai.BindMigrations(isGoRun)
 	surmai.BindRoutes()
 	surmai.BindEventHooks()
-	surmai.StartDemoMode()
+	surmai.StartJobs()
 
 	if err := surmai.Pb.Start(); err != nil {
 		log.Fatal(err)

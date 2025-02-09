@@ -1,18 +1,25 @@
 import classes from './UserInfo.module.css';
 import { Avatar, Group, Menu, rem, Text, UnstyledButton } from '@mantine/core';
-import { IconChevronDown, IconLogout, IconUser } from '@tabler/icons-react';
+import { IconChevronDown, IconLogout, IconPinInvoke, IconUser } from '@tabler/icons-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getAttachmentUrl, logoutCurrentUser } from '../../lib/api';
+import { getAttachmentUrl, listInvitations, logoutCurrentUser } from '../../lib/api';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
+import { Invitation } from '../../types/invitations.ts';
 
 export const UserInfo = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { t } = useTranslation();
 
+  const { data: invitations } = useQuery<Invitation[]>({
+    queryKey: ['listInvitations'],
+    queryFn: () => listInvitations(),
+  });
+
   return (
-    <Menu position="top-end" transitionProps={{ transition: 'pop-top-right' }} withinPortal>
+    <Menu position="bottom-end" withinPortal width={'xl'}>
       <Menu.Target>
         <UnstyledButton>
           <Group>
@@ -30,7 +37,6 @@ export const UserInfo = () => {
                 {user?.email}
               </Text>
             </div>
-
             <IconChevronDown style={{ width: rem(14), height: rem(14) }} stroke={1.5} />
           </Group>
         </UnstyledButton>
@@ -39,6 +45,11 @@ export const UserInfo = () => {
         <Link to={'/profile'} className={classes.menuLink}>
           <Menu.Item leftSection={<IconUser style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
             {t('profile', 'Profile')}
+          </Menu.Item>
+        </Link>
+        <Link to={'/invitations'} className={classes.menuLink}>
+          <Menu.Item leftSection={<IconPinInvoke style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
+            {t('invitations', 'Invitations')} {invitations && invitations.length > 0 ? ` (${invitations.length})` : ''}
           </Menu.Item>
         </Link>
         <Menu.Item

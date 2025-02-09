@@ -5,6 +5,7 @@ import { ParticipantData } from './ParticipantData.tsx';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { formatDate } from '../../../lib/time.ts';
+import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t, i18n } = useTranslation();
@@ -40,6 +41,17 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           return (
             <Group wrap={'nowrap'} key={person.name}>
               <ParticipantData participant={person} trip={trip} index={index} refetch={refetch} />
+            </Group>
+          );
+        })}
+      </Group>
+
+      <Text mt={'md'}>{t('basic.collaborators', 'Collaborators')}</Text>
+      <Group>
+        {(trip.collaborators || []).map((person, _) => {
+          return (
+            <Group key={person.id}>
+              <CollaboratorButton user={person} trip={trip} onSave={() => refetch()} />
             </Group>
           );
         })}

@@ -61,7 +61,36 @@ func (surmai *SurmaiApp) BuildTimezoneFinder() {
 
 }
 
-func (surmai *SurmaiApp) StartDemoMode() {
+func (surmai *SurmaiApp) BindEventHooks() {
+	surmai.Pb.OnRecordCreate("trips").BindFunc(func(e *core.RecordEvent) error {
+		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
+	})
+
+	surmai.Pb.OnRecordUpdate("trips").BindFunc(func(e *core.RecordEvent) error {
+		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
+	})
+
+	surmai.Pb.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateInvitationEventHook)
+	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateInvitationEventHook)
+}
+
+func (surmai *SurmaiApp) StartJobs() {
+	surmai.startInvitationCleanupJob()
+	surmai.startDemoModeSetupJob()
+}
+
+func (surmai *SurmaiApp) startInvitationCleanupJob() {
+
+	job := &jobs.CleanupInvitationsJob{
+		Pb: surmai.Pb,
+	}
+
+	surmai.Pb.Cron().MustAdd("CleanupInvitationsJob", "0 * * * *", func() {
+		job.Execute()
+	})
+}
+
+func (surmai *SurmaiApp) startDemoModeSetupJob() {
 	if surmai.DemoMode {
 
 		password := os.Getenv("SURMAI_DEMO_PASSWORD")
@@ -80,14 +109,4 @@ func (surmai *SurmaiApp) StartDemoMode() {
 			job.Execute()
 		})
 	}
-}
-
-func (surmai *SurmaiApp) BindEventHooks() {
-	surmai.Pb.OnRecordCreate("trips").BindFunc(func(e *core.RecordEvent) error {
-		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
-	})
-
-	surmai.Pb.OnRecordUpdate("trips").BindFunc(func(e *core.RecordEvent) error {
-		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
-	})
 }
