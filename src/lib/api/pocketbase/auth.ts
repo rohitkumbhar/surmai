@@ -83,7 +83,7 @@ export const getUserByEmail = (email: string) => {
 };
 
 export const listAllUsers = (): Promise<User[]> => {
-  return pb
+  return pbAdmin
     .collection<User>('users')
     .getList(1, 50)
     .then((results) => results.items);
