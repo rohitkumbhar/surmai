@@ -12,7 +12,7 @@ import {
 import { listActivities } from './activities.ts';
 
 import { convertSavedToBrowserDate } from '../../time.ts';
-// import { downloadAsBase64 } from '../../components/trip/common/util.ts';
+import { User } from '../../../types/auth.ts';
 
 export const createTrip = async (data: NewTrip) => {
   return await pb.collection('trips').create(data);
@@ -21,12 +21,11 @@ export const createTrip = async (data: NewTrip) => {
 export const getTrip = (tripId: string): Promise<Trip> => {
   return pb
     .collection('trips')
-    .getOne<TripResponse>(tripId, { expand: 'collaborators' })
+    .getOne<TripResponse>(tripId)
     .then((trip) => {
-      const { expand, startDate, endDate, ...rest } = trip;
+      const { startDate, endDate, ...rest } = trip;
       return {
         ...rest,
-        ...expand,
         startDate: new Date(Date.parse(startDate)),
         endDate: new Date(Date.parse(endDate)),
       };
@@ -46,6 +45,13 @@ export const listTrips = async (): Promise<Trip[]> => {
       startDate: new Date(Date.parse(startDate)),
       endDate: new Date(Date.parse(endDate)),
     };
+  });
+};
+
+export const listCollaborators = ({ tripId }: { tripId: string }) : Promise<User[]> => {
+  return pb.send('/trip/collaborators', {
+    method: 'GET',
+    query: { tripId }
   });
 };
 

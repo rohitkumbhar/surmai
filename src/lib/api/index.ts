@@ -16,6 +16,7 @@ export {
 export {
   getTrip,
   listTrips,
+  listCollaborators,
   createTrip,
   getAttachmentUrl,
   saveTransportationAttachments,

@@ -6,9 +6,20 @@ import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { formatDate } from '../../../lib/time.ts';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { listCollaborators } from '../../../lib/api';
+import { User } from '../../../types/auth.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t, i18n } = useTranslation();
+
+  const { data: collaborators } = useQuery<User[]>({
+    queryKey: ['listCollaborators', trip.id],
+    queryFn: () => listCollaborators({ tripId: trip.id }),
+  });
+
+  console.log("collaborators => ", collaborators);
+
 
   return (
     <Stack gap={'md'}>
@@ -48,7 +59,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
 
       <Text mt={'md'}>{t('basic.collaborators', 'Collaborators')}</Text>
       <Group>
-        {(trip.collaborators || []).map((person, _) => {
+        {collaborators && (collaborators || []).map((person) => {
           return (
             <Group key={person.id}>
               <CollaboratorButton user={person} trip={trip} onSave={() => refetch()} />

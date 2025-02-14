@@ -27,6 +27,7 @@ func (surmai *SurmaiApp) BindRoutes() {
 		se.Router.POST("/load-airport-data", R.LoadAirportsDataset).Bind(apis.RequireSuperuserAuth())
 		se.Router.POST("/export-trip", R.ExportTrip).Bind(apis.RequireAuth())
 		se.Router.POST("/import-trip", R.ImportTrip).Bind(apis.RequireAuth())
+		se.Router.GET("/trip/collaborators", R.GetTripCollaborators).Bind(apis.RequireAuth())
 		se.Router.GET("/get-timezone", func(e *core.RequestEvent) error {
 			return R.GetTimeZone(e, surmai.TimezoneFinder)
 		}).Bind(apis.RequireAuth())
