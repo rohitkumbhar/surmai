@@ -1,5 +1,5 @@
 import { Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
-import { IconHome2, IconLogout, IconSettings, IconUser } from '@tabler/icons-react';
+import { IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FishOne } from '../logo/FishOne.tsx';
@@ -38,6 +38,7 @@ export function Navbar({ close }: NavbarProps) {
   const { t } = useTranslation();
   const mainNav = [
     { icon: IconHome2, label: 'Home', route: '/' },
+    { icon: IconPinInvoke, label: t('invitations', 'Invitations'), route: '/invitations' },
     { icon: IconSettings, label: 'Settings', route: '/settings', isAdmin: true },
   ];
 

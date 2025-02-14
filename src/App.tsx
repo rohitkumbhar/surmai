@@ -35,7 +35,7 @@ function App() {
               <Burger mt={'md'} opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
               <Box component="div" id={'app-header'} />
             </Group>
-            <Group gap={'xs'} mt={'sm'}>
+            <Group gap={'xs'} mt={'sm'} visibleFrom={"xs"}>
               <UserInfo />
             </Group>
           </Group>
