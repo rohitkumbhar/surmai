@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { useDocumentTitle } from '@mantine/hooks';
 import { Header } from '../components/nav/Header.tsx';
-import { Card, Container, Group, Text } from '@mantine/core';
+import { Anchor, Card, Container, Group, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import { Invitation } from '../types/invitations.ts';
 import { listInvitations } from '../lib/api';
 import { TripCollaborationInvitationCard } from '../components/invitations/TripCollaborationInvitationCard.tsx';
+import { useNavigate } from 'react-router-dom';
 
 export const Invitations = () => {
   const { data: invitations, refetch: refetchInvitations } = useQuery<Invitation[]>({
@@ -13,6 +14,7 @@ export const Invitations = () => {
     queryFn: () => listInvitations(),
   });
 
+  const navigate = useNavigate();
   const { t } = useTranslation();
   useDocumentTitle(t('invitations', 'Invitations'));
 
@@ -26,7 +28,19 @@ export const Invitations = () => {
 
       {invitations && invitations.length === 0 && (
         <Card>
-          <Text>{t('no_pending_invitations', 'You do not have any pending invitations')}</Text>
+          <Group>
+            <Text>{t('no_pending_invitations', 'You do not have any pending invitations.')}</Text>
+            <Anchor
+              size="sm"
+              component="button"
+              type="button"
+              onClick={() => {
+                navigate('/');
+              }}
+            >
+              <Text>{t('view_all_trips', 'View All Trips')}</Text>
+            </Anchor>
+          </Group>
         </Card>
       )}
       <Group align={'top'}>
