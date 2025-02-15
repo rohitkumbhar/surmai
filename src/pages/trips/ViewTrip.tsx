@@ -8,17 +8,19 @@ import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { TransportationPanel } from '../../components/trip/transportation/TransportationPanel.tsx';
 import { useTranslation } from 'react-i18next';
-import { useDisclosure, useDocumentTitle, useLocalStorage, useNetwork } from '@mantine/hooks';
+import { useDisclosure, useDocumentTitle, useLocalStorage } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
 import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
 import { formatDate } from '../../lib/time.ts';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
   useDocumentTitle(docTitle);
 
+  const { offline } = useSurmaiContext();
   const { tripId } = useParams();
   const { t, i18n } = useTranslation();
   const {
@@ -32,7 +34,6 @@ export const ViewTrip = () => {
     queryFn: () => getTrip(tripId || ''),
   });
 
-  const { online } = useNetwork();
   const [showAlert, { close: closeAlert }] = useDisclosure(true);
   const [offlineCacheTimestamp] = useLocalStorage<string | null>({
     key: `offline-cache-timestamp-${tripId}`,
@@ -63,7 +64,7 @@ export const ViewTrip = () => {
         </Group>
       </Header>
 
-      {online && offlineCacheTimestamp && showAlert && (
+      {!offline && offlineCacheTimestamp && showAlert && (
         <Alert
           variant="light"
           title={t('offline_access', 'Offline Access')}
@@ -79,7 +80,7 @@ export const ViewTrip = () => {
         </Alert>
       )}
 
-      {!online && offlineCacheTimestamp && showAlert && (
+      {offline && offlineCacheTimestamp && showAlert && (
         <Alert
           variant="light"
           title={t('offline', 'Offline')}
@@ -95,7 +96,7 @@ export const ViewTrip = () => {
         </Alert>
       )}
 
-      {!online && !offlineCacheTimestamp && showAlert && (
+      {offline && !offlineCacheTimestamp && showAlert && (
         <Alert
           variant="light"
           title={t('offline', 'Offline')}

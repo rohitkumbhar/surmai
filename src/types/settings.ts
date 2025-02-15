@@ -16,4 +16,5 @@ export type SiteSettings = {
   demoMode: boolean;
   emailEnabled: boolean;
   signupsEnabled: boolean;
+  offline: boolean;
 };

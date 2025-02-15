@@ -8,16 +8,19 @@ import { buildTheme } from './theme.ts';
 import { buildRouter } from './routes.tsx';
 import { modals } from './modals.ts';
 import { SiteSettings } from '../types/settings.ts';
+import { useNetwork } from '@mantine/hooks';
 
 export const SurmaiContext = createContext<
   SiteSettings & {
     primaryColor?: string;
     changeColor?: (colorName: string | undefined) => void;
   }
->({ demoMode: false, emailEnabled: false, signupsEnabled: false });
+>({ demoMode: false, emailEnabled: false, signupsEnabled: false, offline: false });
 
 export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');
+  const { online } = useNetwork();
+
   useEffect(() => {
     currentUser().then((user) => {
       if (user.colorScheme) {
@@ -30,6 +33,7 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
 
   const value = {
     ...settings,
+    offline: !online,
     primaryColor,
     changeColor: (colorName: string | undefined) => {
       if (colorName) {

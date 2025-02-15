@@ -25,14 +25,23 @@ dayjs.extend(relativeTime);
 
 const queryClient = new QueryClient();
 
-fetch(`${apiUrl}/site-settings.json`)
+fetch(`${apiUrl}/site-settings.json`, { signal: AbortSignal.timeout(2000) })
   .then((result) => result.json())
   .then((settings: SiteSettings) => {
-    ReactDOM.createRoot(document.getElementById('root')!).render(
-      <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-          <SurmaiApp settings={settings} />
-        </QueryClientProvider>
-      </React.StrictMode>
-    );
+    launchApp({ ...settings, offline: false });
+  })
+  .catch((error) => {
+    // We still need the app in offline mode
+    console.log('Could not load site settings', error);
+    launchApp({ demoMode: false, emailEnabled: false, signupsEnabled: false, offline: true });
   });
+
+const launchApp = (settings: SiteSettings) => {
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <SurmaiApp settings={settings} />
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+};
