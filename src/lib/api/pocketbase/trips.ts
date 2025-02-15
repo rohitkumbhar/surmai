@@ -48,10 +48,10 @@ export const listTrips = async (): Promise<Trip[]> => {
   });
 };
 
-export const listCollaborators = ({ tripId }: { tripId: string }) : Promise<User[]> => {
+export const listCollaborators = ({ tripId }: { tripId: string }): Promise<User[]> => {
   return pb.send('/trip/collaborators', {
     method: 'GET',
-    query: { tripId }
+    query: { tripId },
   });
 };
 

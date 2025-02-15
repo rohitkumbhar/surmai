@@ -18,9 +18,6 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
     queryFn: () => listCollaborators({ tripId: trip.id }),
   });
 
-  console.log("collaborators => ", collaborators);
-
-
   return (
     <Stack gap={'md'}>
       <Flex mih={30} justify="flex-end" align="center" wrap="wrap" pos={'relative'} top={'20px'}>
@@ -59,13 +56,14 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
 
       <Text mt={'md'}>{t('basic.collaborators', 'Collaborators')}</Text>
       <Group>
-        {collaborators && (collaborators || []).map((person) => {
-          return (
-            <Group key={person.id}>
-              <CollaboratorButton user={person} trip={trip} onSave={() => refetch()} />
-            </Group>
-          );
-        })}
+        {collaborators &&
+          (collaborators || []).map((person) => {
+            return (
+              <Group key={person.id}>
+                <CollaboratorButton user={person} trip={trip} onSave={() => refetch()} />
+              </Group>
+            );
+          })}
       </Group>
     </Stack>
   );
