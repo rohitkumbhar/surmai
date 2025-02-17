@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { createTransportationEntry, saveTransportationAttachments } from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { fakeAsUtcString } from '../../../lib/time.ts';
 
 export const CarRentalForm = ({
   trip,
@@ -52,8 +53,8 @@ export const CarRentalForm = ({
         value: values.cost,
         currency: values.currencyCode,
       },
-      departureTime: values.pickupTime,
-      arrivalTime: values.dropOffTime,
+      departureTime: fakeAsUtcString(values.pickupTime),
+      arrivalTime: fakeAsUtcString(values.dropOffTime),
       metadata: {
         confirmationCode: values.confirmationCode,
         rentalCompany: values.rentalCompany,
