@@ -1,16 +1,16 @@
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CreateTransportation, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
+import { useForm } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { createTransportationEntry, saveTransportationAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { updateTransportation } from '../../../lib/api/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { AirportSelect } from './AirportSelect.tsx';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
+import { transportationConfig } from './config.tsx';
 
 export const GenericTransportationModeForm = ({
   transportationType,
@@ -29,6 +29,12 @@ export const GenericTransportationModeForm = ({
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
+
+  const config =
+    transportationType in transportationConfig
+      ? transportationConfig[transportationType]
+      : transportationConfig['default'];
+
   const form = useForm<TransportationFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -95,30 +101,14 @@ export const GenericTransportationModeForm = ({
     <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
       <Stack>
         <Group>
-          {transportationType === 'flight' ? (
-            <AirportSelect
-              form={form as UseFormReturnType<unknown>}
-              propName={'origin'}
-              label={t('transportation.from', 'From')}
-              required={true}
-              withAsterisk={true}
-            />
-          ) : (
-            <TextInput
-              name={'from'}
-              label={t('transportation.from', 'From')}
-              required
-              key={form.key('origin')}
-              {...form.getInputProps('origin')}
-            />
-          )}
+          {config.components.from(form)}
 
           <DateTimePicker
             highlightToday
             valueFormat="lll"
             name={'departureTime'}
             miw={rem('200px')}
-            label={t('transportation.departure_time', 'Departure Time')}
+            label={t('transportation.departure_time', 'Departure')}
             clearable
             required
             minDate={trip.startDate}
@@ -128,28 +118,11 @@ export const GenericTransportationModeForm = ({
           />
         </Group>
         <Group>
-          {transportationType === 'flight' ? (
-            <AirportSelect
-              form={form as UseFormReturnType<unknown>}
-              propName={'destination'}
-              label={t('transportation.to', 'To')}
-              required={true}
-              withAsterisk={true}
-            />
-          ) : (
-            <TextInput
-              name={'to'}
-              label={t('transportation.to', 'To')}
-              required
-              key={form.key('destination')}
-              {...form.getInputProps('destination')}
-            />
-          )}
-
+          {config.components.to(form)}
           <DateTimePicker
             valueFormat="lll"
             name={'arrivalTime'}
-            label={t('transportation.arrival_time', 'Arrival Time')}
+            label={t('transportation.arrival_time', 'Arrival')}
             required
             miw={rem('200px')}
             minDate={trip.startDate}
@@ -160,17 +133,10 @@ export const GenericTransportationModeForm = ({
           />
         </Group>
         <Group>
-          <TextInput
-            name={'provider'}
-            label={t('transportation.provider', 'Provider')}
-            required
-            key={form.key('provider')}
-            {...form.getInputProps('provider')}
-          />
-
+          {config.components.provider(form)}
           <TextInput
             name={'reservation'}
-            label={t('transportation.reservation', 'Reservation')}
+            label={config.strings.reservationLabel}
             key={form.key('reservation')}
             {...form.getInputProps('reservation')}
           />

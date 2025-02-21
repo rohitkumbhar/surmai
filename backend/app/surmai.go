@@ -23,8 +23,17 @@ func (surmai *SurmaiApp) BindRoutes() {
 
 	surmai.Pb.OnServe().BindFunc(func(se *core.ServeEvent) error {
 		se.Router.POST("/impersonate", R.ImpersonateAction).Bind(apis.RequireSuperuserAuth())
-		se.Router.POST("/load-city-data", R.LoadPlacesDataset).Bind(apis.RequireSuperuserAuth())
-		se.Router.POST("/load-airport-data", R.LoadAirportsDataset).Bind(apis.RequireSuperuserAuth())
+
+		se.Router.POST("/load-airline-data", R.LoadAirlinesDataset).Bind(apis.RequireSuperuserAuth())
+
+		se.Router.POST("/load-city-data", func(e *core.RequestEvent) error {
+			return R.LoadPlacesDataset(e, surmai.TimezoneFinder)
+		}).Bind(apis.RequireSuperuserAuth())
+
+		se.Router.GET("/load-airport-data", func(e *core.RequestEvent) error {
+			return R.LoadAirportsDataset(e, surmai.TimezoneFinder)
+		}).Bind(apis.RequireAuth())
+
 		se.Router.POST("/export-trip", R.ExportTrip).Bind(apis.RequireAuth())
 		se.Router.POST("/import-trip", R.ImportTrip).Bind(apis.RequireAuth())
 		se.Router.GET("/trip/collaborators", R.GetTripCollaborators).Bind(apis.RequireAuth())

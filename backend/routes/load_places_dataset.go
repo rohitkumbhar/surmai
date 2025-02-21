@@ -1,11 +1,15 @@
 package routes
 
 import (
+	"backend/datasets"
 	"encoding/json"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/ringsaturn/tzf"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"unicode"
 )
 
 type Place struct {
@@ -18,7 +22,7 @@ type Place struct {
 	CountryName string `json:"country_name"`
 }
 
-func LoadPlacesDataset(e *core.RequestEvent) error {
+func LoadPlacesDataset(e *core.RequestEvent, finder tzf.F) error {
 
 	places, err := e.App.FindCollectionByNameOrId("places")
 	if err != nil {
@@ -54,6 +58,16 @@ func LoadPlacesDataset(e *core.RequestEvent) error {
 		record.Set("countryName", place.CountryName)
 		record.Set("latitude", place.Latitude)
 		record.Set("longitude", place.Longitude)
+
+		if place.Latitude != "" && place.Longitude != "" {
+			lat, _ := strconv.ParseFloat(place.Latitude, 64)
+			long, _ := strconv.ParseFloat(place.Longitude, 64)
+			timezone := finder.GetTimezoneName(long, lat)
+			record.Set("timezone", timezone)
+		}
+
+		record.Set("asciiName", datasets.AsciiName(place.Name))
+
 		err := e.App.Save(record)
 		if err != nil {
 			log.Printf("Error saving record: %v", err)
@@ -62,4 +76,8 @@ func LoadPlacesDataset(e *core.RequestEvent) error {
 	}
 
 	return e.JSON(http.StatusOK, map[string]int{"count": len(payload)})
+}
+
+func isMn(r rune) bool {
+	return unicode.Is(unicode.Mn, r) // Mn: nonspacing marks
 }
