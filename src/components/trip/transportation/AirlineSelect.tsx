@@ -26,8 +26,9 @@ export const AirlineSelect = ({
   const [searchResults, setSearchResults] = useState<Airline[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // @ts-expect-error its ok
+
   const existingValue =
+    // @ts-expect-error its ok
     currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;
   const [value, setValue] = useState<string | undefined>(existingValue);
   const inputRef = useRef<HTMLInputElement>();
