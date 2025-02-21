@@ -154,6 +154,8 @@ From [OurAirports](https://ourairports.com/data/)
 ### Cities
 From [countries-states-cities-database](https://github.com/dr5hn/countries-states-cities-database)
 
+### Airlines
+From [dotmarn/Airlines](https://github.com/dotmarn/Airlines) 
 
 # Possibly FAQ
 ### Why so ugly tho?

@@ -1,6 +1,6 @@
 import { Box, Button, Card, Grid, Text, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { countAirports, countPlaces, loadAirports, loadCities } from '../../lib/api';
+import { countAirlines, countAirports, countPlaces, loadAirlines, loadAirports, loadCities } from '../../lib/api';
 import { modals } from '@mantine/modals';
 import { clearLoadingNotification, showLoadingNotification } from '../../lib/notifications.tsx';
 import { useTranslation } from 'react-i18next';
@@ -8,10 +8,13 @@ import { useTranslation } from 'react-i18next';
 export const Datasets = () => {
   const [cityCount, setCityCount] = useState<number>(0);
   const [airportCount, setAirportCount] = useState<number>(0);
+  const [airlineCount, setAirlineCount] = useState<number>(0);
+
   const { t } = useTranslation();
   useEffect(() => {
     countPlaces().then((count) => setCityCount(count));
     countAirports().then((count) => setAirportCount(count));
+    countAirlines().then((count) => setAirlineCount(count));
   }, []);
 
   const cityLoadConfirmationModal = () =>
@@ -71,6 +74,35 @@ export const Datasets = () => {
       },
     });
 
+  const airlinesLoadConfirmationModal = () =>
+    modals.openConfirmModal({
+      title: 'Loading Airlines Dataset',
+      children: (
+        <Text size="sm">
+          {t(
+            'loading_airlines_info',
+            'This action will load airline information into your database and will take a long time.'
+          )}
+        </Text>
+      ),
+      labels: { confirm: 'Confirm', cancel: 'Cancel' },
+      onCancel: () => {},
+      onConfirm: () => {
+        const notificationId = showLoadingNotification({
+          title: t('dataset', 'Dataset'),
+          message: t('loading_airlines_dataset', 'Loading Airlines dataset'),
+        });
+
+        loadAirlines().then((results) => {
+          clearLoadingNotification({
+            id: notificationId,
+            title: t('dataset', 'Dataset'),
+            message: t('airlines_loaded', 'Number of airlines loaded: {{count}}', { count: results.count }),
+          });
+        });
+      },
+    });
+
   return (
     <Card withBorder radius="md" p="xl" mt={'md'}>
       <Title order={3} fw={500}>
@@ -123,6 +155,28 @@ export const Datasets = () => {
           )}
           {airportCount === 0 && (
             <Button onClick={airportsLoadConfirmationModal}>{t('load_airports', 'Load Airports')}</Button>
+          )}
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, sm: 12, md: 8, lg: 10 }}>
+          <div>
+            <Text>{t('world_airline_dataset', 'World Airlines')}</Text>
+            <Text size="sm" c="dimmed">
+              {t('airline_dataset_info', 'A list of airlines around the world.')}
+            </Text>
+          </div>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 12, md: 4, lg: 2 }}>
+          {airlineCount > 0 && (
+            <Text component={'div'} size="md">
+              {airlineCount || 0}
+              <Text size="sm" c="dimmed">
+                {t('airlines_available_suffix', 'Airlines Available')}
+              </Text>
+            </Text>
+          )}
+          {airlineCount === 0 && (
+            <Button onClick={airlinesLoadConfirmationModal}>{t('load_airlines', 'Load Airlines')}</Button>
           )}
         </Grid.Col>
       </Grid>

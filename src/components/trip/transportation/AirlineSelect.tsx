@@ -1,13 +1,13 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { CloseButton, Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
-import { searchAirports } from '../../../lib/api';
+import { searchAirlines } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
-import { Airport } from '../../../types/trips.ts';
+import { Airline } from '../../../types/trips.ts';
 import { useTranslation } from 'react-i18next';
-import { IconPlaneArrival, IconPlaneDeparture } from '@tabler/icons-react';
+import { IconPlane } from '@tabler/icons-react';
 
-export const AirportSelect = ({
+export const AirlineSelect = ({
   propName,
   form,
   label,
@@ -23,18 +23,22 @@ export const AirportSelect = ({
   const { t } = useTranslation();
   const currentValues = form.getValues();
   const [search, setSearch] = useDebouncedState('', 200);
-  const [searchResults, setSearchResults] = useState<Airport[]>([]);
+  const [searchResults, setSearchResults] = useState<Airline[]>([]);
   const [loading, setLoading] = useState(false);
-  // @ts-expect-error its ok
-  const [value, setValue] = useState<string | undefined>(currentValues ? currentValues[propName] : undefined);
+
+
+  const existingValue =
+    // @ts-expect-error its ok
+    currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;
+  const [value, setValue] = useState<string | undefined>(existingValue);
   const inputRef = useRef<HTMLInputElement>();
   const combobox = useCombobox();
 
   useEffect(() => {
     if (search?.length > 1) {
       setLoading(true);
-      searchAirports(search).then((results) => {
-        setSearchResults(results.items as unknown as Airport[]);
+      searchAirlines(search).then((results) => {
+        setSearchResults(results.items as unknown as Airline[]);
         setLoading(false);
         combobox.openDropdown();
       });
@@ -42,14 +46,13 @@ export const AirportSelect = ({
   }, [search]);
 
   const options = searchResults
-    .filter((item) => item.iataCode && item.iataCode !== '')
+    .filter((item) => item.code && item.code !== '')
     .map((item) => (
       <Combobox.Option value={item.id} key={item.id}>
         <Group gap={'xs'}>
           <Text size={'md'} fw={400}>
             {item.name}
           </Text>
-          <Text size={'xs'} c={'dimmed'}>{`${item.iataCode}`}</Text>
         </Group>
       </Combobox.Option>
     ));
@@ -61,15 +64,12 @@ export const AirportSelect = ({
     } else {
       const selection = searchResults.find((item) => item.id === val);
       if (selection) {
-        setValue(selection.iataCode);
+        setValue(selection.name);
         form.setFieldValue(propName, {
-          iataCode: selection.iataCode,
+          code: selection.code,
           name: selection.name,
           id: selection.id,
-          countryCode: selection.isoCountry,
-          latitude: selection.latitude,
-          longitude: selection.longitude,
-          timezone: selection.timezone,
+          logo: selection.logo,
         });
       }
     }
@@ -98,10 +98,8 @@ export const AirportSelect = ({
                 }}
                 aria-label="Clear value"
               />
-            ) : propName === 'destination' ? (
-              <IconPlaneArrival />
             ) : (
-              <IconPlaneDeparture />
+              <IconPlane />
             )
           }
           value={value}
@@ -115,7 +113,7 @@ export const AirportSelect = ({
           onBlur={() => {
             combobox.closeDropdown();
           }}
-          placeholder={t('transportation.airport_code', 'Airport Code')}
+          placeholder={t('transportation.airline_name', 'Airline Name')}
         />
       </Combobox.Target>
       <Combobox.Dropdown>

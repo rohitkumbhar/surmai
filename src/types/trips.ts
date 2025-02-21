@@ -174,3 +174,9 @@ export interface Airport extends RecordModel {
   iataCode?: string;
   name: string;
 }
+
+export interface Airline extends RecordModel {
+  code?: string;
+  logo?: string;
+  name: string;
+}

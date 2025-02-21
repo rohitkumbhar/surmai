@@ -3,9 +3,11 @@ package routes
 import (
 	"encoding/json"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/ringsaturn/tzf"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
 type Airport struct {
@@ -16,7 +18,7 @@ type Airport struct {
 	IsoCountry string `json:"iso_country"`
 }
 
-func LoadAirportsDataset(e *core.RequestEvent) error {
+func LoadAirportsDataset(e *core.RequestEvent, finder tzf.F) error {
 
 	places, err := e.App.FindCollectionByNameOrId("airports")
 	if err != nil {
@@ -50,6 +52,14 @@ func LoadAirportsDataset(e *core.RequestEvent) error {
 		record.Set("isoCountry", airport.IsoCountry)
 		record.Set("latitude", airport.Latitude)
 		record.Set("longitude", airport.Longitude)
+
+		if airport.Latitude != "" && airport.Longitude != "" {
+			lat, _ := strconv.ParseFloat(airport.Latitude, 64)
+			long, _ := strconv.ParseFloat(airport.Longitude, 64)
+			timezone := finder.GetTimezoneName(long, lat)
+			record.Set("timezone", timezone)
+		}
+
 		err := e.App.Save(record)
 		if err != nil {
 			log.Printf("Error saving record: %v", err)

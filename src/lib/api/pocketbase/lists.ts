@@ -14,6 +14,13 @@ export const loadAirports = () => {
   });
 };
 
+export const loadAirlines = () => {
+  return pbAdmin.send('/load-airline-data', {
+    method: 'POST',
+    signal: AbortSignal.timeout(5 * 60 * 1000),
+  });
+};
+
 export const countPlaces = async () => {
   const { totalItems } = await pb.collection('places').getList(1, 1);
   return totalItems;
@@ -21,6 +28,11 @@ export const countPlaces = async () => {
 
 export const countAirports = async () => {
   const { totalItems } = await pb.collection('airports').getList(1, 1);
+  return totalItems;
+};
+
+export const countAirlines = async () => {
+  const { totalItems } = await pb.collection('airlines').getList(1, 1);
   return totalItems;
 };
 
@@ -35,12 +47,18 @@ export const getTimezone = (latitude: string, longitude: string): Promise<string
 
 export const searchPlaces = (query: string) => {
   return pb.collection('places').getList(1, 20, {
-    filter: `name~"${query}"`,
+    filter: `name~"${query}" || asciiName~"${query}"`,
   });
 };
 
 export const searchAirports = (query: string) => {
   return pb.collection('airports').getList(1, 10, {
     filter: `(name~"${query}" || iataCode~"${query}")`,
+  });
+};
+
+export const searchAirlines = (query: string) => {
+  return pb.collection('airlines').getList(1, 10, {
+    filter: `name~"${query}"`,
   });
 };

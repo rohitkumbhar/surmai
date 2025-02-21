@@ -51,10 +51,13 @@ export {
 export {
   loadCities,
   loadAirports,
+  loadAirlines,
   countPlaces,
   countAirports,
+  countAirlines,
   searchPlaces,
   searchAirports,
+  searchAirlines,
   getTimezone,
 } from './pocketbase/lists.ts';
 

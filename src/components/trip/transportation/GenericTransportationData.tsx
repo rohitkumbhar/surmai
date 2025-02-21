@@ -13,6 +13,7 @@ import { formatDate, formatTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
+import { transportationConfig } from './config.tsx';
 
 export const GenericTransportationData = ({
   trip,
@@ -30,7 +31,10 @@ export const GenericTransportationData = ({
 
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
-
+  const config =
+    transportation.type in transportationConfig
+      ? transportationConfig[transportation.type]
+      : transportationConfig['default'];
   return (
     <DataLine
       onEdit={() => {
@@ -169,13 +173,15 @@ export const GenericTransportationData = ({
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.provider', 'Provider')}
+            {config.strings.providerLabel}
           </Text>
-          <Text size="md">{transportation.metadata.provider}</Text>
+          <Group gap={1}>
+            <Text size="md">{transportation.metadata.provider.name || transportation.metadata.provider}</Text>
+          </Group>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
-            {t('transportation.reservation', 'Reservation')}
+            {config.strings.reservationLabel}
           </Text>
           <Text size="md">{transportation.metadata.reservation || ''}</Text>
         </Grid.Col>
