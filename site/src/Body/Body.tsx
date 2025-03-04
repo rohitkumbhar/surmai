@@ -1,7 +1,26 @@
-import { Carousel } from '@mantine/carousel';
-import { Button, Card, Container, Grid, Group, Image, List, SimpleGrid, Text, ThemeIcon, Title } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Divider,
+  Grid,
+  Group,
+  List,
+  SimpleGrid,
+  Stack,
+  Text,
+  ThemeIcon,
+  Title,
+} from '@mantine/core';
 
-import { IconCheck, IconCode, IconDeviceMobile, IconUser, IconWifiOff } from '@tabler/icons-react';
+import {
+  IconBrandGithub,
+  IconCheck,
+  IconCode,
+  IconDeviceMobile,
+  IconDevices,
+  IconUser,
+  IconWifiOff,
+} from '@tabler/icons-react';
 import classes from './Body.module.css';
 import { CodeHighlightTabs } from '@mantine/code-highlight';
 
@@ -25,44 +44,6 @@ const features = [
     icon: IconDeviceMobile,
     title: 'Responsive',
     description: 'Get the same experience on a mobile device compared to a desktop',
-  },
-];
-
-const images = [
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/desktop_organization.png?raw=true',
-    title: 'Desktop - Organization Expanded',
-  },
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/desktop_home.png?raw=true',
-    title: 'Desktop - Home',
-  },
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/desktop_itinerary.png?raw=true',
-    title: 'Desktop - Itinerary',
-  },
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/desktop_admin_settings.png?raw=true',
-    title: 'Desktop - Admin Settings',
-  },
-];
-
-const mobileImages = [
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/mobile_home.png?raw=true',
-    title: 'Mobile - Home',
-  },
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/mobile_offline_ready.png?raw=true',
-    title: 'Mobile - Offline Ready',
-  },
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/mobile_organization.png?raw=true',
-    title: 'Mobile - Organization',
-  },
-  {
-    src: 'https://github.com/rohitkumbhar/surmai/blob/main/screenshots/mobile_user_profile.png?raw=true',
-    title: 'Mobile - User Profile',
   },
 ];
 
@@ -135,16 +116,26 @@ services:
               </List>
             </Text>
 
-            <Group>
+            <Group mt="xl">
               <Button
                 component={'a'}
                 href={'https://github.com/rohitkumbhar/surmai'}
                 target={'_blank'}
-                size="lg"
-                radius="md"
-                mt="xl"
+                size="md"
+                radius="sm"
+                leftSection={<IconBrandGithub />}
               >
-                View Source Code
+                Source Code
+              </Button>
+              <Button
+                component={'a'}
+                href={'https://demo.surmai.app'}
+                target={'_blank'}
+                size="md"
+                radius="sm"
+                leftSection={<IconDevices />}
+              >
+                Demo
               </Button>
             </Group>
           </Grid.Col>
@@ -156,18 +147,16 @@ services:
         </Grid>
       </div>
 
-      <Card mt={'xl'}>
-        <Card.Section withBorder>
-          <Group justify="space-between">
-            <Title order={2}>Docker Compose</Title>
-          </Group>
-        </Card.Section>
-        <Card.Section withBorder>
-          <CodeHighlightTabs code={[{ fileName: 'docker-compose.yaml', code: dockerCompose, language: 'yaml' }]} />
-        </Card.Section>
-      </Card>
+      <Divider mt="md" />
 
-      <Card mt={'xl'}>
+      <Stack>
+        <Title mt={'md'} order={3}>
+          Self host with Docker
+        </Title>
+        <CodeHighlightTabs code={[{ fileName: 'docker-compose.yaml', code: dockerCompose, language: 'yaml' }]} />
+      </Stack>
+
+      {/*<Card mt={'xl'}>
         <Card.Section withBorder>
           <Group justify="space-between">
             <Title order={2}>Screenshots</Title>
@@ -201,12 +190,12 @@ services:
             {mobileImages.map((image) => (
               <Carousel.Slide key={image.src}>
                 <Text>{image.title}</Text>
-                <Image src={image.src} alt={image.title} />
+                <Image src={image.src} alt={image.title}  />
               </Carousel.Slide>
             ))}
           </Carousel>
         </Card.Section>
-      </Card>
+      </Card>*/}
     </Container>
   );
 };

@@ -9,3 +9,7 @@
     margin-bottom: var(--mantine-spacing-md);
     color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
 }
+
+.card {
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6));
+}

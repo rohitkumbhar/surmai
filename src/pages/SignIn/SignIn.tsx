@@ -1,4 +1,5 @@
 import {
+  Alert,
   Anchor,
   Button,
   Container,
@@ -7,7 +8,7 @@ import {
   Modal,
   Notification,
   Paper,
-  PasswordInput,
+  PasswordInput, Stack,
   Text,
   TextInput,
 } from '@mantine/core';
@@ -23,7 +24,7 @@ import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const SignIn = () => {
   useDocumentTitle('Surmai');
-  const { signupsEnabled } = useSurmaiContext();
+  const { signupsEnabled , demoMode} = useSurmaiContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [apiError, setApiError] = useState<string>();
@@ -209,6 +210,14 @@ export const SignIn = () => {
                 </Anchor>
               </Text>
             )}
+
+            {demoMode && <Stack mt={"md"} gap={0}>
+              <Alert>
+                <Text size={"sm"}>Demo User: demo@surmai.app</Text>
+                <Text size={"sm"}>Demo Password: vi#c8Euuf16idhbG</Text>
+              </Alert>
+            </Stack>}
+
           </form>
         </Paper>
       </Container>
