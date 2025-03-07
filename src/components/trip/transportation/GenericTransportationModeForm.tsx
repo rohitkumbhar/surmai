@@ -11,6 +11,7 @@ import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { transportationConfig } from './config.tsx';
+import dayjs from 'dayjs';
 
 export const GenericTransportationModeForm = ({
   transportationType,
@@ -126,7 +127,7 @@ export const GenericTransportationModeForm = ({
             required
             miw={rem('200px')}
             minDate={trip.startDate}
-            maxDate={trip.endDate}
+            maxDate={dayjs(trip.endDate).endOf('day').toDate()}
             clearable
             key={form.key('arrivalTime')}
             {...form.getInputProps('arrivalTime')}

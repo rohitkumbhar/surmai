@@ -9,6 +9,7 @@ import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
+import dayjs from 'dayjs';
 
 export const GenericLodgingForm = ({
   trip,
@@ -128,7 +129,7 @@ export const GenericLodgingForm = ({
               miw={rem('200px')}
               clearable
               minDate={trip.startDate}
-              maxDate={trip.endDate}
+              maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               key={form.key('endDate')}
               {...form.getInputProps('endDate')}
             />
