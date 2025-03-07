@@ -1,4 +1,4 @@
-import { Activity, Lodging, Transportation } from '../../../types/trips.ts';
+import { Activity, ItineraryLine, Lodging, Transportation } from '../../../types/trips.ts';
 import dayjs from 'dayjs';
 
 export const buildTransportationIndex = (transportations: Transportation[]) => {
@@ -72,3 +72,11 @@ export function chunk<T>(array: T[], size: number): T[][] {
   const tail = array.slice(size);
   return [head, ...chunk(tail, size)];
 }
+
+export const compareItineraryLine = (a: ItineraryLine, b: ItineraryLine) => {
+  // @ts-expect-error types
+  const aStart: Date = a.departureTime || a.startDate;
+  // @ts-expect-error types
+  const bStart: Date = b.departureTime || b.startDate;
+  return aStart.getTime() - bStart.getTime();
+};

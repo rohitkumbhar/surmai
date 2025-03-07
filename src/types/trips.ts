@@ -180,3 +180,8 @@ export interface Airline extends RecordModel {
   logo?: string;
   name: string;
 }
+
+export type ItineraryLine = (Transportation | Lodging | Activity) & {
+  itineraryType? : string
+};
+
