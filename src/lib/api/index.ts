@@ -58,7 +58,6 @@ export {
   searchPlaces,
   searchAirports,
   searchAirlines,
-  getTimezone,
 } from './pocketbase/lists.ts';
 
 export {

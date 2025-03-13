@@ -1,24 +1,23 @@
 import { pb, pbAdmin } from './pocketbase.ts';
 
-export const loadCities = () => {
-  return pbAdmin.send('/load-city-data', {
+export const loadDataset = (name: string) => {
+  return pbAdmin.send('/api/surmai/datasets/load', {
     method: 'POST',
+    body: { name },
     signal: AbortSignal.timeout(5 * 60 * 1000),
   });
+};
+
+export const loadCities = () => {
+  return loadDataset('places');
 };
 
 export const loadAirports = () => {
-  return pbAdmin.send('/load-airport-data', {
-    method: 'POST',
-    signal: AbortSignal.timeout(5 * 60 * 1000),
-  });
+  return loadDataset('airports');
 };
 
 export const loadAirlines = () => {
-  return pbAdmin.send('/load-airline-data', {
-    method: 'POST',
-    signal: AbortSignal.timeout(5 * 60 * 1000),
-  });
+  return loadDataset('airlines');
 };
 
 export const countPlaces = async () => {
@@ -34,15 +33,6 @@ export const countAirports = async () => {
 export const countAirlines = async () => {
   const { totalItems } = await pb.collection('airlines').getList(1, 1);
   return totalItems;
-};
-
-export const getTimezone = (latitude: string, longitude: string): Promise<string> => {
-  return pb
-    .send('/get-timezone', {
-      method: 'GET',
-      query: { latitude: latitude, longitude: longitude },
-    })
-    .then((result) => result.value);
 };
 
 export const searchPlaces = (query: string) => {

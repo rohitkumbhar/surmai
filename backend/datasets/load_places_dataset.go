@@ -1,12 +1,11 @@
-package routes
+package datasets
 
 import (
-	"backend/datasets"
 	"encoding/json"
+	"errors"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/ringsaturn/tzf"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 	"unicode"
@@ -22,11 +21,11 @@ type Place struct {
 	CountryName string `json:"country_name"`
 }
 
-func LoadPlacesDataset(e *core.RequestEvent, finder tzf.F) error {
+func LoadPlacesDataset(app core.App, finder tzf.F) (int, error) {
 
-	places, err := e.App.FindCollectionByNameOrId("places")
+	places, err := app.FindCollectionByNameOrId("places")
 	if err != nil {
-		return e.BadRequestError("Collection `places` does not exists", nil)
+		return -1, errors.New("collection `places` does not exists")
 	}
 
 	content, err := os.ReadFile("./datasets/places.json")
@@ -41,11 +40,11 @@ func LoadPlacesDataset(e *core.RequestEvent, finder tzf.F) error {
 		log.Fatal("Error during Unmarshal(): ", err)
 	}
 
-	recordCount, err := e.App.CountRecords("places")
+	recordCount, err := app.CountRecords("places")
 	if err != nil {
-		return err
+		return -1, err
 	} else if recordCount > 0 {
-		return e.JSON(http.StatusOK, map[string]int{"count": int(recordCount)})
+		return int(recordCount), nil
 	}
 
 	for _, place := range payload {
@@ -66,16 +65,16 @@ func LoadPlacesDataset(e *core.RequestEvent, finder tzf.F) error {
 			record.Set("timezone", timezone)
 		}
 
-		record.Set("asciiName", datasets.AsciiName(place.Name))
+		record.Set("asciiName", AsciiName(place.Name))
 
-		err := e.App.Save(record)
+		err := app.Save(record)
 		if err != nil {
 			log.Printf("Error saving record: %v", err)
 		}
 
 	}
 
-	return e.JSON(http.StatusOK, map[string]int{"count": len(payload)})
+	return len(payload), nil
 }
 
 func isMn(r rune) bool {

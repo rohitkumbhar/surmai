@@ -1,11 +1,11 @@
-package routes
+package datasets
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/ringsaturn/tzf"
 	"log"
-	"net/http"
 	"os"
 	"strconv"
 )
@@ -18,11 +18,11 @@ type Airport struct {
 	IsoCountry string `json:"iso_country"`
 }
 
-func LoadAirportsDataset(e *core.RequestEvent, finder tzf.F) error {
+func LoadAirportsDataset(app core.App, finder tzf.F) (int, error) {
 
-	places, err := e.App.FindCollectionByNameOrId("airports")
+	places, err := app.FindCollectionByNameOrId("airports")
 	if err != nil {
-		return e.BadRequestError("Collection `airports` does not exists", nil)
+		return -1, errors.New("collection `airports` does not exists")
 	}
 
 	content, err := os.ReadFile("./datasets/airports.json")
@@ -37,11 +37,11 @@ func LoadAirportsDataset(e *core.RequestEvent, finder tzf.F) error {
 		log.Fatal("Error during Unmarshal(): ", err)
 	}
 
-	recordCount, err := e.App.CountRecords("airports")
+	recordCount, err := app.CountRecords("airports")
 	if err != nil {
-		return err
+		return -1, err
 	} else if recordCount > 0 {
-		return e.JSON(http.StatusOK, map[string]int{"count": int(recordCount)})
+		return int(recordCount), nil
 	}
 
 	for _, airport := range payload {
@@ -60,12 +60,11 @@ func LoadAirportsDataset(e *core.RequestEvent, finder tzf.F) error {
 			record.Set("timezone", timezone)
 		}
 
-		err := e.App.Save(record)
+		err := app.Save(record)
 		if err != nil {
 			log.Printf("Error saving record: %v", err)
 		}
-
 	}
 
-	return e.JSON(http.StatusOK, map[string]int{"count": len(payload)})
+	return len(payload), nil
 }

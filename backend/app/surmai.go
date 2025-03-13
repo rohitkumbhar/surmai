@@ -22,24 +22,25 @@ type SurmaiApp struct {
 func (surmai *SurmaiApp) BindRoutes() {
 
 	surmai.Pb.OnServe().BindFunc(func(se *core.ServeEvent) error {
-		se.Router.POST("/impersonate", R.ImpersonateAction).Bind(apis.RequireSuperuserAuth())
 
-		se.Router.POST("/load-airline-data", R.LoadAirlinesDataset).Bind(apis.RequireSuperuserAuth())
+		adminRoutes := se.Router.Group("/api/surmai")
+		adminRoutes.Bind(apis.RequireSuperuserAuth())
+		adminRoutes.POST("/datasets/load", func(e *core.RequestEvent) error {
+			return R.LoadDataset(e, surmai.TimezoneFinder)
+		})
 
-		se.Router.POST("/load-city-data", func(e *core.RequestEvent) error {
-			return R.LoadPlacesDataset(e, surmai.TimezoneFinder)
-		}).Bind(apis.RequireSuperuserAuth())
-
-		se.Router.GET("/load-airport-data", func(e *core.RequestEvent) error {
-			return R.LoadAirportsDataset(e, surmai.TimezoneFinder)
-		}).Bind(apis.RequireAuth())
+		// These routes are handled by React Router to load the appropriate component
+		// It's possible that these routes are bookmarked and are loaded directly
+		// in the browser. Return the index.html and let the react router take over
+		se.Router.GET("/login", R.ShowIndexPage).Bind()
+		se.Router.GET("/trips/{path...}", R.ShowIndexPage).Bind()
+		se.Router.GET("/settings", R.ShowIndexPage).Bind()
+		se.Router.GET("/profile", R.ShowIndexPage).Bind()
+		se.Router.GET("/invitations", R.ShowIndexPage).Bind()
 
 		se.Router.POST("/export-trip", R.ExportTrip).Bind(apis.RequireAuth())
 		se.Router.POST("/import-trip", R.ImportTrip).Bind(apis.RequireAuth())
 		se.Router.GET("/trip/collaborators", R.GetTripCollaborators).Bind(apis.RequireAuth())
-		se.Router.GET("/get-timezone", func(e *core.RequestEvent) error {
-			return R.GetTimeZone(e, surmai.TimezoneFinder)
-		}).Bind(apis.RequireAuth())
 
 		se.Router.GET("/site-settings.json", func(e *core.RequestEvent) error {
 			return R.SiteSettings(e, surmai.DemoMode)
