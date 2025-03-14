@@ -23,6 +23,9 @@ type SurmaiApp struct {
 func (surmai *SurmaiApp) BindRoutes() {
 
 	surmai.Pb.OnServe().BindFunc(func(se *core.ServeEvent) error {
+
+		se.Router.POST("/impersonate", R.ImpersonateAction).Bind(apis.RequireSuperuserAuth())
+
 		adminRoutes := se.Router.Group("/api/surmai/settings")
 		adminRoutes.Bind(apis.RequireSuperuserAuth())
 		adminRoutes.POST("/datasets", func(e *core.RequestEvent) error {
