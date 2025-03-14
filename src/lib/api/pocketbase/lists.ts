@@ -1,7 +1,7 @@
 import { pb, pbAdmin } from './pocketbase.ts';
 
 export const loadDataset = (name: string) => {
-  return pbAdmin.send('/api/surmai/datasets/load', {
+  return pbAdmin.send('/api/surmai/settings/datasets', {
     method: 'POST',
     body: { name },
     signal: AbortSignal.timeout(5 * 60 * 1000),

@@ -3,6 +3,7 @@ package app
 import (
 	"backend/hooks"
 	"backend/jobs"
+	"backend/middleware"
 	R "backend/routes"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
@@ -22,26 +23,31 @@ type SurmaiApp struct {
 func (surmai *SurmaiApp) BindRoutes() {
 
 	surmai.Pb.OnServe().BindFunc(func(se *core.ServeEvent) error {
-
-		adminRoutes := se.Router.Group("/api/surmai")
+		adminRoutes := se.Router.Group("/api/surmai/settings")
 		adminRoutes.Bind(apis.RequireSuperuserAuth())
-		adminRoutes.POST("/datasets/load", func(e *core.RequestEvent) error {
+		adminRoutes.POST("/datasets", func(e *core.RequestEvent) error {
 			return R.LoadDataset(e, surmai.TimezoneFinder)
 		})
 
 		// These routes are handled by React Router to load the appropriate component
 		// It's possible that these routes are bookmarked and are loaded directly
-		// in the browser. Return the index.html and let the react router take over
+		// in the browser. Return the index.html and let the React router take over
 		se.Router.GET("/login", R.ShowIndexPage).Bind()
 		se.Router.GET("/trips/{path...}", R.ShowIndexPage).Bind()
 		se.Router.GET("/settings", R.ShowIndexPage).Bind()
 		se.Router.GET("/profile", R.ShowIndexPage).Bind()
 		se.Router.GET("/invitations", R.ShowIndexPage).Bind()
 
-		se.Router.POST("/export-trip", R.ExportTrip).Bind(apis.RequireAuth())
-		se.Router.POST("/import-trip", R.ImportTrip).Bind(apis.RequireAuth())
-		se.Router.GET("/trip/collaborators", R.GetTripCollaborators).Bind(apis.RequireAuth())
+		// Import a new trip
+		se.Router.POST("/api/surmai/trip/import", R.ImportTrip).Bind(apis.RequireAuth())
 
+		// Ops on existing trips
+		tripRoutes := se.Router.Group("/api/surmai/trip/{tripId}")
+		tripRoutes.Bind(apis.RequireAuth(), middleware.RequireTripAccess())
+		tripRoutes.GET("/collaborators", R.GetTripCollaborators)
+		tripRoutes.POST("/export", R.ExportTrip)
+
+		// Public routes
 		se.Router.GET("/site-settings.json", func(e *core.RequestEvent) error {
 			return R.SiteSettings(e, surmai.DemoMode)
 		}).Bind()

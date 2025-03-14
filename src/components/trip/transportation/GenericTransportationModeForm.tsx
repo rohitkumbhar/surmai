@@ -6,12 +6,12 @@ import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { createTransportationEntry, saveTransportationAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { updateTransportation } from '../../../lib/api/pocketbase/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { transportationConfig } from './config.tsx';
 import dayjs from 'dayjs';
+import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 
 export const GenericTransportationModeForm = ({
   transportationType,

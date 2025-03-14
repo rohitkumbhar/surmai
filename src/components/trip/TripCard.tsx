@@ -53,9 +53,6 @@ export function TripCard({ trip }: { trip: Trip }) {
       </Card.Section>
 
       <Card.Section className={classes.section}>
-        {/*        <Text mt="md" className={classes.label} c={'dimmed'}>
-          {t('destinations', 'Destinations')}
-        </Text>*/}
         <Group gap={7} mt={'md'}>
           {destinationBadge}
         </Group>
