@@ -1,10 +1,10 @@
-package routes
+package datasets
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/pocketbase/pocketbase/core"
 	"log"
-	"net/http"
 	"os"
 )
 
@@ -14,11 +14,11 @@ type Airline struct {
 	Id   string `json:"id"`
 }
 
-func LoadAirlinesDataset(e *core.RequestEvent) error {
+func LoadAirlinesDataset(app core.App) (int, error) {
 
-	places, err := e.App.FindCollectionByNameOrId("airlines")
+	places, err := app.FindCollectionByNameOrId("airlines")
 	if err != nil {
-		return e.BadRequestError("Collection `airlines` does not exists", nil)
+		return -1, errors.New("collection `airlines` does not exists")
 	}
 
 	content, err := os.ReadFile("./datasets/airlines.json")
@@ -33,11 +33,11 @@ func LoadAirlinesDataset(e *core.RequestEvent) error {
 		log.Fatal("Error during Unmarshal(): ", err)
 	}
 
-	recordCount, err := e.App.CountRecords("airlines")
+	recordCount, err := app.CountRecords("airlines")
 	if err != nil {
-		return err
+		return -1, err
 	} else if recordCount > 0 {
-		return e.JSON(http.StatusOK, map[string]int{"count": int(recordCount)})
+		return int(recordCount), nil
 	}
 
 	for _, airline := range payload {
@@ -46,12 +46,11 @@ func LoadAirlinesDataset(e *core.RequestEvent) error {
 		record.Set("name", airline.Name)
 		record.Set("code", airline.Id)
 		record.Set("logo", airline.Logo)
-		err := e.App.Save(record)
+		err := app.Save(record)
 		if err != nil {
 			log.Printf("Error saving record: %v", err)
 		}
-
 	}
 
-	return e.JSON(http.StatusOK, map[string]int{"count": len(payload)})
+	return len(payload), nil
 }

@@ -26,7 +26,6 @@ export const AirlineSelect = ({
   const [searchResults, setSearchResults] = useState<Airline[]>([]);
   const [loading, setLoading] = useState(false);
 
-
   const existingValue =
     // @ts-expect-error its ok
     currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;

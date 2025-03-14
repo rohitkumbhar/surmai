@@ -182,6 +182,5 @@ export interface Airline extends RecordModel {
 }
 
 export type ItineraryLine = (Transportation | Lodging | Activity) & {
-  itineraryType? : string
+  itineraryType?: string;
 };
-

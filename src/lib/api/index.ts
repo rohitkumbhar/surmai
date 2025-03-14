@@ -19,22 +19,11 @@ export {
   listCollaborators,
   createTrip,
   getAttachmentUrl,
-  saveTransportationAttachments,
-  addFlight,
-  deleteTransportation,
-  deleteTransportationAttachment,
-  listTransportations,
   updateTrip,
-  createTransportationEntry,
   uploadTripCoverImage,
   deleteTrip,
   addCollaborators,
   deleteCollaborator,
-  listLodgings,
-  createLodgingEntry,
-  saveLodgingAttachments,
-  updateLodgingEntry,
-  deleteLodging,
   loadEverything,
   exportTripData,
   importTripData,
@@ -58,7 +47,6 @@ export {
   searchPlaces,
   searchAirports,
   searchAirlines,
-  getTimezone,
 } from './pocketbase/lists.ts';
 
 export {
@@ -80,3 +68,15 @@ export {
 export { sendCollaborationInvitation, listInvitations, invitationAction } from './pocketbase/invitations.ts';
 
 export { pocketBaseUrl as apiUrl } from './pocketbase/pocketbase.ts';
+export {
+  listTransportations,
+  createTransportationEntry,
+  saveTransportationAttachments,
+  deleteTransportation,
+  deleteTransportationAttachment,
+} from './pocketbase/transportations.ts';
+export { saveLodgingAttachments } from './pocketbase/lodgings.ts';
+export { deleteLodging } from './pocketbase/lodgings.ts';
+export { updateLodgingEntry } from './pocketbase/lodgings.ts';
+export { createLodgingEntry } from './pocketbase/lodgings.ts';
+export { listLodgings } from './pocketbase/lodgings.ts';

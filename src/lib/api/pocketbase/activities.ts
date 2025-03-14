@@ -3,8 +3,9 @@ import { pb } from './pocketbase.ts';
 
 import { convertSavedToBrowserDate } from '../../time.ts';
 
+const activities = pb.collection('activities');
 export const listActivities = async (tripId: string): Promise<Activity[]> => {
-  const results = await pb.collection('activities').getList(1, 50, {
+  const results = await activities.getList(1, 50, {
     filter: `trip="${tripId}"`,
     sort: 'startDate',
   });
@@ -19,19 +20,19 @@ export const listActivities = async (tripId: string): Promise<Activity[]> => {
 };
 
 export const createActivityEntry = (payload: CreateActivity): Promise<Activity> => {
-  return pb.collection('activities').create(payload);
+  return activities.create(payload);
 };
 
 export const updateActivityEntry = (activityId: string, payload: CreateActivity): Promise<Activity> => {
-  return pb.collection('activities').update(activityId, payload);
+  return activities.update(activityId, payload);
 };
 
 export const deleteActivity = (activityId: string) => {
-  return pb.collection('activities').delete(activityId);
+  return activities.delete(activityId);
 };
 
 export const saveActivityAttachments = (activityId: string, files: File[]) => {
   const formData = new FormData();
   files.forEach((f) => formData.append('attachments', f));
-  return pb.collection('activities').update(activityId, formData);
+  return activities.update(activityId, formData);
 };
