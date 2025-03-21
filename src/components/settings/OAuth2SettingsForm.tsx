@@ -1,10 +1,22 @@
-import { Button, Collapse, Group, PasswordInput, Select, Stack, Switch, Text, TextInput } from '@mantine/core';
+import {
+  Alert,
+  Button,
+  Code,
+  Collapse,
+  Group,
+  PasswordInput,
+  Select,
+  Stack,
+  Switch,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { OAuthSettings, OAuthSettingsFormType } from '../../types/auth.ts';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
-import { IconDeviceFloppy } from '@tabler/icons-react';
-import { setOAuth2Provider } from '../../lib/api';
+import { IconDeviceFloppy, IconWebhook } from '@tabler/icons-react';
+import { apiUrl, setOAuth2Provider } from '../../lib/api';
 import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 interface OAuth2SettingsFormProps {
@@ -79,6 +91,10 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
           />
         </Group>
         <Collapse in={opened}>
+          <Alert title={t('callback_url', 'Callback URL')} icon={<IconWebhook />} mb="lg">
+            {t('callback_url_desc', 'The callback url for your setup is: ')}
+            <Code>{`${apiUrl}/api/oauth2-redirect`}</Code>
+          </Alert>
           <Group mt={'sm'}>
             <Select
               label={t('oauth_provider_label', 'OAuth2 Provider')}
