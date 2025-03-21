@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { authRefresh, currentUser } from '../lib/api';
 import { User } from '../types/auth.ts';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SurmaiContext } from '../app/Surmai.tsx';
 
 export const AuthContext = createContext<{
@@ -12,7 +12,16 @@ export const AuthContext = createContext<{
 export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, setCurrentUser] = useState<User>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { changeColor } = useContext(SurmaiContext);
+
+  useEffect(() => {
+    if (location.pathname !== '/login' && location.pathname !== '/register') {
+      authRefresh().catch(() => {
+        navigate('/login');
+      });
+    }
+  }, [location, navigate]);
 
   useEffect(() => {
     currentUser()
@@ -38,6 +47,5 @@ export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
     user,
     reloadUser,
   };
-
   return user ? <AuthContext.Provider value={value}>{children}</AuthContext.Provider> : null;
 };

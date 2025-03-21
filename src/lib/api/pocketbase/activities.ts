@@ -33,6 +33,12 @@ export const deleteActivity = (activityId: string) => {
 
 export const saveActivityAttachments = (activityId: string, files: File[]) => {
   const formData = new FormData();
-  files.forEach((f) => formData.append('attachments', f));
+  files.forEach((f) => formData.append('attachments+', f));
   return activities.update(activityId, formData);
+};
+
+export const deleteActivityAttachments = (activityId: string, fileName: string) => {
+  return activities.update(activityId, {
+    'attachments-': [fileName],
+  });
 };

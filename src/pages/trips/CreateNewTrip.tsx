@@ -1,22 +1,20 @@
-import { Accordion, Button, Container, FileButton, Group, rem, Text } from '@mantine/core';
+import { Accordion, Button, Container, Group, rem, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconInfoSquare } from '@tabler/icons-react';
-import { createTrip, importTripData } from '../../lib/api';
+import { createTrip } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { CreateTripForm, NewTrip } from '../../types/trips.ts';
 import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
 import { basicInfoFormValidation } from '../../components/trip/basic/validation.ts';
 import { useTranslation } from 'react-i18next';
 import { Header } from '../../components/nav/Header.tsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { showErrorNotification } from '../../lib/notifications.tsx';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [tripDataFile, setTripDataFile] = useState<File | null>(null);
-  const [importing, setImporting] = useState<boolean>(false);
   const [creatingTrip, setCreatingTrip] = useState<boolean>(false);
   const { user } = useCurrentUser();
 
@@ -31,26 +29,6 @@ export const CreateNewTrip = () => {
     },
     validate: basicInfoFormValidation,
   });
-
-  useEffect(() => {
-    if (tripDataFile) {
-      setImporting(true);
-      importTripData(tripDataFile)
-        .then((res) => {
-          navigate(`/trips/${res.tripId}`);
-        })
-        .catch((err) => {
-          showErrorNotification({
-            error: err,
-            title: t('import_failed', 'Import failed'),
-            message: t('import_failed_details', 'Unable to import {{name}}', { name: tripDataFile.name }),
-          });
-        })
-        .finally(() => {
-          setImporting(false);
-        });
-    }
-  }, [tripDataFile, t, navigate]);
 
   return (
     <Container py="xl">
@@ -127,16 +105,7 @@ export const CreateNewTrip = () => {
             <Accordion.Panel>
               <EditTripBasicForm form={form} />
               <Group mt="xl" justify={'flex-end'}>
-                <FileButton onChange={setTripDataFile} accept="application/json" form={'tripData'} name={'tripData'}>
-                  {(props) => {
-                    return (
-                      <Button {...props} loading={importing} variant={'subtle'}>
-                        {t('import_trip', 'Import Trip')}
-                      </Button>
-                    );
-                  }}
-                </FileButton>
-                <Button disabled={importing && !form.isValid()} loading={creatingTrip} type={'submit'}>
+                <Button disabled={!form.isValid()} loading={creatingTrip} type={'submit'}>
                   Create Trip
                 </Button>
               </Group>

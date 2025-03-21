@@ -12,22 +12,52 @@ export const createTrip = async (data: NewTrip) => {
 };
 
 export const getTrip = (tripId: string): Promise<Trip> => {
-  return trips
-    .getOne<TripResponse>(tripId)
-    .then((trip) => {
-      const { startDate, endDate, ...rest } = trip;
-      return {
-        ...rest,
-        startDate: new Date(Date.parse(startDate)),
-        endDate: new Date(Date.parse(endDate)),
-      };
-    });
+  return trips.getOne<TripResponse>(tripId).then((trip) => {
+    const { startDate, endDate, ...rest } = trip;
+    return {
+      ...rest,
+      startDate: new Date(Date.parse(startDate)),
+      endDate: new Date(Date.parse(endDate)),
+    };
+  });
 };
 
 export const listTrips = async (): Promise<Trip[]> => {
   const results = await trips.getFullList<TripResponse>({
     sort: '-created',
     expand: 'collaborators',
+  });
+  return results.map((trip) => {
+    const { expand, startDate, endDate, ...rest } = trip;
+    return {
+      ...rest,
+      ...expand,
+      startDate: new Date(Date.parse(startDate)),
+      endDate: new Date(Date.parse(endDate)),
+    };
+  });
+};
+
+export const listUpcomingTrips = async (): Promise<Trip[]> => {
+  const results = await trips.getFullList<TripResponse>({
+    sort: 'startDate',
+    filter: `endDate > "${new Date().toISOString()}"`,
+  });
+  return results.map((trip) => {
+    const { expand, startDate, endDate, ...rest } = trip;
+    return {
+      ...rest,
+      ...expand,
+      startDate: new Date(Date.parse(startDate)),
+      endDate: new Date(Date.parse(endDate)),
+    };
+  });
+};
+
+export const listPastTrips = async (): Promise<Trip[]> => {
+  const results = await trips.getFullList<TripResponse>({
+    sort: '-endDate',
+    filter: `endDate < "${new Date().toISOString()}"`,
   });
   return results.map((trip) => {
     const { expand, startDate, endDate, ...rest } = trip;

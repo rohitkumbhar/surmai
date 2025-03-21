@@ -33,7 +33,7 @@ export const createTransportationEntry = (payload: CreateTransportation): Promis
 
 export const saveTransportationAttachments = (transportationId: string, files: File[]) => {
   const formData = new FormData();
-  files.forEach((f) => formData.append('attachments', f));
+  files.forEach((f) => formData.append('attachments+', f));
   return transportations.update(transportationId, formData);
 };
 

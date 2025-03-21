@@ -10,6 +10,9 @@ export const pocketBaseClients = {
   admin: new PocketBase(pocketBaseUrl, new LocalAuthStore('pb_admin')),
 };
 
+pocketBaseClients.user.autoCancellation(false);
+pocketBaseClients.admin.autoCancellation(false);
+
 export const pb = pocketBaseClients.user;
 export const pbAdmin = pocketBaseClients.admin;
 

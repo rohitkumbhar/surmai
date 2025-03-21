@@ -1,5 +1,5 @@
 import { Alert, AppShell, Box, Burger, Container, Group, rem, Text } from '@mantine/core';
-import { useDisclosure, useDocumentTitle } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './components/nav/Navbar.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -8,11 +8,12 @@ import { IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useSurmaiContext } from './app/useSurmaiContext.ts';
 import { UserInfo } from './components/user/UserInfo.tsx';
+import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
   const { demoMode } = useSurmaiContext();
-  useDocumentTitle('Surmai');
+  useDefaultPageTitle();
   const { t } = useTranslation();
   return (
     <AppShell

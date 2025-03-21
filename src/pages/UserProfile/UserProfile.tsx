@@ -1,14 +1,14 @@
 import { Container, Paper, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { useDocumentTitle } from '@mantine/hooks';
 import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
 import { Header } from '../../components/nav/Header.tsx';
 import { UserAvatarForm } from '../../components/account/UserAvatarForm.tsx';
 import { ChangePasswordForm } from '../../components/account/ChangePasswordForm.tsx';
+import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
 export const UserProfile = () => {
   const { t } = useTranslation();
-  useDocumentTitle(t('settings', 'Settings'));
+  usePageTitle(t('settings', 'Settings'));
 
   return (
     <Container size={'xl'}>

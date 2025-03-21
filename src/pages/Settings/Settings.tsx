@@ -1,6 +1,5 @@
 import { Container, Tabs, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
-import { useDocumentTitle } from '@mantine/hooks';
 import { Header } from '../../components/nav/Header.tsx';
 import { Configuration } from '../../components/settings/Configuration.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
@@ -10,11 +9,12 @@ import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
 import { UserList } from '../../components/settings/UserList.tsx';
+import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
 export const Settings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  useDocumentTitle(t('site_settings', 'Site Settings'));
+  usePageTitle(t('site_settings', 'Site Settings'));
 
   useEffect(() => {
     adminAuthRefresh().catch(() => {

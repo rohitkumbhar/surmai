@@ -5,7 +5,7 @@ import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteActivity } from '../../../lib/api';
+import { deleteActivity, deleteActivityAttachments } from '../../../lib/api';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { IconActivity } from '@tabler/icons-react';
 import { formatDate, formatTime } from '../../../lib/time.ts';
@@ -120,10 +120,8 @@ export const GenericActivityData = ({
       <Attachments
         entity={activity}
         refetch={refetch}
-        onDelete={() => {
-          return new Promise<unknown>(() => {
-            return true;
-          });
+        onDelete={(attachmentName) => {
+          return deleteActivityAttachments(activity.id, attachmentName);
         }}
       />
     </DataLine>

@@ -8,17 +8,18 @@ import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { TransportationPanel } from '../../components/trip/transportation/TransportationPanel.tsx';
 import { useTranslation } from 'react-i18next';
-import { useDisclosure, useDocumentTitle, useLocalStorage } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
 import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
 import { formatDate } from '../../lib/time.ts';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
-  useDocumentTitle(docTitle);
+  usePageTitle(docTitle);
 
   const { offline } = useSurmaiContext();
   const { tripId } = useParams();
