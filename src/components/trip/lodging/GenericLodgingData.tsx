@@ -6,7 +6,7 @@ import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteLodging } from '../../../lib/api';
+import { deleteLodging, deleteLodgingAttachments } from '../../../lib/api';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
 import { formatDate, formatTime } from '../../../lib/time.ts';
@@ -142,10 +142,8 @@ export const GenericLodgingData = ({
       <Attachments
         entity={lodging}
         refetch={refetch}
-        onDelete={() => {
-          return new Promise<unknown>(() => {
-            return true;
-          });
+        onDelete={(attachmentName) => {
+          return deleteLodgingAttachments(lodging.id, attachmentName);
         }}
       />
     </DataLine>

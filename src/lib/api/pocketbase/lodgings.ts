@@ -33,6 +33,12 @@ export const deleteLodging = (lodgingId: string) => {
 
 export const saveLodgingAttachments = (lodgingId: string, files: File[]) => {
   const formData = new FormData();
-  files.forEach((f) => formData.append('attachments', f));
+  files.forEach((f) => formData.append('attachments+', f));
   return lodgings.update(lodgingId, formData);
+};
+
+export const deleteLodgingAttachments = (lodgingId: string, fileName: string) => {
+  return lodgings.update(lodgingId, {
+    'attachments-': [fileName],
+  });
 };

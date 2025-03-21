@@ -27,6 +27,8 @@ export {
   loadEverything,
   exportTripData,
   importTripData,
+  listUpcomingTrips,
+  listPastTrips,
 } from './pocketbase/trips.ts';
 
 export {
@@ -35,6 +37,7 @@ export {
   saveActivityAttachments,
   updateActivityEntry,
   deleteActivity,
+  deleteActivityAttachments,
 } from './pocketbase/activities.ts';
 
 export {
@@ -75,8 +78,12 @@ export {
   deleteTransportation,
   deleteTransportationAttachment,
 } from './pocketbase/transportations.ts';
-export { saveLodgingAttachments } from './pocketbase/lodgings.ts';
-export { deleteLodging } from './pocketbase/lodgings.ts';
-export { updateLodgingEntry } from './pocketbase/lodgings.ts';
-export { createLodgingEntry } from './pocketbase/lodgings.ts';
-export { listLodgings } from './pocketbase/lodgings.ts';
+
+export {
+  deleteLodging,
+  updateLodgingEntry,
+  createLodgingEntry,
+  saveLodgingAttachments,
+  listLodgings,
+  deleteLodgingAttachments,
+} from './pocketbase/lodgings.ts';
