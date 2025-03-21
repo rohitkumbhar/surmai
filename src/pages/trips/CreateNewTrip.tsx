@@ -105,15 +105,6 @@ export const CreateNewTrip = () => {
             <Accordion.Panel>
               <EditTripBasicForm form={form} />
               <Group mt="xl" justify={'flex-end'}>
-                {/*<FileButton onChange={setTripDataFile} accept="application/json" form={'tripData'} name={'tripData'}>*/}
-                {/*  {(props) => {*/}
-                {/*    return (*/}
-                {/*      <Button {...props} loading={importing} variant={'subtle'}>*/}
-                {/*        {t('import_trip', 'Import Trip')}*/}
-                {/*      </Button>*/}
-                {/*    );*/}
-                {/*  }}*/}
-                {/*</FileButton>*/}
                 <Button disabled={!form.isValid()} loading={creatingTrip} type={'submit'}>
                   Create Trip
                 </Button>
