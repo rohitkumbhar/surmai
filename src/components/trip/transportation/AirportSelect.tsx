@@ -27,7 +27,7 @@ export const AirportSelect = ({
   const [loading, setLoading] = useState(false);
   // @ts-expect-error its ok
   const [value, setValue] = useState<string | undefined>(currentValues ? currentValues[propName] : undefined);
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
   useEffect(() => {
@@ -93,8 +93,9 @@ export const AirportSelect = ({
                   setValue(undefined);
                   setSearchResults([]);
                   setSearch('');
-                  // @ts-expect-error its ok
-                  inputRef.current.value = '';
+                  if (inputRef?.current) {
+                    inputRef.current.value = '';
+                  }
                 }}
                 aria-label="Clear value"
               />
