@@ -1,7 +1,7 @@
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { useForm } from '@mantine/form';
 import { UserSettingsFormType } from '../../types/auth.ts';
-import { Box, Button, Group, Select, TextInput } from '@mantine/core';
+import { Button, Group, Select, Stack, TextInput } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
 import { updateUser } from '../../lib/api';
@@ -46,7 +46,7 @@ export const UserSettingsForm = () => {
   };
 
   return (
-    <Box mt={'sm'}>
+    <Stack mt={'sm'}>
       <form onSubmit={form.onSubmit(handleSubmission)}>
         <TextInput
           mt={'sm'}
@@ -111,6 +111,6 @@ export const UserSettingsForm = () => {
           </Button>
         </Group>
       </form>
-    </Box>
+    </Stack>
   );
 };
