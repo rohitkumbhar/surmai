@@ -30,7 +30,7 @@ export const AirlineSelect = ({
     // @ts-expect-error its ok
     currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;
   const [value, setValue] = useState<string | undefined>(existingValue);
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
   useEffect(() => {
@@ -92,8 +92,9 @@ export const AirlineSelect = ({
                   setValue(undefined);
                   setSearchResults([]);
                   setSearch('');
-                  // @ts-expect-error its ok
-                  inputRef.current.value = '';
+                  if (inputRef?.current) {
+                    inputRef.current.value = '';
+                  }
                 }}
                 aria-label="Clear value"
               />

@@ -19,7 +19,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   );
 
   const combobox = useCombobox();
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useClickOutside(() => combobox.closeDropdown());
 
   useEffect(() => {
@@ -45,7 +45,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   ));
 
   const handleValueSelect = (val: string) => {
-    if (inputRef.current) {
+    if (inputRef?.current) {
       inputRef.current.value = '';
     }
 
