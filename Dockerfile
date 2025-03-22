@@ -1,4 +1,4 @@
-FROM --platform=$BUILDPLATFORM node:20 AS frontend
+FROM --platform=$BUILDPLATFORM node:23 AS frontend
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -15,7 +15,6 @@ COPY tsconfig.json .
 COPY tsconfig.node.json .
 COPY vite.config.ts .
 
-RUN npm install -g npm@10.3.0 # For windows
 RUN npm install --no-audit
 RUN npm run build
 
