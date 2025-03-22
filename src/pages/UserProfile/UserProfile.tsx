@@ -1,10 +1,11 @@
-import { Container, Paper, Text, Title } from '@mantine/core';
+import { Container, Paper, SimpleGrid, Tabs, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
 import { Header } from '../../components/nav/Header.tsx';
 import { UserAvatarForm } from '../../components/account/UserAvatarForm.tsx';
 import { ChangePasswordForm } from '../../components/account/ChangePasswordForm.tsx';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { IconInfoCircle, IconKey } from '@tabler/icons-react';
 
 export const UserProfile = () => {
   const { t } = useTranslation();
@@ -17,26 +18,31 @@ export const UserProfile = () => {
           {t('user_profile', 'User Profile')}
         </Text>
       </Header>
-      <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'}>
-        <Title order={3} fw={500}>
-          {t('user.basic_info', 'Basic Information')}
-        </Title>
-        <Text fz="xs" c="dimmed" mt={3} mb="xl">
-          {t('user.basic_info_desc', 'Update your basic information and preferences')}
-        </Text>
-        <UserAvatarForm />
-        <UserSettingsForm />
-      </Paper>
-
-      <Paper withBorder radius="md" mt={'sm'} p="xl" bg={'var(--mantine-color-body)'}>
-        <Title order={3} fw={500}>
-          {t('user.security_info', 'Security')}
-        </Title>
-        <Text fz="xs" c="dimmed" mt={3} mb="xl">
-          {t('user.security_info_desc', 'Update your security preferences')}
-        </Text>
-        <ChangePasswordForm />
-      </Paper>
+      <Tabs defaultValue="basic_info">
+        <Tabs.List>
+          <Tabs.Tab value="basic_info" leftSection={<IconInfoCircle size={12} />}>
+            {t('user.basic_info', 'Basic Information')}
+          </Tabs.Tab>
+          <Tabs.Tab value="security" leftSection={<IconKey size={12} />}>
+            {t('user.security_info', 'Security')}
+          </Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="basic_info">
+          <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'} mt={'md'}>
+            <Title order={4}>{t('user.basic_info_desc', 'Update your basic information and preferences')}</Title>
+            <SimpleGrid cols={2}>
+              <UserSettingsForm />
+              <UserAvatarForm />
+            </SimpleGrid>
+          </Paper>
+        </Tabs.Panel>
+        <Tabs.Panel value="security">
+          <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'} mt={'md'}>
+            <Title order={4}>{t('user.security_info_desc', 'Update your security preferences')}</Title>
+            <ChangePasswordForm />
+          </Paper>
+        </Tabs.Panel>
+      </Tabs>
     </Container>
   );
 };

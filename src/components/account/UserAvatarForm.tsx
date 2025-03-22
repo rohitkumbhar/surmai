@@ -1,4 +1,4 @@
-import { AspectRatio, Avatar, Button, Group } from '@mantine/core';
+import { AspectRatio, Avatar, Button, Stack } from '@mantine/core';
 import { getAttachmentUrl, updateUserAvatar } from '../../lib/api';
 import { openContextModal } from '@mantine/modals';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
@@ -12,13 +12,13 @@ export const UserAvatarForm = () => {
   const isMobile = useMediaQuery('(max-width: 50em)');
 
   return (
-    <Group mt={'sm'}>
+    <Stack mt={'lg'} align={'center'}>
       <AspectRatio ratio={400 / 400}>
         <Avatar
           name={user?.name}
           color={'initials'}
           src={user?.avatar && getAttachmentUrl(user, user.avatar)}
-          size={100}
+          size={300}
           radius="md"
         />
       </AspectRatio>
@@ -38,7 +38,9 @@ export const UserAvatarForm = () => {
                 aspectRatio: 400 / 400,
                 saveUploadedImage: (uploadedImage: File | Blob) => {
                   updateUserAvatar(user.id, uploadedImage).then(() => {
-                    reloadUser && reloadUser();
+                    if (reloadUser) {
+                      reloadUser();
+                    }
                   });
                 },
               },
@@ -48,6 +50,6 @@ export const UserAvatarForm = () => {
           {t('change_avatar', 'Change Avatar')}
         </Button>
       )}
-    </Group>
+    </Stack>
   );
 };
