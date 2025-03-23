@@ -14,7 +14,14 @@ export const PDFViewer = ({ documentUrl }: { documentUrl: string }) => {
 
   return (
     <div>
-      <Document file={documentUrl} onLoadSuccess={onDocumentLoadSuccess} className={styles.fitContainer}>
+      <Document
+        file={documentUrl}
+        onLoadSuccess={onDocumentLoadSuccess}
+        onLoadError={(error) => {
+          console.log('load error', error);
+        }}
+        className={styles.fitContainer}
+      >
         <Stack gap={'xs'}>
           {Array.from(new Array(numPages), (_el, index) => (
             <Page

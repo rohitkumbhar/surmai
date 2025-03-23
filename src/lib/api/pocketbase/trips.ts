@@ -84,8 +84,12 @@ export const deleteTrip = (tripId: string) => {
   return trips.delete(tripId);
 };
 
-export const getAttachmentUrl = (record: Trip | Transportation | Lodging | Activity | User, fileName: string) => {
-  return pb.files.getURL(record, fileName);
+export const getAttachmentUrl = (
+  record: Trip | Transportation | Lodging | Activity | User,
+  fileName: string,
+  options?: { [key: string]: string }
+) => {
+  return pb.files.getURL(record, fileName, options);
 };
 
 export const uploadTripCoverImage = (tripId: string, coverImage: File | Blob) => {

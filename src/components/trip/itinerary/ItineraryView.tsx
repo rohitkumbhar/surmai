@@ -80,7 +80,7 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
       <Accordion chevronPosition="right" variant="separated" multiple={true} mt={'sm'}>
         {(tripWeeks[activePage - 1] || []).map((day) => {
           return (
-            <Accordion.Item value={day.id} key={day.id}>
+            <Accordion.Item value={day.id} key={'top_' + day.id}>
               <Accordion.Control
                 icon={
                   <IconCalendar
@@ -107,15 +107,15 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
                 <Stack>
                   {getDailyItinerary(day.value.toISOString()).map((entry: ItineraryLine) => {
                     return (
-                      <Fragment key={day.id}>
+                      <Fragment key={entry.id}>
                         {entry.itineraryType === 'transportation' && (
-                          <TransportationLine transportation={entry as Transportation} day={day.value} key={day.id} />
+                          <TransportationLine transportation={entry as Transportation} day={day.value} />
                         )}
                         {entry.itineraryType === 'lodging' && (
-                          <LodgingLine lodging={entry as Lodging} day={day.value} key={day.id} />
+                          <LodgingLine lodging={entry as Lodging} day={day.value} />
                         )}
                         {entry.itineraryType === 'activity' && (
-                          <ActivityLine activity={entry as Activity} day={day.value} key={day.id} />
+                          <ActivityLine activity={entry as Activity} day={day.value} />
                         )}
                       </Fragment>
                     );
