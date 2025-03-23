@@ -76,13 +76,13 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconPhoto style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('basic.add_cover_image', 'Add Cover Image')}
+          {t('basic.cover_image', 'Cover Image')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
             openContextModal({
               modal: 'collaboratorsForm',
-              title: t('basic.add_collaborators', 'Add Collaborators'),
+              title: t('basic.invite_collaborators', 'Invite Collaborators'),
               radius: 'md',
               withCloseButton: false,
               fullScreen: isMobile,
@@ -97,7 +97,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconUsers style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('basic.add_cover_image', 'Add Collaborators')}
+          {t('basic.collaborators', 'Collaborators')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item

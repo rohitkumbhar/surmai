@@ -34,6 +34,7 @@ export const MyTrips = () => {
     isPending: upcomingTripsPending,
     data: upcomingTrips,
     error: upcomingTripsError,
+    refetch: upcomingTripsRefetch,
   } = useQuery<Trip[]>({
     queryKey: ['upcoming_trips'],
     queryFn: listUpcomingTrips,
@@ -42,6 +43,7 @@ export const MyTrips = () => {
   const {
     isPending: pastTripsPending,
     data: pastTrips,
+    refetch: pastTripsRefetch,
     // error: pastTripsError,
   } = useQuery<Trip[]>({
     queryKey: ['past_trips'],
@@ -63,7 +65,15 @@ export const MyTrips = () => {
   const cards = (data: Trip[]) => {
     return data?.map((trip) => (
       <ErrorBoundary key={trip.id} onError={logError} fallback={<p>Uh oh!</p>}>
-        {trip && <TripCard trip={trip} />}
+        {trip && (
+          <TripCard
+            trip={trip}
+            onSave={async () => {
+              await upcomingTripsRefetch();
+              await pastTripsRefetch();
+            }}
+          />
+        )}
       </ErrorBoundary>
     ));
   };

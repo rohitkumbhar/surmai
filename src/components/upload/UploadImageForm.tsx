@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { Button, Center, Stack, Stepper } from '@mantine/core';
+import { Button, Center, Stack, Stepper, Text } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { CroppedImage } from '../../types/trips.ts';
 import { getCroppedImg } from '../../lib/image.ts';
 import { ImageDropZone } from './ImageDropZone.tsx';
 import { CropModal } from './CropModal.tsx';
+import { useTranslation } from 'react-i18next';
 
 export const UploadImageForm = ({
   context,
@@ -16,7 +17,7 @@ export const UploadImageForm = ({
 }>) => {
   const [uploadedFile, setUploadedFile] = useState<File | undefined>();
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<CroppedImage | null>(null);
-
+  const { t } = useTranslation();
   const { aspectRatio, saveUploadedImage } = innerProps;
   const [active, setActive] = useState(0);
   const nextStep = () => setActive((current) => (current < 2 ? current + 1 : current));
@@ -46,6 +47,7 @@ export const UploadImageForm = ({
           />
         </Stepper.Step>
         <Stepper.Step label="Crop Image">
+          <Text size={'sm'}>{t('scroll_to_zoom', 'Scroll to zoom')}</Text>
           {uploadedFile && <CropModal file={uploadedFile} onCropComplete={onCropComplete} aspectRatio={aspectRatio} />}
           <Center>
             <Button w={'fit-content'} mt={'sm'} mb={'sm'} onClick={completeUpload}>

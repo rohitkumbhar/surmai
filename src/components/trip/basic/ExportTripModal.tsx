@@ -38,7 +38,9 @@ export const ExportTripModal = ({
 
   return (
     <Container>
-      <Text>Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.</Text>
+      <Text size={'sm'}>
+        Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.
+      </Text>
       <Center>
         {!downloadLink && (
           <Button loading={preparing} onClick={prepareExport}>

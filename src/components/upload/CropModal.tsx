@@ -12,15 +12,20 @@ export const CropModal = ({
   onCropComplete: (val: CroppedImage, val2: CroppedImage) => void;
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState(1);
   return (
     <div style={{ height: '20rem', position: 'relative' }}>
       <Cropper
         image={URL.createObjectURL(file)}
         crop={crop}
+        zoom={zoom}
         aspect={aspectRatio}
         onCropChange={setCrop}
+        onZoomChange={setZoom}
         zoomWithScroll={true}
         onCropComplete={onCropComplete}
+        showGrid={true}
+        cropShape={'rect'}
       />
     </div>
   );
