@@ -110,7 +110,7 @@ export const getUserByEmail = (email: string) => {
 };
 
 export const listAllUsers = (page: number): Promise<{ items: User[]; totalItems: number; totalPages: number }> => {
-  return pbAdmin.collection<User>('users').getList(page, 2, { sort: 'name' });
+  return pbAdmin.collection<User>('users').getList(page, 25, { sort: 'name' });
 };
 
 export const authRefresh = () => {
