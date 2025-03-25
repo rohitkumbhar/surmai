@@ -16,6 +16,7 @@ import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx
 import { formatDate } from '../../lib/time.ts';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
@@ -115,6 +116,7 @@ export const ViewTrip = () => {
         <Tabs.List>
           <Tabs.Tab value="organization">{t('organization', 'Organization')}</Tabs.Tab>
           <Tabs.Tab value="itinerary">{t('itinerary', 'Itinerary')}</Tabs.Tab>
+          <Tabs.Tab value="notes">{t('notes', 'Notes')}</Tabs.Tab>
         </Tabs.List>
 
         <Tabs.Panel value="organization">
@@ -229,6 +231,9 @@ export const ViewTrip = () => {
         </Tabs.Panel>
         <Tabs.Panel value="itinerary">
           <ItineraryView trip={trip} />
+        </Tabs.Panel>
+        <Tabs.Panel value="notes">
+          <TripNotes refetch={refetch} trip={trip} />
         </Tabs.Panel>
       </Tabs>
     </Container>

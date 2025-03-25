@@ -23,6 +23,7 @@ export type Trip = {
   ownerId: string;
   name: string;
   description?: string;
+  notes?: string;
   startDate: Date;
   endDate: Date;
   coverImage?: string;

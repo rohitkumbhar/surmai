@@ -30,6 +30,7 @@ export {
   importTripData,
   listUpcomingTrips,
   listPastTrips,
+  saveTripNotes,
 } from './pocketbase/trips.ts';
 
 export {

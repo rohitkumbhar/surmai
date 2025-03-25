@@ -110,6 +110,12 @@ export const deleteCollaborator = (tripId: string, userId: string): Promise<Coll
   });
 };
 
+export const saveTripNotes = (tripId: string, notes: string): Promise<Trip> => {
+  return trips.update(tripId, {
+    notes: notes,
+  });
+};
+
 export const loadEverything = (tripId: string) => {
   return import('pdfjs-dist/build/pdf.worker.mjs?url')
     .then((pdfjsWorker) => {
