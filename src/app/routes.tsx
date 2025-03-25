@@ -9,7 +9,7 @@ import { ViewTrip } from '../pages/trips/ViewTrip.tsx';
 import { SignIn } from '../pages/SignIn/SignIn.tsx';
 import { SignUp } from '../pages/SignUp/SignUp.tsx';
 import { UserProfile } from '../pages/UserProfile/UserProfile.tsx';
-import { Invitations } from '../pages/Invitations.tsx';
+import { Invitations } from '../pages/Invitations/Invitations.tsx';
 
 export const buildRouter = () => {
   return createBrowserRouter([

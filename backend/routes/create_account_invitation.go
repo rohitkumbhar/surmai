@@ -1,18 +1,17 @@
-package hooks
+package routes
 
 import (
-	bt "backend/types"
 	"bytes"
-	"errors"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/mailer"
+	"github.com/pocketbase/pocketbase/tools/security"
 	"html/template"
+	"net/http"
 	"net/mail"
-	"time"
 )
 
-const InvitationEmail = `
+const AccountInvitationEmail = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org=/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -86,10 +85,10 @@ const InvitationEmail = `
 </head>
 <body>
 <p>Hello,</p>
-<p>{{ .senderName }} has invited you to collaborate on "{{ .tripName }}"</p>
+<p>{{ .senderName }} been invited to create an account on Surmai"</p>
 <p>Invitation Message:</p>
 <p style="border:1px solid #ccc; padding: 5px 5px 5px 5px"> {{ .invitationMessage }}</p>
-<a class="btn" href="{{ .applicationUrl }}/invitations" target="_blank">View Invitation</a>
+<p>Create an account using this <a class="btn" href="{{ .applicationUrl }}/register?code={{ .invitationCode }}" target="_blank">sign up link</a></p>
 <p>This invitation will expire in 1 week.</p>
 <p><i>If you do not have an account, you will have to create with this email address.</i></p>
 <p></p>
@@ -101,108 +100,83 @@ const InvitationEmail = `
 </html>
 `
 
-func CreateInvitationEventHook(e *core.RecordRequestEvent) error {
+func CreateAccountInvitation(e *core.RequestEvent) error {
 
 	info, err := e.RequestInfo()
 	if err != nil {
 		return err
 	}
 
-	record := e.Record
-	tripId := record.GetString("trip")
-	recipientEmail := record.GetString("recipientEmail")
+	fromId := info.Auth.Id
+	recipientEmail := info.Body["email"].(string)
+	message := info.Body["message"].(string)
 
-	trip, err := e.App.FindRecordById("trips", tripId)
-	if err != nil {
-		return err
-	}
-
-	// user can edit the trip
-	accessRecord, err := e.App.CanAccessRecord(trip, info, trip.Collection().UpdateRule)
-	if err != nil {
-		return err
-	}
-
-	if !accessRecord {
-		return errors.New("user cannot access this record")
-	}
-
-	// Verify open invitations for the trip
-	existingInvitations, err := e.App.FindAllRecords("invitations",
-		dbx.NewExp("trip = {:tripId} and recipientEmail = {:email} and status = {:status}",
-			dbx.Params{"email": recipientEmail, "tripId": tripId, "status": "open"}))
+	existingInvitations, err := e.App.FindAllRecords("account_invitations",
+		dbx.NewExp("fromId = {:fromId} and recipientEmail = {:recipientEmail}",
+			dbx.Params{"recipientEmail": recipientEmail, "fromId": fromId}))
 	if err != nil {
 		return err
 	}
 
 	if len(existingInvitations) > 0 {
-		// don't add another invitation
-		return nil
+		code := existingInvitations[0].GetString("invitationCode")
+		data := make(map[string]string)
+		data["invitationCode"] = code
+		return e.JSON(http.StatusOK, data)
 	}
 
-	senderId, metadata, err2 := buildMetadata(e, info, trip)
-	if err2 != nil {
-		return err2
+	// create new record
+	collection, err := e.App.FindCollectionByNameOrId("account_invitations")
+	if err != nil {
+		return err
 	}
 
-	record.Set("metadata", metadata)
-	record.Set("from", senderId)
-	record.Set("expiresOn", time.Now().Add(24*7*time.Hour))
-	record.Set("status", bt.Open.String())
-
-	err = e.Next()
-
+	// generate new invitation code
+	invitationCode := security.RandomString(10)
+	record := core.NewRecord(collection)
+	record.Set("recipientEmail", recipientEmail)
+	record.Set("fromId", fromId)
+	record.Set("invitationCode", invitationCode)
+	record.Set("message", message)
+	err = e.App.Save(record)
 	if err != nil {
 		return err
 	}
 
 	// send email
+	err = sendEmail(e, info, invitationCode, message, recipientEmail)
+	if err != nil {
+		return err
+	}
 
+	response := make(map[string]string)
+	response["invitationCode"] = invitationCode
+	return e.JSON(http.StatusOK, response)
+}
+
+func sendEmail(e *core.RequestEvent, info *core.RequestInfo, invitationCode string, message string, recipientEmail string) error {
 	var emailContents bytes.Buffer
-
-	invitationEmailTemplate := template.Must(template.New("InvitationEmail").Parse(InvitationEmail))
-	err = invitationEmailTemplate.Execute(&emailContents, map[string]interface{}{
+	invitationEmailTemplate := template.Must(template.New("AccountInvitationEmail").Parse(AccountInvitationEmail))
+	err := invitationEmailTemplate.Execute(&emailContents, map[string]interface{}{
 		"senderName":        info.Auth.GetString("name"),
 		"applicationUrl":    e.App.Settings().Meta.AppURL,
-		"tripId":            tripId,
-		"tripName":          trip.GetString("name"),
-		"invitationMessage": record.GetString("message"),
+		"invitationCode":    invitationCode,
+		"invitationMessage": message,
 	})
 	if err != nil {
 		return err
 	}
 
-	message := &mailer.Message{
+	email := &mailer.Message{
 		From: mail.Address{
 			Address: e.App.Settings().Meta.SenderAddress,
 			Name:    e.App.Settings().Meta.SenderName,
 		},
 		To:      []mail.Address{{Address: recipientEmail}},
-		Subject: "[surmai] Invitation to collaborate",
+		Subject: "[surmai] Invitation to create an account",
 		HTML:    emailContents.String(),
 	}
+	_ = e.App.NewMailClient().Send(email)
 
-	return e.App.NewMailClient().Send(message)
-}
-
-func buildMetadata(e *core.RecordRequestEvent, info *core.RequestInfo, trip *core.Record) (string, map[string]interface{}, error) {
-	senderId := info.Auth.Id
-	sender, err := e.App.FindRecordById("users", senderId)
-	if err != nil {
-		return "", nil, err
-	}
-
-	metadata := make(map[string]interface{})
-	senderMetadata := make(map[string]string)
-	tripMetadata := make(map[string]interface{})
-
-	tripMetadata["name"] = trip.GetString("name")
-	tripMetadata["description"] = trip.GetString("description")
-	tripMetadata["startDate"] = trip.GetDateTime("startDate")
-	tripMetadata["endDate"] = trip.GetDateTime("endDate")
-	metadata["trip"] = tripMetadata
-
-	senderMetadata["name"] = sender.GetString("name")
-	metadata["sender"] = senderMetadata
-	return senderId, metadata, nil
+	return nil
 }

@@ -109,3 +109,10 @@ export const setOAuth2Provider = (provider: OAuthSettingsFormType) => {
     });
   }
 };
+
+export const sendUserAccountInvitation = (email: string, message: string) => {
+  return pbAdmin.send('/api/surmai/settings/invite-user', {
+    method: 'POST',
+    body: { email: email, message: message },
+  });
+};

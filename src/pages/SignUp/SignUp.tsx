@@ -1,7 +1,7 @@
 import { Alert, Button, Container, Paper, Text, TextInput } from '@mantine/core';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { createUserWithPassword } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { FancyPasswordInput } from '../../components/account/FancyPasswordInput.tsx';
@@ -10,8 +10,15 @@ import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const SignUp = () => {
   const [apiError, setApiError] = useState<string>();
+  const [searchParams] = useSearchParams();
+
+  const invitationCode = searchParams.get('code');
   const navigate = useNavigate();
   const { signupsEnabled } = useSurmaiContext();
+
+  console.log('invitationCode =>', !!invitationCode, 'signupsEnabled =>', signupsEnabled);
+
+  const [allowSignup, _] = useState(signupsEnabled || !!invitationCode);
 
   const { t } = useTranslation();
   const createAccount = async (values: {
@@ -22,6 +29,7 @@ export const SignUp = () => {
   }) => {
     const { email, password, fullName } = values;
     createUserWithPassword({
+      invitationCode,
       email,
       name: fullName,
       password,
@@ -56,7 +64,7 @@ export const SignUp = () => {
             {t('create_account', 'Create An Account')}
           </Text>
 
-          {!signupsEnabled && (
+          {!allowSignup && (
             <Alert mt={'sm'} title={t('signups_disabled', 'Signups are disabled for this instance')}></Alert>
           )}
 
@@ -91,7 +99,7 @@ export const SignUp = () => {
 
             {<FancyPasswordInput fieldName={'password'} form={form as UseFormReturnType<unknown>} />}
 
-            <Button fullWidth mt="xl" type={'submit'} disabled={!signupsEnabled}>
+            <Button fullWidth mt="xl" type={'submit'} disabled={!allowSignup}>
               {t('create_account', 'Create An Account')}
             </Button>
           </form>

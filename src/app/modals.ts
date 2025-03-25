@@ -1,8 +1,9 @@
 import { EditBasicInfoForm } from '../components/trip/basic/EditBasicInfoForm.tsx';
 import { UploadImageForm } from '../components/upload/UploadImageForm.tsx';
-import { Collaborators } from '../components/trip/basic/Collaborators.tsx';
+import { Collaborators } from '../components/trip/basic/collaborators/Collaborators.tsx';
 import { AttachmentViewer } from '../components/trip/attachments/AttachmentViewer.tsx';
 import { ExportTripModal } from '../components/trip/basic/ExportTripModal.tsx';
+import { InviteUserModal } from '../components/settings/InviteUserModal.tsx';
 
 export const modals = {
   editBasicInfoForm: EditBasicInfoForm,
@@ -10,6 +11,7 @@ export const modals = {
   collaboratorsForm: Collaborators,
   attachmentViewer: AttachmentViewer,
   exportTripModal: ExportTripModal,
+  inviteUsersFormModal: InviteUserModal,
 };
 
 declare module '@mantine/modals' {

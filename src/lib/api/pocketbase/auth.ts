@@ -3,7 +3,8 @@ import { User } from '../../../types/auth.ts';
 import { ClientResponseError } from 'pocketbase';
 
 export const authWithUsernameAndPassword = async ({ email, password }: { email: string; password: string }) => {
-  return pbAdmin.admins
+  return pbAdmin
+    .collection('_superusers')
     .authWithPassword(email, password)
     .then(async () => {
       const result = await pbAdmin.send('/impersonate', {
@@ -38,11 +39,13 @@ export const logoutCurrentUser = async () => {
 };
 
 export const createUserWithPassword = async ({
+  invitationCode,
   email,
   name,
   password,
   passwordConfirm,
 }: {
+  invitationCode: string | null;
   email: string;
   name: string;
   password: string;
@@ -56,22 +59,46 @@ export const createUserWithPassword = async ({
     name: name,
   };
 
-  return new Promise<User>((resolve, reject) => {
-    pb.collection('users')
-      .create(data)
-      .then((record) => {
-        resolve(record as unknown as User);
+  if (invitationCode) {
+    return new Promise<User>((resolve, reject) => {
+      pb.send(`/api/surmai/create-user`, {
+        method: 'POST',
+        body: {
+          ...data,
+          invitationCode,
+        },
       })
-      .catch((err: ClientResponseError) => {
-        const messages = [err.message];
-        Object.entries(err.data || {}).forEach(([, val]) => {
-          if (val.message) {
-            messages.push(val.message);
-          }
+        .then((record) => {
+          resolve(record as unknown as User);
+        })
+        .catch((err: ClientResponseError) => {
+          const messages = [err.message];
+          Object.entries(err.data || {}).forEach(([, val]) => {
+            if (val.message) {
+              messages.push(val.message);
+            }
+          });
+          reject(messages.join('.'));
         });
-        reject(messages.join('.'));
-      });
-  });
+    });
+  } else {
+    return new Promise<User>((resolve, reject) => {
+      pb.collection('users')
+        .create(data)
+        .then((record) => {
+          resolve(record as unknown as User);
+        })
+        .catch((err: ClientResponseError) => {
+          const messages = [err.message];
+          Object.entries(err.data || {}).forEach(([, val]) => {
+            if (val.message) {
+              messages.push(val.message);
+            }
+          });
+          reject(messages.join('.'));
+        });
+    });
+  }
 };
 
 export const isAdmin = () => {
@@ -82,11 +109,8 @@ export const getUserByEmail = (email: string) => {
   return pb.collection('users').getFirstListItem(`email="${email}"`);
 };
 
-export const listAllUsers = (): Promise<User[]> => {
-  return pbAdmin
-    .collection<User>('users')
-    .getList(1, 50)
-    .then((results) => results.items);
+export const listAllUsers = (page: number): Promise<{ items: User[]; totalItems: number; totalPages: number }> => {
+  return pbAdmin.collection<User>('users').getList(page, 2, { sort: 'name' });
 };
 
 export const authRefresh = () => {
