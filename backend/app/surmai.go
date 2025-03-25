@@ -41,6 +41,7 @@ func (surmai *SurmaiApp) BindRoutes() {
 		se.Router.GET("/settings", R.ShowIndexPage).Bind()
 		se.Router.GET("/profile", R.ShowIndexPage).Bind()
 		se.Router.GET("/invitations", R.ShowIndexPage).Bind()
+		se.Router.GET("/register", R.ShowIndexPage).Bind()
 
 		// Create invited user
 		se.Router.POST("/api/surmai/create-user", R.CreateInvitedUser).Bind()
