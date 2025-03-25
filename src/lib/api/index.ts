@@ -13,6 +13,7 @@ export {
   startOAuthFlow,
   sendResetPasswordRequest,
 } from './pocketbase/auth.ts';
+
 export {
   getTrip,
   listTrips,
@@ -66,6 +67,7 @@ export {
   disableUserSignups,
   enableUserSignups,
   disableOAuth2Provider,
+  sendUserAccountInvitation,
 } from './pocketbase/settings.ts';
 
 export { sendCollaborationInvitation, listInvitations, invitationAction } from './pocketbase/invitations.ts';

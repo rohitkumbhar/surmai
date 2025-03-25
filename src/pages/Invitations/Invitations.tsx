@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { Header } from '../components/nav/Header.tsx';
+import { Header } from '../../components/nav/Header.tsx';
 import { Anchor, Card, Container, Group, Text } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
-import { Invitation } from '../types/invitations.ts';
-import { listInvitations } from '../lib/api';
-import { TripCollaborationInvitationCard } from '../components/invitations/TripCollaborationInvitationCard.tsx';
+import { Invitation } from '../../types/invitations.ts';
+import { listInvitations } from '../../lib/api';
+import { TripCollaborationInvitationCard } from '../../components/invitations/TripCollaborationInvitationCard.tsx';
 import { useNavigate } from 'react-router-dom';
-import { usePageTitle } from '../lib/hooks/usePageTitle.ts';
+import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
 export const Invitations = () => {
   const { data: invitations, refetch: refetchInvitations } = useQuery<Invitation[]>({

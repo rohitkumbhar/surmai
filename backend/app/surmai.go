@@ -28,6 +28,7 @@ func (surmai *SurmaiApp) BindRoutes() {
 
 		adminRoutes := se.Router.Group("/api/surmai/settings")
 		adminRoutes.Bind(apis.RequireSuperuserAuth())
+		adminRoutes.POST("/invite-user", R.CreateAccountInvitation)
 		adminRoutes.POST("/datasets", func(e *core.RequestEvent) error {
 			return R.LoadDataset(e, surmai.TimezoneFinder)
 		})
@@ -40,6 +41,9 @@ func (surmai *SurmaiApp) BindRoutes() {
 		se.Router.GET("/settings", R.ShowIndexPage).Bind()
 		se.Router.GET("/profile", R.ShowIndexPage).Bind()
 		se.Router.GET("/invitations", R.ShowIndexPage).Bind()
+
+		// Create invited user
+		se.Router.POST("/api/surmai/create-user", R.CreateInvitedUser).Bind()
 
 		// Import a new trip
 		se.Router.POST("/api/surmai/trip/import", R.ImportTrip).Bind(apis.RequireAuth())
@@ -90,8 +94,8 @@ func (surmai *SurmaiApp) BindEventHooks() {
 		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
 	})
 
-	surmai.Pb.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateInvitationEventHook)
-	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateInvitationEventHook)
+	surmai.Pb.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateTripCollaborationInvitation)
+	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
 }
 
 func (surmai *SurmaiApp) StartJobs() {

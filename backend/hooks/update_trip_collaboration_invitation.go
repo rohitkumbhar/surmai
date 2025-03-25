@@ -5,7 +5,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
-func UpdateInvitationEventHook(e *core.RecordRequestEvent) error {
+func UpdateTripCollaborationInvitation(e *core.RecordRequestEvent) error {
 
 	info, err := e.RequestInfo()
 	if err != nil {

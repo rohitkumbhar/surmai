@@ -3,11 +3,13 @@ import { deleteUserAdminAction, getAttachmentUrl, listAllUsers } from '../../lib
 import {
   ActionIcon,
   Avatar,
+  Button,
   Card,
   Container,
   Group,
   LoadingOverlay,
   Modal,
+  Pagination,
   ScrollArea,
   Table,
   Text,
@@ -20,7 +22,7 @@ import { ChangeUserPasswordForm } from './ChangeUserPasswordForm.tsx';
 import { useState } from 'react';
 import { User } from '../../types/auth.ts';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { openConfirmModal } from '@mantine/modals';
+import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { showDeleteNotification } from '../../lib/notifications.tsx';
 
 export const UserList = () => {
@@ -31,17 +33,18 @@ export const UserList = () => {
 
   const [changePasswordUser, setChangePasswordUser] = useState<User | undefined>();
   const isMobile = useMediaQuery('(max-width: 50em)');
+  const [activePage, setPage] = useState(1);
 
   const {
     isPending: fetchUserListPending,
-    data,
+    data: result,
     refetch: refetchAllUsers,
   } = useQuery({
-    queryKey: ['listAllUsers'],
-    queryFn: () => listAllUsers(),
+    queryKey: ['listAllUsers', activePage],
+    queryFn: () => listAllUsers(activePage),
   });
 
-  const users = data || [];
+  const users = result?.items || [];
   const rows = users.map((item) => {
     return (
       <Table.Tr key={item.id}>
@@ -157,7 +160,27 @@ export const UserList = () => {
           overlayProps={{ radius: 'sm', blur: 2 }}
           loaderProps={{ type: 'bars' }}
         />
-        <ScrollArea>
+        <Group justify={'flex-end'} gap={'xl'}>
+          {result && result.totalPages > 1 && (
+            <Pagination value={activePage} onChange={setPage} total={result.totalPages} />
+          )}
+          <Button
+            onClick={() => {
+              openContextModal({
+                modal: 'inviteUsersFormModal',
+                title: t('invite_new_user', 'Invite New User'),
+                radius: 'md',
+                withCloseButton: false,
+                size: 'auto',
+                fullScreen: isMobile,
+                innerProps: {},
+              });
+            }}
+          >
+            Invite User
+          </Button>
+        </Group>
+        <ScrollArea mt={'md'}>
           <Table miw={800} verticalSpacing="sm" striped>
             <Table.Thead>
               <Table.Tr>
