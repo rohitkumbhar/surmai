@@ -7,6 +7,10 @@ import Underline from '@tiptap/extension-underline';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import Highlight from '@tiptap/extension-highlight';
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
@@ -14,6 +18,8 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import { Button, Group, Stack } from '@mantine/core';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { InsertTableControl } from './InsertTableControl.tsx';
+import styles from './TripNotes.module.css';
 
 const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: string) => void }) => {
   const { t } = useTranslation();
@@ -23,10 +29,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       StarterKit,
       getTaskListExtension(TipTapTaskList),
       TaskItem.configure({
-        nested: true,
-        HTMLAttributes: {
-          class: 'test-item',
-        },
+        nested: false,
       }),
       Underline,
       Link,
@@ -36,14 +39,29 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       Color,
       TextStyle,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      Placeholder.configure({ placeholder: 'Add your trip notes here...' }),
+      Placeholder.configure({
+        placeholder: t(
+          'notes_placeholder',
+          'You can use notes to jot down anything that is not covered ' +
+            'under Organization or just for brainstorming with collaborators.' +
+            'For example, a task list or links to local attractions.'
+        ),
+      }),
+      Table.configure({
+        resizable: true,
+        handleWidth: 5,
+        lastColumnResizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content: notes || '',
   });
 
   return (
     <Stack>
-      <RichTextEditor editor={editor} variant={'subtle'}>
+      <RichTextEditor editor={editor} mih={200}>
         <RichTextEditor.Toolbar sticky stickyOffset={60}>
           <RichTextEditor.ColorPicker
             colors={[
@@ -106,12 +124,16 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
           </RichTextEditor.ControlsGroup>
 
           <RichTextEditor.ControlsGroup>
+            <InsertTableControl />
+          </RichTextEditor.ControlsGroup>
+
+          <RichTextEditor.ControlsGroup>
             <RichTextEditor.Undo />
             <RichTextEditor.Redo />
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
 
-        <RichTextEditor.Content />
+        <RichTextEditor.Content className={styles.tiptap} />
       </RichTextEditor>
       <Group justify={'flex-end'}>
         <Button
