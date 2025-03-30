@@ -1,5 +1,14 @@
 {
-  "basic": {
-    "visiting": "Visitar"
-  }
+    "basic": {
+        "visiting": "Visitar"
+    },
+    "accept": "Aceptar",
+    "account_creation_failed": "No se puede crear una cuenta",
+    "account_invitation_email_is_not_enabled": "El envío de correos electrónicos no ha sido habilitado en este servidor.",
+    "actions": "Acciones",
+    "activities": "Actividades",
+    "activity_add_new": "Agregar actividad",
+    "activity_address": "Dirección",
+    "activity_attachments_desc": "Sube cualquier documento relacionado, por ejemplo, el correo de confirmación.",
+    "activity_deleted": "La actividad {{name}} ha sido eliminada."
 }
