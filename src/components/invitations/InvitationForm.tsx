@@ -45,11 +45,11 @@ export const InvitationForm = ({
         miw={'500px'}
         name={'email'}
         leftSection={<IconMail size={18} stroke={1.5} />}
-        label={t('basic.email_address', 'Email Address')}
+        label={t('email_address', 'Email Address')}
         mt={'md'}
         required
         type={'email'}
-        description={t('basic.recipient_email_description', 'Email address for the recipient')}
+        description={t('recipient_email_description', 'Email address for the recipient')}
         key={form.key('email')}
         {...form.getInputProps('email')}
       />
@@ -59,8 +59,8 @@ export const InvitationForm = ({
         required
         resize={'both'}
         name={'message'}
-        label={t('basic.invitation_message', 'Message')}
-        description={t('basic.invitation_message_description', 'A brief message with the invitation. 200 chars limit.')}
+        label={t('invitation_message', 'Message')}
+        description={t('invitation_message_description', 'A brief message with the invitation. 200 chars limit.')}
         placeholder=""
         key={form.key('message')}
         {...form.getInputProps('message')}
@@ -76,7 +76,7 @@ export const InvitationForm = ({
         >
           {t('cancel', 'Cancel')}
         </Button>
-        <Button type={'submit'}>{t('invite', 'Send Invitation')}</Button>
+        <Button type={'submit'}>{t('send_invitation', 'Send Invitation')}</Button>
       </Group>
     </form>
   );

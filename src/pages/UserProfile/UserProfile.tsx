@@ -21,15 +21,15 @@ export const UserProfile = () => {
       <Tabs defaultValue="basic_info">
         <Tabs.List>
           <Tabs.Tab value="basic_info" leftSection={<IconInfoCircle size={12} />}>
-            {t('user.basic_info', 'Basic Information')}
+            {t('user_basic_info', 'Basic Information')}
           </Tabs.Tab>
           <Tabs.Tab value="security" leftSection={<IconKey size={12} />}>
-            {t('user.security_info', 'Security')}
+            {t('user_security_info', 'Security')}
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="basic_info">
           <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'} mt={'md'}>
-            <Title order={4}>{t('user.basic_info_desc', 'Update your basic information and preferences')}</Title>
+            <Title order={4}>{t('user_basic_info_desc', 'Update your basic information and preferences')}</Title>
             <SimpleGrid cols={2}>
               <UserSettingsForm />
               <UserAvatarForm />
@@ -38,7 +38,7 @@ export const UserProfile = () => {
         </Tabs.Panel>
         <Tabs.Panel value="security">
           <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'} mt={'md'}>
-            <Title order={4}>{t('user.security_info_desc', 'Update your security preferences')}</Title>
+            <Title order={4}>{t('user_security_info_desc', 'Update your security preferences')}</Title>
             <ChangePasswordForm />
           </Paper>
         </Tabs.Panel>

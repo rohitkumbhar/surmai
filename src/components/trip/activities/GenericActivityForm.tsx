@@ -84,20 +84,20 @@ export const GenericActivityForm = ({
           <Stack>
             <TextInput
               name={'name'}
-              label={t('activity.name', 'Name')}
+              label={t('activity_name', 'Name')}
               required
               key={form.key('name')}
               {...form.getInputProps('name')}
             />
             <Textarea
               name={'address'}
-              label={t('activity.description', 'Description')}
+              label={t('activity_description', 'Description')}
               key={form.key('description')}
               {...form.getInputProps('description')}
             />
             <Textarea
               name={'address'}
-              label={t('activity.address', 'Address')}
+              label={t('activity_address', 'Address')}
               required
               key={form.key('address')}
               {...form.getInputProps('address')}
@@ -108,7 +108,7 @@ export const GenericActivityForm = ({
               highlightToday
               valueFormat="lll"
               name={'startDate'}
-              label={t('activity.start_date', 'Date/Time')}
+              label={t('activity_start_date', 'Date/Time')}
               clearable
               required
               minDate={trip.startDate}
@@ -131,7 +131,7 @@ export const GenericActivityForm = ({
                 <Title size={'md'}>
                   {t('attachments', 'Attachments')}
                   <Text size={'xs'} c={'dimmed'}>
-                    {t('lodging.attachments_desc', 'Upload any related documents e.g. confirmation email')}
+                    {t('activity_attachments_desc', 'Upload any related documents e.g. confirmation email')}
                   </Text>
                 </Title>
               </Group>

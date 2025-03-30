@@ -84,14 +84,14 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
             mb={'sm'}
             onLabel="ON"
             offLabel="OFF"
-            label={t('oauth_enabled', 'Enable OAuth2 Login')}
+            label={t('enable_oauth2_action', 'Enable OAuth2 Login')}
             size="md"
             key={form.key('enabled')}
             {...form.getInputProps('enabled', { type: 'checkbox' })}
           />
         </Group>
         <Collapse in={opened}>
-          <Alert title={t('callback_url', 'Callback URL')} icon={<IconWebhook />} mb="lg">
+          <Alert title={t('oauth2_callback_url', 'Callback URL')} icon={<IconWebhook />} mb="lg">
             {t('callback_url_desc', 'The callback url for your setup is: ')}
             <Code>{`${apiUrl}/api/oauth2-redirect`}</Code>
           </Alert>
@@ -143,7 +143,7 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
               label={t('oauth_auth_url', 'Auth URL')}
               type={'url'}
               required={form.getValues().name === 'oidc'}
-              description={t('auth_url_description', 'Authorization Endpoint')}
+              description={t('oauth_url_description', 'Authorization Endpoint')}
               key={form.key('authURL')}
               {...form.getInputProps('authURL')}
             />
@@ -162,7 +162,7 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
               name={'userInfoURL'}
               label={t('oauth_info_url', 'User Info URL')}
               type={'url'}
-              description={t('info_url_description', 'User Info Endpoint')}
+              description={t('oauth_info_url_description', 'User Info Endpoint')}
               key={form.key('userInfoURL')}
               {...form.getInputProps('userInfoURL')}
             />

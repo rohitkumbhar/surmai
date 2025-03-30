@@ -34,7 +34,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('activity.add_new', 'Add Activity')}
+        title={t('activity_add_new', 'Add Activity')}
         onClose={() => {
           closeForm();
         }}
@@ -63,7 +63,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
           <Title order={5}>{t('activities', 'Activities')}</Title>
           {data.length === 0 && (
             <Card withBorder>
-              <Text c={'dimmed'}>{t('activities.no_data', 'No Activities')}</Text>
+              <Text c={'dimmed'}>{t('activity_no_data', 'No Activities')}</Text>
             </Card>
           )}
           {data.map((t: Activity) => {

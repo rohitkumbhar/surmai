@@ -37,7 +37,7 @@ export const CarRentalData = ({
         opened={opened}
         size="auto"
         fullScreen={isMobile}
-        title={t('transportation.edit_rental_car', 'Edit Rental Car')}
+        title={t('transportation_edit_rental_car', 'Edit Rental Car')}
         onClose={() => {
           close();
         }}
@@ -78,7 +78,7 @@ export const CarRentalData = ({
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.pickup', 'Pickup')}
+            {t('transportation_pickup', 'Pickup')}
           </Text>
           <Text size="sm">{rental.origin}</Text>
           <Text size="sm">
@@ -88,7 +88,7 @@ export const CarRentalData = ({
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.drop_off', 'Drop Off')}
+            {t('transportation_drop_off', 'Drop Off')}
           </Text>
           <Text size="sm">{rental.destination}</Text>
           <Text size="sm">{`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(rental.arrivalTime)}`}</Text>
@@ -96,22 +96,24 @@ export const CarRentalData = ({
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.provider', 'Provider')}
+            {t('transportation_provider', 'Provider')}
           </Text>
           <Text size="md">{rental.metadata.rentalCompany}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.reservation', 'Reservation')}
+            {t('transportation_reservation', 'Reservation')}
           </Text>
-          <Text size="md">{rental.metadata.confirmationCode || 'Unknown'}</Text>
+          <Text size="md">{rental.metadata.confirmationCode || t('unknown', 'Unknown')}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{rental.cost.value ? `${rental.cost.value} ${rental.cost.currency || ''}` : 'Unknown'}</Text>
+          <Text size="md">
+            {rental.cost.value ? `${rental.cost.value} ${rental.cost.currency || ''}` : t('unknown', 'Unknown')}
+          </Text>
         </Grid.Col>
       </Grid>
       <Attachments

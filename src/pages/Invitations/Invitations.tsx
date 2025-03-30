@@ -16,7 +16,7 @@ export const Invitations = () => {
 
   const navigate = useNavigate();
   const { t } = useTranslation();
-  usePageTitle(t('invitations', 'Invitations'));
+  usePageTitle(t('invitations', t('invitations', 'Invitations')));
 
   return (
     <Container size={'xl'}>

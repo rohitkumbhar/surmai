@@ -45,7 +45,7 @@ export const GenericLodgingData = ({
           onConfirm: () => {
             deleteLodging(lodging.id).then(() => {
               showDeleteNotification({
-                title: t('lodging.section_name', 'Lodging'),
+                title: t('lodging_section_name', 'Lodging'),
                 message: t('lodging_deleted', 'Lodging at {{name}} has been deleted', { name: lodging.name }),
               });
               refetch();
@@ -58,7 +58,7 @@ export const GenericLodgingData = ({
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('lodging.edit_' + lodging.type, 'Edit Lodging')}
+        title={t('lodging_edit_' + lodging.type, 'Edit Lodging')}
         onClose={() => {
           closeForm();
         }}
@@ -99,7 +99,7 @@ export const GenericLodgingData = ({
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.check_in', 'Check-In')}
+            {t('lodging_check_in', 'Check-In')}
           </Text>
           <Text size="md">{`${formatDate(i18n.language, lodging.startDate)}`}</Text>
           <Text size="md">{`${formatTime(lodging.startDate)}`}</Text>
@@ -107,7 +107,7 @@ export const GenericLodgingData = ({
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.check_out', 'Check-Out')}
+            {t('lodging_check_out', 'Check-Out')}
           </Text>
           <Text size="md">{`${formatDate(i18n.language, lodging.endDate)}`}</Text>
           <Text size="md">{`${formatTime(lodging.endDate)}`}</Text>
@@ -115,19 +115,19 @@ export const GenericLodgingData = ({
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.name', 'Name')}
+            {t('lodging_name', 'Name')}
           </Text>
           <Text size="md">{lodging.name}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.address', 'Address')}
+            {t('lodging_address', 'Address')}
           </Text>
           <Text size="md">{lodging.address}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.confirmation_code', 'Confirmation Code')}
+            {t('lodging_confirmation_code', 'Confirmation Code')}
           </Text>
           <Text size="md">{lodging.confirmationCode || ''}</Text>
         </Grid.Col>

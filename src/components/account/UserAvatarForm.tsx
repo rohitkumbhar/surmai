@@ -29,7 +29,7 @@ export const UserAvatarForm = () => {
           onClick={() => {
             openContextModal({
               modal: 'uploadImageForm',
-              title: t('basic.add_cover_image', 'Add Cover Image'),
+              title: t('trip_add_cover_image', 'Add Cover Image'),
               radius: 'md',
               withCloseButton: false,
               size: 'auto',

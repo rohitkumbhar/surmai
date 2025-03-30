@@ -11,16 +11,13 @@ import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 export const SignUp = () => {
   const [apiError, setApiError] = useState<string>();
   const [searchParams] = useSearchParams();
+  const { t } = useTranslation();
 
   const invitationCode = searchParams.get('code');
   const navigate = useNavigate();
   const { signupsEnabled } = useSurmaiContext();
-
-  console.log('invitationCode =>', !!invitationCode, 'signupsEnabled =>', signupsEnabled);
-
   const [allowSignup, _] = useState(signupsEnabled || !!invitationCode);
 
-  const { t } = useTranslation();
   const createAccount = async (values: {
     email: string;
     fullName: string;
@@ -52,7 +49,7 @@ export const SignUp = () => {
     },
 
     validate: {
-      email: (value) => (/^\S+@\S+$/.test(value) ? null : t('account.invalid_email', 'Invalid email')),
+      email: (value) => (/^\S+@\S+$/.test(value) ? null : t('error_invalid_email', 'Invalid email address')),
     },
   });
 

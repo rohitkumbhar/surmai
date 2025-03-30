@@ -18,7 +18,6 @@ export const Settings = () => {
 
   useEffect(() => {
     adminAuthRefresh().catch(() => {
-      console.error('Could not refresh admin credentials. Logging out');
       logoutCurrentUser().then(() => {
         navigate(0);
       });
@@ -42,10 +41,10 @@ export const Settings = () => {
             {t('smtp_settings', 'SMTP Settings')}
           </Tabs.Tab>
           <Tabs.Tab value="security" leftSection={<IconKey size={12} />}>
-            {t('site_settings', 'Configuration')}
+            {t('site_configuration', 'Configuration')}
           </Tabs.Tab>
           <Tabs.Tab value="datasets" leftSection={<IconSettings size={12} />}>
-            {t('dataset_section_title', 'Datasets')}
+            {t('dataset_section', 'Datasets')}
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="users">

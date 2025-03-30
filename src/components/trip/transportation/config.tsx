@@ -14,7 +14,7 @@ export const transportationConfig: { [key: string]: any } = {
         return (
           <TextInput
             name={'from'}
-            label={i18n.t('transportation.from', 'From')}
+            label={i18n.t('transportation_from', 'From')}
             required
             key={form.key('origin')}
             {...form.getInputProps('origin')}
@@ -25,7 +25,7 @@ export const transportationConfig: { [key: string]: any } = {
         return (
           <TextInput
             name={'to'}
-            label={i18n.t('transportation.to', 'To')}
+            label={i18n.t('transportation_to', 'To')}
             required
             key={form.key('destination')}
             {...form.getInputProps('destination')}
@@ -36,7 +36,7 @@ export const transportationConfig: { [key: string]: any } = {
         return (
           <TextInput
             name={'provider'}
-            label={i18n.t('transportation.provider', 'Provider')}
+            label={i18n.t('transportation_provider', 'Provider')}
             required
             key={form.key('provider')}
             {...form.getInputProps('provider')}
@@ -46,8 +46,8 @@ export const transportationConfig: { [key: string]: any } = {
     },
 
     strings: {
-      providerLabel: i18n.t('transportation.provider', 'Provider'),
-      reservationLabel: i18n.t('transportation.reservation', 'Reservation'),
+      providerLabel: i18n.t('transportation_provider', 'Provider'),
+      reservationLabel: i18n.t('transportation_reservation', 'Reservation'),
     },
   },
   flight: {
@@ -57,7 +57,7 @@ export const transportationConfig: { [key: string]: any } = {
           <AirportSelect
             form={form}
             propName={'origin'}
-            label={i18n.t('transportation.from', 'From')}
+            label={i18n.t('transportation_from', 'From')}
             required={true}
             withAsterisk={true}
           />
@@ -68,7 +68,7 @@ export const transportationConfig: { [key: string]: any } = {
           <AirportSelect
             form={form}
             propName={'destination'}
-            label={i18n.t('transportation.to', 'To')}
+            label={i18n.t('transportation_to', 'To')}
             required={true}
             withAsterisk={true}
           />
@@ -79,7 +79,7 @@ export const transportationConfig: { [key: string]: any } = {
           <AirlineSelect
             form={form}
             propName={'provider'}
-            label={i18n.t('transportation.airline', 'Airline')}
+            label={i18n.t('transportation_airline', 'Airline')}
             required={true}
             withAsterisk={true}
           />
@@ -88,8 +88,8 @@ export const transportationConfig: { [key: string]: any } = {
     },
 
     strings: {
-      providerLabel: i18n.t('transportation.airline', 'Airline'),
-      reservationLabel: i18n.t('transportation.confirmation_code', 'Confirmation Code'),
+      providerLabel: i18n.t('transportation_airline', 'Airline'),
+      reservationLabel: i18n.t('transportation_confirmation_code', 'Confirmation Code'),
     },
   },
 };

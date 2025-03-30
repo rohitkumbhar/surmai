@@ -15,19 +15,19 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
     <Stack align="stretch" justify="center" gap="md">
       <TextInput
         name={'tripName'}
-        label={t('basic.trip_name', 'Name')}
+        label={t('trip_name', 'Name')}
         placeholder="Name"
         mt={'md'}
         required
-        description={t('basic.trip_name_description', 'A short name for your trip e.g. Summer 2025 in Costa Rica')}
+        description={t('trip_name_description', 'A short name for your trip e.g. Summer 2025 in Costa Rica')}
         key={form.key('name')}
         {...form.getInputProps('name')}
       />
 
       <Textarea
         name={'tripDesc'}
-        label={t('basic.trip_description', 'Brief Description')}
-        description={t('basic.trip_description_description', 'Optional: Brief description of the trip')}
+        label={t('trip_description', 'Brief Description')}
+        description={t('trip_description_description', 'Optional: Brief description of the trip')}
         placeholder=""
         key={form.key('description')}
         {...form.getInputProps('description')}
@@ -38,9 +38,9 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
       <DatePickerInput
         type="range"
         required
-        label={t('basic.trip_dates', 'Trip Dates')}
+        label={t('trip_dates', 'Trip Dates')}
         description={t(
-          'basic.trip_dates_description',
+          'trip_dates_description',
           'Select the start and end dates of the trip. These dates are in your timezone'
         )}
         placeholder="Pick date"
@@ -49,11 +49,11 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
       />
 
       <TagsInput
-        label={t('basic.travellers')}
+        label={t('trip_travellers')}
         key={form.key('participants')}
         {...form.getInputProps('participants')}
         acceptValueOnBlur
-        description={t('basic.travellers_description')}
+        description={t('trip_travellers_description')}
         placeholder="Enter names"
       />
     </Stack>

@@ -113,7 +113,7 @@ export const AirlineSelect = ({
           onBlur={() => {
             combobox.closeDropdown();
           }}
-          placeholder={t('transportation.airline_name', 'Airline Name')}
+          placeholder={t('transportation_airline_name', 'Airline Name')}
         />
       </Combobox.Target>
       <Combobox.Dropdown>

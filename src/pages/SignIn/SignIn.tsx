@@ -66,7 +66,7 @@ export const SignIn = () => {
     },
     validate: {
       email: (value) => {
-        return /^\S+@\S+$/.test(value) ? null : 'Invalid email';
+        return /^\S+@\S+$/.test(value) ? null : t('error_invalid_email', 'Invalid email address');
       },
     },
   });
@@ -85,14 +85,14 @@ export const SignIn = () => {
         <Container>
           <Text>
             {t(
-              'reset_password_desc',
-              'Enter the email address associated with your account. If an account exists, password reset instructions will be email to this address.'
+              'reset_password_action_description',
+              'Enter the email address associated with your account. If an account exists, password reset instructions will be emailed to this address.'
             )}
           </Text>
 
           <TextInput
             name={'resetEmailAddress'}
-            label={t('reset_email', 'Email Address')}
+            label={t('reset_email_address', 'Email Address')}
             placeholder="you@domain.com"
             mt={'md'}
             onChange={(event) => setResetEmailAddress(event.target.value)}
@@ -138,7 +138,7 @@ export const SignIn = () => {
       <Container size={420} my={40}>
         <Paper withBorder shadow="md" p={30} mt={30} radius="md" bg="var(--mantine-primary-color-light)">
           <Text size="lg" ta="center" mt={5}>
-            Welcome to Surmai
+            {t('welcome_to_surmai', 'Welcome to Surmai')}
           </Text>
           {oauthInfo && (
             <>
@@ -153,7 +153,7 @@ export const SignIn = () => {
                   Sign in with {oauthInfo.displayName}
                 </Button>
               </Group>
-              <Divider label="Or continue with email" labelPosition="center" my="lg" />
+              <Divider label={t('or_use_email_login', 'Or continue with email')} labelPosition="center" my="lg" />
             </>
           )}
 
@@ -166,7 +166,7 @@ export const SignIn = () => {
           <form onSubmit={form.onSubmit((values) => signInWithEmailAndPassword(values))}>
             <TextInput
               name={'email'}
-              label={t('email', 'Email')}
+              label={t('email_address', 'Email Address')}
               placeholder="you@domain.com"
               mt={'md'}
               required

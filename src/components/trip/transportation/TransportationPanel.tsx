@@ -40,7 +40,7 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('transportation.add_' + newTransportationType, 'Add Transportation')}
+        title={`${t('transportation_add_new', 'Add new')} ${t(newTransportationType, '{{ type }}', { type: newTransportationType })}`}
         onClose={() => {
           closeForm();
         }}
@@ -62,7 +62,7 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         opened={carRentalFormOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('transportation.add_rental_car', 'Add Rental Car')}
+        title={t('transportation_add_rental_car', 'Add Rental Car')}
         onClose={() => {
           closeRentalForm();
         }}
@@ -92,10 +92,10 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         />
       </Flex>
       <Stack mt={'sm'}>
-        <Title order={5}>{t('transportation.travel_timeline', 'Travel Timeline')}</Title>
+        <Title order={5}>{t('transportation_travel_timeline', 'Travel Timeline')}</Title>
         {tickets.length === 0 && (
           <Card withBorder>
-            <Text c={'dimmed'}>{t('transportation.no_tickets', 'No Tickets')}</Text>
+            <Text c={'dimmed'}>{t('transportation_no_tickets', 'No Tickets')}</Text>
           </Card>
         )}
         {tickets.map((t: Transportation) => {
@@ -113,10 +113,10 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
       </Stack>
 
       <Stack mt={'sm'}>
-        <Title order={5}>{t('transportation.travel_rentals', 'Rentals')}</Title>
+        <Title order={5}>{t('transportation_travel_rentals', 'Rentals')}</Title>
         {rentalAgreements.length === 0 && (
           <Card withBorder>
-            <Text c={'dimmed'}>{t('transportation.no_tickets', 'No Rentals')}</Text>
+            <Text c={'dimmed'}>{t('transportation_no_rentals', 'No Rentals')}</Text>
           </Card>
         )}
         {rentalAgreements.map((t: Transportation) => {

@@ -10,7 +10,7 @@ export const AddActivitiesMenu = ({ onClick }: { onClick: () => void }) => {
       leftSection={<IconCalendar style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
       pr={12}
     >
-      {t('activity.add_new', 'Add Activity')}
+      {t('activity_add_new', 'Add Activity')}
     </Button>
   );
 };

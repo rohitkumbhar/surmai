@@ -56,7 +56,7 @@ export const Collaborators = ({
         >
           <Text size={'sm'}>
             {t(
-              'email_is_not_enabled',
+              'collaborator_invitation_email_is_not_enabled',
               'Sending emails has not been enabled on this server. The recipient will not receive a notification email. They will see the invitation when they log into their account.'
             )}
           </Text>

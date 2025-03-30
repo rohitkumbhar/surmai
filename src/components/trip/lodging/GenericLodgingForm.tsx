@@ -92,7 +92,7 @@ export const GenericLodgingForm = ({
           <Stack>
             <TextInput
               name={'name'}
-              label={t('lodging.name', 'Name')}
+              label={t('lodging_name', 'Name')}
               required
               key={form.key('name')}
               {...form.getInputProps('name')}
@@ -100,7 +100,7 @@ export const GenericLodgingForm = ({
 
             <Textarea
               name={'address'}
-              label={t('lodging.address', 'Address')}
+              label={t('lodging_address', 'Address')}
               required
               key={form.key('address')}
               {...form.getInputProps('address')}
@@ -111,7 +111,7 @@ export const GenericLodgingForm = ({
               highlightToday
               valueFormat="lll"
               name={'startDate'}
-              label={t('lodging.start_date', 'Check-In')}
+              label={t('lodging_start_date', 'Check-In')}
               clearable
               required
               minDate={trip.startDate}
@@ -124,7 +124,7 @@ export const GenericLodgingForm = ({
             <DateTimePicker
               valueFormat="lll"
               name={'endDate'}
-              label={t('lodging.end_date', 'Check-Out')}
+              label={t('lodging_end_date', 'Check-Out')}
               required
               miw={rem('200px')}
               clearable
@@ -137,7 +137,7 @@ export const GenericLodgingForm = ({
           <Group>
             <TextInput
               name={'confirmationCode'}
-              label={t('lodging.confirmationCode', 'ConfirmationCode')}
+              label={t('lodging_confirmationCode', 'ConfirmationCode')}
               key={form.key('confirmationCode')}
               {...form.getInputProps('confirmationCode')}
             />
@@ -155,7 +155,7 @@ export const GenericLodgingForm = ({
                 <Title size={'md'}>
                   {t('attachments', 'Attachments')}
                   <Text size={'xs'} c={'dimmed'}>
-                    {t('lodging.attachments_desc', 'Upload any related documents e.g. confirmation email')}
+                    {t('lodging_attachments_desc', 'Upload any related documents e.g. confirmation email')}
                   </Text>
                 </Title>
               </Group>

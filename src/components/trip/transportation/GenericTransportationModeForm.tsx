@@ -109,7 +109,7 @@ export const GenericTransportationModeForm = ({
             valueFormat="lll"
             name={'departureTime'}
             miw={rem('200px')}
-            label={t('transportation.departure_time', 'Departure')}
+            label={t('transportation_departure_time', 'Departure')}
             clearable
             required
             minDate={trip.startDate}
@@ -123,7 +123,7 @@ export const GenericTransportationModeForm = ({
           <DateTimePicker
             valueFormat="lll"
             name={'arrivalTime'}
-            label={t('transportation.arrival_time', 'Arrival')}
+            label={t('transportation_arrival_time', 'Arrival')}
             required
             miw={rem('200px')}
             minDate={trip.startDate}
@@ -156,7 +156,7 @@ export const GenericTransportationModeForm = ({
               <Title size={'md'}>
                 {t('attachments', 'Attachments')}
                 <Text size={'xs'} c={'dimmed'}>
-                  {t('transportation.attachments_desc', 'Upload any related documents e.g. confirmation email')}
+                  {t('transportation_attachments_desc', 'Upload any related documents e.g. confirmation email')}
                 </Text>
               </Title>
             </Group>
