@@ -1,0 +1,59 @@
+{
+  "input": [
+    "src/**/*.{js,jsx,ts,tsx}"
+  ],
+  "output": "./",
+  "options": {
+    "debug": true,
+    "removeUnusedKeys": true,
+    "sort": true,
+    "attr": {
+      "list": [
+        "data-i18n"
+      ],
+      "extensions": [
+        ".html",
+        ".htm"
+      ]
+    },
+    "func": {
+      "list": [
+        "t",
+        "i18next.t",
+        "i18n.t"
+      ],
+      "extensions": [
+        ".ts",
+        ".tsx",
+        ".js",
+        ".jsx"
+      ]
+    },
+    "trans": {
+      "component": "Trans",
+      "i18nKey": "i18nKey",
+      "defaultsKey": "defaults",
+      "extensions": [],
+      "fallbackKey": false
+    },
+    "lngs": [
+      "en-US"
+    ],
+    "defaultLng": "en-US",
+    "defaultValue": "",
+    "resource": {
+      "loadPath": "./public/locales/{{lng}}/translation.json",
+      "savePath": "./public/locales/{{lng}}/translation.json",
+      "jsonIndent": 2
+    },
+    "nsSeparator": ":",
+    "keySeparator": ".",
+    "pluralSeparator": "_",
+    "contextSeparator": "_",
+    "contextDefaultValues": [],
+    "interpolation": {
+      "prefix": "{{",
+      "suffix": "}}"
+    }
+  }
+}

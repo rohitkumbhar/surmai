@@ -58,7 +58,7 @@ export const Configuration = () => {
                   .then(() => {
                     showSaveSuccessNotification({
                       title: t('settings', 'Settings'),
-                      message: t('user_signups_disable', 'User signups disabled'),
+                      message: t('user_signups_disabled', 'User signups disabled'),
                     });
                   });
               } else {
@@ -67,7 +67,7 @@ export const Configuration = () => {
                   .then(() => {
                     showSaveSuccessNotification({
                       title: t('settings', 'Settings'),
-                      message: t('user_signups_enable', 'User signups enabled'),
+                      message: t('user_signups_enabled', 'User signups enabled'),
                     });
                   });
               }

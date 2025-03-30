@@ -133,7 +133,7 @@ export const UserList = () => {
         {t('users_section', 'Users')}
       </Title>
       <Text fz="xs" c="dimmed" mt={3} mb="xl">
-        {t('users_section_description', 'Manage site users')}
+        {t('users_section_description', 'Manage Users')}
       </Text>
 
       <div style={{ width: '100%' }}>
@@ -184,8 +184,8 @@ export const UserList = () => {
           <Table miw={800} verticalSpacing="sm" striped>
             <Table.Thead>
               <Table.Tr>
-                <Table.Th>{t('name', 'Name')}</Table.Th>
-                <Table.Th>{t('email', 'Email')}</Table.Th>
+                <Table.Th>{t('user_full_name', 'Name')}</Table.Th>
+                <Table.Th>{t('email_address', 'Email Address')}</Table.Th>
                 <Table.Th>{t('actions', 'Actions')}</Table.Th>
               </Table.Tr>
             </Table.Thead>

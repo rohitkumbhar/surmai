@@ -8,7 +8,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
     <Menu transitionProps={{ transition: 'pop-top-right' }} position="bottom-end" width={150} withinPortal>
       <Menu.Target>
         <Button rightSection={<IconChevronDown style={{ width: rem(18), height: rem(18) }} stroke={1.5} />} pr={12}>
-          {t('transportation.add_new', 'Add new')}
+          {t('transportation_add_new', 'Add new')}
         </Button>
       </Menu.Target>
       <Menu.Dropdown>
@@ -18,7 +18,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           }}
           leftSection={<IconPlane style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('transportation.flight', 'Flight')}
+          {t('transportation_flight', 'Flight')}
         </Menu.Item>
 
         <Menu.Item
@@ -27,7 +27,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           }}
           leftSection={<IconBus style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('transportation.bus', 'Bus')}
+          {t('transportation_bus', 'Bus')}
         </Menu.Item>
 
         <Menu.Item
@@ -36,7 +36,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           }}
           leftSection={<IconCar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('transportation.car_taxi', 'Car')}
+          {t('transportation_car_taxi', 'Car')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -44,7 +44,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           }}
           leftSection={<IconShip style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('transportation.boat', 'Boat')}
+          {t('transportation_boat', 'Boat')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
@@ -52,7 +52,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           }}
           leftSection={<IconTrain style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('transportation.train', 'Train')}
+          {t('transportation_train', 'Train')}
         </Menu.Item>
 
         <Menu.Divider />
@@ -62,7 +62,7 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           }}
           leftSection={<IconCar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('transportation.rental_car', 'Car Rental')}
+          {t('transportation_rental_car', 'Car Rental')}
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

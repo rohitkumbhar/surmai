@@ -37,18 +37,18 @@ export const ImageDropZone = ({ setUploadedFile }: { setUploadedFile: (val: File
           </Group>
 
           <Text ta="center" fw={700} fz="lg" mt="xl">
-            <Dropzone.Accept>{t('basic.drop_files_here', 'Drop image here')}</Dropzone.Accept>
-            <Dropzone.Reject>{t('basic.cover_image_limit', 'Image file less than 30mb')}</Dropzone.Reject>
-            <Dropzone.Idle>{t('basic.upload-cover_image', 'Upload Image')}</Dropzone.Idle>
+            <Dropzone.Accept>{t('drop_image_gere', 'Drop image here')}</Dropzone.Accept>
+            <Dropzone.Reject>{t('image_size_limit', 'Image file less than 4Mb')}</Dropzone.Reject>
+            <Dropzone.Idle>{t('upload_image', 'Upload Image')}</Dropzone.Idle>
           </Text>
           <Text ta="center" fz="sm" mt="xs" c="dimmed">
-            {t('basic.upload_cover_image', 'Drag and drop an image in this area')}
+            {t('upload_cover_image', 'Drag and drop an image in this area')}
           </Text>
         </div>
       </Dropzone>
 
       <Button className={classes.control} size="md" radius="xl" onClick={() => openRef.current?.()}>
-        {t('basic.select_image', 'Upload Image')}
+        {t('upload_image', 'Upload Image')}
       </Button>
     </div>
   );

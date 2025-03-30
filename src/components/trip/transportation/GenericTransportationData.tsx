@@ -53,7 +53,7 @@ export const GenericTransportationData = ({
           onConfirm: () => {
             deleteTransportation(transportation.id).then(() => {
               showDeleteNotification({
-                title: t('transportation.section_name', 'Transportation'),
+                title: t('transportation_section_name', 'Transportation'),
                 message: t(
                   'transportation_deleted',
                   'Transportation from {{origin}} to {{destination}} has been deleted',
@@ -73,7 +73,7 @@ export const GenericTransportationData = ({
         opened={opened}
         size="auto"
         fullScreen={isMobile}
-        title={t('transportation.edit_' + transportation.type, 'Edit Transportation')}
+        title={t('transportation_edit_' + transportation.type, 'Edit Transportation')}
         onClose={() => {
           close();
         }}
@@ -116,7 +116,7 @@ export const GenericTransportationData = ({
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.from', 'From')}
+            {t('transportation_from', 'From')}
           </Text>
           {!transportation.metadata.origin && <Text size="md">{transportation.origin}</Text>}
           {transportation.metadata.origin && (
@@ -144,7 +144,7 @@ export const GenericTransportationData = ({
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('transportation.to', 'To')}
+            {t('transportation_to', 'To')}
           </Text>
 
           {!transportation.metadata.destination && <Text size="md">{transportation.destination}</Text>}

@@ -14,7 +14,8 @@
     "preview": "vite preview",
     "format": "prettier --write ./src",
     "prepare": "husky",
-    "test": "echo 'TBD'"
+    "test": "echo 'TBD'",
+    "sync-translations": "i18next-scanner --config i18next-scanner.config.json"
   },
   "dependencies": {
     "@mantine/carousel": "^7.17.2",
@@ -82,6 +83,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.19",
     "husky": "^9.1.7",
+    "i18next-scanner": "^4.6.0",
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",

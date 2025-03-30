@@ -59,7 +59,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           onClick={() => {
             openContextModal({
               modal: 'uploadImageForm',
-              title: t('basic.add_cover_image', 'Add Cover Image'),
+              title: t('trip_add_cover_image', 'Add Cover Image'),
               radius: 'md',
               withCloseButton: false,
               size: 'auto',
@@ -76,13 +76,13 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconPhoto style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('basic.cover_image', 'Cover Image')}
+          {t('trip_cover_image', 'Cover Image')}
         </Menu.Item>
         <Menu.Item
           onClick={() => {
             openContextModal({
               modal: 'collaboratorsForm',
-              title: t('basic.invite_collaborators', 'Invite Collaborators'),
+              title: t('trip_invite_collaborators', 'Invite Collaborators'),
               radius: 'md',
               withCloseButton: false,
               fullScreen: isMobile,
@@ -97,7 +97,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconUsers style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('basic.collaborators', 'Collaborators')}
+          {t('trip_collaborators', 'Collaborators')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item
@@ -125,14 +125,14 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconDownload style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('offline', 'Enable Offline')}
+          {t('enable_offline', 'Enable Offline')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item
           onClick={() => {
             openContextModal({
               modal: 'exportTripModal',
-              title: t('basic.export', 'Export Trip Data'),
+              title: t('trip_export', 'Export Trip Data'),
               withCloseButton: true,
               fullScreen: isMobile,
               size: 'lg',
@@ -143,7 +143,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconPackageExport style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('basic.export', 'Export')}
+          {t('export_trip', 'Export Trip')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item

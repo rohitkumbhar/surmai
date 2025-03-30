@@ -88,13 +88,13 @@ export const CarRentalForm = ({
 
   return (
     <Stack>
-      <Title order={4}>{t('transportation.add_rental_car', 'Add Rental Car')}</Title>
+      <Title order={4}>{t('transportation_add_rental_car', 'Add Rental Car')}</Title>
       <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
         <Stack>
           <Group>
             <TextInput
               name={'rentalCompany'}
-              label={t('transportation.rental_company', 'Rental Company')}
+              label={t('transportation_rental_company', 'Rental Company')}
               required
               key={form.key('rentalCompany')}
               {...form.getInputProps('rentalCompany')}
@@ -104,7 +104,7 @@ export const CarRentalForm = ({
               highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'pickupTime'}
-              label={t('transportation.pickup_time', 'Pickup Time')}
+              label={t('transportation_pickup_time', 'Pickup Time')}
               clearable
               required
               key={form.key('pickupTime')}
@@ -116,7 +116,7 @@ export const CarRentalForm = ({
               highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'dropOffTime'}
-              label={t('transportation.dropOff_time', 'Drop-off Time')}
+              label={t('transportation_dropOff_time', 'Drop-off Time')}
               clearable
               required
               key={form.key('dropOffTime')}
@@ -127,7 +127,7 @@ export const CarRentalForm = ({
           <Group>
             <TextInput
               name={'pickupLocation'}
-              label={t('transportation.pickup_location', 'Pickup Location')}
+              label={t('transportation_pickup_location', 'Pickup Location')}
               required
               miw={rem('300px')}
               key={form.key('pickupLocation')}
@@ -135,7 +135,7 @@ export const CarRentalForm = ({
             />
             <TextInput
               name={'dropOffLocation'}
-              label={t('transportation.dropOff_location', 'DropOff Location')}
+              label={t('transportation_dropOff_location', 'DropOff Location')}
               required
               miw={rem('300px')}
               key={form.key('dropOffLocation')}
@@ -143,7 +143,7 @@ export const CarRentalForm = ({
             />
             <TextInput
               name={'confirmationCode'}
-              label={t('transportation.confirmation_code', 'Confirmation Code')}
+              label={t('transportation_confirmation_code', 'Confirmation Code')}
               key={form.key('confirmationCode')}
               {...form.getInputProps('confirmationCode')}
             />
@@ -161,7 +161,7 @@ export const CarRentalForm = ({
                   {t('attachments', 'Attachments')}
                   <Text size={'xs'} c={'dimmed'}>
                     {t(
-                      'transportation.attachments_desc',
+                      'transportation_rental_attachments_desc',
                       'Upload any related documents for this rental e.g. confirmation email'
                     )}
                   </Text>

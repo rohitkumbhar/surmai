@@ -70,9 +70,9 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
       <Combobox store={combobox} onOptionSubmit={handleValueSelect}>
         <Combobox.Target>
           <PillsInput
-            label={t('basic.trip_destinations', 'Destinations')}
+            label={t('trip_destinations', 'Destinations')}
             description={t(
-              'basic.trip_destinations_description',
+              'trip_destinations_description',
               'Enter the destinations in this trip e.g. San Jose, Guanacaste'
             )}
             withAsterisk
@@ -119,7 +119,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
                     {search}
                   </Text>
                   <Text size={'xs'} c={'dimmed'}>
-                    {t('basic.create_new_entry', 'Create New Entry')}
+                    {t('create_new_entry', 'Create New Entry')}
                   </Text>
                 </Group>
               </Combobox.Option>

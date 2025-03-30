@@ -101,7 +101,7 @@ export const SmtpSettingsForm = () => {
                 mb={'sm'}
                 onLabel="ON"
                 offLabel="OFF"
-                label={t('smtp_enabled', 'Enable SMTP server')}
+                label={t('enable_smtp_action', 'Enable SMTP server')}
                 className={classes.switch}
                 size="md"
                 key={form.key('enabled')}
@@ -121,7 +121,7 @@ export const SmtpSettingsForm = () => {
               <TextInput
                 name={'senderAddress'}
                 label={t('smtp_sender_address', 'Sender Address')}
-                description={t('smtp_sender_name_description', 'Email address of the sender')}
+                description={t('smtp_sender_address_description', 'Email address of the sender')}
                 required
                 type={'email'}
                 key={form.key('senderAddress')}
@@ -161,7 +161,7 @@ export const SmtpSettingsForm = () => {
               <TextInput
                 name={'localName'}
                 label={t('smtp_local_name', 'Local Server Name')}
-                description={t('smtp_local_name', 'Local domain name. Default is localhost')}
+                description={t('smtp_local_name_description', 'Local domain name. Default is localhost')}
                 required
                 type={'domain'}
                 key={form.key('localName')}

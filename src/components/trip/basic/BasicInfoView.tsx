@@ -32,7 +32,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
       </Text>
       <Divider />
-      <Text mt={'md'}>{t('basic.destinations', 'Destinations')}</Text>
+      <Text mt={'md'}>{t('trip_destinations', 'Destinations')}</Text>
       <Group>
         {(trip.destinations || []).map((destination) => {
           return (
@@ -43,7 +43,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         })}
       </Group>
       <Divider />
-      <Text mt={'md'}>{t('basic.travellers', 'Travellers')}</Text>
+      <Text mt={'md'}>{t('trip_travellers', 'Travellers')}</Text>
       <Group>
         {(trip.participants || []).map((person, index) => {
           return (
@@ -54,7 +54,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         })}
       </Group>
 
-      <Text mt={'md'}>{t('basic.collaborators', 'Collaborators')}</Text>
+      <Text mt={'md'}>{t('trip_collaborators', 'Collaborators')}</Text>
       <Group>
         {collaborators &&
           (collaborators || []).map((person) => {

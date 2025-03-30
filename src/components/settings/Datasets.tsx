@@ -106,7 +106,7 @@ export const Datasets = () => {
   return (
     <Card withBorder radius="md" p="xl" mt={'md'}>
       <Title order={3} fw={500}>
-        {t('dataset_section_title', 'Datasets')}
+        {t('dataset_section', 'Datasets')}
       </Title>
       <Text fz="xs" c="dimmed" mt={3} mb="xl">
         {t('dataset_section_description', 'Load available datasets')}

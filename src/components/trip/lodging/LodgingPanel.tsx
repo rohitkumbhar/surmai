@@ -35,7 +35,7 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('lodging.add_' + newLodgingType, 'Add Lodging')}
+        title={t('lodging_add_' + newLodgingType, 'Add Lodging')}
         onClose={() => {
           closeForm();
         }}
@@ -63,10 +63,10 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
       </Flex>
       {
         <Stack mt={'sm'}>
-          <Title order={5}>{t('lodging.name', 'Lodging')}</Title>
+          <Title order={5}>{t('lodging_section_name', 'Lodging')}</Title>
           {data.length === 0 && (
             <Card withBorder>
-              <Text c={'dimmed'}>{t('lodging.no_data', 'No Lodgings')}</Text>
+              <Text c={'dimmed'}>{t('lodging_no_data', 'No Lodgings')}</Text>
             </Card>
           )}
           {data.map((t: Lodging) => {

@@ -135,9 +135,9 @@ export const ViewTrip = () => {
               >
                 <Group wrap="nowrap">
                   <div>
-                    <Text>{t('basic.section_name', 'Basic Information')}</Text>
+                    <Text>{t('trip_basic_information', 'Basic Information')}</Text>
                     <Text size="sm" c="dimmed" fw={400}>
-                      {t('basic.section_description', 'View basic information about your trip')}
+                      {t('trip_basic_info_description', 'View basic information about your trip')}
                     </Text>
                   </div>
                 </Group>
@@ -161,10 +161,10 @@ export const ViewTrip = () => {
               >
                 <Group wrap="nowrap">
                   <div>
-                    <Text>{t('transportation.section_name', 'Transportation')}</Text>
+                    <Text>{t('transportation_section_name', 'Transportation')}</Text>
                     <Text size="sm" c="dimmed" fw={400}>
                       {t(
-                        'transportation.section_description',
+                        'transportation_section_description',
                         'View and edit your transportation arrangements for this trip'
                       )}
                     </Text>
@@ -190,9 +190,9 @@ export const ViewTrip = () => {
               >
                 <Group wrap="nowrap">
                   <div>
-                    <Text>{t('lodging.section_name', 'Lodging')}</Text>
+                    <Text>{t('lodging_section_name', 'Lodging')}</Text>
                     <Text size="sm" c="dimmed" fw={400}>
-                      {t('lodging.section_description', 'View and edit your lodging arrangements for this trip')}
+                      {t('lodging_section_description', 'View and edit your lodging arrangements for this trip')}
                     </Text>
                   </div>
                 </Group>
@@ -216,9 +216,9 @@ export const ViewTrip = () => {
               >
                 <Group wrap="nowrap">
                   <div>
-                    <Text>{t('activities.section_name', 'Activities')}</Text>
+                    <Text>{t('activity_section_name', 'Activities')}</Text>
                     <Text size="sm" c="dimmed" fw={400}>
-                      {t('activities.section_description', 'View and edit your activities for this trip')}
+                      {t('activity_section_description', 'View and edit your activities for this trip')}
                     </Text>
                   </div>
                 </Group>

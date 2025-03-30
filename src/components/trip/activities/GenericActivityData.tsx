@@ -42,7 +42,7 @@ export const GenericActivityData = ({
           onConfirm: () => {
             deleteActivity(activity.id).then(() => {
               showDeleteNotification({
-                title: t('activity', 'Activity'),
+                title: t('activity_label', 'Activity'),
                 message: t('activity_deleted', 'Activity {{name}} has been deleted', { name: activity.name }),
               });
               refetch();
@@ -55,7 +55,7 @@ export const GenericActivityData = ({
         opened={formOpened}
         fullScreen={isMobile}
         size="auto"
-        title={t('activity.edit', 'Edit Activity')}
+        title={t('activity_edit', 'Edit Activity')}
         onClose={() => {
           closeForm();
         }}
@@ -88,14 +88,14 @@ export const GenericActivityData = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('activity.start_date', 'Date/Time')}
+            {t('activity_start_date', 'Date/Time')}
           </Text>
           <Text size="sm">{`${formatDate(i18n.language, activity.startDate)} ${formatTime(activity.startDate)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 4 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.name', 'Name')}
+            {t('lodging_name', 'Name')}
           </Text>
           <Text size="md">{activity.name}</Text>
           <Text size="sm" c={'dimmed'}>
@@ -105,7 +105,7 @@ export const GenericActivityData = ({
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 3 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('lodging.address', 'Address')}
+            {t('lodging_address', 'Address')}
           </Text>
           <Text size="md">{activity.address}</Text>
         </Grid.Col>

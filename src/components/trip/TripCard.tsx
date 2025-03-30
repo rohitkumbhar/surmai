@@ -54,13 +54,13 @@ export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
             <Overlay color="#000" backgroundOpacity={0.05}>
               <ActionIcon
                 variant={'filled'}
-                title={'Edit Cover Image'}
+                title={t('edit_cover_image', 'Edit Cover Image')}
                 style={{ height: '100%' }}
                 onClick={(e) => {
                   e.stopPropagation();
                   openContextModal({
                     modal: 'uploadImageForm',
-                    title: t('basic.add_cover_image', 'Add Cover Image'),
+                    title: t('trip_add_cover_image', 'Add Cover Image'),
                     radius: 'md',
                     withCloseButton: false,
                     size: 'auto',

@@ -32,7 +32,9 @@ export const InviteUserModal = ({ context, id }: ContextModalProps) => {
           withCloseButton
           closeButtonLabel={t('dismiss', 'Dismiss')}
         >
-          <Text size={'sm'}>{t('email_is_not_enabled', 'Sending emails has not been enabled on this server.')}</Text>
+          <Text size={'sm'}>
+            {t('account_invitation_email_is_not_enabled', 'Sending emails has not been enabled on this server.')}
+          </Text>
           <Text size={'sm'}>
             {t('share_invitation_link', 'Please share the generated invitation link with the recipient.')}
           </Text>
