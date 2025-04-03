@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import version from 'vite-plugin-package-version';
 
 // https://vitejs.dev/config/
-export default defineConfig(() => {
+export default defineConfig(({mode}) => {
   // @ts-expect-error types
   const routeMatchCallback: RouteMatchCallback = ({ request }) => {
     return request?.url.includes('api') || request?.url.includes('pdf.worker');
@@ -81,7 +81,16 @@ export default defineConfig(() => {
           ],
         },
       }),
-      version()
+      version(),
+
     ],
+    resolve: {
+      alias: {
+        ...(mode === 'development' && {
+          // See https://github.com/mantinedev/ui.mantine.dev/issues/113
+          '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
+        })
+      }
+    },
   };
 });
