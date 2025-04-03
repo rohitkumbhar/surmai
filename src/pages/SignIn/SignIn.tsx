@@ -4,7 +4,6 @@ import {
   Button,
   Container,
   Divider,
-  Group,
   Modal,
   Notification,
   Paper,
@@ -13,7 +12,6 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import classes from './SignIn.module.css';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
 import { useEffect, useState } from 'react';
@@ -23,6 +21,15 @@ import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { IconBrandApple, IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
+
+
+const oauthIcons: { [key: string]: React.ReactNode } = {
+  google: <IconBrandGoogle size={16} stroke={1} />,
+  facebook: <IconBrandFacebook size={16} stroke={1} />,
+  github: <IconBrandGithub size={16} stroke={1} />,
+  apple: <IconBrandApple size={16} stroke={1} />,
+};
 
 export const SignIn = () => {
   useDefaultPageTitle();
@@ -32,7 +39,7 @@ export const SignIn = () => {
   const [apiError, setApiError] = useState<string>();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [resetEmailAddress, setResetEmailAddress] = useState<string | undefined>();
-  const [oauthInfo, setOAuthInfo] = useState<{ name: string; displayName: string } | undefined>();
+  const [oauthInfo, setOAuthInfo] = useState<Array<{ name: string; displayName: string }> | undefined>();
   const [forgotPasswordFormOpened, { open: openForgotPasswordForm, close: closeForgotPasswordForm }] =
     useDisclosure(false);
 
@@ -53,7 +60,7 @@ export const SignIn = () => {
   useEffect(() => {
     listAuthMethods().then((result) => {
       if (result.oauth2.enabled && result.oauth2.providers.length > 0) {
-        setOAuthInfo(result.oauth2.providers[0]);
+        setOAuthInfo(result.oauth2.providers);
       }
     });
   }, []);
@@ -72,7 +79,7 @@ export const SignIn = () => {
   });
 
   return (
-    <div className={classes.wrapper}>
+    <div>
       <Modal
         opened={forgotPasswordFormOpened}
         fullScreen={isMobile}
@@ -86,7 +93,7 @@ export const SignIn = () => {
           <Text>
             {t(
               'reset_password_action_description',
-              'Enter the email address associated with your account. If an account exists, password reset instructions will be emailed to this address.'
+              'Enter the email address associated with your account. If an account exists, password reset instructions will be emailed to this address.',
             )}
           </Text>
 
@@ -123,7 +130,7 @@ export const SignIn = () => {
                         title: t('reset_password', 'Reset Password'),
                         message: t(
                           'reset_request_not_submitted',
-                          'Your password reset request could not be submitted.'
+                          'Your password reset request could not be submitted.',
                         ),
                       });
                     });
@@ -140,88 +147,95 @@ export const SignIn = () => {
           <Text size="lg" ta="center" mt={5}>
             {t('welcome_to_surmai', 'Welcome to Surmai')}
           </Text>
-          {oauthInfo && (
-            <>
-              <Group grow mb="md" mt="md">
-                <Button
-                  onClick={() => {
-                    startOAuthFlow(oauthInfo.name).then(() => {
-                      navigate('/');
-                    });
-                  }}
-                >
-                  Sign in with {oauthInfo.displayName}
-                </Button>
-              </Group>
-              <Divider label={t('or_use_email_login', 'Or continue with email')} labelPosition="center" my="lg" />
-            </>
-          )}
-
           {apiError && (
             <Notification withBorder color="red" title="Unable to sign in" onClose={() => setApiError(undefined)}>
               {apiError}
             </Notification>
           )}
+          <Stack align={'top'} justify={'center'} mt={'sm'}>
+            {/*
+              <Text>{t('or_use_email_login', 'Or continue with email')}</Text>
+*/}
+            <form onSubmit={form.onSubmit((values) => signInWithEmailAndPassword(values))}>
+              <TextInput
+                name={'email'}
+                label={t('email_address', 'Email Address')}
+                placeholder="you@domain.com"
+                mt={'md'}
+                required
+                key={form.key('email')}
+                {...form.getInputProps('email')}
+              />
 
-          <form onSubmit={form.onSubmit((values) => signInWithEmailAndPassword(values))}>
-            <TextInput
-              name={'email'}
-              label={t('email_address', 'Email Address')}
-              placeholder="you@domain.com"
-              mt={'md'}
-              required
-              key={form.key('email')}
-              {...form.getInputProps('email')}
-            />
+              <PasswordInput
+                name={'password'}
+                label={t('password', 'Password')}
+                required
+                mt="md"
+                key={form.key('password')}
+                {...form.getInputProps('password')}
+              />
+              <Anchor
+                size="sm"
+                component="button"
+                type="button"
+                onClick={() => {
+                  openForgotPasswordForm();
+                }}
+              >
+                <Text>{t('forgot_password', 'Forgot Password')}</Text>
+              </Anchor>
 
-            <PasswordInput
-              name={'password'}
-              label={t('password', 'Password')}
-              required
-              mt="md"
-              key={form.key('password')}
-              {...form.getInputProps('password')}
-            />
-            <Anchor
-              size="sm"
-              component="button"
-              type="button"
-              onClick={() => {
-                openForgotPasswordForm();
-              }}
-            >
-              <Text>{t('forgot_password', 'Forgot Password')}</Text>
-            </Anchor>
+              <Button fullWidth mt="xl" type={'submit'} name={'loginBtn'}>
+                {t('sign_in', 'Sign In')}
+              </Button>
 
-            <Button fullWidth mt="xl" type={'submit'} name={'loginBtn'}>
-              {t('sign_in', 'Sign In')}
-            </Button>
+              {signupsEnabled && (
+                <Text c="dimmed" size="sm" ta="center" mt={25}>
+                  {t('no_account', 'Do not have an account yet?')}{' '}
+                  <Anchor
+                    size="sm"
+                    component="button"
+                    type="button"
+                    onClick={() => {
+                      navigate('/register');
+                    }}
+                  >
+                    <Text>{t('create_account', 'Create An Account')}</Text>
+                  </Anchor>
+                </Text>
+              )}
 
-            {signupsEnabled && (
-              <Text c="dimmed" size="sm" ta="center" mt={25}>
-                {t('no_account', 'Do not have an account yet?')}{' '}
-                <Anchor
-                  size="sm"
-                  component="button"
-                  type="button"
+              {demoMode && (
+                <Stack mt={'md'} gap={0}>
+                  <Alert>
+                    <Text size={'sm'}>Demo User: demo@surmai.app</Text>
+                    <Text size={'sm'}>Demo Password: vi#c8Euuf16idhbG</Text>
+                  </Alert>
+                </Stack>
+              )}
+            </form>
+
+            {oauthInfo && (<Divider size={'sm'} label={t('sign_in_with_provides', 'Alternate Auth Providers')}
+                                    orientation={'horizontal'} mt={'md'} />)}
+
+            {oauthInfo && oauthInfo.map((oa) => {
+              return (<>
+                <Button
+                  fullWidth={true}
+                  justify={'flex-start'}
+                  leftSection={oauthIcons[oa.name]}
                   onClick={() => {
-                    navigate('/register');
+                    startOAuthFlow(oa.name).then(() => {
+                      navigate('/');
+                    });
                   }}
                 >
-                  <Text>{t('create_account', 'Create An Account')}</Text>
-                </Anchor>
-              </Text>
-            )}
-
-            {demoMode && (
-              <Stack mt={'md'} gap={0}>
-                <Alert>
-                  <Text size={'sm'}>Demo User: demo@surmai.app</Text>
-                  <Text size={'sm'}>Demo Password: vi#c8Euuf16idhbG</Text>
-                </Alert>
-              </Stack>
-            )}
-          </form>
+                  {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
+                </Button>
+              </>);
+            })}
+          </Stack>
         </Paper>
       </Container>
     </div>
