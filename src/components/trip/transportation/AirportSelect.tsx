@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { CloseButton, Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
+import { CloseButton, Combobox, Group, InputBase, ScrollArea, Text, useCombobox } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
 import { searchAirports } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
@@ -8,12 +8,12 @@ import { useTranslation } from 'react-i18next';
 import { IconPlaneArrival, IconPlaneDeparture } from '@tabler/icons-react';
 
 export const AirportSelect = ({
-  propName,
-  form,
-  label,
-  required,
-  withAsterisk,
-}: {
+                                propName,
+                                form,
+                                label,
+                                required,
+                                withAsterisk,
+                              }: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
@@ -121,18 +121,20 @@ export const AirportSelect = ({
       </Combobox.Target>
       <Combobox.Dropdown>
         <Combobox.Options>
-          {loading && <Combobox.Empty>Loading....</Combobox.Empty>}
-          {!loading && options.length > 0 && options}
-          {!loading && options.length === 0 && search != '' && (
-            <Combobox.Option value={'create_new'} key={'create_new'}>
-              <Group gap={'xs'}>
-                <Text size={'md'} fw={400}>
-                  {search}
-                </Text>
-                <Text size={'xs'} c={'dimmed'}>{`Create New Entry`}</Text>
-              </Group>
-            </Combobox.Option>
-          )}
+          <ScrollArea.Autosize  type="scroll">
+            {loading && <Combobox.Empty>Loading....</Combobox.Empty>}
+            {!loading && options.length > 0 && options}
+            {!loading && options.length === 0 && search != '' && (
+              <Combobox.Option value={'create_new'} key={'create_new'}>
+                <Group gap={'xs'}>
+                  <Text size={'md'} fw={400}>
+                    {search}
+                  </Text>
+                  <Text size={'xs'} c={'dimmed'}>{`Create New Entry`}</Text>
+                </Group>
+              </Combobox.Option>
+            )}
+          </ScrollArea.Autosize>
         </Combobox.Options>
       </Combobox.Dropdown>
     </Combobox>
