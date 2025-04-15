@@ -58,7 +58,7 @@ export const CarRentalData = ({
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 1, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
-            <Tooltip label={t(`transportation_type_${rental.type}`, rental.type)}>
+            <Tooltip label={t(`transportation_car_rental`, 'Car Rental')}>
               <IconArticle
                 size={'sm'}
                 stroke={0.5}
@@ -71,7 +71,7 @@ export const CarRentalData = ({
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'sm'}>
-            <Title size={'lg'}>{t(`transportation_type_${rental.type}`, rental.type)}</Title>
+            <Title size={'lg'}>{t(`transportation_car_rental`, 'Car Rental')}</Title>
             <Divider mt={'5px'} />
           </Box>
         </Grid.Col>

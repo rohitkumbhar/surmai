@@ -15,11 +15,12 @@ import {
 import { TransportationLine } from './TransportationLine.tsx';
 import { LodgingLine } from './LodgingLine.tsx';
 import { ActivityLine } from './ActivityLine.tsx';
+import { useTranslation } from 'react-i18next';
 
 export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const [tripWeeks, setTripWeeks] = useState<Array<Array<{ id: string; value: Dayjs }>>>([]);
   const [activePage, setPage] = useState(1);
-
+  const { t } = useTranslation();
   const tripId = trip.id;
   const { data: activities } = useQuery<Activity[]>({
     queryKey: ['listActivities', tripId],
@@ -96,9 +97,11 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
                   <div>
                     <Text>{day.value.format('LL')}</Text>
                     <Text c={'dimmed'} size={'xs'}>
-                      {`Transportations: ${(transportationItinerary[day.value.toISOString()] || []).length}`} &nbsp;
-                      {`Lodgings: ${(lodgingsItinerary[day.value.toISOString()] || []).length}`} &nbsp;
-                      {`Activities: ${(activitiesItinerary[day.value.toISOString()] || []).length}`}
+                      {`${t('transportation', 'Transportation')}: ${(transportationItinerary[day.value.toISOString()] || []).length}`}{' '}
+                      &nbsp;
+                      {`${t('lodging', 'Lodging')}: ${(lodgingsItinerary[day.value.toISOString()] || []).length}`}{' '}
+                      &nbsp;
+                      {`${t('activities', 'Activities')}: ${(activitiesItinerary[day.value.toISOString()] || []).length}`}
                     </Text>
                   </div>
                 </Group>

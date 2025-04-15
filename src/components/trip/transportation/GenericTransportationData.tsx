@@ -94,7 +94,7 @@ export const GenericTransportationData = ({
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
-            <Tooltip label={t(`transportation.${transportation.type}`, `transportation.${transportation.type}`)}>
+            <Tooltip label={t(`transportation_${transportation.type}`, `${transportation.type}`)}>
               <TypeIcon
                 size={'xs'}
                 stroke={0.5}
@@ -107,9 +107,7 @@ export const GenericTransportationData = ({
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
-            <Title size={'lg'}>
-              {t(`transportation.${transportation.type}`, `transportation.${transportation.type}`)}
-            </Title>
+            <Title size={'lg'}>{t(`transportation_${transportation.type}`, `${transportation.type}`)}</Title>
             <Divider mt={'5px'} />
           </Box>
         </Grid.Col>

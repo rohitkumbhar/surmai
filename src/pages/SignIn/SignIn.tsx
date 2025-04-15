@@ -23,7 +23,6 @@ import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { IconBrandApple, IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
 
-
 const oauthIcons: { [key: string]: React.ReactNode } = {
   google: <IconBrandGoogle size={16} stroke={1} />,
   facebook: <IconBrandFacebook size={16} stroke={1} />,
@@ -93,7 +92,7 @@ export const SignIn = () => {
           <Text>
             {t(
               'reset_password_action_description',
-              'Enter the email address associated with your account. If an account exists, password reset instructions will be emailed to this address.',
+              'Enter the email address associated with your account. If an account exists, password reset instructions will be emailed to this address.'
             )}
           </Text>
 
@@ -130,7 +129,7 @@ export const SignIn = () => {
                         title: t('reset_password', 'Reset Password'),
                         message: t(
                           'reset_request_not_submitted',
-                          'Your password reset request could not be submitted.',
+                          'Your password reset request could not be submitted.'
                         ),
                       });
                     });
@@ -216,25 +215,34 @@ export const SignIn = () => {
               )}
             </form>
 
-            {oauthInfo && (<Divider size={'sm'} label={t('sign_in_with_provides', 'Alternate Auth Providers')}
-                                    orientation={'horizontal'} mt={'md'} />)}
+            {oauthInfo && (
+              <Divider
+                size={'sm'}
+                label={t('sign_in_with_provides', 'Alternate Auth Providers')}
+                orientation={'horizontal'}
+                mt={'md'}
+              />
+            )}
 
-            {oauthInfo && oauthInfo.map((oa) => {
-              return (<>
-                <Button
-                  fullWidth={true}
-                  justify={'flex-start'}
-                  leftSection={oauthIcons[oa.name]}
-                  onClick={() => {
-                    startOAuthFlow(oa.name).then(() => {
-                      navigate('/');
-                    });
-                  }}
-                >
-                  {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
-                </Button>
-              </>);
-            })}
+            {oauthInfo &&
+              oauthInfo.map((oa) => {
+                return (
+                  <>
+                    <Button
+                      fullWidth={true}
+                      justify={'flex-start'}
+                      leftSection={oauthIcons[oa.name]}
+                      onClick={() => {
+                        startOAuthFlow(oa.name).then(() => {
+                          navigate('/');
+                        });
+                      }}
+                    >
+                      {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
+                    </Button>
+                  </>
+                );
+              })}
           </Stack>
         </Paper>
       </Container>

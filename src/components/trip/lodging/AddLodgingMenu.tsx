@@ -28,7 +28,7 @@ export const AddLodgingMenu = ({ onClick }: { onClick: (type: string) => void })
           }}
           leftSection={<IconHome style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('lodging_home_stay', 'Home')}
+          {t('lodging_home', 'Home')}
         </Menu.Item>
 
         <Menu.Item

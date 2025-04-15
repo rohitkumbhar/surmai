@@ -3,7 +3,7 @@ volumes:
 
 services:
   surmai:
-    container_name: surmai_server
+    container_name: surmai_dev_server
     image: surmai:latest
     build:
       dockerfile: ./Dockerfile
