@@ -41,10 +41,19 @@ export const searchPlaces = (query: string) => {
   });
 };
 
-export const searchAirports = (query: string) => {
-  return pb.collection('airports').getList(1, 10, {
-    filter: `(name~"${query}" || iataCode~"${query}")`,
+export const searchAirports = async (query: string) => {
+
+  const result = await pb.collection('airports').getList(1, 10, {
+    filter: `iataCode="${query.toUpperCase()}"`,
   });
+  if (result.items.length === 1) {
+    return result;
+  }
+
+  return await pb.collection('airports').getList(1, 10, {
+    filter: `name~"${query}"`,
+  })
+
 };
 
 export const searchAirlines = (query: string) => {
