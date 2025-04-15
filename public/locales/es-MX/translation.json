@@ -324,5 +324,19 @@
     "welcome_to_surmai": "Bienvenido a Surmai",
     "world_airline_dataset": "Aerolíneas Mundiales",
     "world_airports_dataset": "Aeropuertos del mundo",
-    "world_places_dataset": "Lugares del mundo"
+    "world_places_dataset": "Lugares del mundo",
+    "lodging": "Alojamiento",
+    "lodging_home": "Inicio",
+    "pickup_rental_car": "Recoger el auto de alquiler en {{ origin }}",
+    "sign_in_with": "Iniciar sesión con {{ name }}",
+    "transportation_car_rental": "Alquiler de autos",
+    "add_basic_info_to_start": "Ingresa información básica sobre tu viaje para comenzar",
+    "check_in_at": "Registro en {{ name }}",
+    "check_out_from": "Salida de {{name}}",
+    "create_trip": "Crear viaje",
+    "return_rental_car": "Devolver el auto de alquiler en {{ destination }}",
+    "sign_in_with_provides": "Proveedores de autenticación alternativos",
+    "stay_at": "Quédate en {{ name }}",
+    "transportation": "Transporte",
+    "transportation_from_to": "{{ origen }} a {{ destino }}"
 }
