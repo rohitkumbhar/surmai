@@ -5,16 +5,16 @@ import { IconCar } from '@tabler/icons-react';
 import dayjs, { Dayjs } from 'dayjs';
 
 import { formatTime } from '../../../lib/time.ts';
+import { useTranslation } from 'react-i18next';
 
 export const TransportationLine = ({ transportation, day }: { transportation: Transportation; day: Dayjs }) => {
   const type = transportation.type;
 
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[type] || IconCar;
-
   const showStartTime = dayjs(transportation.departureTime).startOf('day').isSame(day);
   const showEndTime = dayjs(transportation.arrivalTime).endOf('day').isSame(day.endOf('day'));
-
+  const { t } = useTranslation();
   return (
     <>
       {type === 'rental_car' && (
@@ -34,7 +34,12 @@ export const TransportationLine = ({ transportation, day }: { transportation: Tr
           </Box>
 
           {showStartTime && <Badge radius={'xs'}>{formatTime(transportation.departureTime)}</Badge>}
-          <Text>{`${transportation.origin} to ${transportation.destination}`}</Text>
+          <Text>
+            {t('transportation_from_to', '{{ origin }} to {{ destination }}', {
+              origin: transportation.origin,
+              destination: transportation.destination,
+            })}
+          </Text>
           {showEndTime && <Badge radius={'xs'}>{formatTime(transportation.arrivalTime)}</Badge>}
         </Group>
       )}
@@ -51,6 +56,8 @@ const CarRentalLine = ({
   showEndTime: boolean;
   rental: Transportation;
 }) => {
+  const { t } = useTranslation();
+
   if (!(showStartTime || showEndTime)) {
     return null;
   }
@@ -68,8 +75,14 @@ const CarRentalLine = ({
         />
       </Box>
       {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime)}</Badge>}
-      {showStartTime && <Text>{`Pickup rental car from ${rental.origin}`}</Text>}
-      {showEndTime && <Text>{`Return rental car to ${rental.destination}`}</Text>}
+      {showStartTime && (
+        <Text>{t('pickup_rental_car', 'Pickup rental car from {{ origin }}', { origin: rental.origin })}</Text>
+      )}
+      {showEndTime && (
+        <Text>
+          {t('return_rental_car', 'Return rental car to {{ destination }}', { destination: rental.destination })}
+        </Text>
+      )}
       {showEndTime && <Badge radius={'xs'}>{formatTime(rental.arrivalTime)}</Badge>}
     </Group>
   );

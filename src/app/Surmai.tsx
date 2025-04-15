@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Notifications } from '@mantine/notifications';
 import { ModalsProvider } from '@mantine/modals';
 import { RouterProvider } from 'react-router-dom';
@@ -9,17 +9,33 @@ import { buildRouter } from './routes.tsx';
 import { modals } from './modals.ts';
 import { SiteSettings } from '../types/settings.ts';
 import { useNetwork } from '@mantine/hooks';
-
-export const SurmaiContext = createContext<
-  SiteSettings & {
-    primaryColor?: string;
-    changeColor?: (colorName: string | undefined) => void;
-  }
->({ demoMode: false, emailEnabled: false, signupsEnabled: false, offline: false });
+import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
+import { SurmaiContext as SurmaiContext1 } from './SurmaiContext.tsx';
+import { DatesProvider } from '@mantine/dates';
 
 export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');
   const { online } = useNetwork();
+  const [locale, setLocale] = useState<string>();
+
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    if (i18n.language !== 'en-US') {
+      switch (i18n.language) {
+        case 'es-MX':
+          import('dayjs/locale/es-mx')
+            .then(() => {
+              console.log('es-mx loaded');
+              dayjs.locale('es-mx');
+              setLocale('es-mx');
+            })
+            .catch((err) => {
+              console.log('could not load locale', err);
+            });
+      }
+    }
+  }, [i18n]);
 
   useEffect(() => {
     currentUser().then((user) => {
@@ -43,13 +59,15 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   };
 
   return (
-    <SurmaiContext.Provider value={value}>
+    <SurmaiContext1 value={value}>
       <MantineProvider theme={theme} defaultColorScheme="auto">
-        <Notifications position={'top-right'} autoClose={5000} />
-        <ModalsProvider modals={modals}>
-          <RouterProvider router={buildRouter()} />
-        </ModalsProvider>
+        <DatesProvider settings={{ locale: locale || 'en' }}>
+          <Notifications position={'top-right'} autoClose={5000} />
+          <ModalsProvider modals={modals}>
+            <RouterProvider router={buildRouter()} />
+          </ModalsProvider>
+        </DatesProvider>
       </MantineProvider>
-    </SurmaiContext.Provider>
+    </SurmaiContext1>
   );
 };

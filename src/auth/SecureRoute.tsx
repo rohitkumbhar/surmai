@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { authRefresh, currentUser } from '../lib/api';
 import { User } from '../types/auth.ts';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SurmaiContext } from '../app/Surmai.tsx';
+
+import { SurmaiContext } from '../app/SurmaiContext.tsx';
 
 export const AuthContext = createContext<{
   user?: User;

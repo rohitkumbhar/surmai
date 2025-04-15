@@ -79,7 +79,7 @@ export const GenericLodgingData = ({
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
-            <Tooltip label={t(`lodging.${lodging.type}`, lodging.type)}>
+            <Tooltip label={t(`lodging_${lodging.type}`, lodging.type)}>
               <TypeIcon
                 size={'xs'}
                 stroke={0.5}
@@ -92,7 +92,7 @@ export const GenericLodgingData = ({
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
-            <Title size={'lg'}>{t(`lodging.${lodging.type}`, lodging.type)}</Title>
+            <Title size={'lg'}>{t(`lodging_${lodging.type}`, lodging.type)}</Title>
             <Divider mt={'5px'} />
           </Box>
         </Grid.Col>

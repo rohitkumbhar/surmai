@@ -95,9 +95,9 @@ export const CreateNewTrip = () => {
             >
               <Group wrap="nowrap">
                 <div>
-                  <Text>{'Basic Information'}</Text>
+                  <Text>{t('trip_basic_information', 'Basic Information')}</Text>
                   <Text size="sm" c="dimmed" fw={400}>
-                    {'Enter some basic information about your trip to get started'}
+                    {t('add_basic_info_to_start', 'Enter some basic information about your trip to get started')}
                   </Text>
                 </div>
               </Group>
@@ -106,7 +106,7 @@ export const CreateNewTrip = () => {
               <EditTripBasicForm form={form} />
               <Group mt="xl" justify={'flex-end'}>
                 <Button disabled={!form.isValid()} loading={creatingTrip} type={'submit'}>
-                  Create Trip
+                  {t('create_trip', 'Create Trip')}
                 </Button>
               </Group>
             </Accordion.Panel>

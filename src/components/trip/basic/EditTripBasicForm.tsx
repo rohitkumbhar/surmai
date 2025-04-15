@@ -11,6 +11,7 @@ interface EditTripBasicFormProps {
 
 export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
   const { t } = useTranslation();
+
   return (
     <Stack align="stretch" justify="center" gap="md">
       <TextInput
@@ -37,6 +38,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
 
       <DatePickerInput
         type="range"
+        valueFormat={'LL'}
         required
         label={t('trip_dates', 'Trip Dates')}
         description={t(
