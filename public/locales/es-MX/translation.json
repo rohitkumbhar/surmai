@@ -338,5 +338,8 @@
     "sign_in_with_provides": "Proveedores de autenticación alternativos",
     "stay_at": "Quédate en {{ name }}",
     "transportation": "Transporte",
-    "transportation_from_to": "{{ origin }} a {{ destination }}"
+    "transportation_from_to": "{{ origin }} a {{ destination }}",
+    "no_notes_yet": "Este viaje aún no tiene notas. Puedes usar las notas para anotar cualquier cosa que no esté cubierta bajo Organización o simplemente para hacer una lluvia de ideas con colaboradores. Por ejemplo, una lista de tareas o enlaces a atracciones locales.",
+    "notes_placeholder": "Puedes usar notas para anotar cualquier cosa que no esté cubierta bajo Organización o simplemente para hacer una lluvia de ideas con colaboradores. Por ejemplo, una lista de tareas o enlaces a atracciones locales.",
+    "trip_travellers_description": "Nombres de las personas que van en este viaje. Separa los nombres por comas."
 }
