@@ -22,9 +22,7 @@ export const TripNotes = ({ trip, refetch }: { trip: Trip; refetch: () => void }
             <Text>
               {t(
                 'no_notes_yet',
-                'This trip does not have any notes yet. You can use notes to jot down anything that is not covered ' +
-                  'under Organization or just for brainstorming with collaborators. ' +
-                  'For example, a task list or links to local attractions.'
+                'This trip does not have any notes yet. You can use notes to jot down anything that is not covered under Organization or just for brainstorming with collaborators. For example, a task list or links to local attractions.'
               )}
             </Text>
           )}

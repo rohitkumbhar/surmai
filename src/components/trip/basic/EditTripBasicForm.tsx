@@ -43,9 +43,8 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         label={t('trip_dates', 'Trip Dates')}
         description={t(
           'trip_dates_description',
-          'Select the start and end dates of the trip. These dates are in your timezone'
+          'Select the start and end dates of the trip. These dates are in your timezone',
         )}
-        placeholder="Pick date"
         key={form.key('dateRange')}
         {...form.getInputProps('dateRange')}
       />
@@ -55,8 +54,8 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         key={form.key('participants')}
         {...form.getInputProps('participants')}
         acceptValueOnBlur
-        description={t('trip_travellers_description')}
-        placeholder="Enter names"
+        description={t('trip_travellers_description', 'Names of people going on this trip. Separate names by comma.')}
+        placeholder={''}
       />
     </Stack>
   );
