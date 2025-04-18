@@ -1,11 +1,12 @@
 package routes
 
 import (
+	"backend/types"
 	"github.com/pocketbase/pocketbase/core"
 	"net/http"
 )
 
-func SiteSettings(e *core.RequestEvent, demoMode bool) error {
+func SiteSettings(e *core.RequestEvent, demoMode *types.DemoMode) error {
 
 	_, riErr := e.RequestInfo()
 	if riErr != nil {
@@ -13,7 +14,7 @@ func SiteSettings(e *core.RequestEvent, demoMode bool) error {
 	}
 	data := map[string]any{
 		"emailEnabled":   e.App.Settings().SMTP.Enabled,
-		"demoMode":       demoMode,
+		"demoMode":       demoMode.Enabled,
 		"signupsEnabled": signupsEnabled(e),
 	}
 	return e.JSON(http.StatusOK, data)
