@@ -5,6 +5,7 @@ import (
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
+	"log/slog"
 	"os"
 )
 
@@ -16,6 +17,7 @@ type ImportDemoDataJob struct {
 }
 
 func (job *ImportDemoDataJob) Execute() {
+	slog.Info("Importing Demo Data")
 	job.deleteAllTrips()
 	job.deleteAllUsersExceptAdmin()
 	job.createDemoUser()

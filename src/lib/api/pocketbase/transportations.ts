@@ -47,3 +47,18 @@ export const deleteTransportationAttachment = (transportationId: string, attachm
       return deleteAttachment(attachmentId);
     });
 };
+
+export const getHtmlFile = async (url: string) => {
+  try {
+    const response = await fetch(url);
+
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.text();
+  } catch (error) {
+    console.error('Error fetching file:', error);
+    throw error;
+  }
+};

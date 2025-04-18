@@ -50,6 +50,7 @@
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
     "dayjs": "^1.11.13",
+    "dompurify": "^3.2.5",
     "embla-carousel-react": "^8.5.2",
     "i18next": "^24.2.3",
     "i18next-browser-languagedetector": "^8.0.4",

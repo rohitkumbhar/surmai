@@ -5,22 +5,54 @@ import (
 	"backend/jobs"
 	"backend/middleware"
 	R "backend/routes"
+	bt "backend/types"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/ringsaturn/tzf"
+	"log/slog"
 	"os"
 )
 
-type SurmaiApp struct {
-	Pb             *pocketbase.PocketBase
-	DemoMode       bool
-	AdminEmail     string
-	TimezoneFinder tzf.F
+func InitializeSurmai(isGoRun bool) *bt.SurmaiApp {
+
+	surmai := &bt.SurmaiApp{
+		Pb: pocketbase.NewWithConfig(pocketbase.Config{
+			DefaultDev:     isGoRun,
+			DefaultDataDir: os.Getenv("PB_DATA_DIRECTORY"),
+		}),
+		DemoMode: &bt.DemoMode{
+			Enabled:      os.Getenv("SURMAI_DEMO_MODE") == "true",
+			DemoEmail:    os.Getenv("SURMAI_DEMO_EMAIL"),
+			DemoPassword: os.Getenv("SURMAI_DEMO_PASSWORD"),
+		},
+		AdminEmail: os.Getenv("SURMAI_ADMIN_EMAIL"),
+		WebhookSettings: &bt.EmailWebhookSettings{
+			Enabled:       os.Getenv("SURMAI_WEBHOOK_ENABLED") == "true",
+			WebhookSecret: os.Getenv("SURMAI_WEBHOOK_SECRET"),
+			ImapServer:    os.Getenv("SURMAI_WEBHOOK_IMAP_SERVER"),
+			ImapUsername:  os.Getenv("SURMAI_WEBHOOK_IMAP_USERNAME"),
+			ImapPassword:  os.Getenv("SURMAI_WEBHOOK_IMAP_PASSWORD"),
+		},
+		LlmSettings: &bt.LlmSettings{
+			Type:            os.Getenv("SURMAI_LLM_TYPE"), // ollama or openai
+			ModelName:       os.Getenv("SURMAI_LLM_MODEL"),
+			OllamaServerUrl: os.Getenv("SURMAI_OLLAMA_URL"), // used by
+			OpenAIApiKey:    os.Getenv("SURMAI_OPENAI_API_KEY"),
+		},
+	}
+
+	bindRoutes(surmai)
+	bindMigrations(isGoRun, surmai)
+	buildTimezoneFinder(surmai)
+	bindEventHooks(surmai)
+	startJobs(surmai)
+
+	return surmai
 }
 
-func (surmai *SurmaiApp) BindRoutes() {
+func bindRoutes(surmai *bt.SurmaiApp) {
 
 	surmai.Pb.OnServe().BindFunc(func(se *core.ServeEvent) error {
 
@@ -60,13 +92,18 @@ func (surmai *SurmaiApp) BindRoutes() {
 			return R.SiteSettings(e, surmai.DemoMode)
 		}).Bind()
 
+		// Email webhook endpoint
+		se.Router.POST("/api/surmai/webhook", func(e *core.RequestEvent) error {
+			return R.EmailWebhook(e, surmai)
+		}).Bind(middleware.RequireSurmaiSecret(surmai.WebhookSettings))
+
 		// serves static files from the provided public dir (if exists)
 		se.Router.GET("/{path...}", apis.Static(os.DirFS("./pb_public"), false))
 		return se.Next()
 	})
 }
 
-func (surmai *SurmaiApp) BindMigrations(isGoRun bool) {
+func bindMigrations(isGoRun bool, surmai *bt.SurmaiApp) {
 
 	migratecmd.MustRegister(surmai.Pb, surmai.Pb.RootCmd, migratecmd.Config{
 		// enable auto creation of migration files when making collection changes in the Dashboard
@@ -76,7 +113,7 @@ func (surmai *SurmaiApp) BindMigrations(isGoRun bool) {
 
 }
 
-func (surmai *SurmaiApp) BuildTimezoneFinder() {
+func buildTimezoneFinder(surmai *bt.SurmaiApp) {
 
 	finder, err := tzf.NewDefaultFinder()
 	if err != nil {
@@ -86,7 +123,7 @@ func (surmai *SurmaiApp) BuildTimezoneFinder() {
 
 }
 
-func (surmai *SurmaiApp) BindEventHooks() {
+func bindEventHooks(surmai *bt.SurmaiApp) {
 	surmai.Pb.OnRecordCreate("trips").BindFunc(func(e *core.RecordEvent) error {
 		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
 	})
@@ -99,12 +136,12 @@ func (surmai *SurmaiApp) BindEventHooks() {
 	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
 }
 
-func (surmai *SurmaiApp) StartJobs() {
-	surmai.startInvitationCleanupJob()
-	surmai.startDemoModeSetupJob()
+func startJobs(surmai *bt.SurmaiApp) {
+	startInvitationCleanupJob(surmai)
+	startDemoModeSetupJob(surmai)
 }
 
-func (surmai *SurmaiApp) startInvitationCleanupJob() {
+func startInvitationCleanupJob(surmai *bt.SurmaiApp) {
 
 	job := &jobs.CleanupInvitationsJob{
 		Pb: surmai.Pb,
@@ -115,23 +152,30 @@ func (surmai *SurmaiApp) startInvitationCleanupJob() {
 	})
 }
 
-func (surmai *SurmaiApp) startDemoModeSetupJob() {
-	if surmai.DemoMode {
+func startDemoModeSetupJob(surmai *bt.SurmaiApp) {
+	if surmai.DemoMode.Enabled {
 
-		password := os.Getenv("SURMAI_DEMO_PASSWORD")
+		password := surmai.DemoMode.DemoPassword
 		if password == "" {
 			password = "vi#c8Euuf16idhbG"
+		}
+
+		demoEmail := surmai.DemoMode.DemoEmail
+		if demoEmail == "" {
+			demoEmail = "demo@surmai.app"
 		}
 
 		job := &jobs.ImportDemoDataJob{
 			Pb:           surmai.Pb,
 			AdminEmail:   surmai.AdminEmail,
-			DemoEmail:    "demo@surmai.app",
+			DemoEmail:    demoEmail,
 			DemoPassword: password,
 		}
 
 		surmai.Pb.Cron().MustAdd("ImportDemoDataJob", "0 * * * *", func() {
 			job.Execute()
 		})
+
+		slog.Info("Starting surmai in demo mode")
 	}
 }

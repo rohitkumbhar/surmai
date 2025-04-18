@@ -80,6 +80,7 @@ export {
   saveTransportationAttachments,
   deleteTransportation,
   deleteTransportationAttachment,
+  getHtmlFile,
 } from './pocketbase/transportations.ts';
 
 export {
