@@ -3,7 +3,7 @@ import { Invitation } from '../../../types/invitations.ts';
 
 export const sendCollaborationInvitation = (email: string, message: string, tripId: string): Promise<Invitation> => {
   return pb.collection('invitations').create({
-    recipientEmail: email,
+    recipientEmail: email.toLowerCase(),
     message,
     trip: tripId,
   });

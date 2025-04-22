@@ -1,14 +1,14 @@
 volumes:
-  surmai_data:
+  surmai_dev_data:
 
 services:
-  surmai:
+  surmai_dev_server:
     container_name: surmai_dev_server
     image: surmai:latest
     build:
       dockerfile: ./Dockerfile
     volumes:
-      - surmai_data:/pb_data
+      - surmai_dev_data:/pb_data
     ports:
       - "9090:8080"
     restart: always
