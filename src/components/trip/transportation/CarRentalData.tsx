@@ -1,4 +1,4 @@
-import { Transportation, Trip } from '../../../types/trips.ts';
+import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
 import { IconArticle } from '@tabler/icons-react';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
@@ -13,14 +13,19 @@ export const CarRentalData = ({
   trip,
   rental,
   refetch,
+  tripAttachments,
 }: {
   trip: Trip;
   rental: Transportation;
   refetch: () => void;
+  tripAttachments?: Attachment[];
 }) => {
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [opened, { open, close }] = useDisclosure(false);
+  const transportationAttachments = tripAttachments?.filter((attachment) =>
+    rental.attachmentReferences?.includes(attachment.id)
+  );
 
   return (
     <DataLine
@@ -45,6 +50,7 @@ export const CarRentalData = ({
         <CarRentalForm
           carRental={rental}
           trip={trip}
+          exitingAttachments={transportationAttachments}
           onSuccess={() => {
             refetch();
             close();
@@ -116,11 +122,12 @@ export const CarRentalData = ({
           </Text>
         </Grid.Col>
       </Grid>
-      <Attachments
-        entity={rental}
-        refetch={refetch}
-        onDelete={(attachmentName) => deleteTransportationAttachment(rental.id, attachmentName)}
-      />
+      {transportationAttachments && (
+        <Attachments
+          attachments={transportationAttachments}
+          onDelete={(attachmentName) => deleteTransportationAttachment(rental.id, attachmentName).then(() => refetch())}
+        />
+      )}
     </DataLine>
   );
 };

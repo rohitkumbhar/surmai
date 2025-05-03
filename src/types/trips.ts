@@ -55,6 +55,12 @@ export type Cost = {
   currency: string;
 };
 
+export type Attachment = {
+  id: string;
+  name: string;
+  file: string;
+};
+
 export type Transportation = {
   id: string;
   type: string;
@@ -66,6 +72,7 @@ export type Transportation = {
   trip: string;
   metadata: { [key: string]: any };
   attachments?: string[];
+  attachmentReferences?: string[];
 };
 
 export type CreateTransportation = {
@@ -78,6 +85,7 @@ export type CreateTransportation = {
   trip: string;
   metadata?: { [key: string]: any };
   attachments?: string[];
+  attachmentReferences?: string[];
 };
 
 export type CarRentalFormSchema = {
@@ -127,6 +135,7 @@ export type Lodging = {
   confirmationCode?: string;
   metadata?: { [key: string]: any };
   attachments?: string[];
+  attachmentReferences?: string[];
 };
 
 export type CreateLodging = Omit<Lodging, 'id'>;
@@ -158,6 +167,7 @@ export interface Activity extends RecordModel {
   cost?: Cost;
   trip: string;
   attachments?: string[];
+  attachmentReferences?: string[];
 }
 
 export type CreateActivity = Omit<Activity, 'id'>;

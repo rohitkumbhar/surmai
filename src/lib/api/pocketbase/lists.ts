@@ -42,7 +42,6 @@ export const searchPlaces = (query: string) => {
 };
 
 export const searchAirports = async (query: string) => {
-
   const result = await pb.collection('airports').getList(1, 10, {
     filter: `iataCode="${query.toUpperCase()}"`,
   });
@@ -52,8 +51,7 @@ export const searchAirports = async (query: string) => {
 
   return await pb.collection('airports').getList(1, 10, {
     filter: `name~"${query}"`,
-  })
-
+  });
 };
 
 export const searchAirlines = (query: string) => {

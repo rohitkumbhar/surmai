@@ -1,6 +1,7 @@
 import { CreateLodging, Lodging } from '../../../types/trips.ts';
 import { pb } from './pocketbase.ts';
 import { convertSavedToBrowserDate } from '../../time.ts';
+import { deleteAttachment } from './attachments.ts';
 
 const lodgings = pb.collection('lodgings');
 
@@ -37,8 +38,12 @@ export const saveLodgingAttachments = (lodgingId: string, files: File[]) => {
   return lodgings.update(lodgingId, formData);
 };
 
-export const deleteLodgingAttachments = (lodgingId: string, fileName: string) => {
-  return lodgings.update(lodgingId, {
-    'attachments-': [fileName],
-  });
+export const deleteLodgingAttachments = (lodgingId: string, attachmentId: string) => {
+  return lodgings
+    .update(lodgingId, {
+      'attachmentReferences-': [attachmentId],
+    })
+    .then(() => {
+      return deleteAttachment(attachmentId);
+    });
 };

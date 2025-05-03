@@ -1,4 +1,4 @@
-import { Lodging, Trip } from '../../../types/trips.ts';
+import { Attachment, Lodging, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
 import { IconCar } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
@@ -16,16 +16,22 @@ export const GenericLodgingData = ({
   trip,
   lodging,
   refetch,
+  tripAttachments,
 }: {
   trip: Trip;
   lodging: Lodging;
   refetch: () => void;
+  tripAttachments?: Attachment[];
 }) => {
   const { t, i18n } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[lodging.type] || IconCar;
+
+  const attachments = tripAttachments?.filter((attachment) => {
+    return lodging.attachmentReferences?.includes(attachment.id);
+  });
 
   return (
     <DataLine
@@ -66,6 +72,7 @@ export const GenericLodgingData = ({
         <GenericLodgingForm
           type={lodging.type}
           lodging={lodging}
+          exitingAttachments={attachments}
           trip={trip}
           onSuccess={() => {
             refetch();
@@ -139,13 +146,14 @@ export const GenericLodgingData = ({
           <Text size="md">{lodging.cost?.value ? `${lodging.cost.value} ${lodging.cost.currency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
-      <Attachments
-        entity={lodging}
-        refetch={refetch}
-        onDelete={(attachmentName) => {
-          return deleteLodgingAttachments(lodging.id, attachmentName);
-        }}
-      />
+      {attachments && (
+        <Attachments
+          attachments={attachments}
+          onDelete={(attachmentId) => {
+            return deleteLodgingAttachments(lodging.id, attachmentId).then(() => refetch());
+          }}
+        />
+      )}
     </DataLine>
   );
 };

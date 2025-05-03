@@ -2,6 +2,7 @@ import { Activity, CreateActivity } from '../../../types/trips.ts';
 import { pb } from './pocketbase.ts';
 
 import { convertSavedToBrowserDate } from '../../time.ts';
+import { deleteAttachment } from './attachments.ts';
 
 const activities = pb.collection('activities');
 export const listActivities = async (tripId: string): Promise<Activity[]> => {
@@ -37,8 +38,12 @@ export const saveActivityAttachments = (activityId: string, files: File[]) => {
   return activities.update(activityId, formData);
 };
 
-export const deleteActivityAttachments = (activityId: string, fileName: string) => {
-  return activities.update(activityId, {
-    'attachments-': [fileName],
-  });
+export const deleteActivityAttachments = (activityId: string, attachmentId: string) => {
+  return activities
+    .update(activityId, {
+      'attachmentReferences-': [attachmentId],
+    })
+    .then(() => {
+      return deleteAttachment(attachmentId);
+    });
 };

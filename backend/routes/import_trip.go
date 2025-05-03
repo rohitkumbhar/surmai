@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"backend/trips"
+	"backend/trips/import"
 	"github.com/pocketbase/pocketbase/core"
 	"net/http"
 )
@@ -21,7 +21,7 @@ func ImportTrip(e *core.RequestEvent) error {
 
 	defer file.Close()
 
-	tripId, importError := trips.Import(e.App, file, currentUserId)
+	tripId, importError := _import.Import(e.App, file, currentUserId)
 	if importError != nil {
 		return importError
 	}

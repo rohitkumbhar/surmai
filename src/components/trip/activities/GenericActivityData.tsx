@@ -1,4 +1,4 @@
-import { Activity, Trip } from '../../../types/trips.ts';
+import { Activity, Attachment, Trip } from '../../../types/trips.ts';
 import { Box, Grid, Modal, rem, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
@@ -15,14 +15,20 @@ export const GenericActivityData = ({
   trip,
   activity,
   refetch,
+  tripAttachments,
 }: {
   trip: Trip;
   activity: Activity;
   refetch: () => void;
+  tripAttachments?: Attachment[];
 }) => {
   const { t, i18n } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
+
+  const attachments = tripAttachments?.filter((attachment) => {
+    return activity.attachmentReferences?.includes(attachment.id);
+  });
 
   return (
     <DataLine
@@ -63,6 +69,7 @@ export const GenericActivityData = ({
         <GenericActivityForm
           activity={activity}
           trip={trip}
+          exitingAttachments={attachments}
           onSuccess={() => {
             refetch();
             closeForm();
@@ -117,13 +124,14 @@ export const GenericActivityData = ({
           <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
-      <Attachments
-        entity={activity}
-        refetch={refetch}
-        onDelete={(attachmentName) => {
-          return deleteActivityAttachments(activity.id, attachmentName);
-        }}
-      />
+      {attachments && (
+        <Attachments
+          attachments={attachments}
+          onDelete={(attachmentId) => {
+            return deleteActivityAttachments(activity.id, attachmentId).then(() => refetch());
+          }}
+        />
+      )}
     </DataLine>
   );
 };

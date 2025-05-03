@@ -1,11 +1,11 @@
-import { CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
+import { Attachment, CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
-import { createLodgingEntry, saveLodgingAttachments, updateLodgingEntry } from '../../../lib/api';
+import { createLodgingEntry, updateLodgingEntry, uploadAttachments } from '../../../lib/api';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
@@ -17,12 +17,14 @@ export const GenericLodgingForm = ({
   lodging,
   onSuccess,
   onCancel,
+  exitingAttachments,
 }: {
   trip: Trip;
   lodging?: Lodging;
   type: string;
   onSuccess: () => void;
   onCancel: () => void;
+  exitingAttachments?: Attachment[] | undefined;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -56,33 +58,26 @@ export const GenericLodgingForm = ({
         value: values.cost,
         currency: values.currencyCode,
       },
+      attachmentReferences: lodging?.attachmentReferences || [],
     };
 
-    if (lodging?.id) {
-      // update
-      updateLodgingEntry(lodging.id, data as unknown as CreateLodging).then((result) => {
-        if (files.length > 0) {
-          saveLodgingAttachments(result.id, files).then(() => {
-            onSuccess();
-          });
-        } else {
+    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
+      if (lodging?.id) {
+        data.attachmentReferences = [
+          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+          ...attachments.map((attachment: Attachment) => attachment.id),
+        ];
+        updateLodgingEntry(lodging.id, data as unknown as CreateLodging).then(() => {
           onSuccess();
-        }
-      });
-    } else {
-      createLodgingEntry(data as unknown as CreateLodging).then((result) => {
-        if (files.length > 0) {
-          saveLodgingAttachments(result.id, files).then(() => {
-            onSuccess();
-          });
-        } else {
+        });
+      } else {
+        data.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+        createLodgingEntry(data as unknown as CreateLodging).then(() => {
           onSuccess();
-        }
-      });
-    }
-
-    setSaving(false);
-    onSuccess();
+        });
+      }
+      setSaving(false);
+    });
   };
 
   return (
@@ -179,7 +174,7 @@ export const GenericLodgingForm = ({
                         <Stack>
                           <Text
                             size={'xs'}
-                          >{`${lodging.attachments ? lodging.attachments.length : 0} existing files`}</Text>
+                          >{`${exitingAttachments ? exitingAttachments.length : 0} existing files`}</Text>
                           <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                         </Stack>
                       );

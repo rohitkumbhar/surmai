@@ -1,6 +1,7 @@
 import { pb } from './pocketbase.ts';
 import { CreateTransportation, Transportation } from '../../../types/trips.ts';
 import { convertSavedToBrowserDate } from '../../time.ts';
+import { deleteAttachment } from './attachments.ts';
 
 const transportations = pb.collection('transportations');
 
@@ -37,8 +38,12 @@ export const saveTransportationAttachments = (transportationId: string, files: F
   return transportations.update(transportationId, formData);
 };
 
-export const deleteTransportationAttachment = (transportationId: string, fileName: string) => {
-  return transportations.update(transportationId, {
-    'attachments-': [fileName],
-  });
+export const deleteTransportationAttachment = (transportationId: string, attachmentId: string) => {
+  return transportations
+    .update(transportationId, {
+      'attachmentReferences-': [attachmentId],
+    })
+    .then(() => {
+      return deleteAttachment(attachmentId);
+    });
 };

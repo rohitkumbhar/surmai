@@ -1,7 +1,7 @@
-import { Activity, Trip } from '../../../types/trips.ts';
+import { Activity, Attachment, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
 import { listActivities } from '../../../lib/api';
-import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Title, Text } from '@mantine/core';
+import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
 import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,7 +9,15 @@ import { GenericActivityData } from './GenericActivityData.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
-export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
+export const ActivitiesPanel = ({
+  trip,
+  tripAttachments,
+  refetchTrip,
+}: {
+  trip: Trip;
+  tripAttachments?: Attachment[];
+  refetchTrip: () => void;
+}) => {
   const { t } = useTranslation();
   const tripId = trip.id;
   const { isPending, isError, data, error, refetch } = useQuery<Activity[]>({
@@ -19,6 +27,10 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
 
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
+
+  const refetchData = () => {
+    return refetch().then(() => refetchTrip());
+  };
 
   if (isPending) {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
@@ -42,7 +54,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
         <GenericActivityForm
           trip={trip}
           onSuccess={() => {
-            refetch();
+            refetchData();
             closeForm();
           }}
           onCancel={() => {
@@ -69,7 +81,7 @@ export const ActivitiesPanel = ({ trip }: { trip: Trip }) => {
           {data.map((t: Activity) => {
             return (
               <Fragment key={t.id}>
-                <GenericActivityData refetch={refetch} trip={trip} activity={t} />
+                <GenericActivityData refetch={refetchData} trip={trip} activity={t} tripAttachments={tripAttachments} />
               </Fragment>
             );
           })}

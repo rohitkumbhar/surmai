@@ -1,7 +1,7 @@
 package jobs
 
 import (
-	"backend/trips"
+	"backend/trips/import"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
@@ -91,6 +91,6 @@ func (job *ImportDemoDataJob) importDemoTrip() {
 	open, err := os.Open("/datasets/demo_trip.json")
 	defer open.Close()
 	if err == nil && noDemoUserError == nil {
-		_, _ = trips.Import(pbApp, open, demoUser.Id)
+		_, _ = _import.Import(pbApp, open, demoUser.Id)
 	}
 }

@@ -8,12 +8,12 @@ import { useTranslation } from 'react-i18next';
 import { IconPlaneArrival, IconPlaneDeparture } from '@tabler/icons-react';
 
 export const AirportSelect = ({
-                                propName,
-                                form,
-                                label,
-                                required,
-                                withAsterisk,
-                              }: {
+  propName,
+  form,
+  label,
+  required,
+  withAsterisk,
+}: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
@@ -121,7 +121,7 @@ export const AirportSelect = ({
       </Combobox.Target>
       <Combobox.Dropdown>
         <Combobox.Options>
-          <ScrollArea.Autosize  type="scroll">
+          <ScrollArea.Autosize type="scroll">
             {loading && <Combobox.Empty>Loading....</Combobox.Empty>}
             {!loading && options.length > 0 && options}
             {!loading && options.length === 0 && search != '' && (

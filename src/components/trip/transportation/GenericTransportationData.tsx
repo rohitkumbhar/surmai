@@ -1,4 +1,4 @@
-import { Transportation, Trip } from '../../../types/trips.ts';
+import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Group, HoverCard, Modal, rem, Stack, Text, Title, Tooltip } from '@mantine/core';
 import { IconCar, IconInfoCircle } from '@tabler/icons-react';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
@@ -19,10 +19,12 @@ export const GenericTransportationData = ({
   trip,
   transportation,
   refetch,
+  tripAttachments,
 }: {
   trip: Trip;
   transportation: Transportation;
   refetch: () => void;
+  tripAttachments?: Attachment[];
 }) => {
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
@@ -35,6 +37,11 @@ export const GenericTransportationData = ({
     transportation.type in transportationConfig
       ? transportationConfig[transportation.type]
       : transportationConfig['default'];
+
+  const transportationAttachments = tripAttachments?.filter((attachment) =>
+    transportation.attachmentReferences?.includes(attachment.id)
+  );
+
   return (
     <DataLine
       onEdit={() => {
@@ -81,6 +88,7 @@ export const GenericTransportationData = ({
         <GenericTransportationModeForm
           transportationType={transportation.type}
           transportation={transportation}
+          exitingAttachments={transportationAttachments}
           trip={trip}
           onSuccess={() => {
             refetch();
@@ -193,11 +201,14 @@ export const GenericTransportationData = ({
           </Text>
         </Grid.Col>
       </Grid>
-      <Attachments
-        entity={transportation}
-        refetch={refetch}
-        onDelete={(attachmentName) => deleteTransportationAttachment(transportation.id, attachmentName)}
-      />
+      {transportationAttachments && (
+        <Attachments
+          onDelete={(attachmentId) =>
+            deleteTransportationAttachment(transportation.id, attachmentId).then(() => refetch())
+          }
+          attachments={transportationAttachments}
+        />
+      )}
     </DataLine>
   );
 };

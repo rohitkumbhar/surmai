@@ -1,13 +1,18 @@
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import { CreateTransportation, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
+import {
+  Attachment,
+  CreateTransportation,
+  Transportation,
+  TransportationFormSchema,
+  Trip,
+} from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { createTransportationEntry, saveTransportationAttachments } from '../../../lib/api';
+import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { transportationConfig } from './config.tsx';
 import dayjs from 'dayjs';
@@ -19,12 +24,14 @@ export const GenericTransportationModeForm = ({
   transportation,
   onSuccess,
   onCancel,
+  exitingAttachments,
 }: {
   transportationType: string;
   trip: Trip;
   transportation?: Transportation;
   onSuccess: () => void;
   onCancel: () => void;
+  exitingAttachments?: Attachment[];
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -73,29 +80,23 @@ export const GenericTransportationModeForm = ({
       },
     };
 
-    if (transportation?.id) {
-      updateTransportation(transportation.id, payload).then((result) => {
-        if (files.length > 0) {
-          saveTransportationAttachments(result.id, files).then(() => {
-            onSuccess();
-          });
-        } else {
+    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
+      if (transportation?.id) {
+        payload.attachmentReferences = [
+          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+          ...attachments.map((attachment: Attachment) => attachment.id),
+        ];
+        updateTransportation(transportation.id, payload).then(() => {
           onSuccess();
-        }
-      });
-    } else {
-      createTransportationEntry(payload).then((result: Transportation) => {
-        if (files.length > 0) {
-          saveTransportationAttachments(result.id, files).then(() => {
-            onSuccess();
-          });
-        } else {
+        });
+      } else {
+        payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+        createTransportationEntry(payload).then(() => {
           onSuccess();
-        }
-      });
-    }
-
-    setSaving(false);
+        });
+      }
+      setSaving(false);
+    });
   };
 
   return (
@@ -180,7 +181,7 @@ export const GenericTransportationModeForm = ({
                       <Stack>
                         <Text
                           size={'xs'}
-                        >{`${transportation.attachments ? transportation.attachments.length : 0} existing files`}</Text>
+                        >{`${exitingAttachments ? exitingAttachments.length : 0} existing files`}</Text>
                         <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                       </Stack>
                     );
