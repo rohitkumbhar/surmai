@@ -1,9 +1,19 @@
 import { pb } from './pocketbase.ts';
-import { Activity, Collaborator, Lodging, NewTrip, Transportation, Trip, TripResponse } from '../../../types/trips.ts';
+import {
+  Activity,
+  Attachment,
+  Collaborator,
+  Lodging,
+  NewTrip,
+  Transportation,
+  Trip,
+  TripResponse,
+} from '../../../types/trips.ts';
 import { listActivities } from './activities.ts';
 import { User } from '../../../types/auth.ts';
 import { listTransportations } from './transportations.ts';
 import { listLodgings } from './lodgings.ts';
+import { getTripAttachments } from './attachments.ts';
 
 const trips = pb.collection('trips');
 
@@ -85,7 +95,7 @@ export const deleteTrip = (tripId: string) => {
 };
 
 export const getAttachmentUrl = (
-  record: Trip | Transportation | Lodging | Activity | User,
+  record: Trip | Transportation | Lodging | Activity | User | Attachment,
   fileName: string,
   options?: { [key: string]: string }
 ) => {
@@ -123,6 +133,17 @@ export const loadEverything = (tripId: string) => {
     })
     .then(() => {
       return getTrip(tripId);
+    })
+    .then(() => {
+      return getTripAttachments(tripId);
+    })
+    .then((attachments) => {
+      attachments.forEach((attachment) => {
+        const attachmentUrl = getAttachmentUrl(attachment, attachment.file);
+        fetch(attachmentUrl).then(() => {
+          console.log('Attachment ', attachment, ' downloaded');
+        });
+      });
     })
     .then(() => {
       return listTransportations(tripId);
@@ -166,9 +187,13 @@ export const loadEverything = (tripId: string) => {
 };
 
 export const exportTripData = async (tripId: string) => {
-  return await pb.send(`/api/surmai/trip/${tripId}/export`, {
-    method: 'POST',
-  });
+  return pb
+    .send(`/api/surmai/trip/${tripId}/export`, {
+      method: 'POST',
+    })
+    .then((response) => {
+      return Uint8Array.from(atob(response.data), (c) => c.charCodeAt(0));
+    });
 };
 
 export const importTripData = async (file: File) => {

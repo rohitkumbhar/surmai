@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { Accordion, Alert, Container, Group, LoadingOverlay, rem, Tabs, Text } from '@mantine/core';
 import { IconBed, IconCalendar, IconInfoSquare, IconPlane, IconRefresh, IconWifiOff } from '@tabler/icons-react';
-import { Trip } from '../../types/trips.ts';
-import { getTrip } from '../../lib/api';
+import { Attachment, Trip } from '../../types/trips.ts';
+import { getTrip, getTripAttachments } from '../../lib/api';
 import { Header } from '../../components/nav/Header.tsx';
 import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
 import { useQuery } from '@tanstack/react-query';
@@ -17,6 +17,7 @@ import { formatDate } from '../../lib/time.ts';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
+import { TripAttachments } from '../../components/trip/attachments/TripAttachments.tsx';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
@@ -34,6 +35,11 @@ export const ViewTrip = () => {
   } = useQuery<Trip>({
     queryKey: ['trip', tripId],
     queryFn: () => getTrip(tripId || ''),
+  });
+
+  const { data: tripAttachments, refetch: refetchAttachments } = useQuery<Attachment[]>({
+    queryKey: ['getTripAttachments', tripId],
+    queryFn: () => getTripAttachments(tripId || ''),
   });
 
   const [showAlert, { close: closeAlert }] = useDisclosure(true);
@@ -116,6 +122,7 @@ export const ViewTrip = () => {
         <Tabs.List>
           <Tabs.Tab value="organization">{t('organization', 'Organization')}</Tabs.Tab>
           <Tabs.Tab value="itinerary">{t('itinerary', 'Itinerary')}</Tabs.Tab>
+          <Tabs.Tab value="attachments">{t('attachments', 'Attachments')}</Tabs.Tab>
           <Tabs.Tab value="notes">{t('notes', 'Notes')}</Tabs.Tab>
         </Tabs.List>
 
@@ -143,7 +150,13 @@ export const ViewTrip = () => {
                 </Group>
               </Accordion.Control>
               <Accordion.Panel>
-                <BasicInfo trip={trip} refetch={refetch} />
+                <BasicInfo
+                  trip={trip}
+                  tripAttachments={tripAttachments}
+                  refetch={() => {
+                    return refetch().then(() => refetchAttachments());
+                  }}
+                />
               </Accordion.Panel>
             </Accordion.Item>
 
@@ -172,7 +185,13 @@ export const ViewTrip = () => {
                 </Group>
               </Accordion.Control>
               <Accordion.Panel>
-                <TransportationPanel trip={trip} />
+                <TransportationPanel
+                  trip={trip}
+                  tripAttachments={tripAttachments}
+                  refetchTrip={() => {
+                    return refetch().then(() => refetchAttachments());
+                  }}
+                />
               </Accordion.Panel>
             </Accordion.Item>
 
@@ -198,7 +217,13 @@ export const ViewTrip = () => {
                 </Group>
               </Accordion.Control>
               <Accordion.Panel>
-                <LodgingPanel trip={trip} />
+                <LodgingPanel
+                  trip={trip}
+                  tripAttachments={tripAttachments}
+                  refetchTrip={() => {
+                    return refetch().then(() => refetchAttachments());
+                  }}
+                />
               </Accordion.Panel>
             </Accordion.Item>
 
@@ -224,13 +249,28 @@ export const ViewTrip = () => {
                 </Group>
               </Accordion.Control>
               <Accordion.Panel>
-                <ActivitiesPanel trip={trip} />
+                <ActivitiesPanel
+                  trip={trip}
+                  tripAttachments={tripAttachments}
+                  refetchTrip={() => {
+                    return refetch().then(() => refetchAttachments());
+                  }}
+                />
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
         </Tabs.Panel>
         <Tabs.Panel value="itinerary">
           <ItineraryView trip={trip} />
+        </Tabs.Panel>
+        <Tabs.Panel value="attachments">
+          <TripAttachments
+            trip={trip}
+            tripAttachments={tripAttachments}
+            refetchTrip={() => {
+              return refetch().then(() => refetchAttachments());
+            }}
+          />
         </Tabs.Panel>
         <Tabs.Panel value="notes">
           <TripNotes refetch={refetch} trip={trip} />

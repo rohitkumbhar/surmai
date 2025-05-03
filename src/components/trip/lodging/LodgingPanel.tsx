@@ -1,4 +1,4 @@
-import { Lodging, Trip } from '../../../types/trips.ts';
+import { Attachment, Lodging, Trip } from '../../../types/trips.ts';
 import { useQuery } from '@tanstack/react-query';
 import { listLodgings } from '../../../lib/api';
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
@@ -9,7 +9,15 @@ import { GenericLodgingData } from './GenericLodgingData.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 
-export const LodgingPanel = ({ trip }: { trip: Trip }) => {
+export const LodgingPanel = ({
+  trip,
+  tripAttachments,
+  refetchTrip,
+}: {
+  trip: Trip;
+  tripAttachments?: Attachment[];
+  refetchTrip: () => void;
+}) => {
   const { t } = useTranslation();
   const tripId = trip.id;
   const { isPending, isError, data, error, refetch } = useQuery<Lodging[]>({
@@ -20,6 +28,10 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const [newLodgingType, setNewLodgingType] = useState<string>('hotel');
+
+  const refetchData = () => {
+    return refetch().then(() => refetchTrip());
+  };
 
   if (isPending) {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
@@ -44,7 +56,7 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
           type={newLodgingType}
           trip={trip}
           onSuccess={() => {
-            refetch();
+            refetchData();
             closeForm();
           }}
           onCancel={() => {
@@ -72,7 +84,7 @@ export const LodgingPanel = ({ trip }: { trip: Trip }) => {
           {data.map((t: Lodging) => {
             return (
               <Fragment key={t.id}>
-                <GenericLodgingData refetch={refetch} trip={trip} lodging={t} />
+                <GenericLodgingData refetch={refetchData} trip={trip} lodging={t} tripAttachments={tripAttachments} />
               </Fragment>
             );
           })}

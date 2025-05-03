@@ -43,7 +43,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         label={t('trip_dates', 'Trip Dates')}
         description={t(
           'trip_dates_description',
-          'Select the start and end dates of the trip. These dates are in your timezone',
+          'Select the start and end dates of the trip. These dates are in your timezone'
         )}
         key={form.key('dateRange')}
         {...form.getInputProps('dateRange')}

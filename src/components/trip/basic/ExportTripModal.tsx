@@ -3,6 +3,7 @@ import { Trip } from '../../../types/trips.ts';
 import { Button, Center, Container, Text } from '@mantine/core';
 import { useState } from 'react';
 import { exportTripData } from '../../../lib/api';
+import { useTranslation } from 'react-i18next';
 
 export const ExportTripModal = ({
   innerProps,
@@ -10,7 +11,7 @@ export const ExportTripModal = ({
   trip: Trip;
 }>) => {
   const { trip } = innerProps;
-
+  const { t } = useTranslation();
   const [preparing, setPreparing] = useState<boolean>(false);
   const [downloadLink, setDownloadLink] = useState<string | undefined>();
 
@@ -24,7 +25,7 @@ export const ExportTripModal = ({
   };
 
   const prepareDownload = (tripData: any) => {
-    const blob = new Blob([JSON.stringify(tripData)], { type: 'application/json' });
+    const blob = new Blob([tripData], { type: 'application/zip' });
 
     // If we are replacing a previously generated file we need to
     // manually revoke the object URL to avoid memory leaks.
@@ -38,18 +39,18 @@ export const ExportTripModal = ({
 
   return (
     <Container>
-      <Text size={'sm'}>
-        Trip data will be downloaded as a JSON file. Attachments will be included in Base64 encoded format.
+      <Text size={'sm'} p={'sm'}>
+        {t('export_trip_description', 'Exporting this trip will create a zip file containing all the trip data.')}
       </Text>
       <Center>
         {!downloadLink && (
           <Button loading={preparing} onClick={prepareExport}>
-            Prepare
+            {t('prepare_export', 'Prepare Export')}
           </Button>
         )}
         {downloadLink && (
-          <Button component={'a'} href={downloadLink} download={`trip-${trip.name}-${trip.id}.json`}>
-            Download
+          <Button component={'a'} href={downloadLink} download={`trip-${trip.name}-${trip.id}.zip`}>
+            {t('download', 'Download')}
           </Button>
         )}
       </Center>

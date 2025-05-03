@@ -3,8 +3,15 @@ package types
 import "github.com/pocketbase/pocketbase/tools/types"
 
 type UploadedFile struct {
+	Id          string `json:"id"`
 	FileName    string `json:"fileName"`
 	FileContent string `json:"fileContent"`
+}
+
+type Attachment struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+	File string `json:"file"`
 }
 
 type Destination struct {
@@ -27,51 +34,56 @@ type Cost struct {
 }
 
 type Transportation struct {
-	Id          string          `json:"id"`
-	Type        string          `json:"type"`
-	Origin      string          `json:"origin"`
-	Destination string          `json:"destination"`
-	Cost        *Cost           `json:"cost"`
-	Departure   types.DateTime  `json:"departure"`
-	Arrival     types.DateTime  `json:"arrival"`
-	Attachments []*UploadedFile `json:"attachments"`
-	Metadata    *map[string]any `json:"metadata"`
+	Id                   string          `json:"id"`
+	Type                 string          `json:"type"`
+	Origin               string          `json:"origin"`
+	Destination          string          `json:"destination"`
+	Cost                 *Cost           `json:"cost"`
+	Departure            types.DateTime  `json:"departure"`
+	Arrival              types.DateTime  `json:"arrival"`
+	Attachments          []*UploadedFile `json:"attachments"`
+	AttachmentReferences []string        `json:"attachmentReferences"`
+	Metadata             *map[string]any `json:"metadata"`
 }
 
 type Lodging struct {
-	Id               string          `json:"id"`
-	Type             string          `json:"type"`
-	Name             string          `json:"name"`
-	Address          string          `json:"address"`
-	ConfirmationCode string          `json:"confirmationCode"`
-	Cost             *Cost           `json:"cost"`
-	StartDate        types.DateTime  `json:"startDate"`
-	EndDate          types.DateTime  `json:"endDate"`
-	Attachments      []*UploadedFile `json:"attachments"`
-	Metadata         *map[string]any `json:"metadata"`
+	Id                   string          `json:"id"`
+	Type                 string          `json:"type"`
+	Name                 string          `json:"name"`
+	Address              string          `json:"address"`
+	ConfirmationCode     string          `json:"confirmationCode"`
+	Cost                 *Cost           `json:"cost"`
+	StartDate            types.DateTime  `json:"startDate"`
+	EndDate              types.DateTime  `json:"endDate"`
+	Attachments          []*UploadedFile `json:"attachments"`
+	AttachmentReferences []string        `json:"attachmentReferences"`
+	Metadata             *map[string]any `json:"metadata"`
 }
 
 type Activity struct {
-	Id               string          `json:"id"`
-	Name             string          `json:"name"`
-	Description      string          `json:"description"`
-	Address          string          `json:"address"`
-	ConfirmationCode string          `json:"confirmationCode"`
-	Cost             *Cost           `json:"cost"`
-	StartDate        types.DateTime  `json:"startDate"`
-	Attachments      []*UploadedFile `json:"attachments"`
-	Metadata         *map[string]any `json:"metadata"`
+	Id                   string          `json:"id"`
+	Name                 string          `json:"name"`
+	Description          string          `json:"description"`
+	Address              string          `json:"address"`
+	ConfirmationCode     string          `json:"confirmationCode"`
+	Cost                 *Cost           `json:"cost"`
+	StartDate            types.DateTime  `json:"startDate"`
+	Attachments          []*UploadedFile `json:"attachments"`
+	AttachmentReferences []string        `json:"attachmentReferences"`
+	Metadata             *map[string]any `json:"metadata"`
 }
 
 type Trip struct {
-	Id           string         `json:"id"`
-	Name         string         `json:"name"`
-	Description  string         `json:"description"`
-	StartDate    types.DateTime `json:"startDate"`
-	EndDate      types.DateTime `json:"endDate"`
-	Destinations []Destination  `json:"destinations"`
-	Participants []Participant  `json:"participants"`
-	CoverImage   *UploadedFile  `json:"coverImage"`
+	Id                 string         `json:"id"`
+	Name               string         `json:"name"`
+	Description        string         `json:"description"`
+	StartDate          types.DateTime `json:"startDate"`
+	EndDate            types.DateTime `json:"endDate"`
+	Destinations       []Destination  `json:"destinations"`
+	Participants       []Participant  `json:"participants"`
+	CoverImage         *UploadedFile  `json:"coverImage"`
+	CoverImageFileName string         `json:"coverImageFileName"`
+	Notes              string         `json:"notes"`
 }
 
 type ExportedTrip struct {
@@ -79,4 +91,5 @@ type ExportedTrip struct {
 	Transportations []*Transportation `json:"transportations"`
 	Lodgings        []*Lodging        `json:"lodgings"`
 	Activities      []*Activity       `json:"activities"`
+	Attachments     []*Attachment     `json:"attachments"`
 }

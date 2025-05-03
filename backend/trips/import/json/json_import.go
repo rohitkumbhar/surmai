@@ -1,32 +1,26 @@
-package trips
+package json
 
 import (
+	im "backend/trips/import/attachments"
 	bt "backend/types"
-	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/pocketbase/pocketbase/tools/filesystem"
-	"go/types"
-	"mime/multipart"
+	t "go/types"
 )
 
-func Import(e core.App, file multipart.File, ownerId string) (string, error) {
-
-	var buff bytes.Buffer
-	_, _ = buff.ReadFrom(file)
+func ImportJsonFile(e core.App, fileContents []byte, ownerId string) (string, error) {
 
 	var data bt.ExportedTrip
-	err := json.Unmarshal(buff.Bytes(), &data)
+	err := json.Unmarshal(fileContents, &data)
 	if err != nil {
 		return "", err
 	}
 
 	if data.Trip == nil {
-		return "", types.Error{Msg: "Cannot parse trip data"}
+		return "", t.Error{Msg: "Cannot parse trip data"}
 	}
 
-	trip, tripError := createTrip(e, ownerId, &data)
+	trip, tripError := importBasicTripInfo(e, ownerId, &data)
 	if tripError != nil {
 		return "", tripError
 	}
@@ -42,7 +36,6 @@ func createTransportations(app core.App, tripId string, tripData *bt.ExportedTri
 	collection, _ := app.FindCollectionByNameOrId("transportations")
 	records := make([]*core.Record, 0, len(tripData.Transportations))
 	if tripData.Transportations != nil {
-
 		for _, tr := range tripData.Transportations {
 			record := core.NewRecord(collection)
 			record.Set("type", tr.Type)
@@ -53,11 +46,10 @@ func createTransportations(app core.App, tripId string, tripData *bt.ExportedTri
 			record.Set("cost", tr.Cost)
 			record.Set("metadata", tr.Metadata)
 			record.Set("trip", tripId)
-			if tr.Attachments != nil {
-				files, _ := getFiles(tr.Attachments)
-				record.Set("attachments", files)
+			if tr.Attachments != nil && len(tr.Attachments) > 0 {
+				attachmentReferences, _ := im.UploadAttachments(app, tr.Attachments, tripId)
+				record.Set("attachmentReferences", attachmentReferences)
 			}
-
 			err := app.Save(record)
 			if err != nil {
 				return nil, err
@@ -86,9 +78,9 @@ func createLodgings(app core.App, tripId string, tripData *bt.ExportedTrip) ([]*
 			record.Set("cost", l.Cost)
 			record.Set("metadata", l.Metadata)
 			record.Set("trip", tripId)
-			if l.Attachments != nil {
-				files, _ := getFiles(l.Attachments)
-				record.Set("attachments", files)
+			if l.Attachments != nil && len(l.Attachments) > 0 {
+				attachmentReferences, _ := im.UploadAttachments(app, l.Attachments, tripId)
+				record.Set("attachmentReferences", attachmentReferences)
 			}
 
 			err := app.Save(record)
@@ -118,9 +110,9 @@ func createActivities(app core.App, tripId string, tripData *bt.ExportedTrip) ([
 			record.Set("cost", a.Cost)
 			record.Set("metadata", a.Metadata)
 			record.Set("trip", tripId)
-			if a.Attachments != nil {
-				files, _ := getFiles(a.Attachments)
-				record.Set("attachments", files)
+			if a.Attachments != nil && len(a.Attachments) > 0 {
+				attachmentReferences, _ := im.UploadAttachments(app, a.Attachments, tripId)
+				record.Set("attachmentReferences", attachmentReferences)
 			}
 
 			err := app.Save(record)
@@ -134,7 +126,7 @@ func createActivities(app core.App, tripId string, tripData *bt.ExportedTrip) ([
 	return records, nil
 }
 
-func createTrip(app core.App, userId string, data *bt.ExportedTrip) (*core.Record, error) {
+func importBasicTripInfo(app core.App, userId string, data *bt.ExportedTrip) (*core.Record, error) {
 	trips, _ := app.FindCollectionByNameOrId("trips")
 	record := core.NewRecord(trips)
 
@@ -146,9 +138,10 @@ func createTrip(app core.App, userId string, data *bt.ExportedTrip) (*core.Recor
 	record.Set("destinations", tripData.Destinations)
 	record.Set("participants", tripData.Participants)
 	record.Set("ownerId", userId)
+	record.Set("notes", tripData.Notes)
 
 	if tripData.CoverImage != nil {
-		file, fileErr := getFile(tripData.CoverImage)
+		file, fileErr := im.GetFile(tripData.CoverImage)
 		if fileErr != nil {
 			return nil, fileErr
 		}
@@ -161,31 +154,4 @@ func createTrip(app core.App, userId string, data *bt.ExportedTrip) (*core.Recor
 	}
 
 	return record, nil
-}
-
-func getFiles(attachments []*bt.UploadedFile) ([]*filesystem.File, error) {
-
-	files := make([]*filesystem.File, 0, len(attachments))
-	for _, attachment := range attachments {
-		file, _ := getFile(attachment)
-		files = append(files, file)
-	}
-	return files, nil
-}
-
-func getFile(uploadedFile *bt.UploadedFile) (*filesystem.File, error) {
-
-	fileName := uploadedFile.FileName
-	encodedFileContent := uploadedFile.FileContent
-	decodedBytes, err := base64.StdEncoding.DecodeString(encodedFileContent)
-	if err != nil {
-		return nil, err
-	}
-
-	file, err := filesystem.NewFileFromBytes(decodedBytes, fileName)
-	if err != nil {
-		return nil, err
-	}
-
-	return file, nil
 }

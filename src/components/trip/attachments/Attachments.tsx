@@ -1,19 +1,24 @@
-import { Activity, Lodging, Transportation } from '../../../types/trips.ts';
+import { Attachment } from '../../../types/trips.ts';
 import { Anchor, Badge, CloseButton, Divider, Group, Text } from '@mantine/core';
 import { getAttachmentUrl } from '../../../lib/api';
-import { IconFile, IconFileTypeBmp, IconFileTypeJpg, IconFileTypePdf, IconFileTypePng } from '@tabler/icons-react';
+import {
+  IconFile,
+  IconFileTypeBmp,
+  IconFileTypeHtml,
+  IconFileTypeJpg,
+  IconFileTypePdf,
+  IconFileTypePng,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { useMediaQuery } from '@mantine/hooks';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 
 export const Attachments = ({
-  entity,
-  refetch,
+  attachments,
   onDelete,
 }: {
-  entity: Transportation | Lodging | Activity;
-  refetch: () => void;
+  attachments: Attachment[];
   onDelete: (attachmentName: string) => Promise<unknown>;
 }) => {
   const { t } = useTranslation();
@@ -29,6 +34,8 @@ export const Attachments = ({
       return <IconFileTypeBmp />;
     } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
       return <IconFileTypeJpg />;
+    } else if (fileName.endsWith('.html')) {
+      return <IconFileTypeHtml />;
     }
     return <IconFile />;
   };
@@ -36,17 +43,17 @@ export const Attachments = ({
   return (
     <>
       <Divider />
-      {entity.attachments && entity.attachments.length > 0 && (
+      {attachments && attachments.length > 0 && (
         <Group p={'sm'}>
-          {(entity.attachments || []).map((attachmentName: string) => {
+          {(attachments || []).map((entry: Attachment) => {
             return (
               <Badge
-                key={attachmentName}
+                key={entry.id}
                 variant={'transparent'}
                 size={'md'}
                 tt={'none'}
                 radius={0}
-                leftSection={getFileTypeIcon(attachmentName)}
+                leftSection={getFileTypeIcon(entry.name)}
                 rightSection={
                   <CloseButton
                     title={t('delete_attachment', 'Delete Attachment')}
@@ -60,7 +67,7 @@ export const Attachments = ({
                             {t(
                               'attachment_deletion_confirmation',
                               'Deleting "{{attachmentName}}". This action cannot be undone.',
-                              { attachmentName: attachmentName }
+                              { attachmentName: entry }
                             )}
                           </Text>
                         ),
@@ -70,14 +77,13 @@ export const Attachments = ({
                         },
                         onCancel: () => {},
                         onConfirm: () => {
-                          onDelete(attachmentName).then(() => {
+                          onDelete(entry.id).then(() => {
                             showDeleteNotification({
                               title: t('attachments', 'Attachments'),
                               message: t('attachment_deleted', 'Attachment {{name}} has been deleted', {
-                                name: attachmentName,
+                                name: entry.name,
                               }),
                             });
-                            refetch();
                           });
                         },
                       });
@@ -90,24 +96,24 @@ export const Attachments = ({
                   target={'_blank'}
                   onClick={(event) => {
                     event.preventDefault();
-                    const url = getAttachmentUrl(entity, attachmentName);
+                    const url = getAttachmentUrl(entry, entry.file);
                     openContextModal({
                       modal: 'attachmentViewer',
-                      title: attachmentName,
+                      title: entry.name,
                       radius: 'md',
                       withCloseButton: true,
                       fullScreen: isMobile,
                       size: 'auto',
                       innerProps: {
-                        fileName: attachmentName,
+                        fileName: entry.name,
                         attachmentUrl: url,
                       },
                     });
                   }}
                   rel="noreferrer"
-                  key={attachmentName}
+                  key={entry.id}
                 >
-                  {attachmentName}
+                  {entry.name}
                 </Anchor>
               </Badge>
             );

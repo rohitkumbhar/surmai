@@ -90,3 +90,5 @@ export {
   listLodgings,
   deleteLodgingAttachments,
 } from './pocketbase/lodgings.ts';
+
+export { getTripAttachments, deleteAttachment, uploadAttachments } from './pocketbase/attachments.ts';

@@ -1,5 +1,5 @@
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
-import { Transportation, Trip } from '../../../types/trips.ts';
+import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 import { AddTransportationMenu } from './AddTransportationMenu.tsx';
 import { Fragment, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
@@ -11,7 +11,15 @@ import { GenericTransportationModeForm } from './GenericTransportationModeForm.t
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { CarRentalForm } from './CarRentalForm.tsx';
 
-export const TransportationPanel = ({ trip }: { trip: Trip }) => {
+export const TransportationPanel = ({
+  trip,
+  tripAttachments,
+  refetchTrip,
+}: {
+  trip: Trip;
+  tripAttachments?: Attachment[];
+  refetchTrip: () => void;
+}) => {
   const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const [carRentalFormOpened, { open: openRentalForm, close: closeRentalForm }] = useDisclosure(false);
@@ -33,6 +41,10 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
 
   const rentalAgreements = (data || []).filter((t) => t.type === 'rental_car');
   const tickets = (data || []).filter((t) => t.type !== 'rental_car');
+
+  const refetchData = () => {
+    return refetch().then(() => refetchTrip());
+  };
 
   return (
     <Container py={'xs'} size="xl">
@@ -101,12 +113,49 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         {tickets.map((t: Transportation) => {
           return (
             <Fragment key={t.id}>
-              {t.type === 'flight' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-              {t.type === 'rental_car' && <CarRentalData refetch={refetch} trip={trip} rental={t} />}
-              {t.type === 'bus' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-              {t.type === 'boat' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-              {t.type === 'train' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
-              {t.type === 'car' && <GenericTransportationData refetch={refetch} trip={trip} transportation={t} />}
+              {t.type === 'flight' && (
+                <GenericTransportationData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                />
+              )}
+              {t.type === 'rental_car' && (
+                <CarRentalData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} rental={t} />
+              )}
+              {t.type === 'bus' && (
+                <GenericTransportationData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                />
+              )}
+              {t.type === 'boat' && (
+                <GenericTransportationData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                />
+              )}
+              {t.type === 'train' && (
+                <GenericTransportationData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                />
+              )}
+              {t.type === 'car' && (
+                <GenericTransportationData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                />
+              )}
             </Fragment>
           );
         })}
@@ -122,7 +171,7 @@ export const TransportationPanel = ({ trip }: { trip: Trip }) => {
         {rentalAgreements.map((t: Transportation) => {
           return (
             <Fragment key={t.id}>
-              <CarRentalData refetch={refetch} trip={trip} rental={t} />
+              <CarRentalData refetch={refetchData} trip={trip} rental={t} />
             </Fragment>
           );
         })}

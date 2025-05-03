@@ -32,7 +32,12 @@ export const ImportTripAction = () => {
   }, [tripDataFile, t, navigate]);
 
   return (
-    <FileButton onChange={setTripDataFile} accept="application/json" form={'tripData'} name={'tripData'}>
+    <FileButton
+      onChange={setTripDataFile}
+      accept="application/json,application/zip"
+      form={'tripData'}
+      name={'tripData'}
+    >
       {(props) => {
         return (
           <Button {...props} loading={importing} variant={'subtle'}>

@@ -1,46 +1,112 @@
 package trips
 
 import (
+	"archive/zip"
 	bt "backend/types"
 	"bytes"
-	"encoding/base64"
 	"encoding/json"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"io"
 	"log"
+	"os"
 )
 
-func Export(e core.App, trip *core.Record) *bt.ExportedTrip {
+func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File) error {
 
-	t := bt.Trip{
-		Id:           trip.Id,
-		Name:         trip.GetString("name"),
-		Description:  trip.GetString("description"),
-		StartDate:    trip.GetDateTime("startDate"),
-		EndDate:      trip.GetDateTime("endDate"),
-		CoverImage:   getUploadedFile(e, trip, trip.GetString("coverImage")),
-		Destinations: getDestinations(trip),
-		Participants: getParticipants(trip),
-	}
+	zipWriter := zip.NewWriter(tripExport)
 
-	e.Logger().Debug("Exported Basic trip data", "id", trip.Id)
-
-	transportations := buildTransportations(e, trip)
-	lodgings := buildLodgings(e, trip)
-	activities := buildActivities(e, trip)
+	t := exportTrip(app, trip, zipWriter)
+	transportations := exportTransportations(app, trip)
+	lodgings := exportLodgings(app, trip)
+	activities := exportActivities(app, trip)
+	attachments, _ := writeAttachmentsWithMapping(app, trip, zipWriter)
 
 	exportedTrip := bt.ExportedTrip{
 		Trip:            &t,
 		Transportations: transportations,
 		Lodgings:        lodgings,
 		Activities:      activities,
+		Attachments:     attachments,
 	}
 
-	return &exportedTrip
+	exportedTripEntities, err := json.MarshalIndent(exportedTrip, "", " ")
+	tripJsonExport, _ := zipWriter.Create("trip.json")
+	_, err = io.Copy(tripJsonExport, bytes.NewReader(exportedTripEntities))
+	if err != nil {
+		return err
+	}
+
+	return zipWriter.Close()
 }
 
-func buildActivities(e core.App, trip *core.Record) []*bt.Activity {
+func exportTrip(app core.App, trip *core.Record, zipWriter *zip.Writer) bt.Trip {
+	t := bt.Trip{
+		Id:                 trip.Id,
+		Name:               trip.GetString("name"),
+		Description:        trip.GetString("description"),
+		StartDate:          trip.GetDateTime("startDate"),
+		EndDate:            trip.GetDateTime("endDate"),
+		CoverImageFileName: trip.GetString("coverImage"),
+		Notes:              trip.GetString("notes"),
+		Destinations:       getDestinations(trip),
+		Participants:       getParticipants(trip),
+	}
+
+	// add cover image
+	coverImageFileName := trip.GetString("coverImage")
+	_ = writeFileToArchive(app, trip, zipWriter, coverImageFileName)
+
+	return t
+}
+
+func writeAttachmentsWithMapping(app core.App, trip *core.Record, zipWriter *zip.Writer) ([]*bt.Attachment, error) {
+
+	var attachmentExport []*bt.Attachment
+
+	// add all trip attachments
+	attachments, _ := app.FindAllRecords("trip_attachments", dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
+	for _, attachment := range attachments {
+		fileName := attachment.GetString("file")
+		attachmentExport = append(attachmentExport, &bt.Attachment{
+			Id:   attachment.Id,
+			Name: attachment.GetString("name"),
+			File: fileName,
+		})
+
+		attachmentsError := writeFileToArchive(app, attachment, zipWriter, fileName)
+		if attachmentsError != nil {
+			return nil, attachmentsError
+		}
+	}
+	return attachmentExport, nil
+}
+
+func writeFileToArchive(app core.App, record *core.Record, zipWriter *zip.Writer, fileName string) error {
+
+	if fileName != "" {
+
+		fileKey := record.BaseFilesPath() + "/" + fileName
+		fsys, _ := app.NewFilesystem()
+		defer fsys.Close()
+
+		serverFile, _ := fsys.GetFile(fileKey)
+
+		if serverFile != nil {
+			defer serverFile.Close()
+
+			coverImageExport, _ := zipWriter.Create("files/" + fileName)
+			_, err := io.Copy(coverImageExport, serverFile)
+			if err != nil {
+				return err
+			}
+		}
+
+	}
+	return nil
+}
+
+func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 
 	activities, _ := e.FindAllRecords("activities",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
@@ -49,13 +115,13 @@ func buildActivities(e core.App, trip *core.Record) []*bt.Activity {
 	for _, l := range activities {
 
 		ct := bt.Activity{
-			Id:               l.Id,
-			Name:             l.GetString("name"),
-			Description:      l.GetString("description"),
-			Address:          l.GetString("address"),
-			StartDate:        l.GetDateTime("startDate"),
-			ConfirmationCode: l.GetString("confirmationCode"),
-			Attachments:      getAttachments(e, l),
+			Id:                   l.Id,
+			Name:                 l.GetString("name"),
+			Description:          l.GetString("description"),
+			Address:              l.GetString("address"),
+			StartDate:            l.GetDateTime("startDate"),
+			ConfirmationCode:     l.GetString("confirmationCode"),
+			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -68,7 +134,7 @@ func buildActivities(e core.App, trip *core.Record) []*bt.Activity {
 
 }
 
-func buildLodgings(e core.App, trip *core.Record) []*bt.Lodging {
+func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 
 	lodgings, _ := e.FindAllRecords("lodgings",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
@@ -77,14 +143,14 @@ func buildLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 	for _, l := range lodgings {
 
 		ct := bt.Lodging{
-			Id:               l.Id,
-			Name:             l.GetString("name"),
-			Address:          l.GetString("address"),
-			StartDate:        l.GetDateTime("startDate"),
-			EndDate:          l.GetDateTime("endDate"),
-			ConfirmationCode: l.GetString("confirmationCode"),
-			Type:             l.GetString("type"),
-			Attachments:      getAttachments(e, l),
+			Id:                   l.Id,
+			Name:                 l.GetString("name"),
+			Address:              l.GetString("address"),
+			StartDate:            l.GetDateTime("startDate"),
+			EndDate:              l.GetDateTime("endDate"),
+			ConfirmationCode:     l.GetString("confirmationCode"),
+			Type:                 l.GetString("type"),
+			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 		}
 
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
@@ -99,75 +165,29 @@ func buildLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 
 }
 
-func buildTransportations(e core.App, trip *core.Record) []*bt.Transportation {
+func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 
 	transportations, _ := e.FindAllRecords("transportations",
 		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
 
 	var payload []*bt.Transportation
 	for _, tr := range transportations {
-
 		ct := bt.Transportation{
-			Id:          tr.Id,
-			Type:        tr.GetString("type"),
-			Origin:      tr.GetString("origin"),
-			Destination: tr.GetString("destination"),
-			Departure:   tr.GetDateTime("departureTime"),
-			Arrival:     tr.GetDateTime("arrivalTime"),
-			Attachments: getAttachments(e, tr),
+			Id:                   tr.Id,
+			Type:                 tr.GetString("type"),
+			Origin:               tr.GetString("origin"),
+			Destination:          tr.GetString("destination"),
+			Departure:            tr.GetDateTime("departureTime"),
+			Arrival:              tr.GetDateTime("arrivalTime"),
+			AttachmentReferences: tr.GetStringSlice("attachmentReferences"),
 		}
-
 		_ = tr.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = tr.UnmarshalJSONField("cost", &ct.Cost)
-
 		payload = append(payload, &ct)
 		e.Logger().Debug("Exported Transportation  data", "id", tr.Id)
-
 	}
 
 	return payload
-}
-
-func getAttachments(e core.App, r *core.Record) []*bt.UploadedFile {
-
-	attachments := r.GetStringSlice("attachments")
-	var payload []*bt.UploadedFile
-	for _, attachmentName := range attachments {
-		payload = append(payload, getUploadedFile(e, r, attachmentName))
-	}
-	return payload
-}
-
-func getUploadedFile(e core.App, record *core.Record, fileName string) *bt.UploadedFile {
-
-	if fileName != "" {
-		return &bt.UploadedFile{
-			FileName:    fileName,
-			FileContent: getFileAsBase64(e, record, fileName),
-		}
-	}
-	return nil
-}
-
-func getFileAsBase64(e core.App, record *core.Record, fileName string) string {
-
-	if fileName != "" {
-
-		fileKey := record.BaseFilesPath() + "/" + fileName
-		fsys, _ := e.NewFilesystem()
-		defer fsys.Close()
-
-		r, _ := fsys.GetFile(fileKey)
-		defer r.Close()
-
-		content := new(bytes.Buffer)
-		_, _ = io.Copy(content, r)
-
-		base64Str := base64.StdEncoding.EncodeToString(content.Bytes())
-		return base64Str
-	}
-
-	return ""
 }
 
 func getDestinations(trip *core.Record) []bt.Destination {

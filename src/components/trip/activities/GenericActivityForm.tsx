@@ -1,4 +1,4 @@
-import { Activity, ActivityFormSchema, CreateActivity, Trip } from '../../../types/trips.ts';
+import { Activity, ActivityFormSchema, Attachment, CreateActivity, Trip } from '../../../types/trips.ts';
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
@@ -6,7 +6,7 @@ import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createActivityEntry, saveActivityAttachments, updateActivityEntry } from '../../../lib/api';
+import { createActivityEntry, updateActivityEntry, uploadAttachments } from '../../../lib/api';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
 
@@ -15,11 +15,13 @@ export const GenericActivityForm = ({
   activity,
   onSuccess,
   onCancel,
+  exitingAttachments,
 }: {
   trip: Trip;
   activity?: Activity;
   onSuccess: () => void;
   onCancel: () => void;
+  exitingAttachments?: Attachment[];
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -49,32 +51,26 @@ export const GenericActivityForm = ({
         value: values.cost,
         currency: values.currencyCode,
       },
+      attachmentReferences: activity?.attachmentReferences || [],
     };
 
-    if (activity?.id) {
-      // update
-      updateActivityEntry(activity.id, data as CreateActivity).then((result) => {
-        if (files.length > 0) {
-          saveActivityAttachments(result.id, files).then(() => {
-            onSuccess();
-          });
-        } else {
+    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
+      if (activity?.id) {
+        data.attachmentReferences = [
+          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+          ...attachments.map((attachment: Attachment) => attachment.id),
+        ];
+        updateActivityEntry(activity.id, data as unknown as CreateActivity).then(() => {
           onSuccess();
-        }
-      });
-    } else {
-      createActivityEntry(data as CreateActivity).then((result) => {
-        if (files.length > 0) {
-          saveActivityAttachments(result.id, files).then(() => {
-            onSuccess();
-          });
-        } else {
+        });
+      } else {
+        data.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+        createActivityEntry(data as unknown as CreateActivity).then(() => {
           onSuccess();
-        }
-      });
-    }
-    setSaving(false);
-    onSuccess();
+        });
+      }
+      setSaving(false);
+    });
   };
 
   return (
@@ -144,7 +140,7 @@ export const GenericActivityForm = ({
               <Group>
                 <FileButton
                   onChange={setFiles}
-                  accept="application/pdf,image/png,image/jpeg,image/gif,image/webp"
+                  accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
                   form={'files'}
                   name={'files'}
                   multiple
@@ -155,7 +151,7 @@ export const GenericActivityForm = ({
                         <Stack>
                           <Text
                             size={'xs'}
-                          >{`${activity.attachments ? activity.attachments.length : 0} existing files`}</Text>
+                          >{`${exitingAttachments ? exitingAttachments.length : 0} existing files`}</Text>
                           <Button {...props}>{t('upload_more', 'Upload More')}</Button>
                         </Stack>
                       );
