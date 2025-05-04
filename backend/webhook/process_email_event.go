@@ -68,6 +68,7 @@ func ProcessEmailEvent(app core.App, surmai *bt.SurmaiApp, email bt.EmailEvent) 
 
 func addFlightsAsTransportationRecords(app core.App, trip bt.Trip, inferredFlights bt.InferFlightDataResults, emailBodyResult bt.FetchEmailBodyResult, email bt.EmailEvent) error {
 	transportations, _ := app.FindCollectionByNameOrId("transportations")
+	tripAttachments, _ := app.FindCollectionByNameOrId("trip_attachments")
 
 	for _, flight := range inferredFlights.Flights {
 		// add flight to transportations
@@ -112,6 +113,17 @@ func addFlightsAsTransportationRecords(app core.App, trip bt.Trip, inferredFligh
 			metadata["reservation"] = flight.ConfirmationCode
 		}
 
+		attachmentName := fmt.Sprintf("%s.html", email.Subject)
+		emailContent, _ := filesystem.NewFileFromBytes([]byte(emailBodyResult.Html), attachmentName)
+		attachmentRecord := core.NewRecord(tripAttachments)
+		attachmentRecord.Set("trip", trip.Id)
+		attachmentRecord.Set("name", attachmentName)
+		attachmentRecord.Set("file", emailContent)
+		attachmentError := app.Save(attachmentRecord)
+		if emailBodyResult.Error != nil {
+			return attachmentError
+		}
+
 		record := core.NewRecord(transportations)
 		record.Set("type", "flight")
 		record.Set("origin", flight.DepartureAirportIataCode)
@@ -120,10 +132,7 @@ func addFlightsAsTransportationRecords(app core.App, trip bt.Trip, inferredFligh
 		record.Set("arrivalTime", arrTimestamp)
 		record.Set("metadata", metadata)
 		record.Set("trip", trip.Id)
-
-		emailContent, _ := filesystem.NewFileFromBytes([]byte(emailBodyResult.Html), fmt.Sprintf("%s.html", email.Subject))
-		record.Set("attachments", []*filesystem.File{emailContent})
-
+		record.Set("attachmentReferences", []string{attachmentRecord.Id})
 		err := app.Save(record)
 		if err != nil {
 			return err
