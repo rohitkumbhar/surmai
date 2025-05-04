@@ -61,8 +61,7 @@ export const TransportationPanel = ({
           transportationType={newTransportationType}
           trip={trip}
           onSuccess={() => {
-            refetch();
-            closeForm();
+            refetchData().then(() => closeForm());
           }}
           onCancel={() => {
             closeForm();
@@ -82,8 +81,7 @@ export const TransportationPanel = ({
         <CarRentalForm
           trip={trip}
           onSuccess={() => {
-            refetch();
-            closeRentalForm();
+            refetchData().then(() => closeRentalForm());
           }}
           onCancel={() => {
             closeRentalForm();
