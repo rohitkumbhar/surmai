@@ -33,6 +33,19 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
             .catch((err) => {
               console.log('could not load locale', err);
             });
+            break;
+        case 'fr':
+        case 'fr-FR':
+          import('dayjs/locale/fr')
+            .then(() => {
+              console.log('fr loaded');
+              dayjs.locale('fr');
+              setLocale('fr-FR');
+            })
+            .catch((err) => {
+              console.log('could not load locale', err);
+            });
+            break;
       }
     }
   }, [i18n]);
