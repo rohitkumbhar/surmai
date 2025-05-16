@@ -17,7 +17,8 @@ func (openai *OpenAI) FlightInfoRequest(body string, settings *bt.LlmSettings, r
 		"role": "user",
 		"content": "You are an expert at structured data extraction. " +
 			"You will be given unstructured text from an email and you have to extract " +
-			"flight information from it. The dates should be in YYYY-MM-DD format and time should be in 24 hour format",
+			"any flight information and any lodging reservations from it. The dates should be in " +
+			"YYYY-MM-DD format and time should be in 24 hour format",
 	}
 
 	prompt := map[string]any{

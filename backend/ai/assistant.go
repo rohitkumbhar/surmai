@@ -15,9 +15,39 @@ type Assistant interface {
 
 var FlightInfoRequestSchema = map[string]interface{}{
 	"type":                 "object",
-	"required":             []string{"flights"},
+	"required":             []string{"flights", "lodgings"},
 	"additionalProperties": false,
 	"properties": map[string]interface{}{
+
+		"lodgings": map[string]interface{}{
+			"type": "array",
+			"items": map[string]interface{}{
+				"type":                 "object",
+				"additionalProperties": false,
+				"required":             []string{"name", "address", "check_in_date", "check_in_time", "checkout_out_date", "check_out_time"},
+				"properties": map[string]interface{}{
+					"name": map[string]interface{}{
+						"type": "string",
+					},
+					"address": map[string]interface{}{
+						"type": "string",
+					},
+					"check_in_date": map[string]interface{}{
+						"type": "string",
+					},
+					"check_out_date": map[string]interface{}{
+						"type": "string",
+					},
+					"check_in_time": map[string]interface{}{
+						"type": "string",
+					},
+					"check_out_time": map[string]interface{}{
+						"type": "string",
+					},
+				},
+			},
+		},
+
 		"flights": map[string]interface{}{
 			"type": "array",
 			"items": map[string]interface{}{
@@ -68,7 +98,17 @@ var FlightInfoRequestSchema = map[string]interface{}{
 					},
 
 					"cost": map[string]interface{}{
-						"type": "string",
+						"type":                 "object",
+						"additionalProperties": false,
+						"required":             []string{"amount", "currency_code"},
+						"properties": map[string]interface{}{
+							"amount": map[string]interface{}{
+								"type": "number",
+							},
+							"currency_code": map[string]interface{}{
+								"type": "string",
+							},
+						},
 					},
 				},
 			},
