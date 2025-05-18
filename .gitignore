@@ -21,3 +21,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+test-results
+backend/pb_data

@@ -9,7 +9,9 @@ export const PasswordRequirement = ({ meets, label }: { meets: boolean; label: s
       ) : (
         <IconX style={{ width: rem(14), height: rem(14) }} />
       )}{' '}
-      <Box ml={10}>{label}</Box>
+      <Box component={'span'} ml={10}>
+        {label}
+      </Box>
     </Text>
   );
 };
