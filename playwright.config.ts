@@ -7,9 +7,8 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
-
   use: {
-    headless: true,
+    headless: false,
     baseURL: 'http://localhost:6173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
@@ -18,6 +17,7 @@ export default defineConfig({
     {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
+      timeout: 5 * 60000,
     },
     {
       name: 'authenticated-tests',

@@ -27,4 +27,31 @@ setup('authenticate', async ({ page }) => {
   if (storageState) {
     await page.context().storageState({ path: storageState as string });
   }
+
+  await page.goto('/settings');
+  await page.getByRole('tab', { name: 'Datasets' }).click();
+
+  const loadAirportsLocator = page.getByRole('button', { name: 'Load Airports' });
+  const airportsLocatorCount = await loadAirportsLocator.count();
+  if (airportsLocatorCount > 0) {
+    await loadAirportsLocator.click();
+    await page.getByRole('button', { name: 'Confirm' }).click();
+    await page.waitForTimeout(5000);
+  }
+
+  const loadPlacesLocator = page.getByRole('button', { name: 'Load Places' });
+  const placesLocatorCount = await loadPlacesLocator.count();
+  if (placesLocatorCount > 0) {
+    await loadPlacesLocator.click();
+    await page.getByRole('button', { name: 'Confirm' }).click();
+    await page.waitForTimeout(50000);
+  }
+
+  const loadAirlinesLocator = page.getByRole('button', { name: 'Load Airlines' });
+  const loadAirlinesLocatorCount = await loadAirlinesLocator.count();
+  if (loadAirlinesLocatorCount > 0) {
+    await loadAirlinesLocator.click();
+    await page.getByRole('button', { name: 'Confirm' }).click();
+    await page.waitForTimeout(5000);
+  }
 });
