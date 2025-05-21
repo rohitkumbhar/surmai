@@ -4,7 +4,7 @@ import { useClickOutside, useDebouncedState } from '@mantine/hooks';
 import { searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
 import { UseFormReturnType } from '@mantine/form';
-import { Destination } from '../../types/trips.ts';
+import { Destination } from '../../types/trips';
 import { useTranslation } from 'react-i18next';
 
 export function DestinationSelect({ propName, form }: { propName: string; form: UseFormReturnType<unknown> }) {

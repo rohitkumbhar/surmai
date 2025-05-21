@@ -3,7 +3,7 @@ import { CloseButton, Combobox, Group, InputBase, ScrollArea, Text, useCombobox 
 import { useDebouncedState } from '@mantine/hooks';
 import { searchAirports } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
-import { Airport } from '../../../types/trips.ts';
+import { Airport } from '../../../types/trips';
 import { useTranslation } from 'react-i18next';
 import { IconPlaneArrival, IconPlaneDeparture } from '@tabler/icons-react';
 
@@ -91,6 +91,7 @@ export const AirportSelect = ({
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
                   setValue(undefined);
+                  form.setFieldValue(propName, undefined);
                   setSearchResults([]);
                   setSearch('');
                   if (inputRef?.current) {

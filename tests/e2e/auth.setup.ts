@@ -2,7 +2,6 @@ import { test as setup } from '@playwright/test';
 
 import * as path from 'path';
 
-// @ts-expect-error its ok
 const __dirname = import.meta.dirname;
 const storageState = path.join(__dirname, '../playwright/.auth/user.json');
 

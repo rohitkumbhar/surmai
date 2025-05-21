@@ -25,11 +25,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "types": [
-      "vite-plugin-pwa/react"
+      "vite-plugin-pwa/react", "vitest/globals", "@testing-library/jest-dom"
     ]
   },
   "include": [
     "src",
-    "site/src"
+    "site/src",
+    "tests"
   ]
 }

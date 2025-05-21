@@ -181,12 +181,12 @@ export type ActivityFormSchema = {
   startDate?: Date;
 };
 
-export interface Airport extends RecordModel {
+export interface Airport extends Omit<RecordModel, 'collectionName,collectionId'> {
   iataCode?: string;
   name: string;
 }
 
-export interface Airline extends RecordModel {
+export interface Airline extends Omit<RecordModel, 'collectionName,collectionId'> {
   code?: string;
   logo?: string;
   name: string;

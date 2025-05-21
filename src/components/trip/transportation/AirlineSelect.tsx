@@ -3,7 +3,7 @@ import { CloseButton, Combobox, Group, InputBase, Text, useCombobox } from '@man
 import { useDebouncedState } from '@mantine/hooks';
 import { searchAirlines } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
-import { Airline } from '../../../types/trips.ts';
+import { Airline } from '../../../types/trips';
 import { useTranslation } from 'react-i18next';
 import { IconPlane } from '@tabler/icons-react';
 

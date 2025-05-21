@@ -6,8 +6,11 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
     "strict": true,
-    "noEmit": true
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts", "tests", "src"]
 }

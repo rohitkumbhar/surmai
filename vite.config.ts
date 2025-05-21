@@ -1,10 +1,13 @@
-import { defineConfig } from 'vite';
+/// <reference types="vitest" />
+
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import version from 'vite-plugin-package-version';
+import { configDefaults } from 'vitest/config';
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => {
+export default defineConfig(({ mode }) => {
   // @ts-expect-error types
   const routeMatchCallback: RouteMatchCallback = ({ request }) => {
     return request?.url.includes('api') || request?.url.includes('pdf.worker');
@@ -82,15 +85,21 @@ export default defineConfig(({mode}) => {
         },
       }),
       version(),
-
     ],
     resolve: {
       alias: {
         ...(mode === 'development' && {
           // See https://github.com/mantinedev/ui.mantine.dev/issues/113
-          '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs'
-        })
-      }
+          '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
+        }),
+      },
+    },
+    test: {
+      globals: true,
+      environment: 'jsdom',
+      exclude: [...configDefaults.exclude, 'tests/e2e/**'],
+      include: ['tests/unit/**/*.{test,spec}.{ts,tsx}'],
+      setupFiles: 'vitest.setup.ts',
     },
   };
 });
