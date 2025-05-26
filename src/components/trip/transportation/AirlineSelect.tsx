@@ -3,7 +3,7 @@ import { CloseButton, Combobox, Group, InputBase, Text, useCombobox } from '@man
 import { useDebouncedState } from '@mantine/hooks';
 import { searchAirlines } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
-import { Airline } from '../../../types/trips.ts';
+import { Airline } from '../../../types/trips';
 import { useTranslation } from 'react-i18next';
 import { IconPlane } from '@tabler/icons-react';
 
@@ -28,8 +28,8 @@ export const AirlineSelect = ({
 
   const existingValue =
     // @ts-expect-error its ok
-    currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;
-  const [value, setValue] = useState<string | undefined>(existingValue);
+    currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : '';
+  const [value, setValue] = useState<string>(existingValue);
   const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
@@ -89,7 +89,7 @@ export const AirlineSelect = ({
                 size="sm"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
-                  setValue(undefined);
+                  setValue('');
                   setSearchResults([]);
                   setSearch('');
                   if (inputRef?.current) {

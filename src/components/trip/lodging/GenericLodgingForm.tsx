@@ -114,6 +114,10 @@ export const GenericLodgingForm = ({
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
               miw={rem(200)}
+              data-testid={'lodging-start-date'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
             />
 
             <DateTimePicker
@@ -127,12 +131,16 @@ export const GenericLodgingForm = ({
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               key={form.key('endDate')}
               {...form.getInputProps('endDate')}
+              data-testid={'lodging-end-date'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
             />
           </Group>
           <Group>
             <TextInput
               name={'confirmationCode'}
-              label={t('lodging_confirmationCode', 'ConfirmationCode')}
+              label={t('lodging_confirmation_code', 'Confirmation Code')}
               key={form.key('confirmationCode')}
               {...form.getInputProps('confirmationCode')}
             />

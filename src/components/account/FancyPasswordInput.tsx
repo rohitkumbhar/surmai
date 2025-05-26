@@ -33,7 +33,7 @@ export const FancyPasswordInput = ({
   });
 
   return (
-    <Popover opened={popoverOpened} position="bottom" width="target" transitionProps={{ transition: 'pop' }}>
+    <Popover opened={popoverOpened} position="top-end" width="auto" transitionProps={{ transition: 'pop' }}>
       <Popover.Target>
         <div onFocusCapture={() => setPopoverOpened(true)} onBlurCapture={() => setPopoverOpened(false)}>
           <PasswordInput

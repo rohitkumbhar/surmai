@@ -1,9 +1,8 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { authRefresh, currentUser } from '../lib/api';
 import { User } from '../types/auth.ts';
 import { useLocation, useNavigate } from 'react-router-dom';
-
-import { SurmaiContext } from '../app/SurmaiContext.tsx';
+import { useSurmaiContext } from '../app/useSurmaiContext.ts';
 
 export const AuthContext = createContext<{
   user?: User;
@@ -14,21 +13,23 @@ export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, setCurrentUser] = useState<User>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { changeColor } = useContext(SurmaiContext);
+  const { offline, changeColor } = useSurmaiContext();
 
   useEffect(() => {
-    if (location.pathname !== '/login' && location.pathname !== '/register') {
+    if (!offline && location.pathname !== '/login' && location.pathname !== '/register') {
       authRefresh().catch(() => {
         navigate('/login');
       });
     }
-  }, [location, navigate]);
+  }, [location, navigate, offline]);
 
   useEffect(() => {
-    currentUser()
-      .then((resolvedUser) => setCurrentUser(resolvedUser))
-      .catch(() => navigate('/login'));
-  }, [navigate]);
+    if (!offline) {
+      currentUser()
+        .then((resolvedUser) => setCurrentUser(resolvedUser))
+        .catch(() => navigate('/login'));
+    }
+  }, [navigate, offline]);
 
   useEffect(() => {
     if (user?.colorScheme) {

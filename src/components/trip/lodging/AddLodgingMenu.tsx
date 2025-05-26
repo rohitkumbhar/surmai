@@ -8,7 +8,11 @@ export const AddLodgingMenu = ({ onClick }: { onClick: (type: string) => void })
   return (
     <Menu transitionProps={{ transition: 'pop-top-right' }} position="bottom-end" width={150} withinPortal>
       <Menu.Target>
-        <Button rightSection={<IconChevronDown style={{ width: rem(18), height: rem(18) }} stroke={1.5} />} pr={12}>
+        <Button
+          rightSection={<IconChevronDown style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
+          pr={12}
+          data-testid={'add-lodging-button'}
+        >
           {t('lodging_add_new', 'Add new')}
         </Button>
       </Menu.Target>

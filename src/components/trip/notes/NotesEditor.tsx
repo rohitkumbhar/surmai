@@ -131,7 +131,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
 
-        <RichTextEditor.Content className={styles.tiptap} />
+        <RichTextEditor.Content className={styles.tiptap} aria-label="Notes" />
       </RichTextEditor>
       <Group justify={'flex-end'}>
         <Button

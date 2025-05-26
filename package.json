@@ -14,7 +14,12 @@
     "preview": "vite preview",
     "format": "prettier --write ./src",
     "prepare": "husky",
-    "test": "echo 'TBD'",
+    "test-web": "vite --host 0.0.0.0 --port 6173 --cors",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:debug": "playwright test --debug",
     "sync-translations": "i18next-scanner --config i18next-scanner.config.json"
   },
   "dependencies": {
@@ -69,6 +74,11 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
     "@commitlint/config-conventional": "^19.8.0",
+    "@playwright/test": "^1.42.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "@typescript-eslint/eslint-plugin": "^8.27.0",
@@ -84,6 +94,7 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "husky": "^9.1.7",
     "i18next-scanner": "^4.6.0",
+    "jsdom": "^26.1.0",
     "postcss": "^8.5.3",
     "postcss-preset-mantine": "^1.17.0",
     "postcss-simple-vars": "^7.0.1",
@@ -91,6 +102,7 @@
     "typescript": "^5.8.2",
     "vite": "^6.2.2",
     "vite-plugin-package-version": "^1.1.0",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^0.21.1",
+    "vitest": "^3.1.3"
   }
 }
