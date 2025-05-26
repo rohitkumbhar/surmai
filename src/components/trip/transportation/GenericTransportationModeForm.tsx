@@ -13,7 +13,6 @@ import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { fakeAsUtcString } from '../../../lib/time.ts';
 import { transportationConfig } from './config.tsx';
 import dayjs from 'dayjs';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
@@ -61,25 +60,7 @@ export const GenericTransportationModeForm = ({
   // @ts-expect-error it ok
   const handleFormSubmit = (values) => {
     setSaving(true);
-    const payload: CreateTransportation = {
-      type: transportationType,
-      origin: transportationType === 'flight' ? values.origin.iataCode : values.origin,
-      destination: transportationType === 'flight' ? values.destination.iataCode : values.destination,
-      cost: {
-        value: values.cost,
-        currency: values.currencyCode,
-      },
-      departureTime: fakeAsUtcString(values.departureTime),
-      arrivalTime: fakeAsUtcString(values.arrivalTime),
-      trip: trip.id,
-      metadata: {
-        provider: values.provider,
-        reservation: values.reservation,
-        origin: transportationType === 'flight' ? values.origin : undefined,
-        destination: transportationType === 'flight' ? values.destination : undefined,
-      },
-    };
-    console.log('saving files => ', JSON.stringify(files));
+    const payload: CreateTransportation = config.buildPayload(trip, transportationType, values);
 
     uploadAttachments(trip.id, files)
       .then((attachments: Attachment[]) => {

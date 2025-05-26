@@ -90,6 +90,24 @@ test.describe('Trip Transportation', () => {
     await expect(page.getByText('FLIGHT1234567890')).toBeVisible();
   });
 
+  test('#125 should add a flight transportation with free form airport', async ({ page }) => {
+    const startDate = getStartDate(tripData.startDate);
+    const endDate = getEndDate(startDate, 0.5);
+
+    await viewTripPage.addTransportation({
+      type: 'Flight',
+      startDate,
+      endDate,
+      startLocation: 'QQQ',
+      endLocation: 'WWW',
+      confirmationCode: 'UNKNOWN_AIRPORT',
+      provider: 'Delta Air Lines',
+    });
+
+    // Verify the flight was added
+    await expect(page.getByText('UNKNOWN_AIRPORT')).toBeVisible();
+  });
+
   test('should add a train transportation', async ({ page }) => {
     const trainName = 'Test Train';
     const startDate = getStartDate(tripData.startDate);

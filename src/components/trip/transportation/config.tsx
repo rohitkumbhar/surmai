@@ -3,11 +3,10 @@ import { UseFormReturnType } from '@mantine/form';
 import { TextInput } from '@mantine/core';
 import { AirportSelect } from './AirportSelect.tsx';
 import { AirlineSelect } from './AirlineSelect.tsx';
+import { CreateTransportation, Trip } from '../../../types/trips.ts';
+import { fakeAsUtcString } from '../../../lib/time.ts';
 
 export const transportationConfig: { [key: string]: any } = {
-  // strings
-  // provider component
-
   default: {
     components: {
       from: (form: UseFormReturnType<unknown>) => {
@@ -44,7 +43,26 @@ export const transportationConfig: { [key: string]: any } = {
         );
       },
     },
-
+    buildPayload: (trip: Trip, transportationType: string, values: Record<string, any>): CreateTransportation => {
+      return {
+        type: transportationType,
+        origin: values.origin,
+        destination: values.destination,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        departureTime: fakeAsUtcString(values.departureTime),
+        arrivalTime: fakeAsUtcString(values.arrivalTime),
+        trip: trip.id,
+        metadata: {
+          provider: values.provider,
+          reservation: values.reservation,
+          origin: values.origin,
+          destination: values.destination,
+        },
+      };
+    },
     strings: {
       providerLabel: i18n.t('transportation_provider', 'Provider'),
       reservationLabel: i18n.t('transportation_reservation', 'Reservation'),
@@ -86,7 +104,26 @@ export const transportationConfig: { [key: string]: any } = {
         );
       },
     },
-
+    buildPayload: (trip: Trip, _transportationType: string, values: Record<string, any>): CreateTransportation => {
+      return {
+        type: 'flight',
+        origin: values.origin.iataCode || values.origin,
+        destination: values.destination.iataCode || values.destination,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        departureTime: fakeAsUtcString(values.departureTime),
+        arrivalTime: fakeAsUtcString(values.arrivalTime),
+        trip: trip.id,
+        metadata: {
+          provider: values.provider,
+          reservation: values.reservation,
+          origin: values.origin,
+          destination: values.destination,
+        },
+      };
+    },
     strings: {
       providerLabel: i18n.t('transportation_airline', 'Airline'),
       reservationLabel: i18n.t('transportation_confirmation_code', 'Confirmation Code'),

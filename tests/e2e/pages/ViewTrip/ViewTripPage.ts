@@ -1,5 +1,4 @@
 import { expect, Page } from '@playwright/test';
-import dayjs from 'dayjs';
 import { getSelectorString } from './helper.ts';
 
 export class ViewTripPage {
@@ -28,6 +27,26 @@ export class ViewTripPage {
    */
   async switchToTab(tabName: 'Organization' | 'Itinerary' | 'Attachments' | 'Notes') {
     await this.page.getByRole('tab', { name: tabName }).click();
+  }
+
+  /** Utility function to select a date in Mantine DatePicker  */
+  async selectDatePickerValue(testId: string, value: Date) {
+    const dateSelector = getSelectorString(value);
+    await this.page.click(`[data-testid="${testId}"]`);
+    await this.page.click(dateSelector);
+    await this.page.click(`button[aria-label="Submit Date"]`);
+  }
+
+  async selectAirlineEntry(value: string) {
+    await this.page.getByLabel('Airline').fill(value);
+    const newEntry = this.page.getByRole('option', { name: 'Create New Entry' });
+    const newEntryVisible = await newEntry.isVisible();
+
+    if (newEntryVisible) {
+      await newEntry.click();
+    } else {
+      await this.page.getByRole('option', { name: value }).click();
+    }
   }
 
   /**
@@ -62,20 +81,13 @@ export class ViewTripPage {
     await this.page.getByLabel('Rental Company').fill(carRentalData.rentalCompany);
     await this.page.getByLabel('Pickup Location').fill(carRentalData.pickupLocation);
 
-    const startDateSelector = getSelectorString(carRentalData.pickupTime);
-    const endDateSelector = getSelectorString(carRentalData.dropOffTime);
-
-    await this.page.click('[data-testid="pickup-time"]');
-    await this.page.click(startDateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
+    await this.selectDatePickerValue('pickup-time', carRentalData.pickupTime);
 
     await this.page.getByLabel('Drop Off Location').fill(carRentalData.dropOffLocation);
     await this.page.getByLabel('Confirmation Code').fill(carRentalData.confirmationCode);
     await this.page.getByLabel('Cost').fill(carRentalData.cost.toString());
 
-    await this.page.click('[data-testid="drop-off-time"]');
-    await this.page.click(endDateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
+    await this.selectDatePickerValue('drop-off-time', carRentalData.dropOffTime);
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.page.waitForTimeout(1000);
@@ -115,24 +127,15 @@ export class ViewTripPage {
     }
 
     // Fill in the dates
-    const startDateSelector = getSelectorString(transportationData.startDate);
-    const endDateSelector = getSelectorString(transportationData.endDate);
-
-    await this.page.click('[data-testid="departure-time"]');
-    await this.page.click(startDateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
-
+    await this.selectDatePickerValue('departure-time', transportationData.startDate);
     await this.page.waitForTimeout(100);
-
-    await this.page.click('[data-testid="arrival-time"]');
-    await this.page.click(endDateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
+    await this.selectDatePickerValue('arrival-time', transportationData.endDate);
 
     if (transportationData.provider) {
       const providerLabel = transportationData.type === 'Flight' ? 'Airline' : 'Provider';
       await this.page.getByLabel(providerLabel).fill(transportationData.provider);
       if (providerLabel === 'Airline') {
-        await this.page.getByText('Create New').click();
+        await this.selectAirlineEntry(transportationData.provider);
       }
     }
 
@@ -182,18 +185,9 @@ export class ViewTripPage {
     }
 
     // Fill in the dates
-    const startDateSelector = getSelectorString(lodgingData.startDate);
-    const endDateSelector = getSelectorString(lodgingData.endDate);
-
-    await this.page.click('[data-testid="lodging-start-date"]');
-    await this.page.click(startDateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
-
+    await this.selectDatePickerValue('lodging-start-date', lodgingData.startDate);
     await this.page.waitForTimeout(100);
-
-    await this.page.click('[data-testid="lodging-end-date"]');
-    await this.page.click(endDateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
+    await this.selectDatePickerValue('lodging-end-date', lodgingData.endDate);
 
     // Save the lodging
     await this.page.getByRole('button', { name: 'Save' }).click();
@@ -213,9 +207,7 @@ export class ViewTripPage {
     await this.page.getByLabel('Name').fill(activityData.name);
 
     // Fill in the dates
-    const startDateStr = dayjs(activityData.startDate).format('D MMMM YYYY');
-    await this.page.click('[data-testid="activity-start-date"]');
-    await this.page.click(`button[aria-label="${startDateStr}"]`);
+    await this.selectDatePickerValue('activity-start-date', activityData.startDate);
 
     // Fill in the location
     await this.page.getByLabel('Address').fill(activityData.address);

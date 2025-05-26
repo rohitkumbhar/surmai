@@ -55,7 +55,7 @@ export class CreateNewTripPage {
     // Set the date range
     const startDateStr = dayjs(data.startDate).format('D MMMM YYYY');
     const endDateStr = dayjs(data.endDate).format('D MMMM YYYY');
-    await this.page.click('[data-testid="trip-dates"]'); // Use a test ID or placeholder
+    await this.page.click('[data-testid="trip-dates"]');
     await this.page.click(`button[aria-label="${startDateStr}"]`);
     await this.page.click(`button[aria-label="${endDateStr}"]`);
 
