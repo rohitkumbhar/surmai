@@ -14,6 +14,7 @@ import { User } from '../../../types/auth.ts';
 import { listTransportations } from './transportations.ts';
 import { listLodgings } from './lodgings.ts';
 import { getTripAttachments } from './attachments.ts';
+import dayjs from 'dayjs';
 
 const trips = pb.collection('trips');
 
@@ -49,9 +50,10 @@ export const listTrips = async (): Promise<Trip[]> => {
 };
 
 export const listUpcomingTrips = async (): Promise<Trip[]> => {
+  const threshold = dayjs().format('YYYY-MM-DD');
   const results = await trips.getFullList<TripResponse>({
     sort: 'startDate',
-    filter: `endDate > "${new Date().toISOString()}"`,
+    filter: `endDate >= "${threshold}"`,
   });
   return results.map((trip) => {
     const { expand, startDate, endDate, ...rest } = trip;
@@ -65,9 +67,10 @@ export const listUpcomingTrips = async (): Promise<Trip[]> => {
 };
 
 export const listPastTrips = async (): Promise<Trip[]> => {
+  const threshold = dayjs().format('YYYY-MM-DD');
   const results = await trips.getFullList<TripResponse>({
     sort: '-endDate',
-    filter: `endDate < "${new Date().toISOString()}"`,
+    filter: `endDate < "${threshold}"`,
   });
   return results.map((trip) => {
     const { expand, startDate, endDate, ...rest } = trip;

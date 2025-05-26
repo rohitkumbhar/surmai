@@ -9,6 +9,7 @@ import { ContextModalProps } from '@mantine/modals';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
+import dayjs from 'dayjs';
 
 export const EditBasicInfoForm = ({
   context,
@@ -54,8 +55,8 @@ export const EditBasicInfoForm = ({
         const data = {
           name: values.name,
           description: values.description,
-          startDate: values.dateRange[0],
-          endDate: values.dateRange[1],
+          startDate: dayjs(values.dateRange[0]).startOf('day').toDate(),
+          endDate: dayjs(values.dateRange[1]).endOf('day').toDate(),
           destinations: values.destinations?.map((d) => {
             return {
               id: d.id,
