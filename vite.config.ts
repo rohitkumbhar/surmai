@@ -66,12 +66,14 @@ export default defineConfig(({ mode }) => {
         workbox: {
           // Don't return index.html for any API calls
           navigateFallbackDenylist: [/^\/api/],
+
           runtimeCaching: [
             {
               urlPattern: routeMatchCallback,
               handler: 'NetworkFirst',
               options: {
                 cacheName: 'surmai-cache',
+                networkTimeoutSeconds: 3,
                 expiration: {
                   maxEntries: 100,
                   maxAgeSeconds: 60 * 60 * 24 * 365, // <== 365 days

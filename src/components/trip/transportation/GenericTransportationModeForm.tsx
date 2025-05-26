@@ -79,24 +79,33 @@ export const GenericTransportationModeForm = ({
         destination: transportationType === 'flight' ? values.destination : undefined,
       },
     };
+    console.log('saving files => ', JSON.stringify(files));
 
-    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
-      if (transportation?.id) {
-        payload.attachmentReferences = [
-          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-          ...attachments.map((attachment: Attachment) => attachment.id),
-        ];
-        updateTransportation(transportation.id, payload).then(() => {
-          onSuccess();
-        });
-      } else {
-        payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        createTransportationEntry(payload).then(() => {
-          onSuccess();
-        });
-      }
-      setSaving(false);
-    });
+    uploadAttachments(trip.id, files)
+      .then((attachments: Attachment[]) => {
+        if (transportation?.id) {
+          payload.attachmentReferences = [
+            ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+            ...attachments.map((attachment: Attachment) => attachment.id),
+          ];
+          updateTransportation(transportation.id, payload).then(() => {
+            onSuccess();
+          });
+        } else {
+          payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+          createTransportationEntry(payload)
+            .then(() => {
+              onSuccess();
+            })
+            .catch((error) => {
+              console.log('error => ', error);
+            });
+        }
+        setSaving(false);
+      })
+      .catch((error) => {
+        console.log('error => ', error);
+      });
   };
 
   return (
@@ -117,6 +126,10 @@ export const GenericTransportationModeForm = ({
             maxDate={trip.endDate}
             key={form.key('departureTime')}
             {...form.getInputProps('departureTime')}
+            data-testid={'departure-time'}
+            submitButtonProps={{
+              'aria-label': 'Submit Date',
+            }}
           />
         </Group>
         <Group>
@@ -132,6 +145,10 @@ export const GenericTransportationModeForm = ({
             clearable
             key={form.key('arrivalTime')}
             {...form.getInputProps('arrivalTime')}
+            data-testid={'arrival-time'}
+            submitButtonProps={{
+              'aria-label': 'Submit Date',
+            }}
           />
         </Group>
         <Group>

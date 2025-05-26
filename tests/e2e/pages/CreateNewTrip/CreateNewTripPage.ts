@@ -53,15 +53,8 @@ export class CreateNewTripPage {
     }
 
     // Set the date range
-
-    const startDateStr = dayjs(data.startDate).format('D MMMM YYYY'); //`${data.startDate.getMonth() + 1}/${data.startDate.getDate()}/${data.startDate.getFullYear()}`;
-    const endDateStr = dayjs(data.endDate).format('D MMMM YYYY'); //`${data.endDate.getMonth() + 1}/${data.endDate.getDate()}/${data.endDate.getFullYear()}`;
-
-    // await this.page.getByLabel('Trip Dates').click();
-    // await this.page.getByLabel('Trip Dates').fill(`${startDateStr} - ${endDateStr}`);
-    // await this.page.keyboard.press('Enter');
-
-    //
+    const startDateStr = dayjs(data.startDate).format('D MMMM YYYY');
+    const endDateStr = dayjs(data.endDate).format('D MMMM YYYY');
     await this.page.click('[data-testid="trip-dates"]'); // Use a test ID or placeholder
     await this.page.click(`button[aria-label="${startDateStr}"]`);
     await this.page.click(`button[aria-label="${endDateStr}"]`);
@@ -83,41 +76,6 @@ export class CreateNewTripPage {
    * Search for and select a destination
    */
   async searchAndSelectDestination(destinationName: string) {
-    // await this.page.route(
-    //   (url: URL) => {
-    //     console.log('url.href =>', url.href);
-    //     return true;
-    //   },
-    //   async (route) => {
-    //     // console.log('route.request().url() =>', route.request().url());
-    //     if (route.request().url().includes('places')) {
-    //       await route.fulfill({
-    //         status: 200,
-    //         contentType: 'application/json',
-    //         body: JSON.stringify({
-    //           page: 1,
-    //           perPage: 10,
-    //           totalItems: 1,
-    //           totalPages: 1,
-    //           items: [
-    //             {
-    //               id: 'dest1',
-    //               name: 'New York',
-    //               stateName: 'NY',
-    //               countryName: 'USA',
-    //               latitude: 40.7128,
-    //               longitude: -74.006,
-    //               timezone: 'America/New_York',
-    //             },
-    //           ],
-    //         }),
-    //       });
-    //     } else {
-    //       await route.continue();
-    //     }
-    //   }
-    // );
-
     // Click on the destination search field
     await this.page.getByLabel('Destinations').click();
 

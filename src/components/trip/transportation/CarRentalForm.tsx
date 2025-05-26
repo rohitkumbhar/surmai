@@ -9,6 +9,7 @@ import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
+import { showErrorNotification } from '../../../lib/notifications.tsx';
 
 export const CarRentalForm = ({
   trip,
@@ -74,9 +75,18 @@ export const CarRentalForm = ({
         });
       } else {
         carRentalData.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        createTransportationEntry(carRentalData).then(() => {
-          onSuccess();
-        });
+        createTransportationEntry(carRentalData)
+          .then(() => {
+            onSuccess();
+          })
+          .catch((error) => {
+            console.log('error => ', JSON.stringify(error));
+            showErrorNotification({
+              error,
+              title: t('car_rental_creation_failed', 'Unable to create Car Rental Entry'),
+              message: 'Please try again later.',
+            });
+          });
       }
       setSaving(false);
     });
@@ -106,18 +116,26 @@ export const CarRentalForm = ({
               key={form.key('pickupTime')}
               {...form.getInputProps('pickupTime')}
               miw={rem(150)}
+              data-testid={'pickup-time'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
             />
 
             <DateTimePicker
               highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'dropOffTime'}
-              label={t('transportation_dropOff_time', 'Drop-off Time')}
+              label={t('transportation_dropOff_time', 'Drop Off Time')}
               clearable
               required
               key={form.key('dropOffTime')}
               {...form.getInputProps('dropOffTime')}
               miw={rem(150)}
+              data-testid={'drop-off-time'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
             />
           </Group>
           <Group>
@@ -131,7 +149,7 @@ export const CarRentalForm = ({
             />
             <TextInput
               name={'dropOffLocation'}
-              label={t('transportation_dropOff_location', 'DropOff Location')}
+              label={t('transportation_dropOff_location', 'Drop Off Location')}
               required
               miw={rem('300px')}
               key={form.key('dropOffLocation')}

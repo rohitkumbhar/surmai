@@ -112,6 +112,7 @@ export const GenericActivityForm = ({
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
               miw={rem(200)}
+              data-testid={'activity-start-date'}
             />
 
             <CurrencyInput

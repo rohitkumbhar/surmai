@@ -182,7 +182,7 @@ export const GenericTransportationData = ({
             {config.strings.providerLabel}
           </Text>
           <Group gap={1}>
-            <Text size="md">{transportation.metadata.provider.name || transportation.metadata.provider}</Text>
+            <Text size="md">{transportation.metadata.provider?.name || transportation.metadata.provider}</Text>
           </Group>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
