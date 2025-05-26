@@ -62,26 +62,6 @@ export const GenericTransportationModeForm = ({
     setSaving(true);
     const payload: CreateTransportation = config.buildPayload(trip, transportationType, values);
 
-    // {
-    //   type: transportationType,
-    //   origin: transportationType === 'flight' ? values.origin.iataCode : values.origin,
-    //   destination: transportationType === 'flight' ? values.destination.iataCode : values.destination,
-    //   cost: {
-    //     value: values.cost,
-    //     currency: values.currencyCode,
-    //   },
-    //   departureTime: fakeAsUtcString(values.departureTime),
-    //   arrivalTime: fakeAsUtcString(values.arrivalTime),
-    //   trip: trip.id,
-    //   metadata: {
-    //     provider: values.provider,
-    //     reservation: values.reservation,
-    //     origin: transportationType === 'flight' ? values.origin : undefined,
-    //     destination: transportationType === 'flight' ? values.destination : undefined,
-    //   },
-    // };
-    console.log('saving files => ', JSON.stringify(files));
-
     uploadAttachments(trip.id, files)
       .then((attachments: Attachment[]) => {
         if (transportation?.id) {
