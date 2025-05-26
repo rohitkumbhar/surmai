@@ -28,8 +28,8 @@ export const AirlineSelect = ({
 
   const existingValue =
     // @ts-expect-error its ok
-    currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : '';
-  const [value, setValue] = useState<string>(existingValue);
+    currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;
+  const [value, setValue] = useState<string | undefined>(existingValue);
   const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
@@ -89,7 +89,7 @@ export const AirlineSelect = ({
                 size="sm"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => {
-                  setValue('');
+                  setValue(undefined);
                   setSearchResults([]);
                   setSearch('');
                   if (inputRef?.current) {

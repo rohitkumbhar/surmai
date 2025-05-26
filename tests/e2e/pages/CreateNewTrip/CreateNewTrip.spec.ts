@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { CreateNewTripPage } from './CreateNewTripPage';
+import dayjs from 'dayjs';
 
 test.describe('Create New Trip Page', () => {
   let createNewTripPage: CreateNewTripPage;
@@ -22,37 +23,13 @@ test.describe('Create New Trip Page', () => {
     await createNewTripPage.expectFormElementsVisible();
   });
 
-  // test('should show validation error for empty required fields', async ({ page }) => {
-  //   // Try to submit the form without filling required fields
-  //   await createNewTripPage.clickCreateTripButton();
-  //
-  //   // Check that the Create Trip button is disabled due to validation
-  //   await expect(page.getByRole('button', { name: 'Create Trip' })).toBeDisabled();
-  // });
-
   test('should create a trip successfully', async ({ page }) => {
-    // Mock the API to return a successful response
-    // await page.route('*/**/api/collections/trips/records', async (route) => {
-    //   await route.fulfill({
-    //     status: 200,
-    //     contentType: 'application/json',
-    //     body: JSON.stringify({
-    //       id: 'test-trip-id',
-    //       name: 'Test Trip',
-    //       description: 'Test Description',
-    //       startDate: new Date().toISOString(),
-    //       endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-    //       ownerId: 'test-user-id',
-    //     }),
-    //   });
-    // });
-
     // Fill in the form with valid data
     await createNewTripPage.fillTripForm({
       name: 'Test Trip',
       description: 'Test Description',
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      startDate: dayjs().startOf('month').toDate() as Date,
+      endDate: dayjs().endOf('month').toDate() as Date,
       destinations: ['New York, NY, USA'],
       participants: ['John Doe', 'Jane Smith'],
     });
@@ -82,8 +59,8 @@ test.describe('Create New Trip Page', () => {
     await createNewTripPage.fillTripForm({
       name: 'Test Trip',
       description: 'Test Description',
-      startDate: new Date(),
-      endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      startDate: dayjs().startOf('month').toDate() as Date,
+      endDate: dayjs().endOf('month').toDate() as Date,
       destinations: ['New York, NY, USA'],
       participants: ['John Doe', 'Jane Smith'],
     });
@@ -95,43 +72,4 @@ test.describe('Create New Trip Page', () => {
     await expect(page.getByText('Error')).toBeVisible();
     await expect(page.getByText('Unable to create trip')).toBeVisible();
   });
-
-  // test('should handle destination selection', async ({ page }) => {
-  //   // Mock the destination search API
-  //   // await page.route('**/api/**', async (route) => {
-  //   //   console.log('route.request().url() =>', route.request().url());
-  //   //   if (route.request().url().includes('places')) {
-  //   //     await route.fulfill({
-  //   //       status: 200,
-  //   //       contentType: 'application/json',
-  //   //       body: JSON.stringify({
-  //   //         page: 1,
-  //   //         perPage: 10,
-  //   //         totalItems: 1,
-  //   //         totalPages: 1,
-  //   //         items: [
-  //   //           {
-  //   //             id: 'dest1',
-  //   //             name: 'New York',
-  //   //             stateName: 'NY',
-  //   //             countryName: 'USA',
-  //   //             latitude: 40.7128,
-  //   //             longitude: -74.006,
-  //   //             timezone: 'America/New_York',
-  //   //           },
-  //   //         ],
-  //   //       }),
-  //   //     });
-  //   //   } else {
-  //   //     await route.continue();
-  //   //   }
-  //   // });
-  //
-  //   // Test destination selection
-  //   await createNewTripPage.searchAndSelectDestination('Seattle');
-  //   // await page.waitForResponse(/.*api.*/);
-  //
-  //   // Verify the destination was added
-  //   await expect(page.getByText('Seattle, Washington, USA')).toBeVisible();
-  // });
 });

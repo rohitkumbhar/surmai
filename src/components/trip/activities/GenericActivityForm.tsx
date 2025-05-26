@@ -113,6 +113,9 @@ export const GenericActivityForm = ({
               {...form.getInputProps('startDate')}
               miw={rem(200)}
               data-testid={'activity-start-date'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
             />
 
             <CurrencyInput

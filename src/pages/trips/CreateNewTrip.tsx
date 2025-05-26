@@ -86,7 +86,7 @@ export const CreateNewTrip = () => {
               icon={
                 <IconInfoSquare
                   style={{
-                    color: 'var(--mantine-primary-color-6',
+                    color: 'var(--mantine-primary-color-6)',
                     width: rem(40),
                     height: rem(40),
                   }}
