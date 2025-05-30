@@ -29,7 +29,10 @@ const queryClient = new QueryClient();
 fetch(`${apiUrl}/site-settings.json`, { signal: AbortSignal.timeout(2000) })
   .then((result) => result.json())
   .then((settings: SiteSettings) => {
-    launchApp({ ...settings, offline: false });
+    // This fetch call is cached by the service worker.
+    // Setting the offline value from the browser state
+    const siteSettings = { ...settings, offline: !navigator.onLine };
+    launchApp(siteSettings);
   })
   .catch((error) => {
     // We still need the app in offline mode

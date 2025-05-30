@@ -16,6 +16,7 @@ export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
   const { offline, changeColor } = useSurmaiContext();
 
   useEffect(() => {
+    //Auth Refresh is a POST call and not cached by the service worker, so we need to check if we are offline
     if (!offline && location.pathname !== '/login' && location.pathname !== '/register') {
       authRefresh().catch(() => {
         navigate('/login');
@@ -24,11 +25,11 @@ export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
   }, [location, navigate, offline]);
 
   useEffect(() => {
-    if (!offline) {
-      currentUser()
-        .then((resolvedUser) => setCurrentUser(resolvedUser))
-        .catch(() => navigate('/login'));
-    }
+    currentUser()
+      .then((resolvedUser) => setCurrentUser(resolvedUser))
+      .catch(() => {
+        navigate('/login');
+      });
   }, [navigate, offline]);
 
   useEffect(() => {

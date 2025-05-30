@@ -62,7 +62,9 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
 
   const value = {
     ...settings,
-    offline: !online,
+    // The hook doesn't reflect the offline state right away
+    // so use the value if set by the launch call
+    offline: !online || settings.offline,
     primaryColor,
     changeColor: (colorName: string | undefined) => {
       if (colorName) {
