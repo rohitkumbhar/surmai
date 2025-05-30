@@ -4,18 +4,19 @@ ARG TARGETARCH
 
 WORKDIR /surmai
 RUN mkdir node_modules
+
+COPY package.json .
+RUN npm install --no-audit
+
 ADD src src
 ADD public public
 COPY .eslintrc.cjs .
 COPY index.html .
-COPY package.json .
 COPY postcss.config.js .
 COPY tsconfig.app.json .
 COPY tsconfig.json .
 COPY tsconfig.node.json .
 COPY vite.config.ts .
-
-RUN npm install --no-audit
 RUN npm run build
 
 FROM --platform=$BUILDPLATFORM golang:1.24.1-alpine3.21 AS backend
