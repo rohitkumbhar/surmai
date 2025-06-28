@@ -9,16 +9,12 @@ export const calculateTimezoneDifference = (user: User | undefined, timezone: st
   return destinationTimezoneInstant.diff(userTimezoneInstant, 'hours', true);
 };
 
-export const formatDate = (locale: string, input: Date) => {
-  return input.toLocaleDateString(locale, {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
+export const formatDate = (_locale: string, input: string) => {
+  return dayjs(input).format('LL')
 };
 
-export const formatTime = (input: Date) => {
-  return `${String(input.getHours()).padStart(2, '0')}:${String(input.getMinutes()).padStart(2, '0')}`;
+export const formatTime = (input: string) => {
+  return dayjs(input).format('LT')
 };
 
 /*
@@ -41,22 +37,15 @@ export const formatTime = (input: Date) => {
      (convertSavedToBrowserDate method)
 
  */
-export const fakeAsUtcString = (date: Date | undefined): string => {
+export const fakeAsUtcString = (date: string | undefined): string => {
   if (!date) {
     return '';
   }
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:00.000Z`;
+
+  return dayjs(date,"UTC").format('YYYY-MM-DDTHH:mm:ss[Z]')
 };
 
 export const convertSavedToBrowserDate = (dateString: string) => {
-  const d = dayjs(dateString, 'UTC').tz('UTC');
-  const convertedDate = new Date();
-  convertedDate.setFullYear(d.year());
-  convertedDate.setMonth(d.month());
-  convertedDate.setDate(d.date());
-  convertedDate.setHours(d.hour());
-  convertedDate.setMinutes(d.minute());
-  convertedDate.setSeconds(0);
-  convertedDate.setMilliseconds(0);
-  return convertedDate;
+  const d = dayjs.tz(dateString, 'UTC');
+  return d.format('YYYY-MM-DDTHH:mm:ss');
 };

@@ -11,6 +11,7 @@ import { Header } from '../../components/nav/Header.tsx';
 import { useState } from 'react';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { showErrorNotification } from '../../lib/notifications.tsx';
+import dayjs from 'dayjs';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
@@ -42,11 +43,17 @@ export const CreateNewTrip = () => {
         onSubmit={form.onSubmit(async (values) => {
           setCreatingTrip(true);
           const { name, description, dateRange, participants, destinations } = values;
+
+          const startDate = dayjs(dayjs(dateRange[0]).startOf('day')).tz(dayjs.tz.guess())
+          const endDate = dayjs(dayjs(dateRange[1]).endOf('day')).tz(dayjs.tz.guess())
+
+          console.log("startDate ", startDate);
+
           const data: NewTrip = {
             name: name,
             description: description,
-            startDate: dateRange[0] || new Date(),
-            endDate: dateRange[1] || new Date(),
+            startDate: startDate.format('YYYY-MM-DDTHH:mm:ssZ'), // dayjs(dateRange[0]).startOf('day').toDate() || dayjs().format('D MMMM YYYY'),
+            endDate: endDate.format('YYYY-MM-DDTHH:mm:ssZ'), //dayjs(dateRange[1]).endOf('day').toDate() || dayjs().format('D MMMM YYYY'),
             ownerId: user?.id || '',
             participants: participants?.map((p) => {
               return { name: p };

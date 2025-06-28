@@ -27,8 +27,8 @@ test.describe('Trip Activities', () => {
     tripData = {
       name: `Activities Test Trip ${Date.now()}`,
       description: 'Test Description for Activities tests',
-      startDate: dayjs().startOf('month').toDate() as Date,
-      endDate: dayjs().endOf('month').toDate() as Date, // 10 days from now
+      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
       destinations: ['Paris, France', 'Rome, Italy'],
       participants: ['Test User'],
     };

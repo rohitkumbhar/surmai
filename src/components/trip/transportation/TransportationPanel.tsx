@@ -169,7 +169,7 @@ export const TransportationPanel = ({
         {rentalAgreements.map((t: Transportation) => {
           return (
             <Fragment key={t.id}>
-              <CarRentalData refetch={refetchData} trip={trip} rental={t} />
+              <CarRentalData refetch={refetchData} trip={trip} rental={t} tripAttachments={tripAttachments} />
             </Fragment>
           );
         })}

@@ -24,12 +24,14 @@ export const createTrip = async (data: NewTrip) => {
 
 export const getTrip = (tripId: string): Promise<Trip> => {
   return trips.getOne<TripResponse>(tripId).then((trip) => {
-    const { startDate, endDate, ...rest } = trip;
-    return {
-      ...rest,
-      startDate: new Date(Date.parse(startDate)),
-      endDate: new Date(Date.parse(endDate)),
-    };
+    // const { startDate, endDate, ...rest } = trip;
+    // return {
+    //   ...rest,
+    //   startDate: new Date(Date.parse(startDate)),
+    //   endDate: new Date(Date.parse(endDate)),
+    // };
+
+    return trip;
   });
 };
 
@@ -39,13 +41,14 @@ export const listTrips = async (): Promise<Trip[]> => {
     expand: 'collaborators',
   });
   return results.map((trip) => {
-    const { expand, startDate, endDate, ...rest } = trip;
-    return {
-      ...rest,
-      ...expand,
-      startDate: new Date(Date.parse(startDate)),
-      endDate: new Date(Date.parse(endDate)),
-    };
+    // const { expand, startDate, endDate, ...rest } = trip;
+    // return {
+    //   ...rest,
+    //   ...expand,
+    //   startDate: new Date(Date.parse(startDate)),
+    //   endDate: new Date(Date.parse(endDate)),
+    // };
+    return trip
   });
 };
 
@@ -56,13 +59,14 @@ export const listUpcomingTrips = async (): Promise<Trip[]> => {
     filter: `endDate >= "${threshold}"`,
   });
   return results.map((trip) => {
-    const { expand, startDate, endDate, ...rest } = trip;
-    return {
-      ...rest,
-      ...expand,
-      startDate: new Date(Date.parse(startDate)),
-      endDate: new Date(Date.parse(endDate)),
-    };
+    // const { expand, startDate, endDate, ...rest } = trip;
+    // return {
+    //   ...rest,
+    //   ...expand,
+    //   startDate: new Date(Date.parse(startDate)),
+    //   endDate: new Date(Date.parse(endDate)),
+    // };
+    return trip
   });
 };
 
@@ -73,13 +77,14 @@ export const listPastTrips = async (): Promise<Trip[]> => {
     filter: `endDate < "${threshold}"`,
   });
   return results.map((trip) => {
-    const { expand, startDate, endDate, ...rest } = trip;
-    return {
-      ...rest,
-      ...expand,
-      startDate: new Date(Date.parse(startDate)),
-      endDate: new Date(Date.parse(endDate)),
-    };
+    // const { expand, startDate, endDate, ...rest } = trip;
+    // return {
+    //   ...rest,
+    //   ...expand,
+    //   startDate: new Date(Date.parse(startDate)),
+    //   endDate: new Date(Date.parse(endDate)),
+    // };
+    return trip;
   });
 };
 

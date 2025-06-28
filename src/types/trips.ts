@@ -24,8 +24,8 @@ export type Trip = {
   name: string;
   description?: string;
   notes?: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   coverImage?: string;
   participants?: Participant[];
   destinations?: Destination[];
@@ -44,7 +44,7 @@ export type TripResponse = Omit<Trip, 'startDate' | 'endDate'> & {
 export type CreateTripForm = {
   name: string;
   description?: string;
-  dateRange: [Date | null, Date | null];
+  dateRange: [string | null, string | null];
   coverImage?: string;
   participants?: string[];
   destinations?: Destination[];
@@ -67,8 +67,8 @@ export type Transportation = {
   origin: string;
   destination: string;
   cost: Cost;
-  departureTime: Date;
-  arrivalTime: Date;
+  departureTime: string;
+  arrivalTime: string;
   trip: string;
   metadata: { [key: string]: any };
   attachments?: string[];
@@ -92,8 +92,8 @@ export type CarRentalFormSchema = {
   rentalCompany?: string;
   pickupLocation?: string;
   dropOffLocation?: string;
-  pickupTime?: Date;
-  dropOffTime?: Date;
+  pickupTime?: string;
+  dropOffTime?: string;
   confirmationCode?: string;
   cost?: number;
   currencyCode?: string;
@@ -103,8 +103,8 @@ export type TransportationFormSchema = {
   provider?: string;
   origin?: string;
   destination?: string;
-  departureTime?: Date;
-  arrivalTime?: Date;
+  departureTime?: string;
+  arrivalTime?: string;
   reservation?: string;
   cost?: number;
   currencyCode?: string;
@@ -129,8 +129,8 @@ export type Lodging = {
   name: string;
   address?: string;
   cost?: Cost;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   trip: string;
   confirmationCode?: string;
   metadata?: { [key: string]: any };
@@ -146,8 +146,8 @@ export type LodgingFormSchema = {
   address?: string;
   cost?: number;
   currencyCode?: string;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: string;
+  endDate?: string;
   confirmationCode?: string;
 };
 
@@ -163,7 +163,7 @@ export interface Activity extends RecordModel {
   name: string;
   description: string;
   address?: string;
-  startDate: Date;
+  startDate: string;
   cost?: Cost;
   trip: string;
   attachments?: string[];
@@ -178,7 +178,7 @@ export type ActivityFormSchema = {
   address?: string;
   cost?: number;
   currencyCode?: string;
-  startDate?: Date;
+  startDate?: string;
 };
 
 export interface Airport extends Omit<RecordModel, 'collectionName,collectionId'> {

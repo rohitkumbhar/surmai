@@ -27,7 +27,6 @@ export const FancyPasswordInput = ({
     <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(currentPasswordValue)} />
   ));
 
-  // @ts-expect-error It works really
   form.watch(fieldName, ({ value }: { value: string }) => {
     setCurrentPasswordValue(value);
   });

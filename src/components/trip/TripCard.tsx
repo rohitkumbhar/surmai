@@ -6,16 +6,16 @@ import { getAttachmentUrl, uploadTripCoverImage } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { nanoid } from 'nanoid';
-import { formatDate } from '../../lib/time.ts';
 import { useHover, useMediaQuery } from '@mantine/hooks';
 import { openContextModal } from '@mantine/modals';
 import { useState } from 'react';
+import dayjs from 'dayjs';
 
 export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
   const navigateFunction = useNavigate();
   const { hovered, ref } = useHover();
   const { id, name, coverImage, destinations } = trip;
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [tripCoverImage, setTripCoverImage] = useState<string | undefined>(coverImage);
 
@@ -91,7 +91,7 @@ export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
           </Text>
         </Group>
         <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
-          {`${formatDate(i18n.language, trip.startDate)} - ${formatDate(i18n.language, trip.endDate)}`}
+          {`${ dayjs(trip.startDate).format('LL')} - ${dayjs(trip.endDate).format('LL')}`}
         </Text>
       </Card.Section>
 

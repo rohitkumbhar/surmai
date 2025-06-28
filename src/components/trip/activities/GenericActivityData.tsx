@@ -8,8 +8,8 @@ import { Attachments } from '../attachments/Attachments.tsx';
 import { deleteActivity, deleteActivityAttachments } from '../../../lib/api';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { IconActivity } from '@tabler/icons-react';
-import { formatDate, formatTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
+import dayjs from 'dayjs';
 
 export const GenericActivityData = ({
   trip,
@@ -22,7 +22,7 @@ export const GenericActivityData = ({
   refetch: () => void;
   tripAttachments?: Attachment[];
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const isMobile = useMediaQuery('(max-width: 50em)');
 
@@ -97,7 +97,7 @@ export const GenericActivityData = ({
           <Text size="xs" c={'dimmed'}>
             {t('activity_start_date', 'Date/Time')}
           </Text>
-          <Text size="sm">{`${formatDate(i18n.language, activity.startDate)} ${formatTime(activity.startDate)}`}</Text>
+          <Text size="sm">{dayjs(activity.startDate).format('l LT')}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 4 }}>
@@ -108,20 +108,20 @@ export const GenericActivityData = ({
           <Text size="sm" c={'dimmed'}>
             {activity.description}
           </Text>
-        </Grid.Col>
+        </Grid.Col>;
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 3 }}>
           <Text size="xs" c={'dimmed'}>
             {t('lodging_address', 'Address')}
           </Text>
           <Text size="md">{activity.address}</Text>
-        </Grid.Col>
+        </Grid.Col>;
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : ''}</Text>
+          <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : '' }</Text>
         </Grid.Col>
       </Grid>
       {attachments && (
