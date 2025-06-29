@@ -26,6 +26,10 @@ test.describe('Trip Transportation', () => {
 
     // Initialize the CreateNewTripPage
     const page = await context.newPage();
+    await page.setViewportSize({
+      width: 1280,
+      height: 900,
+    });
     createNewTripPage = new CreateNewTripPage(page);
 
     // Navigate to the create new trip page

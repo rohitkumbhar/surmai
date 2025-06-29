@@ -50,8 +50,8 @@ export const CreateNewTrip = () => {
           const data: NewTrip = {
             name: name,
             description: description,
-            startDate: startDate.format('YYYY-MM-DDTHH:mm:ssZ'), // dayjs(dateRange[0]).startOf('day').toDate() || dayjs().format('D MMMM YYYY'),
-            endDate: endDate.format('YYYY-MM-DDTHH:mm:ssZ'), //dayjs(dateRange[1]).endOf('day').toDate() || dayjs().format('D MMMM YYYY'),
+            startDate: startDate.format('YYYY-MM-DDTHH:mm:ssZ'),
+            endDate: endDate.format('YYYY-MM-DDTHH:mm:ssZ'),
             ownerId: user?.id || '',
             participants: participants?.map((p) => {
               return { name: p };

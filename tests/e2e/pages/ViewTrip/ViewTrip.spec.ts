@@ -15,6 +15,10 @@ test.describe('View Trip Page', () => {
       storageState: 'tests/playwright/.auth/user.json',
     });
     const page = await context.newPage();
+    await page.setViewportSize({
+      width: 1280,
+      height: 900,
+    });
 
     // Initialize the CreateNewTripPage
     createNewTripPage = new CreateNewTripPage(page);
