@@ -99,7 +99,6 @@ export const GenericActivityData = ({
           </Text>
           <Text size="sm">{dayjs(activity.startDate).format('l LT')}</Text>
         </Grid.Col>
-
         <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 4 }}>
           <Text size="xs" c={'dimmed'}>
             {t('lodging_name', 'Name')}
@@ -108,20 +107,20 @@ export const GenericActivityData = ({
           <Text size="sm" c={'dimmed'}>
             {activity.description}
           </Text>
-        </Grid.Col>;
-
+        </Grid.Col>
+        ;
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 3 }}>
           <Text size="xs" c={'dimmed'}>
             {t('lodging_address', 'Address')}
           </Text>
           <Text size="md">{activity.address}</Text>
-        </Grid.Col>;
-
+        </Grid.Col>
+        ;
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : '' }</Text>
+          <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
       {attachments && (

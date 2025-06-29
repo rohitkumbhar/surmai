@@ -48,7 +48,7 @@ export const listTrips = async (): Promise<Trip[]> => {
     //   startDate: new Date(Date.parse(startDate)),
     //   endDate: new Date(Date.parse(endDate)),
     // };
-    return trip
+    return trip;
   });
 };
 
@@ -66,7 +66,7 @@ export const listUpcomingTrips = async (): Promise<Trip[]> => {
     //   startDate: new Date(Date.parse(startDate)),
     //   endDate: new Date(Date.parse(endDate)),
     // };
-    return trip
+    return trip;
   });
 };
 

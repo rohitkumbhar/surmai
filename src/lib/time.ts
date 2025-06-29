@@ -10,11 +10,11 @@ export const calculateTimezoneDifference = (user: User | undefined, timezone: st
 };
 
 export const formatDate = (_locale: string, input: string) => {
-  return dayjs(input).format('LL')
+  return dayjs(input).format('LL');
 };
 
 export const formatTime = (input: string) => {
-  return dayjs(input).format('LT')
+  return dayjs(input).format('LT');
 };
 
 /*
@@ -42,7 +42,7 @@ export const fakeAsUtcString = (date: string | undefined): string => {
     return '';
   }
 
-  return dayjs(date,"UTC").format('YYYY-MM-DDTHH:mm:ss[Z]')
+  return dayjs(date, 'UTC').format('YYYY-MM-DDTHH:mm:ss[Z]');
 };
 
 export const convertSavedToBrowserDate = (dateString: string) => {

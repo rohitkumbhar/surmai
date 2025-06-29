@@ -44,10 +44,8 @@ export const CreateNewTrip = () => {
           setCreatingTrip(true);
           const { name, description, dateRange, participants, destinations } = values;
 
-          const startDate = dayjs(dayjs(dateRange[0]).startOf('day')).tz(dayjs.tz.guess())
-          const endDate = dayjs(dayjs(dateRange[1]).endOf('day')).tz(dayjs.tz.guess())
-
-          console.log("startDate ", startDate);
+          const startDate = dayjs(dayjs(dateRange[0]).startOf('day')).tz(dayjs.tz.guess());
+          const endDate = dayjs(dayjs(dateRange[1]).endOf('day')).tz(dayjs.tz.guess());
 
           const data: NewTrip = {
             name: name,

@@ -28,9 +28,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         {' '}
         {trip.description}
       </Title>
-      <Text size={'sm'}>
-        {`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}
-      </Text>
+      <Text size={'sm'}>{`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}</Text>
       <Divider />
       <Text mt={'md'}>{t('trip_destinations', 'Destinations')}</Text>
       <Group>
