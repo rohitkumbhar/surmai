@@ -4,14 +4,14 @@ import { Divider, Flex, Group, Stack, Text, Title } from '@mantine/core';
 import { ParticipantData } from './ParticipantData.tsx';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
-import { formatDate } from '../../../lib/time.ts';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { useQuery } from '@tanstack/react-query';
 import { listCollaborators } from '../../../lib/api';
 import { User } from '../../../types/auth.ts';
+import dayjs from 'dayjs';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const { data: collaborators } = useQuery<User[]>({
     queryKey: ['listCollaborators', trip.id],
@@ -28,9 +28,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         {' '}
         {trip.description}
       </Title>
-      <Text size={'sm'}>
-        {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
-      </Text>
+      <Text size={'sm'}>{`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}</Text>
       <Divider />
       <Text mt={'md'}>{t('trip_destinations', 'Destinations')}</Text>
       <Group>

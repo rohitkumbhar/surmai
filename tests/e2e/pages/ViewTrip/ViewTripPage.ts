@@ -30,7 +30,7 @@ export class ViewTripPage {
   }
 
   /** Utility function to select a date in Mantine DatePicker  */
-  async selectDatePickerValue(testId: string, value: Date) {
+  async selectDatePickerValue(testId: string, value: string) {
     const dateSelector = getSelectorString(value);
     await this.page.click(`[data-testid="${testId}"]`);
     await this.page.click(dateSelector);
@@ -69,14 +69,20 @@ export class ViewTripPage {
     rentalCompany: string;
     pickupLocation: string;
     dropOffLocation: string;
-    pickupTime: Date;
-    dropOffTime: Date;
+    pickupTime: string;
+    dropOffTime: string;
     confirmationCode: string;
     cost: number;
     currencyCode: string;
   }) {
     await this.openAccordionSection('Transportation');
-    await this.page.getByTestId('add-transportation-button').click();
+
+    // Click the Add Transportation button
+    const transportationMenu = this.page.getByTestId('add-transportation-button');
+    await transportationMenu.scrollIntoViewIfNeeded();
+    await transportationMenu.click();
+
+
     await this.page.getByRole('menuitem', { name: 'Car Rental' }).click();
     await this.page.getByLabel('Rental Company').fill(carRentalData.rentalCompany);
     await this.page.getByLabel('Pickup Location').fill(carRentalData.pickupLocation);
@@ -98,8 +104,8 @@ export class ViewTripPage {
    */
   async addTransportation(transportationData: {
     type: 'Flight' | 'Train' | 'Bus' | 'Car' | 'Ferry' | 'Other';
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     startLocation: string;
     endLocation: string;
     confirmationCode?: string;
@@ -110,7 +116,9 @@ export class ViewTripPage {
     await this.openAccordionSection('Transportation');
 
     // Click the Add Transportation button
-    await this.page.getByTestId('add-transportation-button').click();
+    const transportationMenu = this.page.getByTestId('add-transportation-button');
+    await transportationMenu.scrollIntoViewIfNeeded();
+    await transportationMenu.click();
 
     // Select the transportation type
     await this.page.getByRole('menuitem', { name: transportationData.type }).click();
@@ -162,8 +170,8 @@ export class ViewTripPage {
   async addLodging(lodgingData: {
     type: string;
     name: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     address: string;
     confirmationCode?: string;
   }) {
@@ -196,7 +204,7 @@ export class ViewTripPage {
   /**
    * Add an activity to the trip
    */
-  async addActivity(activityData: { name: string; startDate: Date; address: string; description?: string }) {
+  async addActivity(activityData: { name: string; startDate: string; address: string; description?: string }) {
     // Open the activities section
     await this.openAccordionSection('Activities');
 

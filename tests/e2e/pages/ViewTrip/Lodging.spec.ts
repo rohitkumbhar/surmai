@@ -27,8 +27,8 @@ test.describe('Trip Lodging', () => {
     tripData = {
       name: `Lodging Test Trip ${Date.now()}`,
       description: 'Test Description for Lodging tests',
-      startDate: dayjs().startOf('month').toDate() as Date,
-      endDate: dayjs().endOf('month').toDate() as Date,
+      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
       destinations: ['New York, NY, USA', 'Los Angeles, CA, USA'],
       participants: ['Test User'],
     };

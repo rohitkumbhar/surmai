@@ -15,6 +15,10 @@ test.describe('View Trip Page', () => {
       storageState: 'tests/playwright/.auth/user.json',
     });
     const page = await context.newPage();
+    await page.setViewportSize({
+      width: 1280,
+      height: 900,
+    });
 
     // Initialize the CreateNewTripPage
     createNewTripPage = new CreateNewTripPage(page);
@@ -26,8 +30,8 @@ test.describe('View Trip Page', () => {
     tripData = {
       name: `Test Trip ${Date.now()}`,
       description: 'Test Description for ViewTrip tests',
-      startDate: dayjs().startOf('month').toDate() as Date,
-      endDate: dayjs().endOf('month').toDate() as Date,
+      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
       destinations: ['New York, NY, USA'],
       participants: ['Test User'],
     };
@@ -57,8 +61,8 @@ test.describe('View Trip Page', () => {
     await viewTripPage.expectTripDetailsVisible(tripData.name);
 
     // Check that the trip dates are visible
-    const startDateStr = dayjs(tripData.startDate).format('MMMM DD, YYYY');
-    const endDateStr = dayjs(tripData.endDate).format('MMMM DD, YYYY');
+    const startDateStr = dayjs(tripData.startDate).format('MMMM D, YYYY');
+    const endDateStr = dayjs(tripData.endDate).format('MMMM D, YYYY');
     await expect(
       page.locator('#app-header').getByText(`${startDateStr} - ${endDateStr}`, { exact: false })
     ).toBeVisible();

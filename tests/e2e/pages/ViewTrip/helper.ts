@@ -1,17 +1,15 @@
 import dayjs from 'dayjs';
 
-export const getStartDate = (tripStart: Date) => {
-  const result = new Date(tripStart);
+export const getStartDate = (tripStart: string) => {
   const randomDay = Math.floor(Math.random() * 15) + 1;
-  result.setDate(randomDay);
-  return result;
+  return dayjs(tripStart).add(randomDay, 'day').format('YYYY-MM-DD');
 };
 
-export const getEndDate = (start: Date, days: number) => {
-  return new Date(start.getTime() + days * 24 * 60 * 60 * 1000);
+export const getEndDate = (start: string, days: number) => {
+  return dayjs(start).add(days, 'day').format('YYYY-MM-DD');
 };
 
-export const getSelectorString = (date: Date) => {
+export const getSelectorString = (date: string) => {
   const dateStr = dayjs(date).format('D MMMM YYYY');
   return `button[aria-label="${dateStr}"]`;
 };

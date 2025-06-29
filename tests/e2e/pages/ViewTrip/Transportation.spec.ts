@@ -26,6 +26,10 @@ test.describe('Trip Transportation', () => {
 
     // Initialize the CreateNewTripPage
     const page = await context.newPage();
+    await page.setViewportSize({
+      width: 1280,
+      height: 900,
+    });
     createNewTripPage = new CreateNewTripPage(page);
 
     // Navigate to the create new trip page
@@ -35,8 +39,8 @@ test.describe('Trip Transportation', () => {
     tripData = {
       name: `Transportation Test Trip ${Date.now()}`,
       description: 'Test Description for Transportation tests',
-      startDate: dayjs().startOf('month').toDate() as Date,
-      endDate: dayjs().endOf('month').toDate() as Date,
+      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
       destinations: ['New York, NY, USA'],
       participants: ['Test User'],
     };

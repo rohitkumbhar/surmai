@@ -72,7 +72,7 @@ export const EditBasicInfoForm = ({
             return { name: name };
           }),
         };
-        updateTrip(trip.id, data as Trip)
+        updateTrip(trip.id, data as unknown as Trip)
           .then(() => {
             setSaving(false);
             context.closeModal(id);

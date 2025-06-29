@@ -75,8 +75,8 @@ export function chunk<T>(array: T[], size: number): T[][] {
 
 export const compareItineraryLine = (a: ItineraryLine, b: ItineraryLine) => {
   // @ts-expect-error types
-  const aStart: Date = a.departureTime || a.startDate;
+  const aStart: string = a.departureTime || a.startDate;
   // @ts-expect-error types
-  const bStart: Date = b.departureTime || b.startDate;
-  return aStart.getTime() - bStart.getTime();
+  const bStart: string = b.departureTime || b.startDate;
+  return dayjs(aStart).valueOf() - dayjs(bStart).valueOf();
 };

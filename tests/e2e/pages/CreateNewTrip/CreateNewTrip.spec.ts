@@ -28,8 +28,8 @@ test.describe('Create New Trip Page', () => {
     await createNewTripPage.fillTripForm({
       name: 'Test Trip',
       description: 'Test Description',
-      startDate: dayjs().startOf('month').toDate() as Date,
-      endDate: dayjs().endOf('month').toDate() as Date,
+      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
       destinations: ['New York, NY, USA'],
       participants: ['John Doe', 'Jane Smith'],
     });
@@ -59,8 +59,8 @@ test.describe('Create New Trip Page', () => {
     await createNewTripPage.fillTripForm({
       name: 'Test Trip',
       description: 'Test Description',
-      startDate: dayjs().startOf('month').toDate() as Date,
-      endDate: dayjs().endOf('month').toDate() as Date,
+      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
       destinations: ['New York, NY, USA'],
       participants: ['John Doe', 'Jane Smith'],
     });

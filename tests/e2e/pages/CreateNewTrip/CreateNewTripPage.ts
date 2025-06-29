@@ -4,8 +4,8 @@ import dayjs from 'dayjs';
 export interface TripFormData {
   name: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   destinations: string[];
   participants: string[];
 }
