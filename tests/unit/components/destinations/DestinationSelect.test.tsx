@@ -85,7 +85,7 @@ describe('DestinationSelect', () => {
     await user.type(input, 'San');
 
     await waitFor(() => {
-      expect(api.searchPlaces).toHaveBeenCalledWith('San');
+      expect(api.searchPlaces).toHaveBeenCalledWith('San', 1, 20);
     });
   });
 
@@ -97,7 +97,7 @@ describe('DestinationSelect', () => {
     await user.type(input, 'San');
 
     await waitFor(() => {
-      expect(api.searchPlaces).toHaveBeenCalledWith('San');
+      expect(api.searchPlaces).toHaveBeenCalledWith('San', 1, 20);
     });
 
     // Wait for dropdown to appear and select an option
@@ -115,7 +115,7 @@ describe('DestinationSelect', () => {
     await user.type(input, 'New Destination');
 
     await waitFor(() => {
-      expect(api.searchPlaces).toHaveBeenCalledWith('New Destination');
+      expect(api.searchPlaces).toHaveBeenCalledWith('New Destination', 1, 20);
     });
 
     // Wait for dropdown to appear and select "Create New Entry"

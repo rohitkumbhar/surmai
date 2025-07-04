@@ -1,5 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Combobox, Group, Pill, PillsInput, Text, useCombobox } from '@mantine/core';
+import { Anchor, Combobox, Group, Pill, PillsInput, Text, useCombobox } from '@mantine/core';
 import { useClickOutside, useDebouncedState } from '@mantine/hooks';
 import { searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
@@ -13,6 +13,9 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   const [search, setSearch] = useDebouncedState('', 200);
   const [searchResults, setSearchResults] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasNextPage, setHasNextPage] = useState(false);
+
   const [values, setValues] = useState<Destination[]>(
     // @ts-expect-error Existing values match type
     currentValues ? (currentValues[propName] as Destination[]) || [] : []
@@ -25,13 +28,14 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   useEffect(() => {
     if (search?.length > 1) {
       setLoading(true);
-      searchPlaces(search).then((results) => {
+      searchPlaces(search, page, 20).then((results) => {
         setSearchResults(results.items as unknown as Destination[]);
+        setHasNextPage(page < (results.totalPages || 0));
         setLoading(false);
         combobox.openDropdown();
       });
     }
-  }, [search]);
+  }, [search, page]);
 
   const options = searchResults.map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
@@ -102,6 +106,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
                 <PillsInput.Field
                   ref={inputRef as MutableRefObject<HTMLInputElement>}
                   onChange={(ev) => {
+                    setPage(1);
                     setSearch(ev.target.value);
                   }}
                 />
@@ -125,6 +130,11 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
               </Combobox.Option>
             )}
             {!loading && options.length > 0 && options}
+            {hasNextPage && (
+              <Anchor p={'sm'} size={'md'} onClick={() => setPage(page + 1)}>
+                {t('load_more_results', 'Load more results')}
+              </Anchor>
+            )}
           </Combobox.Options>
         </Combobox.Dropdown>
       </Combobox>
