@@ -35,8 +35,8 @@ export const countAirlines = async () => {
   return totalItems;
 };
 
-export const searchPlaces = (query: string) => {
-  return pb.collection('places').getList(1, 20, {
+export const searchPlaces = (query: string, page: number = 1, itemsPerPage: number = 20) => {
+  return pb.collection('places').getList(page, itemsPerPage, {
     filter: `name~"${query}" || asciiName~"${query}"`,
   });
 };
