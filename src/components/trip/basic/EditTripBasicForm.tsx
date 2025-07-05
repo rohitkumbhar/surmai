@@ -3,7 +3,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { useTranslation } from 'react-i18next';
 import { UseFormReturnType } from '@mantine/form';
 import { CreateTripForm } from '../../../types/trips.ts';
-import { DestinationSelect } from '../../destinations/DestinationSelect.tsx';
+import { PlaceMultiSelect } from '../../places/PlaceMultiSelect.tsx';
 
 interface EditTripBasicFormProps {
   form: UseFormReturnType<CreateTripForm>;
@@ -34,7 +34,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         {...form.getInputProps('description')}
       />
 
-      <DestinationSelect propName={'destinations'} form={form as UseFormReturnType<unknown>} />
+      <PlaceMultiSelect propName={'destinations'} form={form as UseFormReturnType<unknown>} />
 
       <DatePickerInput
         type="range"

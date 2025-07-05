@@ -4,6 +4,7 @@ import { Collaborators } from '../components/trip/basic/collaborators/Collaborat
 import { AttachmentViewer } from '../components/trip/attachments/AttachmentViewer.tsx';
 import { ExportTripModal } from '../components/trip/basic/ExportTripModal.tsx';
 import { InviteUserModal } from '../components/settings/InviteUserModal.tsx';
+import { ExportTripCalendarModal } from '../components/trip/basic/ExportTripCalendar.tsx';
 
 export const modals = {
   editBasicInfoForm: EditBasicInfoForm,
@@ -11,6 +12,7 @@ export const modals = {
   collaboratorsForm: Collaborators,
   attachmentViewer: AttachmentViewer,
   exportTripModal: ExportTripModal,
+  exportTripCalendarModal: ExportTripCalendarModal,
   inviteUsersFormModal: InviteUserModal,
 };
 

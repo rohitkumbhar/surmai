@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { DestinationSelect } from '../../../../src/components/destinations/DestinationSelect.js';
+import { PlaceMultiSelect } from '../../../../src/components/places/PlaceMultiSelect.tsx';
 import * as api from '../../../../src/lib/api';
-import { Destination } from '../../../../src/types/trips';
+import { Place } from '../../../../src/types/trips';
 import { MantineProvider } from '@mantine/core';
 
 // Mock the API module
@@ -23,7 +23,7 @@ const renderWithMantine = (ui: React.ReactElement) => {
   return render(<MantineProvider>{ui}</MantineProvider>);
 };
 
-describe('DestinationSelect', () => {
+describe('PlacesMultiSelect', () => {
   const mockForm = {
     getValues: vi.fn(),
     setFieldValue: vi.fn(),
@@ -31,7 +31,7 @@ describe('DestinationSelect', () => {
     key: vi.fn().mockReturnValue('test-key'),
   };
 
-  const mockDestinations: Destination[] = [
+  const mockPlaces: Place[] = [
     {
       id: '1',
       name: 'San Jose',
@@ -58,28 +58,28 @@ describe('DestinationSelect', () => {
       destinations: [],
     });
     (api.searchPlaces as any).mockResolvedValue({
-      items: mockDestinations,
+      items: mockPlaces,
     });
   });
 
   it('renders correctly', () => {
-    renderWithMantine(<DestinationSelect propName="destinations" form={mockForm as any} />);
+    renderWithMantine(<PlaceMultiSelect propName="destinations" form={mockForm as any} />);
     expect(screen.getByText('Destinations')).toBeInTheDocument();
     expect(screen.getByText('Enter the destinations in this trip e.g. San Jose, Guanacaste')).toBeInTheDocument();
   });
 
-  it('displays existing destinations', () => {
+  it('displays existing places', () => {
     mockForm.getValues.mockReturnValue({
-      destinations: [mockDestinations[0]],
+      destinations: [mockPlaces[0]],
     });
 
-    renderWithMantine(<DestinationSelect propName="destinations" form={mockForm as any} />);
+    renderWithMantine(<PlaceMultiSelect propName="destinations" form={mockForm as any} />);
     expect(screen.getByText('San Jose')).toBeInTheDocument();
   });
 
-  it('searches for destinations when typing', async () => {
+  it('searches for places when typing', async () => {
     const user = userEvent.setup();
-    renderWithMantine(<DestinationSelect propName="destinations" form={mockForm as any} />);
+    renderWithMantine(<PlaceMultiSelect propName="destinations" form={mockForm as any} />);
 
     const input = screen.getByRole('textbox');
     await user.type(input, 'San');
@@ -91,7 +91,7 @@ describe('DestinationSelect', () => {
 
   it('adds a destination when selected from dropdown', async () => {
     const user = userEvent.setup();
-    renderWithMantine(<DestinationSelect propName="destinations" form={mockForm as any} />);
+    renderWithMantine(<PlaceMultiSelect propName="destinations" form={mockForm as any} />);
 
     const input = screen.getByRole('textbox');
     await user.type(input, 'San');
@@ -104,12 +104,12 @@ describe('DestinationSelect', () => {
     const option = await screen.findByText('San Jose');
     await user.click(option);
 
-    expect(mockForm.setFieldValue).toHaveBeenCalledWith('destinations', [mockDestinations[0]]);
+    expect(mockForm.setFieldValue).toHaveBeenCalledWith('destinations', [mockPlaces[0]]);
   });
 
   it('creates a new destination when "Create New Entry" is selected', async () => {
     const user = userEvent.setup();
-    renderWithMantine(<DestinationSelect propName="destinations" form={mockForm as any} />);
+    renderWithMantine(<PlaceMultiSelect propName="destinations" form={mockForm as any} />);
 
     const input = screen.getByRole('textbox');
     await user.type(input, 'New Destination');
@@ -131,11 +131,11 @@ describe('DestinationSelect', () => {
 
   it.skip('removes a destination when remove button is clicked', async () => {
     mockForm.getValues.mockReturnValue({
-      destinations: [mockDestinations[0]],
+      destinations: [mockPlaces[0]],
     });
 
     const user = userEvent.setup();
-    renderWithMantine(<DestinationSelect propName="destinations" form={mockForm as any} />);
+    renderWithMantine(<PlaceMultiSelect propName="destinations" form={mockForm as any} />);
 
     const removeButton = screen.getByRole('button');
     await user.click(removeButton);

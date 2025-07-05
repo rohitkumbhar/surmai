@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { Button, Menu, rem, Text } from '@mantine/core';
 import {
+  IconCalendar,
   IconChevronDown,
   IconDownload,
   IconPackageExport,
@@ -144,6 +145,23 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           leftSection={<IconPackageExport style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('export_trip', 'Export Trip')}
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => {
+            openContextModal({
+              modal: 'exportTripCalendarModal',
+              title: t('trip_calendar', 'Add To Calendar'),
+              withCloseButton: true,
+              fullScreen: isMobile,
+              size: 'lg',
+              innerProps: {
+                trip: trip,
+              },
+            });
+          }}
+          leftSection={<IconCalendar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        >
+          {t('trip_calendar', 'Add To Calendar')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item

@@ -24,7 +24,7 @@ func init() {
 		// user can view and update self
 		users.ViewRule = types.Pointer("id = @request.auth.id")
 		users.UpdateRule = types.Pointer("id = @request.auth.id")
-		
+
 		return app.Save(users)
 
 	}, func(app core.App) error {

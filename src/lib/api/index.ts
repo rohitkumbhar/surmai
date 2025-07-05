@@ -31,6 +31,7 @@ export {
   listUpcomingTrips,
   listPastTrips,
   saveTripNotes,
+  exportCalendar,
 } from './pocketbase/trips.ts';
 
 export {

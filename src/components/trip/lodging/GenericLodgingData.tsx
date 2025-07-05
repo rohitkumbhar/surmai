@@ -1,6 +1,6 @@
 import { Attachment, Lodging, Trip } from '../../../types/trips.ts';
-import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
-import { IconCar } from '@tabler/icons-react';
+import { Anchor, Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
+import { IconCar, IconMap, IconMap2, IconMapPin, IconMapX } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
@@ -11,6 +11,8 @@ import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
+import { getMapsLink, getMapsUrl } from '../../../lib/places.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const GenericLodgingData = ({
   trip,
@@ -28,6 +30,7 @@ export const GenericLodgingData = ({
   const isMobile = useMediaQuery('(max-width: 50em)');
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[lodging.type] || IconCar;
+  const { user } = useCurrentUser();
 
   const attachments = tripAttachments?.filter((attachment) => {
     return lodging.attachmentReferences?.includes(attachment.id);
@@ -125,12 +128,18 @@ export const GenericLodgingData = ({
             {t('lodging_name', 'Name')}
           </Text>
           <Text size="md">{lodging.name}</Text>
+          <Text size="xs">{lodging.metadata?.place.name}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
             {t('lodging_address', 'Address')}
           </Text>
-          <Text size="md">{lodging.address}</Text>
+
+          {lodging.address && (
+            <Anchor href={getMapsLink(user, lodging.address)} target={'_blank'} c={'var(--mantine-primary-color-6)">'}>
+              <Text size="md">{lodging.address} </Text>
+            </Anchor>
+          )}
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>

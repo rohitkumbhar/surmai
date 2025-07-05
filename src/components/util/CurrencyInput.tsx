@@ -1,5 +1,4 @@
 import { NumberInput, rem, Select } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
 import { currencyCodes } from './currencyCodes.ts';
 
 export const CurrencyInput = ({
@@ -7,14 +6,16 @@ export const CurrencyInput = ({
   costKey,
   costProps,
   currencyCodeProps,
+  label,
+  description,
 }: {
   currencyCodeKey: string;
   costKey: string;
   costProps: any;
   currencyCodeProps: any;
+  label: string;
+  description: string;
 }) => {
-  const { t } = useTranslation();
-
   const select = (
     <Select
       key={currencyCodeKey}
@@ -39,7 +40,8 @@ export const CurrencyInput = ({
     <NumberInput
       type="number"
       placeholder=""
-      label={t('cost', 'Cost')}
+      label={label}
+      description={description}
       rightSection={select}
       rightSectionWidth={92}
       key={costKey}

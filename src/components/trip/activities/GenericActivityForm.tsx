@@ -123,6 +123,8 @@ export const GenericActivityForm = ({
               costProps={form.getInputProps('cost')}
               currencyCodeKey={form.key('currencyCode')}
               currencyCodeProps={form.getInputProps('currencyCode')}
+              label={t('activity_cost', 'Cost')}
+              description={t('activity_cost_desc', 'Charges for this activity')}
             />
           </Group>
           <Group>

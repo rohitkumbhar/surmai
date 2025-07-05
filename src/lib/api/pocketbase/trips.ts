@@ -184,3 +184,13 @@ export const importTripData = async (file: File) => {
     body: formData,
   });
 };
+
+export const exportCalendar = ({ tripId }: { tripId: string }) => {
+  return pb
+    .send(`/api/surmai/trip/${tripId}/calendar`, {
+      method: 'POST',
+    })
+    .then((response) => {
+      return Uint8Array.from(atob(response.data), (c) => c.charCodeAt(0));
+    });
+};

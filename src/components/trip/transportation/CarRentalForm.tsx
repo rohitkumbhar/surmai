@@ -169,6 +169,8 @@ export const CarRentalForm = ({
                 costProps={form.getInputProps('cost')}
                 currencyCodeKey={form.key('currencyCode')}
                 currencyCodeProps={form.getInputProps('currencyCode')}
+                label={t('car_rental_cost', 'Cost')}
+                description={t('car_rental_cost_desc', 'Charges for this rental')}
               />
               <Group>
                 <Title size={'md'}>

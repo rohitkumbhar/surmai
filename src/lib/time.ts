@@ -17,6 +17,10 @@ export const formatTime = (input: string) => {
   return dayjs(input).format('LT');
 };
 
+export const formatDateTime = (input: string) => {
+  return dayjs(input).format('LL LT');
+};
+
 /*
     What is going on here?
     - Pocketbase saves and returns the dates in UTC

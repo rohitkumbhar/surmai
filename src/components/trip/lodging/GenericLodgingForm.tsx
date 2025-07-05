@@ -1,7 +1,7 @@
 import { Attachment, CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import { useState } from 'react';
-import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,8 @@ import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import dayjs from 'dayjs';
+import i18n from '../../../lib/i18n.ts';
+import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 
 export const GenericLodgingForm = ({
   trip,
@@ -41,6 +43,7 @@ export const GenericLodgingForm = ({
       startDate: lodging?.startDate,
       endDate: lodging?.endDate,
       confirmationCode: lodging?.confirmationCode,
+      place: lodging?.metadata?.place?.name || '',
     },
   });
 
@@ -59,6 +62,9 @@ export const GenericLodgingForm = ({
         currency: values.currencyCode,
       },
       attachmentReferences: lodging?.attachmentReferences || [],
+      metadata: {
+        place: values.place,
+      },
     };
 
     uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
@@ -88,18 +94,32 @@ export const GenericLodgingForm = ({
             <TextInput
               name={'name'}
               label={t('lodging_name', 'Name')}
+              description={t('lodging_name_desc', 'Name of the hotel, residence etc')}
               required
               key={form.key('name')}
               {...form.getInputProps('name')}
             />
 
-            <Textarea
-              name={'address'}
-              label={t('lodging_address', 'Address')}
-              required
-              key={form.key('address')}
-              {...form.getInputProps('address')}
-            />
+            <Group>
+              <PlaceSelect
+                form={form as UseFormReturnType<unknown>}
+                propName={'place'}
+                presetDestinations={trip.destinations || []}
+                label={i18n.t('lodging_place', 'Place')}
+                description={i18n.t('lodging_place_desc', 'Associated place')}
+                key={form.key('place')}
+                {...form.getInputProps('place')}
+              />
+
+              <TextInput
+                name={'address'}
+                label={t('lodging_address', 'Address')}
+                description={t('lodging_address_desc', 'Address of the hotel, residence etc')}
+                required
+                key={form.key('address')}
+                {...form.getInputProps('address')}
+              />
+            </Group>
           </Stack>
           <Group>
             <DateTimePicker
@@ -107,6 +127,7 @@ export const GenericLodgingForm = ({
               valueFormat="lll"
               name={'startDate'}
               label={t('lodging_start_date', 'Check-In')}
+              description={t('lodging_start_date_desc', 'Check-In date & time')}
               clearable
               required
               minDate={trip.startDate}
@@ -124,6 +145,7 @@ export const GenericLodgingForm = ({
               valueFormat="lll"
               name={'endDate'}
               label={t('lodging_end_date', 'Check-Out')}
+              description={t('lodging_end_date_desc', 'Check-Out date & time')}
               required
               miw={rem('200px')}
               clearable
@@ -141,6 +163,7 @@ export const GenericLodgingForm = ({
             <TextInput
               name={'confirmationCode'}
               label={t('lodging_confirmation_code', 'Confirmation Code')}
+              description={t('lodging_confirmation_code_desc', 'Booking Id, Reservation code etc')}
               key={form.key('confirmationCode')}
               {...form.getInputProps('confirmationCode')}
             />
@@ -150,6 +173,8 @@ export const GenericLodgingForm = ({
               costProps={form.getInputProps('cost')}
               currencyCodeKey={form.key('currencyCode')}
               currencyCodeProps={form.getInputProps('currencyCode')}
+              label={t('lodging_cost', 'Cost')}
+              description={t('lodging_cost_desc', 'Charges for this accommodation')}
             />
           </Group>
           <Group>

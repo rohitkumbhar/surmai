@@ -4,21 +4,21 @@ import { useClickOutside, useDebouncedState } from '@mantine/hooks';
 import { searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
 import { UseFormReturnType } from '@mantine/form';
-import { Destination } from '../../types/trips';
+import { Place } from '../../types/trips';
 import { useTranslation } from 'react-i18next';
 
-export function DestinationSelect({ propName, form }: { propName: string; form: UseFormReturnType<unknown> }) {
+export function PlaceMultiSelect({ propName, form }: { propName: string; form: UseFormReturnType<unknown> }) {
   const { t } = useTranslation();
   const currentValues = form.getValues();
   const [search, setSearch] = useDebouncedState('', 200);
-  const [searchResults, setSearchResults] = useState<Destination[]>([]);
+  const [searchResults, setSearchResults] = useState<Place[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(false);
 
-  const [values, setValues] = useState<Destination[]>(
+  const [values, setValues] = useState<Place[]>(
     // @ts-expect-error Existing values match type
-    currentValues ? (currentValues[propName] as Destination[]) || [] : []
+    currentValues ? (currentValues[propName] as Place[]) || [] : []
   );
 
   const combobox = useCombobox();
@@ -29,7 +29,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
     if (search?.length > 1) {
       setLoading(true);
       searchPlaces(search, page, 20).then((results) => {
-        setSearchResults(results.items as unknown as Destination[]);
+        setSearchResults(results.items as unknown as Place[]);
         setHasNextPage(page < (results.totalPages || 0));
         setLoading(false);
         combobox.openDropdown();
@@ -40,9 +40,7 @@ export function DestinationSelect({ propName, form }: { propName: string; form: 
   const options = searchResults.map((item) => (
     <Combobox.Option value={item.id} key={item.id}>
       <Group gap={'xs'}>
-        <Text size={'md'} fw={400}>
-          {item.name}
-        </Text>
+        <Text size={'sm'}>{item.name}</Text>
         <Text size={'xs'} c={'dimmed'}>{`${item.stateName}, ${item.countryName}`}</Text>
       </Group>
     </Combobox.Option>

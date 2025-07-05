@@ -54,6 +54,7 @@ func (surmai *SurmaiApp) BindRoutes() {
 		tripRoutes.Bind(apis.RequireAuth(), middleware.RequireTripAccess())
 		tripRoutes.GET("/collaborators", R.GetTripCollaborators)
 		tripRoutes.POST("/export", R.ExportTrip)
+		tripRoutes.POST("/calendar", R.GenerateIcsData)
 
 		// Public routes
 		se.Router.GET("/site-settings.json", func(e *core.RequestEvent) error {

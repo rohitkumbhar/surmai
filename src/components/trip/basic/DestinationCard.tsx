@@ -1,4 +1,4 @@
-import { Destination, Trip } from '../../../types/trips.ts';
+import { Place, Trip } from '../../../types/trips.ts';
 import { IconClock, IconMapPin } from '@tabler/icons-react';
 import { Anchor, Badge, Card, Group, HoverCard, Text } from '@mantine/core';
 import classes from './DestinationCard.module.css';
@@ -6,7 +6,7 @@ import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsUrl } from '../../../lib/places.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 
-export const DestinationCard = ({ destination }: { destination: Destination; trip: Trip }) => {
+export const DestinationCard = ({ destination }: { destination: Place; trip: Trip }) => {
   const { user } = useCurrentUser();
   return (
     <Card withBorder radius="xs" className={classes.card} p={'xs'}>
