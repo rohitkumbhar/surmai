@@ -105,8 +105,8 @@ export const GenericLodgingForm = ({
                 form={form as UseFormReturnType<unknown>}
                 propName={'place'}
                 presetDestinations={trip.destinations || []}
-                label={i18n.t('lodging_place', 'Place')}
-                description={i18n.t('lodging_place_desc', 'Associated place')}
+                label={i18n.t('lodging_place', 'Destination')}
+                description={i18n.t('lodging_place_desc', 'Associated destination')}
                 key={form.key('place')}
                 {...form.getInputProps('place')}
               />

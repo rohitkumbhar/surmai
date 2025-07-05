@@ -169,6 +169,7 @@ export interface Activity extends RecordModel {
   description: string;
   address?: string;
   startDate: string;
+  endDate?: string;
   cost?: Cost;
   trip: string;
   attachments?: string[];
@@ -184,6 +185,8 @@ export type ActivityFormSchema = {
   cost?: number;
   currencyCode?: string;
   startDate?: string;
+  endDate?: string;
+  place?: Place;
 };
 
 export interface Airport extends Omit<RecordModel, 'collectionName,collectionId'> {

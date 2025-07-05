@@ -27,6 +27,10 @@ export const CurrencyInput = ({
       styles={{
         input: {
           fontWeight: 500,
+          // borderTop: 'none',
+          // borderBottom: 'none',
+          marginBottom: '5px',
+
           borderTopLeftRadius: 0,
           borderBottomLeftRadius: 0,
           width: rem(92),

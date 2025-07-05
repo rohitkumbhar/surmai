@@ -11,7 +11,6 @@ import { GenericTransportationModeForm } from './GenericTransportationModeForm.t
 import { typeIcons } from './typeIcons.ts';
 import { formatDateTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { transportationConfig } from './config.tsx';
 
@@ -29,7 +28,6 @@ export const GenericTransportationData = ({
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [opened, { open, close }] = useDisclosure(false);
-  const { user } = useCurrentUser();
 
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
@@ -137,7 +135,7 @@ export const GenericTransportationData = ({
               <HoverCard.Dropdown>
                 <Stack>
                   <Text size="md">{transportation.metadata.origin.name}</Text>
-                  <TimezoneInfo user={user} timezone={transportation.metadata.origin.timezone} />
+                  <TimezoneInfo timezone={transportation.metadata.origin.timezone} />
                 </Stack>
               </HoverCard.Dropdown>
             </HoverCard>
@@ -166,7 +164,7 @@ export const GenericTransportationData = ({
               <HoverCard.Dropdown>
                 <Stack>
                   <Text size="md">{transportation.metadata.destination.name}</Text>
-                  <TimezoneInfo user={user} timezone={transportation.metadata.destination.timezone} />
+                  <TimezoneInfo timezone={transportation.metadata.destination.timezone} />
                 </Stack>
               </HoverCard.Dropdown>
             </HoverCard>
