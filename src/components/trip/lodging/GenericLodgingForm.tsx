@@ -130,6 +130,7 @@ export const GenericLodgingForm = ({
               description={t('lodging_start_date_desc', 'Check-In date & time')}
               clearable
               required
+              date={trip.startDate}
               minDate={trip.startDate}
               maxDate={trip.endDate}
               key={form.key('startDate')}
@@ -149,6 +150,7 @@ export const GenericLodgingForm = ({
               required
               miw={rem('200px')}
               clearable
+              date={trip.startDate}
               minDate={trip.startDate}
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               key={form.key('endDate')}
