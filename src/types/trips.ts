@@ -97,6 +97,7 @@ export type CarRentalFormSchema = {
   confirmationCode?: string;
   cost?: number;
   currencyCode?: string;
+  place?: Place;
 };
 
 export type TransportationFormSchema = {

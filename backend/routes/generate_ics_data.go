@@ -6,11 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	ics "github.com/arran4/golang-ical"
+	"github.com/gobeam/stringy"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
-	"github.com/samber/lo"
 	"net/http"
-	"strings"
 	"time"
 )
 
@@ -53,9 +52,7 @@ func GenerateIcsData(e *core.RequestEvent) error {
 	tripEvent.SetAllDayEndAt(trip.EndDate.Time())
 	tripEvent.SetSummary(trip.Name)
 	tripEvent.SetDescription(trip.Description)
-	tripEvent.SetLocation(lo.Reduce(trip.Destinations, func(agg string, item bt.Destination, index int) string {
-		return strings.TrimSpace(fmt.Sprintf("%s %s", agg, item.Name))
-	}, ""))
+
 	tripEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
 	tripEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
 
@@ -64,19 +61,35 @@ func GenerateIcsData(e *core.RequestEvent) error {
 		transportEvent := cal.AddEvent(fmt.Sprintf("transport-%s@surmai.app", transportation.Id))
 		transportEvent.SetCreatedTime(time.Now())
 		transportEvent.SetDtStampTime(time.Now())
-		transportEvent.SetStartAt(transportation.Departure.Time())
-		transportEvent.SetEndAt(transportation.Arrival.Time())
-		summary := fmt.Sprintf("%s: %s to %s", transportation.Type, transportation.Origin, transportation.Destination)
+
+		metadata := transportation.Metadata
+
+		departureTz := getTimezoneValue(metadata, "origin")
+		departureTime := applyActualTimezone(transportation.Departure.Time(), departureTz)
+		transportEvent.SetStartAt(departureTime)
+
+		arrivalTz := getTimezoneValue(metadata, "destination")
+		arrivalTime := applyActualTimezone(transportation.Arrival.Time(), arrivalTz)
+		transportEvent.SetEndAt(arrivalTime)
+
+		summary := fmt.Sprintf("%s: %s to %s", stringy.New(transportation.Type).SentenceCase(), transportation.Origin, transportation.Destination)
+
 		transportEvent.SetSummary(summary)
+		//transportEvent.SetDescription()
 	}
 
 	// Add lodging events
 	for _, lodging := range lodgings {
 		// Check-in event (30 min)
 		checkInEvent := cal.AddEvent(fmt.Sprintf("lodging-checkin-%s@surmai.app", lodging.Id))
+
 		checkInEvent.SetCreatedTime(time.Now())
 		checkInEvent.SetDtStampTime(time.Now())
-		checkInTime := lodging.StartDate.Time()
+
+		metadata := lodging.Metadata
+		placeTz := getTimezoneValue(metadata, "place")
+
+		checkInTime := applyActualTimezone(lodging.StartDate.Time(), placeTz)
 		checkInEvent.SetStartAt(checkInTime)
 		checkInEvent.SetEndAt(checkInTime.Add(30 * time.Minute))
 		checkInEvent.SetSummary(fmt.Sprintf("Check-in: %s", lodging.Name))
@@ -90,12 +103,14 @@ func GenerateIcsData(e *core.RequestEvent) error {
 		stayEvent.SetAllDayEndAt(lodging.EndDate.Time())
 		stayEvent.SetSummary(fmt.Sprintf("Stay: %s", lodging.Name))
 		stayEvent.SetLocation(lodging.Address)
+		stayEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
 
 		// Check-out event (30 min)
 		checkOutEvent := cal.AddEvent(fmt.Sprintf("lodging-checkout-%s@surmai.app", lodging.Id))
 		checkOutEvent.SetCreatedTime(time.Now())
 		checkOutEvent.SetDtStampTime(time.Now())
-		checkOutTime := lodging.EndDate.Time()
+
+		checkOutTime := applyActualTimezone(lodging.EndDate.Time(), placeTz)
 		checkOutEvent.SetStartAt(checkOutTime)
 		checkOutEvent.SetEndAt(checkOutTime.Add(30 * time.Minute))
 		checkOutEvent.SetSummary(fmt.Sprintf("Check-out: %s", lodging.Name))
@@ -107,12 +122,21 @@ func GenerateIcsData(e *core.RequestEvent) error {
 		activityEvent := cal.AddEvent(fmt.Sprintf("activity-%s@surmai.app", activity.Id))
 		activityEvent.SetCreatedTime(time.Now())
 		activityEvent.SetDtStampTime(time.Now())
-		startTime := activity.StartDate.Time()
-		activityEvent.SetStartAt(startTime)
-		activityEvent.SetEndAt(startTime.Add(1 * time.Hour)) // 1 hour duration
 		activityEvent.SetSummary(activity.Name)
 		activityEvent.SetDescription(activity.Description)
 		activityEvent.SetLocation(activity.Address)
+
+		metadata := activity.Metadata
+		placeTz := getTimezoneValue(metadata, "place")
+		startDate := applyActualTimezone(activity.StartDate.Time(), placeTz)
+		activityEvent.SetStartAt(startDate)
+
+		if activity.EndDate.IsZero() {
+			activityEvent.SetEndAt(startDate.Add(1 * time.Hour))
+		} else {
+			endDate := applyActualTimezone(activity.EndDate.Time(), placeTz)
+			activityEvent.SetEndAt(endDate)
+		}
 	}
 
 	base64Str := base64.StdEncoding.EncodeToString([]byte(cal.Serialize()))
@@ -122,7 +146,6 @@ func GenerateIcsData(e *core.RequestEvent) error {
 }
 
 // Helper functions to extract data from trip record
-
 func getDestinations(trip *core.Record) []bt.Destination {
 	var destinations []bt.Destination
 	destinationsString := trip.GetString("destinations")
@@ -208,4 +231,35 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 	}
 
 	return payload
+}
+
+func applyActualTimezone(t time.Time, timeZone string) time.Time {
+
+	if timeZone == "" {
+		return t
+	}
+
+	loc, err := time.LoadLocation(timeZone)
+	if err != nil {
+		return t
+	}
+
+	locTime := t.In(loc)
+	_, zoneOffset := locTime.Zone()
+	inZoneTime := locTime.Add(-time.Duration(zoneOffset) * time.Second)
+	return inZoneTime
+}
+
+func getTimezoneValue(metadata map[string]interface{}, key string) string {
+
+	if metadata == nil || metadata[key] == nil {
+		return ""
+	}
+
+	place := metadata[key].(map[string]interface{})
+	if place == nil || place["timezone"] == nil {
+		return ""
+	}
+
+	return place["timezone"].(string)
 }

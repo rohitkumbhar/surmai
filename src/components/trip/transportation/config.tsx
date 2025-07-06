@@ -104,6 +104,7 @@ export const transportationConfig: { [key: string]: any } = {
             form={form}
             propName={'origin'}
             label={i18n.t('transportation_from', 'From')}
+            description={i18n.t('airport_from_desc', 'Departure Airport')}
             required={true}
             withAsterisk={true}
           />
@@ -115,6 +116,7 @@ export const transportationConfig: { [key: string]: any } = {
             form={form}
             propName={'destination'}
             label={i18n.t('transportation_to', 'To')}
+            description={i18n.t('airport_to_desc', 'Arrival Airport')}
             required={true}
             withAsterisk={true}
           />
@@ -126,6 +128,7 @@ export const transportationConfig: { [key: string]: any } = {
             form={form}
             propName={'provider'}
             label={i18n.t('transportation_airline', 'Airline')}
+            description={i18n.t('airline_desc', 'Select an Airline')}
             required={true}
             withAsterisk={true}
           />

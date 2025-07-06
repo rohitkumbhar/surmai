@@ -12,11 +12,13 @@ export const AirportSelect = ({
   form,
   label,
   required,
+  description,
   withAsterisk,
 }: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
+  description: string;
   required: boolean;
   withAsterisk: boolean;
 }) => {
@@ -82,6 +84,7 @@ export const AirportSelect = ({
         <InputBase
           ref={inputRef as MutableRefObject<HTMLInputElement>}
           label={label}
+          description={description}
           required={required}
           withAsterisk={withAsterisk}
           rightSection={
