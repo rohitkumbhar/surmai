@@ -6,9 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	ics "github.com/arran4/golang-ical"
-	"github.com/gobeam/stringy"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/samber/lo"
 	"net/http"
 	"time"
 )
@@ -16,10 +16,7 @@ import (
 func GenerateIcsData(e *core.RequestEvent) error {
 	// Get the trip record
 	tripRecord := e.Get("trip").(*core.Record)
-	user := e.Auth
 
-	timeZone := user.GetString("timezone")
-	fmt.Println(timeZone)
 	// Convert the trip record to Trip type
 	trip := bt.Trip{
 		Id:           tripRecord.Id,
@@ -35,15 +32,120 @@ func GenerateIcsData(e *core.RequestEvent) error {
 	lodgings := exportLodgings(e.App, tripRecord)
 	activities := exportActivities(e.App, tripRecord)
 
-	// Set response header
-	//e.Response.Header().Set("Content-Type", "text/calendar")
-
 	// Create calendar
 	cal := ics.NewCalendar()
 	cal.SetMethod(ics.MethodPublish)
-	//cal.SetTimezoneId()
 
-	// Add trip as full day event, not busy
+	// Add a trip as a full-day event, not busy
+	addFullDatTripEvent(e, cal, trip)
+
+	// Add transportation events
+	for _, transportation := range transportations {
+		addTransportationEvent(cal, transportation)
+	}
+
+	// Add lodging events
+	for _, lodging := range lodgings {
+		createLodgingEvent(cal, lodging)
+	}
+
+	// Add activity events (1 hr with end date)
+	for _, activity := range activities {
+		createActivityEvent(cal, activity)
+	}
+
+	base64Str := base64.StdEncoding.EncodeToString([]byte(cal.Serialize()))
+	return e.JSON(http.StatusOK, map[string]string{
+		"data": base64Str,
+	})
+}
+
+func createActivityEvent(cal *ics.Calendar, activity *bt.Activity) {
+	activityEvent := cal.AddEvent(fmt.Sprintf("activity-%s@surmai.app", activity.Id))
+	activityEvent.SetCreatedTime(time.Now())
+	activityEvent.SetDtStampTime(time.Now())
+	activityEvent.SetSummary(activity.Name)
+	activityEvent.SetDescription(activity.Description)
+	activityEvent.SetLocation(activity.Address)
+
+	metadata := activity.Metadata
+	placeTz := getTimezoneValue(metadata, "place")
+	startDate := applyActualTimezone(activity.StartDate.Time(), placeTz)
+	activityEvent.SetStartAt(startDate)
+
+	if activity.EndDate.IsZero() {
+		activityEvent.SetEndAt(startDate.Add(1 * time.Hour))
+	} else {
+		endDate := applyActualTimezone(activity.EndDate.Time(), placeTz)
+		activityEvent.SetEndAt(endDate)
+	}
+}
+
+func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging) {
+	// Check-in event (30 min)
+	checkInEvent := cal.AddEvent(fmt.Sprintf("lodging-checkin-%s@surmai.app", lodging.Id))
+	checkInEvent.SetCreatedTime(time.Now())
+	checkInEvent.SetDtStampTime(time.Now())
+
+	metadata := lodging.Metadata
+	placeTz := getTimezoneValue(metadata, "place")
+
+	checkInTime := applyActualTimezone(lodging.StartDate.Time(), placeTz)
+	checkInEvent.SetStartAt(checkInTime)
+	checkInEvent.SetEndAt(checkInTime.Add(30 * time.Minute))
+	checkInEvent.SetSummary(fmt.Sprintf("Check-in: %s", lodging.Name))
+	checkInEvent.SetLocation(lodging.Address)
+
+	// Stay event (full day)
+	stayEvent := cal.AddEvent(fmt.Sprintf("lodging-stay-%s@surmai.app", lodging.Id))
+	stayEvent.SetCreatedTime(time.Now())
+	stayEvent.SetDtStampTime(time.Now())
+	stayEvent.SetAllDayStartAt(lodging.StartDate.Time())
+	stayEvent.SetAllDayEndAt(lodging.EndDate.Time())
+	stayEvent.SetSummary(fmt.Sprintf("Stay: %s", lodging.Name))
+	stayEvent.SetLocation(lodging.Address)
+	stayEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
+
+	// Check-out event (30 min)
+	checkOutEvent := cal.AddEvent(fmt.Sprintf("lodging-checkout-%s@surmai.app", lodging.Id))
+	checkOutEvent.SetCreatedTime(time.Now())
+	checkOutEvent.SetDtStampTime(time.Now())
+
+	checkOutTime := applyActualTimezone(lodging.EndDate.Time(), placeTz)
+	checkOutEvent.SetStartAt(checkOutTime)
+	checkOutEvent.SetEndAt(checkOutTime.Add(30 * time.Minute))
+	checkOutEvent.SetSummary(fmt.Sprintf("Check-out: %s", lodging.Name))
+	checkOutEvent.SetLocation(lodging.Address)
+}
+
+func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation) {
+	transportEvent := cal.AddEvent(fmt.Sprintf("transport-%s@surmai.app", transportation.Id))
+	transportEvent.SetCreatedTime(time.Now())
+	transportEvent.SetDtStampTime(time.Now())
+
+	metadata := transportation.Metadata
+
+	departureTz := getTimezoneValue(metadata, "origin")
+	departureTime := applyActualTimezone(transportation.Departure.Time(), departureTz)
+	transportEvent.SetStartAt(departureTime)
+
+	arrivalTz := getTimezoneValue(metadata, "destination")
+	arrivalTime := applyActualTimezone(transportation.Arrival.Time(), arrivalTz)
+	transportEvent.SetEndAt(arrivalTime)
+
+	if transportation.Type == "rental_car" {
+		days := int64(arrivalTime.Sub(departureTime).Hours() / 24.0)
+		summary := fmt.Sprintf("%s Car Rental for %d day(s)",
+			metadata["provider"], days)
+		transportEvent.SetSummary(summary)
+	} else {
+		summary := fmt.Sprintf("%s from %s to %s", lo.Capitalize(transportation.Type), transportation.Origin, transportation.Destination)
+		transportEvent.SetSummary(summary)
+	}
+
+}
+
+func addFullDatTripEvent(e *core.RequestEvent, cal *ics.Calendar, trip bt.Trip) {
 	tripEvent := cal.AddEvent(fmt.Sprintf("trip-%s@surmai.app", trip.Id))
 	tripEvent.SetCreatedTime(time.Now())
 	tripEvent.SetDtStampTime(time.Now())
@@ -55,94 +157,6 @@ func GenerateIcsData(e *core.RequestEvent) error {
 
 	tripEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
 	tripEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
-
-	// Add transportation events
-	for _, transportation := range transportations {
-		transportEvent := cal.AddEvent(fmt.Sprintf("transport-%s@surmai.app", transportation.Id))
-		transportEvent.SetCreatedTime(time.Now())
-		transportEvent.SetDtStampTime(time.Now())
-
-		metadata := transportation.Metadata
-
-		departureTz := getTimezoneValue(metadata, "origin")
-		departureTime := applyActualTimezone(transportation.Departure.Time(), departureTz)
-		transportEvent.SetStartAt(departureTime)
-
-		arrivalTz := getTimezoneValue(metadata, "destination")
-		arrivalTime := applyActualTimezone(transportation.Arrival.Time(), arrivalTz)
-		transportEvent.SetEndAt(arrivalTime)
-
-		summary := fmt.Sprintf("%s: %s to %s", stringy.New(transportation.Type).SentenceCase(), transportation.Origin, transportation.Destination)
-
-		transportEvent.SetSummary(summary)
-		//transportEvent.SetDescription()
-	}
-
-	// Add lodging events
-	for _, lodging := range lodgings {
-		// Check-in event (30 min)
-		checkInEvent := cal.AddEvent(fmt.Sprintf("lodging-checkin-%s@surmai.app", lodging.Id))
-
-		checkInEvent.SetCreatedTime(time.Now())
-		checkInEvent.SetDtStampTime(time.Now())
-
-		metadata := lodging.Metadata
-		placeTz := getTimezoneValue(metadata, "place")
-
-		checkInTime := applyActualTimezone(lodging.StartDate.Time(), placeTz)
-		checkInEvent.SetStartAt(checkInTime)
-		checkInEvent.SetEndAt(checkInTime.Add(30 * time.Minute))
-		checkInEvent.SetSummary(fmt.Sprintf("Check-in: %s", lodging.Name))
-		checkInEvent.SetLocation(lodging.Address)
-
-		// Stay event (full day)
-		stayEvent := cal.AddEvent(fmt.Sprintf("lodging-stay-%s@surmai.app", lodging.Id))
-		stayEvent.SetCreatedTime(time.Now())
-		stayEvent.SetDtStampTime(time.Now())
-		stayEvent.SetAllDayStartAt(lodging.StartDate.Time())
-		stayEvent.SetAllDayEndAt(lodging.EndDate.Time())
-		stayEvent.SetSummary(fmt.Sprintf("Stay: %s", lodging.Name))
-		stayEvent.SetLocation(lodging.Address)
-		stayEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
-
-		// Check-out event (30 min)
-		checkOutEvent := cal.AddEvent(fmt.Sprintf("lodging-checkout-%s@surmai.app", lodging.Id))
-		checkOutEvent.SetCreatedTime(time.Now())
-		checkOutEvent.SetDtStampTime(time.Now())
-
-		checkOutTime := applyActualTimezone(lodging.EndDate.Time(), placeTz)
-		checkOutEvent.SetStartAt(checkOutTime)
-		checkOutEvent.SetEndAt(checkOutTime.Add(30 * time.Minute))
-		checkOutEvent.SetSummary(fmt.Sprintf("Check-out: %s", lodging.Name))
-		checkOutEvent.SetLocation(lodging.Address)
-	}
-
-	// Add activity events (1 hr with end date)
-	for _, activity := range activities {
-		activityEvent := cal.AddEvent(fmt.Sprintf("activity-%s@surmai.app", activity.Id))
-		activityEvent.SetCreatedTime(time.Now())
-		activityEvent.SetDtStampTime(time.Now())
-		activityEvent.SetSummary(activity.Name)
-		activityEvent.SetDescription(activity.Description)
-		activityEvent.SetLocation(activity.Address)
-
-		metadata := activity.Metadata
-		placeTz := getTimezoneValue(metadata, "place")
-		startDate := applyActualTimezone(activity.StartDate.Time(), placeTz)
-		activityEvent.SetStartAt(startDate)
-
-		if activity.EndDate.IsZero() {
-			activityEvent.SetEndAt(startDate.Add(1 * time.Hour))
-		} else {
-			endDate := applyActualTimezone(activity.EndDate.Time(), placeTz)
-			activityEvent.SetEndAt(endDate)
-		}
-	}
-
-	base64Str := base64.StdEncoding.EncodeToString([]byte(cal.Serialize()))
-	return e.JSON(http.StatusOK, map[string]string{
-		"data": base64Str,
-	})
 }
 
 // Helper functions to extract data from trip record
