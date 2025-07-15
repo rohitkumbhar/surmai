@@ -43,7 +43,7 @@ type Transportation struct {
 	Arrival              types.DateTime  `json:"arrival"`
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
-	Metadata             *map[string]any `json:"metadata"`
+	Metadata             map[string]any  `json:"metadata"`
 }
 
 type Lodging struct {
@@ -57,7 +57,7 @@ type Lodging struct {
 	EndDate              types.DateTime  `json:"endDate"`
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
-	Metadata             *map[string]any `json:"metadata"`
+	Metadata             map[string]any  `json:"metadata"`
 }
 
 type Activity struct {
@@ -68,9 +68,10 @@ type Activity struct {
 	ConfirmationCode     string          `json:"confirmationCode"`
 	Cost                 *Cost           `json:"cost"`
 	StartDate            types.DateTime  `json:"startDate"`
+	EndDate              types.DateTime  `json:"endDate"`
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
-	Metadata             *map[string]any `json:"metadata"`
+	Metadata             map[string]any  `json:"metadata"`
 }
 
 type Trip struct {

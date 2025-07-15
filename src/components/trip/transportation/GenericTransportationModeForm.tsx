@@ -45,14 +45,16 @@ export const GenericTransportationModeForm = ({
   const form = useForm<TransportationFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
-      origin: transportation?.origin,
+      origin: transportation?.metadata?.origin || transportation?.origin,
       departureTime: transportation?.departureTime,
-      destination: transportation?.destination,
+      destination: transportation?.metadata?.destination || transportation?.destination,
       arrivalTime: transportation?.arrivalTime,
       provider: transportation?.metadata?.provider,
       reservation: transportation?.metadata?.reservation,
       cost: transportation?.cost?.value,
       currencyCode: transportation?.cost?.currency || user?.currencyCode || 'USD',
+      originAddress: transportation?.metadata?.originAddress || '',
+      destinationAddress: transportation?.metadata?.destinationAddress || '',
     },
     validate: {},
   });
@@ -69,9 +71,13 @@ export const GenericTransportationModeForm = ({
             ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
             ...attachments.map((attachment: Attachment) => attachment.id),
           ];
-          updateTransportation(transportation.id, payload).then(() => {
-            onSuccess();
-          });
+          updateTransportation(transportation.id, payload)
+            .then(() => {
+              onSuccess();
+            })
+            .catch((error) => {
+              console.log('error => ', error);
+            });
         } else {
           payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
           createTransportationEntry(payload)
@@ -93,16 +99,17 @@ export const GenericTransportationModeForm = ({
     <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
       <Stack>
         <Group>
-          {config.components.from(form)}
-
+          {config.components.from(form, trip.destinations)}
           <DateTimePicker
             highlightToday
             valueFormat="lll"
             name={'departureTime'}
+            description={t('departure_time_desc', 'Departure date and time')}
             miw={rem('200px')}
             label={t('transportation_departure_time', 'Departure')}
             clearable
             required
+            date={trip.startDate}
             minDate={trip.startDate}
             maxDate={trip.endDate}
             key={form.key('departureTime')}
@@ -114,13 +121,15 @@ export const GenericTransportationModeForm = ({
           />
         </Group>
         <Group>
-          {config.components.to(form)}
+          {config.components.to(form, trip.destinations)}
           <DateTimePicker
             valueFormat="lll"
             name={'arrivalTime'}
             label={t('transportation_arrival_time', 'Arrival')}
+            description={t('arrival_time_desc', 'Arrival date and time')}
             required
             miw={rem('200px')}
+            date={trip.startDate}
             minDate={trip.startDate}
             maxDate={dayjs(trip.endDate).endOf('day').toDate()}
             clearable
@@ -138,6 +147,7 @@ export const GenericTransportationModeForm = ({
             name={'reservation'}
             label={config.strings.reservationLabel}
             key={form.key('reservation')}
+            description={t('reservation_desc', 'Ticket Id, Confirmation code etc')}
             {...form.getInputProps('reservation')}
           />
         </Group>
@@ -147,6 +157,8 @@ export const GenericTransportationModeForm = ({
             costProps={form.getInputProps('cost')}
             currencyCodeKey={form.key('currencyCode')}
             currencyCodeProps={form.getInputProps('currencyCode')}
+            label={t('transportation_cost', 'Cost')}
+            description={t('transportation_cost_desc', 'Charges for this transportation')}
           />
         </Group>
         <Group>

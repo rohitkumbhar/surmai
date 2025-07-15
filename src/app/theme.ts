@@ -65,7 +65,7 @@ const availableColors: { [key: string]: string[] } = {
 };
 export const buildTheme = (primaryColor: string) => {
   const theme = createTheme({
-    fontFamily: 'Lato, Verdana, sans-serif',
+    fontFamily: 'Verdana, sans-serif',
     // @ts-expect-error type not exposed
     colors: availableColors,
     primaryColor: availableColors[primaryColor] ? primaryColor : 'blueGray',

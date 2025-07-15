@@ -78,6 +78,7 @@ describe('AirportSelect', () => {
         propName="origin"
         form={mockForm as any}
         label="Origin Airport"
+        description="Original Airport"
         required={true}
         withAsterisk={true}
       />
@@ -94,6 +95,7 @@ describe('AirportSelect', () => {
         propName="origin"
         form={mockForm as any}
         label="Origin Airport"
+        description="Origin Airport"
         required={true}
         withAsterisk={true}
       />
@@ -112,6 +114,7 @@ describe('AirportSelect', () => {
         propName="origin"
         form={mockForm as any}
         label="Origin Airport"
+        description="Origin Airport"
         required={true}
         withAsterisk={true}
       />
@@ -137,6 +140,7 @@ describe('AirportSelect', () => {
         propName="origin"
         form={mockForm as any}
         label="Origin Airport"
+        description="Origin Airport"
         required={true}
         withAsterisk={true}
       />
@@ -187,6 +191,7 @@ describe('AirportSelect', () => {
         propName="origin"
         form={mockForm as any}
         label="Origin Airport"
+        description="Origin Airport"
         required={true}
         withAsterisk={true}
       />
@@ -225,6 +230,7 @@ describe('AirportSelect', () => {
         propName="origin"
         form={mockForm as any}
         label="Origin Airport"
+        description="Origin Airport"
         required={true}
         withAsterisk={true}
       />
@@ -250,6 +256,7 @@ describe('AirportSelect', () => {
     renderWithMantine(
       <AirportSelect
         propName="origin"
+        description="Description"
         form={mockForm as any}
         label="Origin Airport"
         required={true}
@@ -265,6 +272,7 @@ describe('AirportSelect', () => {
         propName="destination"
         form={mockForm as any}
         label="Destination Airport"
+        description="Description"
         required={true}
         withAsterisk={true}
       />

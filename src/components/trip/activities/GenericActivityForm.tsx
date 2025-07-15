@@ -1,7 +1,7 @@
 import { Activity, ActivityFormSchema, Attachment, CreateActivity, Trip } from '../../../types/trips.ts';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import { useState } from 'react';
-import { Button, FileButton, Group, rem, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
+import { Button, FileButton, Group, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,8 @@ import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { createActivityEntry, updateActivityEntry, uploadAttachments } from '../../../lib/api';
 
 import { fakeAsUtcString } from '../../../lib/time.ts';
+import i18n from '../../../lib/i18n.ts';
+import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 
 export const GenericActivityForm = ({
   trip,
@@ -36,6 +38,8 @@ export const GenericActivityForm = ({
       cost: activity?.cost?.value,
       currencyCode: activity?.cost?.currency || user?.currencyCode || 'USD',
       startDate: activity?.startDate,
+      endDate: activity?.endDate,
+      place: activity?.metadata?.place,
     },
   });
 
@@ -46,12 +50,16 @@ export const GenericActivityForm = ({
       description: values.description,
       address: values.address,
       startDate: fakeAsUtcString(values.startDate),
+      endDate: fakeAsUtcString(values.endDate),
       trip: trip.id,
       cost: {
         value: values.cost,
         currency: values.currencyCode,
       },
       attachmentReferences: activity?.attachmentReferences || [],
+      metadata: {
+        place: values.place,
+      },
     };
 
     uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
@@ -81,6 +89,7 @@ export const GenericActivityForm = ({
             <TextInput
               name={'name'}
               label={t('activity_name', 'Name')}
+              description={t('activity_name_desc', 'Name of the activity e.g. Hike to Diamond Head')}
               required
               key={form.key('name')}
               {...form.getInputProps('name')}
@@ -88,41 +97,77 @@ export const GenericActivityForm = ({
             <Textarea
               name={'address'}
               label={t('activity_description', 'Description')}
+              description={t('activity_desc_desc', 'More description if required')}
               key={form.key('description')}
               {...form.getInputProps('description')}
             />
-            <Textarea
-              name={'address'}
-              label={t('activity_address', 'Address')}
-              required
-              key={form.key('address')}
-              {...form.getInputProps('address')}
-            />
+
+            <Group>
+              <PlaceSelect
+                form={form as UseFormReturnType<unknown>}
+                propName={'place'}
+                presetDestinations={trip.destinations || []}
+                label={i18n.t('activity_place', 'Destination')}
+                description={i18n.t('activity_place_desc', 'Associated destination')}
+                key={form.key('place')}
+                {...form.getInputProps('place')}
+              />
+              <TextInput
+                name={'address'}
+                label={t('activity_address', 'Address')}
+                description={t('activity_address_desc', 'Location of the activity')}
+                required
+                key={form.key('address')}
+                {...form.getInputProps('address')}
+              />
+            </Group>
           </Stack>
-          <Group>
+          <Group grow={true}>
             <DateTimePicker
               highlightToday
               valueFormat="lll"
               name={'startDate'}
-              label={t('activity_start_date', 'Date/Time')}
+              label={t('activity_start_date', 'Start Date')}
+              description={t('activity_start_date_desc', 'Activity start date and time')}
               clearable
               required
+              date={trip.startDate}
               minDate={trip.startDate}
               maxDate={trip.endDate}
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
-              miw={rem(200)}
               data-testid={'activity-start-date'}
               submitButtonProps={{
                 'aria-label': 'Submit Date',
               }}
             />
 
+            <DateTimePicker
+              highlightToday
+              valueFormat="lll"
+              name={'endDate'}
+              label={t('activity_end_date', 'End Date')}
+              description={t('activity_end_date_desc', 'Activity end date and time')}
+              clearable
+              required
+              minDate={trip.startDate}
+              maxDate={trip.endDate}
+              key={form.key('endDate')}
+              {...form.getInputProps('endDate')}
+              data-testid={'activity-end-date'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
+            />
+          </Group>
+          <Group>
             <CurrencyInput
               costKey={form.key('cost')}
               costProps={form.getInputProps('cost')}
               currencyCodeKey={form.key('currencyCode')}
               currencyCodeProps={form.getInputProps('currencyCode')}
+              label={t('activity_cost', 'Cost')}
+              description={t('activity_cost_desc', 'Charges for this activity')}
             />
           </Group>
           <Group>

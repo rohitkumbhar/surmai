@@ -3,32 +3,57 @@ import { UseFormReturnType } from '@mantine/form';
 import { TextInput } from '@mantine/core';
 import { AirportSelect } from './AirportSelect.tsx';
 import { AirlineSelect } from './AirlineSelect.tsx';
-import { CreateTransportation, Trip } from '../../../types/trips.ts';
+import { CreateTransportation, Place, Trip } from '../../../types/trips.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
+import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 
 export const transportationConfig: { [key: string]: any } = {
   default: {
     components: {
-      from: (form: UseFormReturnType<unknown>) => {
+      from: (form: UseFormReturnType<unknown>, destinations: Place[] = []) => {
         return (
-          <TextInput
-            name={'from'}
-            label={i18n.t('transportation_from', 'From')}
-            required
-            key={form.key('origin')}
-            {...form.getInputProps('origin')}
-          />
+          <>
+            <PlaceSelect
+              form={form as UseFormReturnType<unknown>}
+              propName={'origin'}
+              presetDestinations={destinations}
+              label={i18n.t('transportation_from', 'From')}
+              description={i18n.t('origin_place', 'Origin Place')}
+              key={form.key('origin')}
+              {...form.getInputProps('origin')}
+            />
+            <TextInput
+              name={'originAddress'}
+              label={i18n.t('address', 'Address')}
+              description={i18n.t('origin_address', 'Address of the car port, bus station etc.')}
+              required
+              key={form.key('originAddress')}
+              {...form.getInputProps('originAddress')}
+            />
+          </>
         );
       },
-      to: (form: UseFormReturnType<unknown>) => {
+      to: (form: UseFormReturnType<unknown>, destinations: Place[] = []) => {
         return (
-          <TextInput
-            name={'to'}
-            label={i18n.t('transportation_to', 'To')}
-            required
-            key={form.key('destination')}
-            {...form.getInputProps('destination')}
-          />
+          <>
+            <PlaceSelect
+              form={form as UseFormReturnType<unknown>}
+              propName={'destination'}
+              presetDestinations={destinations}
+              label={i18n.t('transportation_to', 'To')}
+              description={i18n.t('destination_place', 'Destination Place')}
+              key={form.key('destination')}
+              {...form.getInputProps('destination')}
+            />
+            <TextInput
+              name={'destinationAddress'}
+              label={i18n.t('address', 'Address')}
+              description={i18n.t('destination_address', 'Address of the car port, bus station etc.')}
+              required
+              key={form.key('destinationAddress')}
+              {...form.getInputProps('destinationAddress')}
+            />
+          </>
         );
       },
       provider: (form: UseFormReturnType<unknown>) => {
@@ -36,6 +61,7 @@ export const transportationConfig: { [key: string]: any } = {
           <TextInput
             name={'provider'}
             label={i18n.t('transportation_provider', 'Provider')}
+            description={i18n.t('transportation_provider_desc', 'Service provider. Bus/Ferry Company etc')}
             required
             key={form.key('provider')}
             {...form.getInputProps('provider')}
@@ -46,8 +72,8 @@ export const transportationConfig: { [key: string]: any } = {
     buildPayload: (trip: Trip, transportationType: string, values: Record<string, any>): CreateTransportation => {
       return {
         type: transportationType,
-        origin: values.origin,
-        destination: values.destination,
+        origin: values.origin.name || values.origin,
+        destination: values.destination.name || values.destination,
         cost: {
           value: values.cost,
           currency: values.currencyCode,
@@ -60,6 +86,8 @@ export const transportationConfig: { [key: string]: any } = {
           reservation: values.reservation,
           origin: values.origin,
           destination: values.destination,
+          originAddress: values.originAddress,
+          destinationAddress: values.destinationAddress,
         },
       };
     },
@@ -76,6 +104,7 @@ export const transportationConfig: { [key: string]: any } = {
             form={form}
             propName={'origin'}
             label={i18n.t('transportation_from', 'From')}
+            description={i18n.t('airport_from_desc', 'Departure Airport')}
             required={true}
             withAsterisk={true}
           />
@@ -87,6 +116,7 @@ export const transportationConfig: { [key: string]: any } = {
             form={form}
             propName={'destination'}
             label={i18n.t('transportation_to', 'To')}
+            description={i18n.t('airport_to_desc', 'Arrival Airport')}
             required={true}
             withAsterisk={true}
           />
@@ -98,6 +128,7 @@ export const transportationConfig: { [key: string]: any } = {
             form={form}
             propName={'provider'}
             label={i18n.t('transportation_airline', 'Airline')}
+            description={i18n.t('airline_desc', 'Select an Airline')}
             required={true}
             withAsterisk={true}
           />

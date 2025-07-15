@@ -59,7 +59,7 @@ export class CreateNewTripPage {
     await this.page.click(`button[aria-label="${startDateStr}"]`);
     await this.page.click(`button[aria-label="${endDateStr}"]`);
 
-    // Add destinations
+    // Add places
     for (const destination of data.destinations) {
       await this.searchAndSelectDestination(destination);
     }

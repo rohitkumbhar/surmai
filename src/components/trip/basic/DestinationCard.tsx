@@ -1,12 +1,12 @@
-import { Destination, Trip } from '../../../types/trips.ts';
-import { IconClock, IconMapPin } from '@tabler/icons-react';
-import { Anchor, Badge, Card, Group, HoverCard, Text } from '@mantine/core';
+import { Place, Trip } from '../../../types/trips.ts';
+import { IconMapPin } from '@tabler/icons-react';
+import { Anchor, Card, Group, Text } from '@mantine/core';
 import classes from './DestinationCard.module.css';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsUrl } from '../../../lib/places.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 
-export const DestinationCard = ({ destination }: { destination: Destination; trip: Trip }) => {
+export const DestinationCard = ({ destination }: { destination: Place; trip: Trip }) => {
   const { user } = useCurrentUser();
   return (
     <Card withBorder radius="xs" className={classes.card} p={'xs'}>
@@ -23,18 +23,7 @@ export const DestinationCard = ({ destination }: { destination: Destination; tri
       </Group>
 
       <Card.Section className={classes.section} mt="xs">
-        <Group>
-          <HoverCard width={200} shadow="md">
-            <HoverCard.Target>
-              <Badge variant={'light'} radius={'sm'} leftSection={<IconClock size={12} />} px={'xs'} size={'sm'}>
-                {destination.timezone || 'Unknown'}
-              </Badge>
-            </HoverCard.Target>
-            <HoverCard.Dropdown>
-              <TimezoneInfo user={user} timezone={destination.timezone} />
-            </HoverCard.Dropdown>
-          </HoverCard>
-        </Group>
+        <TimezoneInfo timezone={destination.timezone} />
       </Card.Section>
     </Card>
   );

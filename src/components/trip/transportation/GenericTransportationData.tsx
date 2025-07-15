@@ -9,9 +9,8 @@ import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { typeIcons } from './typeIcons.ts';
-import { formatDate, formatTime } from '../../../lib/time.ts';
+import { formatDateTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { transportationConfig } from './config.tsx';
 
@@ -26,10 +25,9 @@ export const GenericTransportationData = ({
   refetch: () => void;
   tripAttachments?: Attachment[];
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [opened, { open, close }] = useDisclosure(false);
-  const { user } = useCurrentUser();
 
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
@@ -81,9 +79,7 @@ export const GenericTransportationData = ({
         size="auto"
         fullScreen={isMobile}
         title={t('transportation_edit_' + transportation.type, 'Edit Transportation')}
-        onClose={() => {
-          close();
-        }}
+        onClose={close}
       >
         <GenericTransportationModeForm
           transportationType={transportation.type}
@@ -139,13 +135,13 @@ export const GenericTransportationData = ({
               <HoverCard.Dropdown>
                 <Stack>
                   <Text size="md">{transportation.metadata.origin.name}</Text>
-                  <TimezoneInfo user={user} timezone={transportation.metadata.origin.timezone} />
+                  <TimezoneInfo timezone={transportation.metadata.origin.timezone} />
                 </Stack>
               </HoverCard.Dropdown>
             </HoverCard>
           )}
-          <Text size="xs">{formatDate(i18n.language, transportation.departureTime)}</Text>
-          <Text size="xs">{formatTime(transportation.departureTime)}</Text>
+          <Text size="xs">{formatDateTime(transportation.departureTime)}</Text>
+          <Text size="xs">{transportation.metadata.originAddress}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
@@ -168,13 +164,13 @@ export const GenericTransportationData = ({
               <HoverCard.Dropdown>
                 <Stack>
                   <Text size="md">{transportation.metadata.destination.name}</Text>
-                  <TimezoneInfo user={user} timezone={transportation.metadata.destination.timezone} />
+                  <TimezoneInfo timezone={transportation.metadata.destination.timezone} />
                 </Stack>
               </HoverCard.Dropdown>
             </HoverCard>
           )}
-          <Text size="xs">{formatDate(i18n.language, transportation.arrivalTime)}</Text>
-          <Text size="xs">{formatTime(transportation.arrivalTime)}</Text>
+          <Text size="xs">{formatDateTime(transportation.arrivalTime)}</Text>
+          <Text size="xs">{transportation.metadata.destinationAddress}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>

@@ -9,7 +9,7 @@ import { deleteActivity, deleteActivityAttachments } from '../../../lib/api';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { IconActivity } from '@tabler/icons-react';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import dayjs from 'dayjs';
+import { formatDate, formatTime } from '../../../lib/time.ts';
 
 export const GenericActivityData = ({
   trip,
@@ -95,27 +95,39 @@ export const GenericActivityData = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {t('activity_start_date', 'Date/Time')}
-          </Text>
-          <Text size="sm">{dayjs(activity.startDate).format('l LT')}</Text>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, md: 3, lg: 4 }}>
-          <Text size="xs" c={'dimmed'}>
             {t('lodging_name', 'Name')}
           </Text>
           <Text size="md">{activity.name}</Text>
-          <Text size="sm" c={'dimmed'}>
+          <Text size="sm" c={'dimmed'} lineClamp={1}>
             {activity.description}
           </Text>
         </Grid.Col>
-        ;
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('activity_start_date', 'Start Date')}
+          </Text>
+          <Text size="md">{formatDate('', activity.startDate)}</Text>
+          <Text size="md">{formatTime(activity.startDate)}</Text>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('activity_end_date', 'End Date')}
+          </Text>
+          {activity.endDate && (
+            <>
+              <Text size="md">{formatDate('', activity.endDate)}</Text>
+              <Text size="md">{formatTime(activity.endDate)}</Text>
+            </>
+          )}
+          {!activity.endDate && <Text size="md">{t('end_date_not_set', 'Not Set')}</Text>}
+        </Grid.Col>
+
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 3 }}>
           <Text size="xs" c={'dimmed'}>
             {t('lodging_address', 'Address')}
           </Text>
           <Text size="md">{activity.address}</Text>
         </Grid.Col>
-        ;
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}

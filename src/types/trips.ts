@@ -7,7 +7,7 @@ export type Participant = {
   userId?: string;
 };
 
-export type Destination = {
+export type Place = {
   id: string;
   stateName?: string;
   countryName?: string;
@@ -28,7 +28,7 @@ export type Trip = {
   endDate: string;
   coverImage?: string;
   participants?: Participant[];
-  destinations?: Destination[];
+  destinations?: Place[];
   collaborators?: User[];
 };
 
@@ -47,7 +47,7 @@ export type CreateTripForm = {
   dateRange: [string | null, string | null];
   coverImage?: string;
   participants?: string[];
-  destinations?: Destination[];
+  destinations?: Place[];
 };
 
 export type Cost = {
@@ -97,6 +97,7 @@ export type CarRentalFormSchema = {
   confirmationCode?: string;
   cost?: number;
   currencyCode?: string;
+  place?: Place;
 };
 
 export type TransportationFormSchema = {
@@ -108,6 +109,10 @@ export type TransportationFormSchema = {
   reservation?: string;
   cost?: number;
   currencyCode?: string;
+  originAddress?: string;
+  destinationAddress?: string;
+  flightNumber?: string;
+  assignedSeats?: string;
 };
 
 export type CroppedImage = {
@@ -149,6 +154,7 @@ export type LodgingFormSchema = {
   startDate?: string;
   endDate?: string;
   confirmationCode?: string;
+  place?: Place;
 };
 
 export const enum LodgingType {
@@ -164,6 +170,7 @@ export interface Activity extends RecordModel {
   description: string;
   address?: string;
   startDate: string;
+  endDate?: string;
   cost?: Cost;
   trip: string;
   attachments?: string[];
@@ -179,6 +186,8 @@ export type ActivityFormSchema = {
   cost?: number;
   currencyCode?: string;
   startDate?: string;
+  endDate?: string;
+  place?: Place;
 };
 
 export interface Airport extends Omit<RecordModel, 'collectionName,collectionId'> {

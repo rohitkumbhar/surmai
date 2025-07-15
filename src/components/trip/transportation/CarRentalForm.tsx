@@ -1,7 +1,7 @@
-import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Button, FileButton, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { Attachment, CarRentalFormSchema, CreateTransportation, Transportation, Trip } from '../../../types/trips.ts';
-import { useForm } from '@mantine/form';
+import { useForm, UseFormReturnType } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,8 @@ import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
+import { PlaceSelect } from '../../places/PlaceSelect.tsx';
+import dayjs from 'dayjs';
 
 export const CarRentalForm = ({
   trip,
@@ -40,6 +42,7 @@ export const CarRentalForm = ({
       confirmationCode: carRental?.metadata?.confirmationCode,
       cost: carRental?.cost?.value,
       currencyCode: carRental?.cost?.currency || user?.currencyCode || 'USD',
+      place: carRental?.metadata?.place,
     },
     validate: {},
   });
@@ -61,6 +64,7 @@ export const CarRentalForm = ({
       metadata: {
         confirmationCode: values.confirmationCode,
         rentalCompany: values.rentalCompany,
+        place: values.place,
       },
     };
 
@@ -98,24 +102,39 @@ export const CarRentalForm = ({
       <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
         <Stack>
           <Group>
+            <PlaceSelect
+              form={form as UseFormReturnType<unknown>}
+              propName={'place'}
+              presetDestinations={trip.destinations || []}
+              label={t('associated_destination', 'Destination')}
+              description={t('associated_destination_desc', 'Associated Destination')}
+              key={form.key('place')}
+              {...form.getInputProps('place')}
+            />
+
             <TextInput
               name={'rentalCompany'}
               label={t('transportation_rental_company', 'Rental Company')}
+              description={t('transportation_rental_company_desc', 'Name of the Rental Company')}
               required
               key={form.key('rentalCompany')}
               {...form.getInputProps('rentalCompany')}
             />
-
+          </Group>
+          <Group grow>
             <DateTimePicker
               highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'pickupTime'}
               label={t('transportation_pickup_time', 'Pickup Time')}
+              description={t('transportation_pickup_time_desc', 'Date and time for pickup')}
               clearable
               required
               key={form.key('pickupTime')}
               {...form.getInputProps('pickupTime')}
-              miw={rem(150)}
+              date={trip.startDate}
+              minDate={trip.startDate}
+              maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               data-testid={'pickup-time'}
               submitButtonProps={{
                 'aria-label': 'Submit Date',
@@ -127,11 +146,14 @@ export const CarRentalForm = ({
               valueFormat="DD MMM YYYY hh:mm A"
               name={'dropOffTime'}
               label={t('transportation_dropOff_time', 'Drop Off Time')}
+              description={t('transportation_dropoff_time_desc', 'Date and time for drop-off')}
               clearable
               required
               key={form.key('dropOffTime')}
               {...form.getInputProps('dropOffTime')}
-              miw={rem(150)}
+              date={trip.startDate}
+              minDate={trip.startDate}
+              maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               data-testid={'drop-off-time'}
               submitButtonProps={{
                 'aria-label': 'Submit Date',
@@ -142,34 +164,39 @@ export const CarRentalForm = ({
             <TextInput
               name={'pickupLocation'}
               label={t('transportation_pickup_location', 'Pickup Location')}
+              description={t('transportation_pickup_location_desc', 'Address of the pickup location')}
               required
-              miw={rem('300px')}
               key={form.key('pickupLocation')}
               {...form.getInputProps('pickupLocation')}
             />
             <TextInput
               name={'dropOffLocation'}
               label={t('transportation_dropOff_location', 'Drop Off Location')}
+              description={t('transportation_dropOff_location_desc', 'Address of the drop-off location')}
               required
-              miw={rem('300px')}
               key={form.key('dropOffLocation')}
               {...form.getInputProps('dropOffLocation')}
             />
+          </Group>
+          <Group>
             <TextInput
               name={'confirmationCode'}
               label={t('transportation_confirmation_code', 'Confirmation Code')}
+              description={t('transportation_confirmation_code_desc', 'Reservation Id, Booking code etc')}
               key={form.key('confirmationCode')}
               {...form.getInputProps('confirmationCode')}
+            />
+            <CurrencyInput
+              costKey={form.key('cost')}
+              costProps={form.getInputProps('cost')}
+              currencyCodeKey={form.key('currencyCode')}
+              currencyCodeProps={form.getInputProps('currencyCode')}
+              label={t('car_rental_cost', 'Cost')}
+              description={t('car_rental_cost_desc', 'Charges for this rental')}
             />
           </Group>
           <Group>
             <Stack>
-              <CurrencyInput
-                costKey={form.key('cost')}
-                costProps={form.getInputProps('cost')}
-                currencyCodeKey={form.key('currencyCode')}
-                currencyCodeProps={form.getInputProps('currencyCode')}
-              />
               <Group>
                 <Title size={'md'}>
                   {t('attachments', 'Attachments')}
