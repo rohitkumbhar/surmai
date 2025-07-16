@@ -27,7 +27,6 @@ func (job *ImportDemoDataJob) deleteAllTrips() {
 	pbApp := job.Pb.App
 	logger := pbApp.Logger()
 
-	// Transportations, Lodgings and Activities are set to cascade delete
 	records, err := pbApp.FindAllRecords("trips")
 	if err != nil {
 		logger.Error("ImportDemoDataJob.Execute FindAllRecords error:%v", err)
@@ -88,7 +87,7 @@ func (job *ImportDemoDataJob) importDemoTrip() {
 	pbApp := job.Pb.App
 	demoUser, noDemoUserError := pbApp.FindAuthRecordByEmail("users", job.DemoEmail)
 
-	open, err := os.Open("/datasets/demo_trip.json")
+	open, err := os.Open("/datasets/demo_trip.zip")
 	defer open.Close()
 	if err == nil && noDemoUserError == nil {
 		_, _ = _import.Import(pbApp, open, demoUser.Id)
