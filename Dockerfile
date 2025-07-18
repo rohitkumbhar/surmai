@@ -36,6 +36,8 @@ RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o surmai-backend
 
 FROM alpine:3.21
 
+RUN apk add --no-cache tzdata
+
 COPY backend/init.sh /pb/init.sh
 COPY backend/datasets /datasets
 COPY --from=frontend /surmai/dist /pb_public
