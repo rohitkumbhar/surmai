@@ -150,7 +150,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           onClick={() => {
             openContextModal({
               modal: 'exportTripCalendarModal',
-              title: t('trip_calendar', 'Add To Calendar'),
+              title: t('download_icalendar', 'Download iCalendar File'),
               withCloseButton: true,
               fullScreen: isMobile,
               size: 'lg',
@@ -161,7 +161,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           }}
           leftSection={<IconCalendar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
-          {t('trip_calendar', 'Add To Calendar')}
+          {t('add_to_calendar', 'Add To Calendar')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item

@@ -1,14 +1,14 @@
 import { ContextModalProps } from '@mantine/modals';
 import { Trip } from '../../../types/trips.ts';
 import { Button, Center, Container, Text } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { exportCalendar } from '../../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 
 export const ExportTripCalendarModal = ({
-                                          innerProps,
-                                        }: ContextModalProps<{
+  innerProps,
+}: ContextModalProps<{
   trip: Trip;
 }>) => {
   const { trip } = innerProps;
@@ -21,13 +21,14 @@ export const ExportTripCalendarModal = ({
     exportCalendar({ tripId: trip.id })
       .then((data) => {
         prepareDownload(data);
-      }).catch((error) => {
-      showErrorNotification({
-        error: error,
-        title: t('ics_error_title', 'ICS Export'),
-        message: t('ics_error_desc', 'An error occurred while generating the ICS file for this trip.'),
-      });
-    })
+      })
+      .catch((error) => {
+        showErrorNotification({
+          error: error,
+          title: t('ics_error_title', 'ICS Export'),
+          message: t('ics_error_desc', 'An error occurred while generating the ICS file for this trip.'),
+        });
+      })
       .finally(() => setPreparing(false));
   };
 
@@ -44,19 +45,19 @@ export const ExportTripCalendarModal = ({
     setDownloadLink(dataUrl);
   };
 
-  useEffect(() => {
-    prepareICSData();
-  }, []);
-
   return (
     <Container>
       <Text size={'sm'} p={'sm'}>
-        {t('trip_calendar', 'Add this trip to your calendar. Download as an ICS file or add to a calendar service.')}
+        {t(
+          'prepare_ics_file',
+          'Generate an iCalendar (.ics) file for your trip. This file can be downloaded and added to any calendar application of your choice.'
+        )}
       </Text>
-      <Center>
+      <Center mt={'sm'}>
+        {!downloadLink && <Button onClick={prepareICSData}>{t('generate', 'Generate')}</Button>}
         {downloadLink && (
           <Button component={'a'} href={downloadLink} download={`${trip.name}.ics`}>
-            {t('download_ics', 'Download ICS')}
+            {t('download', 'Download')}
           </Button>
         )}
       </Center>
