@@ -4,10 +4,11 @@ import { Button, Center, Container, Text } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { exportCalendar } from '../../../lib/api';
 import { useTranslation } from 'react-i18next';
+import { showErrorNotification } from '../../../lib/notifications.tsx';
 
 export const ExportTripCalendarModal = ({
-  innerProps,
-}: ContextModalProps<{
+                                          innerProps,
+                                        }: ContextModalProps<{
   trip: Trip;
 }>) => {
   const { trip } = innerProps;
@@ -20,7 +21,13 @@ export const ExportTripCalendarModal = ({
     exportCalendar({ tripId: trip.id })
       .then((data) => {
         prepareDownload(data);
-      })
+      }).catch((error) => {
+      showErrorNotification({
+        error: error,
+        title: t('ics_error_title', 'ICS Export'),
+        message: t('ics_error_desc', 'An error occurred while generating the ICS file for this trip.'),
+      });
+    })
       .finally(() => setPreparing(false));
   };
 
@@ -47,13 +54,8 @@ export const ExportTripCalendarModal = ({
         {t('trip_calendar', 'Add this trip to your calendar. Download as an ICS file or add to a calendar service.')}
       </Text>
       <Center>
-        {/*{!downloadLink && (
-          <Button loading={preparing} onClick={prepareExport}>
-            {t('prepare_export', 'Prepare Export')}
-          </Button>
-        )}*/}
         {downloadLink && (
-          <Button component={'a'} href={downloadLink} download={`trip-${trip.name}.ics`}>
+          <Button component={'a'} href={downloadLink} download={`${trip.name}.ics`}>
             {t('download_ics', 'Download ICS')}
           </Button>
         )}
