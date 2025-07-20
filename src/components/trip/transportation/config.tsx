@@ -25,6 +25,7 @@ export const transportationConfig: { [key: string]: any } = {
             <TextInput
               name={'originAddress'}
               label={i18n.t('address', 'Address')}
+              data-testid={'originAddress'}
               description={i18n.t('origin_address', 'Address of the car port, bus station etc.')}
               required
               key={form.key('originAddress')}
@@ -48,6 +49,7 @@ export const transportationConfig: { [key: string]: any } = {
             <TextInput
               name={'destinationAddress'}
               label={i18n.t('address', 'Address')}
+              data-testid={'destinationAddress'}
               description={i18n.t('destination_address', 'Address of the car port, bus station etc.')}
               required
               key={form.key('destinationAddress')}

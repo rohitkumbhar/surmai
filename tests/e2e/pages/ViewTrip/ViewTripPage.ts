@@ -94,6 +94,9 @@ export class ViewTripPage {
 
     await this.selectDatePickerValue('drop-off-time', carRentalData.dropOffTime);
 
+    await this.page.getByLabel('Destination').click()
+    await this.page.getByRole('option').first().click()
+
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.page.waitForTimeout(1000);
   }
@@ -129,8 +132,13 @@ export class ViewTripPage {
       await this.page.getByLabel('To').fill(transportationData.endLocation);
       await this.page.getByRole('option', { name: transportationData.endLocation }).click();
     } else {
-      await this.page.getByLabel('From').fill(transportationData.startLocation);
-      await this.page.getByLabel('To').fill(transportationData.endLocation);
+      await this.page.getByLabel('From').click();
+      await this.page.getByRole('option').first().click();
+      await this.page.getByTestId('originAddress').fill(transportationData.startLocation);
+
+      await this.page.getByLabel('To').click();
+      await this.page.getByRole('option').first().click();
+      await this.page.getByTestId('destinationAddress').fill(transportationData.endLocation);
     }
 
     // Fill in the dates
