@@ -82,7 +82,6 @@ export class ViewTripPage {
     await transportationMenu.scrollIntoViewIfNeeded();
     await transportationMenu.click();
 
-
     await this.page.getByRole('menuitem', { name: 'Car Rental' }).click();
     await this.page.getByLabel('Rental Company').fill(carRentalData.rentalCompany);
     await this.page.getByLabel('Pickup Location').fill(carRentalData.pickupLocation);
@@ -94,6 +93,9 @@ export class ViewTripPage {
     await this.page.getByLabel('Cost').fill(carRentalData.cost.toString());
 
     await this.selectDatePickerValue('drop-off-time', carRentalData.dropOffTime);
+
+    await this.page.getByLabel('Destination').click()
+    await this.page.getByRole('option').first().click()
 
     await this.page.getByRole('button', { name: 'Save' }).click();
     await this.page.waitForTimeout(1000);
@@ -130,8 +132,13 @@ export class ViewTripPage {
       await this.page.getByLabel('To').fill(transportationData.endLocation);
       await this.page.getByRole('option', { name: transportationData.endLocation }).click();
     } else {
-      await this.page.getByLabel('From').fill(transportationData.startLocation);
-      await this.page.getByLabel('To').fill(transportationData.endLocation);
+      await this.page.getByLabel('From').click();
+      await this.page.getByRole('option').first().click();
+      await this.page.getByTestId('originAddress').fill(transportationData.startLocation);
+
+      await this.page.getByLabel('To').click();
+      await this.page.getByRole('option').first().click();
+      await this.page.getByTestId('destinationAddress').fill(transportationData.endLocation);
     }
 
     // Fill in the dates
@@ -172,6 +179,7 @@ export class ViewTripPage {
     name: string;
     startDate: string;
     endDate: string;
+    destination: string;
     address: string;
     confirmationCode?: string;
   }) {
@@ -197,6 +205,9 @@ export class ViewTripPage {
     await this.page.waitForTimeout(100);
     await this.selectDatePickerValue('lodging-end-date', lodgingData.endDate);
 
+    await this.page.getByLabel('Destination').click();
+    await this.page.getByRole('option').first().click();
+
     // Save the lodging
     await this.page.getByRole('button', { name: 'Save' }).click();
   }
@@ -204,7 +215,14 @@ export class ViewTripPage {
   /**
    * Add an activity to the trip
    */
-  async addActivity(activityData: { name: string; startDate: string; address: string; description?: string }) {
+  async addActivity(activityData: {
+    name: string;
+    startDate: string;
+    endDate: string;
+    address: string;
+    destinationName: string;
+    description?: string;
+  }) {
     // Open the activities section
     await this.openAccordionSection('Activities');
 
@@ -216,6 +234,7 @@ export class ViewTripPage {
 
     // Fill in the dates
     await this.selectDatePickerValue('activity-start-date', activityData.startDate);
+    await this.selectDatePickerValue('activity-end-date', activityData.endDate);
 
     // Fill in the location
     await this.page.getByLabel('Address').fill(activityData.address);
@@ -224,6 +243,9 @@ export class ViewTripPage {
     if (activityData.description) {
       await this.page.getByLabel('Description').fill(activityData.description);
     }
+
+    await this.page.getByLabel('Destination').click();
+    await this.page.getByRole('option').first().click();
 
     // Save the activity
     await this.page.getByRole('button', { name: 'Save' }).click();

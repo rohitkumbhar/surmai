@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { ViewTripPage } from './ViewTripPage';
 import { CreateNewTripPage, TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 import dayjs from 'dayjs';
-import { getStartDate } from './helper.ts';
+import { getEndDate, getStartDate } from './helper.ts';
 
 test.describe('Trip Activities', () => {
   let viewTripPage: ViewTripPage;
@@ -57,11 +57,12 @@ test.describe('Trip Activities', () => {
   test('should add a museum visit activity', async ({ page }) => {
     const activityName = 'Visit the Louvre';
     const startDate = getStartDate(tripData.startDate);
-
+    const endDate = getEndDate(startDate, 0.1);
     await viewTripPage.addActivity({
       name: activityName,
       startDate,
-
+      endDate,
+      destinationName: 'Paris',
       address: 'Louvre Museum, Paris, France',
       description: 'See the Mona Lisa and other famous artworks',
     });
@@ -73,11 +74,13 @@ test.describe('Trip Activities', () => {
   test('should add a restaurant reservation activity', async ({ page }) => {
     const activityName = 'Dinner at Le Jules Verne';
     const startDate = getStartDate(tripData.startDate);
+    const endDate = getEndDate(startDate, 0.1);
 
     await viewTripPage.addActivity({
       name: activityName,
       startDate,
-
+      endDate,
+      destinationName: 'Paris',
       address: 'Eiffel Tower, Paris, France',
       description: 'Reservation at 8:00 PM',
     });
@@ -89,10 +92,13 @@ test.describe('Trip Activities', () => {
   test('should add a guided tour activity', async ({ page }) => {
     const activityName = 'Colosseum Guided Tour';
     const startDate = getStartDate(tripData.startDate);
+    const endDate = getEndDate(startDate, 0.1);
 
     await viewTripPage.addActivity({
       name: activityName,
       startDate,
+      endDate,
+      destinationName: 'Rome',
       address: 'Colosseum, Rome, Italy',
       description: 'Skip-the-line tickets included',
     });
@@ -104,10 +110,12 @@ test.describe('Trip Activities', () => {
   test('should add a free time activity', async ({ page }) => {
     const activityName = 'Shopping at Via del Corso';
     const startDate = getStartDate(tripData.startDate);
-
+    const endDate = getEndDate(startDate, 0.1);
     await viewTripPage.addActivity({
       name: activityName,
       startDate,
+      endDate,
+      destinationName: 'Rome',
       address: 'Via del Corso, Rome, Italy',
       description: 'Free time for shopping and exploring',
     });

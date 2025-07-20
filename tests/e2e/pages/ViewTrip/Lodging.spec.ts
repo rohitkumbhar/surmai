@@ -64,6 +64,7 @@ test.describe('Trip Lodging', () => {
       name: hotelName,
       startDate,
       endDate,
+      destination: 'New York',
       address: 'New York, NY',
       confirmationCode: '53BK3B4II3B4I',
     });
@@ -82,6 +83,7 @@ test.describe('Trip Lodging', () => {
       name: apartmentName,
       startDate,
       endDate,
+      destination: 'Los Angeles',
       address: 'Los Angeles, CA',
       confirmationCode: 'RENTAL-1234567890',
     });
@@ -100,6 +102,7 @@ test.describe('Trip Lodging', () => {
       name: hostelName,
       startDate,
       endDate,
+      destination: 'New York',
       address: 'San Francisco, CA',
       confirmationCode: 'CAMPSITE-1234567890',
     });
