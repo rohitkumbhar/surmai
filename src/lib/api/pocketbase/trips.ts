@@ -191,6 +191,6 @@ export const exportCalendar = ({ tripId }: { tripId: string }) => {
       method: 'POST',
     })
     .then((response) => {
-      return Uint8Array.from(atob(response.data), (c) => c.charCodeAt(0));
+      return response;
     });
 };
