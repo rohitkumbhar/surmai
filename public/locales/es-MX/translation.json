@@ -342,7 +342,7 @@
     "no_notes_yet": "Este viaje aún no tiene notas. Puedes usar las notas para anotar cualquier cosa que no esté cubierta bajo Organización o simplemente para hacer una lluvia de ideas con colaboradores. Por ejemplo, una lista de tareas o enlaces a atracciones locales.",
     "notes_placeholder": "Puedes usar notas para anotar cualquier cosa que no esté cubierta bajo Organización o simplemente para hacer una lluvia de ideas con colaboradores. Por ejemplo, una lista de tareas o enlaces a atracciones locales.",
     "trip_travellers_description": "Nombres de las personas que van en este viaje. Separa los nombres por comas.",
-    "activity_desc_desc": "Más descripción si es necesario.",
+    "activity_desc_desc": "Más descripción si es necesario",
     "activity_name_desc": "Nombre de la actividad, por ejemplo, Caminata a Diamond Head",
     "origin_address": "Dirección del puerto de autos, estación de autobuses, etc.",
     "attachment_upload_failed": "Error al subir archivos adjuntos",
@@ -395,5 +395,11 @@
     "search_results": "Resultados de búsqueda",
     "transportation_confirmation_code_desc": "Id de reserva, código de reserva, etc.",
     "transportation_cost": "Costo",
-    "activity_address_desc": "Ubicación de la actividad"
+    "activity_address_desc": "Ubicación de la actividad",
+    "transportation_pickup_location_desc": "Dirección del lugar de recogida",
+    "transportation_dropOff_location_desc": "Dirección de la ubicación de entrega",
+    "transportation_dropoff_time_desc": "Fecha y hora para la entrega",
+    "transportation_pickup_time_desc": "Fecha y hora de recogida",
+    "transportation_provider_desc": "Proveedor de servicios. Compañía de autobuses/ferries, etc.",
+    "transportation_rental_company_desc": "Nombre de la empresa de alquiler"
 }
