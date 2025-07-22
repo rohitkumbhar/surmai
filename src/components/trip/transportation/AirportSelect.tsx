@@ -28,7 +28,7 @@ export const AirportSelect = ({
   const [searchResults, setSearchResults] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   // @ts-expect-error its ok
-  const [value, setValue] = useState<string | undefined>(currentValues ? currentValues[propName] : undefined);
+  const [value, setValue] = useState<string | Airport | undefined>(currentValues ? currentValues[propName] : undefined);
   const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
@@ -109,7 +109,8 @@ export const AirportSelect = ({
               <IconPlaneDeparture />
             )
           }
-          value={value}
+          // @ts-expect-error its ok
+          value={value?.iataCode || value }
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();
