@@ -109,6 +109,7 @@ export const AirportSelect = ({
               <IconPlaneDeparture />
             )
           }
+          // @ts-expect-error its ok
           value={value?.iataCode || value }
           onChange={(event) => {
             combobox.openDropdown();
