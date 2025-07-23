@@ -123,7 +123,6 @@ export const GenericLodgingForm = ({
           </Stack>
           <Group>
             <DateTimePicker
-
               valueFormat="lll"
               name={'startDate'}
               label={t('lodging_start_date', 'Check-In')}

@@ -101,7 +101,6 @@ export const GenericTransportationModeForm = ({
         <Group>
           {config.components.from(form, trip.destinations)}
           <DateTimePicker
-            highlightToday
             valueFormat="lll"
             name={'departureTime'}
             description={t('departure_time_desc', 'Departure date and time')}

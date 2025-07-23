@@ -124,7 +124,6 @@ export const GenericActivityForm = ({
           </Stack>
           <Group grow={true}>
             <DateTimePicker
-              highlightToday
               valueFormat="lll"
               name={'startDate'}
               label={t('activity_start_date', 'Start Date')}
@@ -143,7 +142,6 @@ export const GenericActivityForm = ({
             />
 
             <DateTimePicker
-              highlightToday
               valueFormat="lll"
               name={'endDate'}
               label={t('activity_end_date', 'End Date')}

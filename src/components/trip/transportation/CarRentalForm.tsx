@@ -123,7 +123,6 @@ export const CarRentalForm = ({
           </Group>
           <Group grow>
             <DateTimePicker
-              highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'pickupTime'}
               label={t('transportation_pickup_time', 'Pickup Time')}
@@ -142,7 +141,6 @@ export const CarRentalForm = ({
             />
 
             <DateTimePicker
-              highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'dropOffTime'}
               label={t('transportation_dropOff_time', 'Drop Off Time')}
