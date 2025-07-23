@@ -123,7 +123,6 @@ export const CarRentalForm = ({
           </Group>
           <Group grow>
             <DateTimePicker
-              highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'pickupTime'}
               label={t('transportation_pickup_time', 'Pickup Time')}
@@ -132,7 +131,7 @@ export const CarRentalForm = ({
               required
               key={form.key('pickupTime')}
               {...form.getInputProps('pickupTime')}
-              date={trip.startDate}
+              defaultDate={trip.startDate}
               minDate={trip.startDate}
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               data-testid={'pickup-time'}
@@ -142,7 +141,6 @@ export const CarRentalForm = ({
             />
 
             <DateTimePicker
-              highlightToday
               valueFormat="DD MMM YYYY hh:mm A"
               name={'dropOffTime'}
               label={t('transportation_dropOff_time', 'Drop Off Time')}
@@ -151,7 +149,7 @@ export const CarRentalForm = ({
               required
               key={form.key('dropOffTime')}
               {...form.getInputProps('dropOffTime')}
-              date={trip.startDate}
+              defaultDate={trip.startDate}
               minDate={trip.startDate}
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               data-testid={'drop-off-time'}

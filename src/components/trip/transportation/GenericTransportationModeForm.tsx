@@ -101,7 +101,6 @@ export const GenericTransportationModeForm = ({
         <Group>
           {config.components.from(form, trip.destinations)}
           <DateTimePicker
-            highlightToday
             valueFormat="lll"
             name={'departureTime'}
             description={t('departure_time_desc', 'Departure date and time')}
@@ -109,7 +108,7 @@ export const GenericTransportationModeForm = ({
             label={t('transportation_departure_time', 'Departure')}
             clearable
             required
-            date={trip.startDate}
+            defaultDate={trip.startDate}
             minDate={trip.startDate}
             maxDate={trip.endDate}
             key={form.key('departureTime')}
@@ -129,7 +128,7 @@ export const GenericTransportationModeForm = ({
             description={t('arrival_time_desc', 'Arrival date and time')}
             required
             miw={rem('200px')}
-            date={trip.startDate}
+            defaultDate={trip.startDate}
             minDate={trip.startDate}
             maxDate={dayjs(trip.endDate).endOf('day').toDate()}
             clearable

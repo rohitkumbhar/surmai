@@ -124,14 +124,13 @@ export const GenericActivityForm = ({
           </Stack>
           <Group grow={true}>
             <DateTimePicker
-              highlightToday
               valueFormat="lll"
               name={'startDate'}
               label={t('activity_start_date', 'Start Date')}
               description={t('activity_start_date_desc', 'Activity start date and time')}
               clearable
               required
-              date={trip.startDate}
+              defaultDate={trip.startDate}
               minDate={trip.startDate}
               maxDate={trip.endDate}
               key={form.key('startDate')}
@@ -143,7 +142,6 @@ export const GenericActivityForm = ({
             />
 
             <DateTimePicker
-              highlightToday
               valueFormat="lll"
               name={'endDate'}
               label={t('activity_end_date', 'End Date')}

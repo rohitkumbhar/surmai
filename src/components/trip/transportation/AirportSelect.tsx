@@ -110,7 +110,7 @@ export const AirportSelect = ({
             )
           }
           // @ts-expect-error its ok
-          value={value?.iataCode || value }
+          value={value?.iataCode || value}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();
