@@ -131,7 +131,7 @@ export const GenericActivityForm = ({
               description={t('activity_start_date_desc', 'Activity start date and time')}
               clearable
               required
-              date={trip.startDate}
+              defaultDate={trip.startDate}
               minDate={trip.startDate}
               maxDate={trip.endDate}
               key={form.key('startDate')}

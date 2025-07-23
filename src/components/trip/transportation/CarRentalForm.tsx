@@ -132,7 +132,7 @@ export const CarRentalForm = ({
               required
               key={form.key('pickupTime')}
               {...form.getInputProps('pickupTime')}
-              date={trip.startDate}
+              defaultDate={trip.startDate}
               minDate={trip.startDate}
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               data-testid={'pickup-time'}
@@ -151,7 +151,7 @@ export const CarRentalForm = ({
               required
               key={form.key('dropOffTime')}
               {...form.getInputProps('dropOffTime')}
-              date={trip.startDate}
+              defaultDate={trip.startDate}
               minDate={trip.startDate}
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               data-testid={'drop-off-time'}
