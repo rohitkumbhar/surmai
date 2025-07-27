@@ -134,7 +134,7 @@ export const GenericLodgingForm = ({
               maxDate={trip.endDate}
               key={form.key('startDate')}
               {...form.getInputProps('startDate')}
-              miw={rem(200)}
+              miw={rem(260)}
               data-testid={'lodging-start-date'}
               submitButtonProps={{
                 'aria-label': 'Submit Date',
@@ -147,7 +147,7 @@ export const GenericLodgingForm = ({
               label={t('lodging_end_date', 'Check-Out')}
               description={t('lodging_end_date_desc', 'Check-Out date & time')}
               required
-              miw={rem('200px')}
+              miw={rem(260)}
               clearable
               defaultDate={trip.startDate}
               minDate={trip.startDate}
@@ -175,6 +175,7 @@ export const GenericLodgingForm = ({
               currencyCodeKey={form.key('currencyCode')}
               currencyCodeProps={form.getInputProps('currencyCode')}
               label={t('lodging_cost', 'Cost')}
+              maxWidth={260}
               description={t('lodging_cost_desc', 'Charges for this accommodation')}
             />
           </Group>

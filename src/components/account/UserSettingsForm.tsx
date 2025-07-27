@@ -10,10 +10,11 @@ import { currencyCodes } from '../util/currencyCodes.ts';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 export const UserSettingsForm = () => {
   const { user, reloadUser } = useCurrentUser();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const appCtx = useSurmaiContext();
 
@@ -23,6 +24,7 @@ export const UserSettingsForm = () => {
     currencyCode: user?.currencyCode || 'USD',
     timezone: user?.timezone || dayjs.tz.guess(),
     mapsProvider: user?.mapsProvider || 'openstreetmap',
+    flightMetadataProvider: user?.flightMetadataProvider || 'none',
   };
 
   const form = useForm<UserSettingsFormType>({
@@ -38,9 +40,15 @@ export const UserSettingsForm = () => {
         currencyCode: values.currencyCode,
         timezone: values.timezone,
         mapsProvider: values.mapsProvider,
+        flightMetadataProvider: values.flightMetadataProvider,
       }).then(() => {
         appCtx.changeColor?.(values.colorScheme);
         reloadUser?.();
+      }).then(() => {
+        showSaveSuccessNotification({
+          title: i18n.t('user_profile', 'User Profile'),
+          message: i18n.t('user_settings_updated', 'User Setting updated'),
+        });
       });
     }
   };
@@ -93,7 +101,7 @@ export const UserSettingsForm = () => {
           label={t('maps_provider', 'Preferred Maps')}
           description={t(
             'maps_provider_desc',
-            'Your preferred Maps provider. This is used to generate links to different locations.'
+            'Your preferred Maps provider. This is used to generate links to different locations.',
           )}
           data={[
             { value: 'google', label: 'Google Maps' },
@@ -101,7 +109,23 @@ export const UserSettingsForm = () => {
           ]}
           key={form.key('mapsProvider')}
           {...form.getInputProps('mapsProvider')}
-          searchable
+          withCheckIcon={false}
+        ></Select>
+
+        <Select
+          mt={'sm'}
+          name={'flightMetadataProvider'}
+          label={t('flight_metadata_provider', 'Preferred Flight Metadata Provider')}
+          description={t(
+            'flight_metadata_provider_desc',
+            'Your preferred for Flight Metadata provider. This provider will be used to fetch your flight route based on a 3rd party service.',
+          )}
+          data={[
+            { value: 'adsbdb', label: 'adsbdb.com' },
+            { value: 'none', label: 'None (default)' },
+          ]}
+          key={form.key('flightMetadataProvider')}
+          {...form.getInputProps('flightMetadataProvider')}
           withCheckIcon={false}
         ></Select>
 

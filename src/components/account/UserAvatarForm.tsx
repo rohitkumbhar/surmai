@@ -18,7 +18,7 @@ export const UserAvatarForm = () => {
           name={user?.name}
           color={'initials'}
           src={user?.avatar && getAttachmentUrl(user, user.avatar)}
-          size={300}
+          size={isMobile ? 200 : 300}
           radius="md"
         />
       </AspectRatio>
@@ -29,7 +29,7 @@ export const UserAvatarForm = () => {
           onClick={() => {
             openContextModal({
               modal: 'uploadImageForm',
-              title: t('trip_add_cover_image', 'Add Cover Image'),
+              title: t('user_change_avatar', 'Update User Avatar'),
               radius: 'md',
               withCloseButton: false,
               size: 'auto',

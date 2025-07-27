@@ -93,3 +93,5 @@ export {
 } from './pocketbase/lodgings.ts';
 
 export { getTripAttachments, deleteAttachment, uploadAttachments } from './pocketbase/attachments.ts';
+
+export { getFlightRoute, type FlightRoute } from './adsbdb/flights.ts'

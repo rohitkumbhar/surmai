@@ -9,6 +9,7 @@ export interface User extends RecordModel {
   avatar?: string;
   timezone?: string;
   mapsProvider?: string;
+  flightMetadataProvider?: 'none' | 'adsbdb';
 }
 
 export type SignUpForm = {
@@ -23,6 +24,7 @@ export interface UserSettingsFormType {
   colorScheme?: string;
   timezone?: string;
   mapsProvider?: string;
+  flightMetadataProvider? : string;
 }
 
 export interface OAuthProvider {

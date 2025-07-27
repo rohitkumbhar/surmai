@@ -13,13 +13,14 @@ import { formatDateTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { transportationConfig } from './config.tsx';
+import { FlightForm } from './FlightForm.tsx';
 
 export const GenericTransportationData = ({
-  trip,
-  transportation,
-  refetch,
-  tripAttachments,
-}: {
+                                            trip,
+                                            transportation,
+                                            refetch,
+                                            tripAttachments,
+                                          }: {
   trip: Trip;
   transportation: Transportation;
   refetch: () => void;
@@ -28,6 +29,7 @@ export const GenericTransportationData = ({
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
   const [opened, { open, close }] = useDisclosure(false);
+  const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
 
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
@@ -37,13 +39,17 @@ export const GenericTransportationData = ({
       : transportationConfig['default'];
 
   const transportationAttachments = tripAttachments?.filter((attachment) =>
-    transportation.attachmentReferences?.includes(attachment.id)
+    transportation.attachmentReferences?.includes(attachment.id),
   );
 
   return (
     <DataLine
       onEdit={() => {
-        open();
+        if (transportation.type === 'flight') {
+          openFlightForm();
+        } else {
+          open();
+        }
       }}
       onDelete={() => {
         openConfirmModal({
@@ -54,7 +60,8 @@ export const GenericTransportationData = ({
             confirm: t('delete', 'Delete'),
             cancel: t('cancel', 'Cancel'),
           },
-          onCancel: () => {},
+          onCancel: () => {
+          },
           onConfirm: () => {
             deleteTransportation(transportation.id).then(() => {
               showDeleteNotification({
@@ -65,7 +72,7 @@ export const GenericTransportationData = ({
                   {
                     origin: transportation.origin,
                     destination: transportation.destination,
-                  }
+                  },
                 ),
               });
               refetch();
@@ -92,6 +99,26 @@ export const GenericTransportationData = ({
           }}
           onCancel={() => {
             close();
+          }}
+        />
+      </Modal>
+      <Modal
+        opened={flightFormOpened}
+        size="auto"
+        fullScreen={isMobile}
+        title={t('transportation_edit_flight', 'Edit Flight')}
+        onClose={closeFlightForm}
+      >
+        <FlightForm
+          transportation={transportation}
+          exitingAttachments={transportationAttachments}
+          trip={trip}
+          onSuccess={() => {
+            refetch();
+            closeFlightForm();
+          }}
+          onCancel={() => {
+            closeFlightForm();
           }}
         />
       </Modal>

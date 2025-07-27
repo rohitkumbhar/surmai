@@ -8,27 +8,27 @@ import { useTranslation } from 'react-i18next';
 import { IconPlaneArrival, IconPlaneDeparture } from '@tabler/icons-react';
 
 export const AirportSelect = ({
-  propName,
-  form,
-  label,
-  required,
-  description,
-  withAsterisk,
-}: {
+                                propName,
+                                form,
+                                label,
+                                required,
+                                description,
+                                withAsterisk,
+                                currentValue,
+                              }: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
   description: string;
   required: boolean;
   withAsterisk: boolean;
+  currentValue?: Airport
 }) => {
   const { t } = useTranslation();
-  const currentValues = form.getValues();
   const [search, setSearch] = useDebouncedState('', 200);
   const [searchResults, setSearchResults] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
-  // @ts-expect-error its ok
-  const [value, setValue] = useState<string | Airport | undefined>(currentValues ? currentValues[propName] : undefined);
+  const [value, setValue] = useState<string | Airport | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
@@ -88,7 +88,7 @@ export const AirportSelect = ({
           required={required}
           withAsterisk={withAsterisk}
           rightSection={
-            value ? (
+            (currentValue || value) ? (
               <CloseButton
                 size="sm"
                 onMouseDown={(event) => event.preventDefault()}
@@ -104,13 +104,13 @@ export const AirportSelect = ({
                 aria-label="Clear value"
               />
             ) : propName === 'destination' ? (
-              <IconPlaneArrival />
+              <IconPlaneArrival size={15} />
             ) : (
-              <IconPlaneDeparture />
+              <IconPlaneDeparture size={15} />
             )
           }
           // @ts-expect-error its ok
-          value={value?.iataCode || value}
+          value={currentValue ? currentValue.iataCode : (value?.iataCode || value)}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();
