@@ -81,6 +81,7 @@ describe('AirportSelect', () => {
         description="Original Airport"
         required={true}
         withAsterisk={true}
+        currentValue={undefined}
       />
     );
     expect(screen.getByText('Origin Airport')).toBeInTheDocument();
@@ -88,7 +89,6 @@ describe('AirportSelect', () => {
   });
 
   it('displays existing airport', () => {
-    mockForm.getValues.mockReturnValue({ origin: 'SFO' });
 
     renderWithMantine(
       <AirportSelect
@@ -98,6 +98,7 @@ describe('AirportSelect', () => {
         description="Origin Airport"
         required={true}
         withAsterisk={true}
+        currentValue={{name: 'San Francisco Airport', iataCode: 'SFO'}}
       />
     );
 
@@ -129,10 +130,6 @@ describe('AirportSelect', () => {
   });
 
   it('adds an airport when selected from dropdown', async () => {
-    // Initialize with empty origin to avoid controlled/uncontrolled warning
-    mockForm.getValues.mockReturnValue({
-      origin: undefined,
-    });
 
     const user = userEvent.setup();
     renderWithMantine(
@@ -220,10 +217,6 @@ describe('AirportSelect', () => {
       name: 'San Francisco International Airport',
     };
 
-    mockForm.getValues.mockReturnValue({
-      origin: originValue,
-    });
-
     const user = userEvent.setup();
     renderWithMantine(
       <AirportSelect
@@ -233,6 +226,7 @@ describe('AirportSelect', () => {
         description="Origin Airport"
         required={true}
         withAsterisk={true}
+        currentValue={originValue}
       />
     );
 
