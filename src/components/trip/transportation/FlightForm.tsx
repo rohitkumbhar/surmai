@@ -11,13 +11,7 @@ import {
 } from '../../../types/trips.ts';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import {
-  createTransportationEntry,
-  getFlightRoute,
-  searchAirlines,
-  searchAirports,
-  uploadAttachments,
-} from '../../../lib/api';
+import { createTransportationEntry, getFlightRoute, uploadAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
@@ -30,12 +24,12 @@ import { fakeAsUtcString } from '../../../lib/time.ts';
 import { IconChairDirector, IconCodeCircle, IconPlane } from '@tabler/icons-react';
 
 export const FlightForm = ({
-                             trip,
-                             transportation,
-                             onSuccess,
-                             onCancel,
-                             exitingAttachments,
-                           }: {
+  trip,
+  transportation,
+  onSuccess,
+  onCancel,
+  exitingAttachments,
+}: {
   trip: Trip;
   transportation?: Transportation;
   onSuccess: () => void;
@@ -47,48 +41,32 @@ export const FlightForm = ({
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
 
-
   const [origin, setOrigin] = useState<Airport>(transportation?.metadata?.origin || transportation?.origin);
-  const [destination, setDestination] = useState<Airport>(transportation?.metadata?.destination || transportation?.destination);
-  const [airline, setAirline] = useState<Airline>(transportation?.metadata?.provider)
+  const [destination, setDestination] = useState<Airport>(
+    transportation?.metadata?.destination || transportation?.destination
+  );
+  const [airline, setAirline] = useState<Airline>(transportation?.metadata?.provider);
 
   const loadFlightInfo = (f: UseFormReturnType<unknown>, flightNumber: string) => {
+    getFlightRoute(flightNumber).then((route) => {
+      const origin = route?.origin;
+      const destination = route?.destination;
+      const airline = route?.airline;
 
-    if (user?.flightMetadataProvider !== 'adsbdb') {
-      return;
-    }
-
-    getFlightRoute(flightNumber).then(route => {
-      if (route.origin?.iataCode) {
-        searchAirports(route.origin?.iataCode).then(airports => {
-          if (airports && airports.items.length === 1) {
-            const airport = airports.items[0] as unknown as Airport;
-            f.setFieldValue('origin', airport);
-            setOrigin(airport);
-          }
-        });
+      if (origin) {
+        f.setFieldValue('origin', origin);
+        setOrigin(origin);
       }
 
-      if (route.destination?.iataCode) {
-        searchAirports(route.destination?.iataCode).then(airports => {
-          if (airports && airports.items.length === 1) {
-            const airport = airports.items[0] as unknown as Airport;
-            f.setFieldValue('destination', airport);
-            setDestination(airport);
-          }
-        });
+      if (destination) {
+        f.setFieldValue('destination', destination);
+        setDestination(destination);
       }
 
-      if (route.airline?.name) {
-        searchAirlines(route.airline?.name).then(airlines => {
-          if (airlines && airlines.items.length === 1) {
-            const airline = airlines.items[0] as unknown as Airline
-            f.setFieldValue('provider', airline)
-            setAirline(airline)
-          }
-        })
+      if (airline) {
+        f.setFieldValue('provider', airline);
+        setAirline(airline);
       }
-
     });
   };
 
@@ -189,7 +167,6 @@ export const FlightForm = ({
             {...form.getInputProps('reservation')}
             rightSection={<IconCodeCircle size={15} />}
           />
-
         </Group>
         <Group>
           <AirportSelect
@@ -268,7 +245,8 @@ export const FlightForm = ({
             key={form.key('seats')}
             description={t('seats_desc', 'Reserved seats, if any')}
             rightSection={<IconChairDirector size={15} />}
-            {...form.getInputProps('seats')} />
+            {...form.getInputProps('seats')}
+          />
         </Group>
         <Group>
           <CurrencyInput

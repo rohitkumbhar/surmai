@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-type Airport struct {
+type AirportDatasetEntry struct {
 	Name       string `json:"name"`
 	Latitude   string `json:"latitude_deg"`
 	Longitude  string `json:"longitude_deg"`
@@ -31,7 +31,7 @@ func LoadAirportsDataset(app core.App, finder tzf.F) (int, error) {
 	}
 
 	// Now let's unmarshall the data into `payload`
-	var payload []Airport
+	var payload []AirportDatasetEntry
 	err = json.Unmarshal(content, &payload)
 	if err != nil {
 		log.Fatal("Error during Unmarshal(): ", err)

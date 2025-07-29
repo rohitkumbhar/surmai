@@ -79,13 +79,19 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
     <div style={{ width: '100%' }}>
       <Text mb={'md'}>{t('oauth2_settings_form', 'OAuth2 Settings')}</Text>
       <form onSubmit={form.onSubmit(handleSubmission)}>
-        <Group>
+        <Group justify="space-between">
+          <div>
+            <Text>{t('enable_oauth2_action', 'Enable OAuth2 Login')}</Text>
+            <Text size="sm" c="dimmed">
+              {t('enable_oauth2_action_description', 'Allow users to sign in via SSO')}
+            </Text>
+          </div>
           <Switch
             mb={'sm'}
             onLabel="ON"
             offLabel="OFF"
-            label={t('enable_oauth2_action', 'Enable OAuth2 Login')}
-            size="md"
+            // label={t('enable_oauth2_action', 'Enable OAuth2 Login')}
+            size="lg"
             key={form.key('enabled')}
             {...form.getInputProps('enabled', { type: 'checkbox' })}
           />
@@ -168,7 +174,7 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
             />
           </Stack>
         </Collapse>
-        <Group mt={'md'} justify="space-between">
+        <Group mt={'xl'} justify="space-between">
           <div></div>
           <Group>
             <Button type={'submit'} w={'min-content'} leftSection={<IconDeviceFloppy />} disabled={!form.isDirty()}>

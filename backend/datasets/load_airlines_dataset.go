@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-type Airline struct {
+type AirlineDatasetEntry struct {
 	Name string `json:"name"`
 	Logo string `json:"logo"`
 	Id   string `json:"id"`
@@ -27,7 +27,7 @@ func LoadAirlinesDataset(app core.App) (int, error) {
 	}
 
 	// Now let's unmarshall the data into `payload`
-	var payload []Airline
+	var payload []AirlineDatasetEntry
 	err = json.Unmarshal(content, &payload)
 	if err != nil {
 		log.Fatal("Error during Unmarshal(): ", err)

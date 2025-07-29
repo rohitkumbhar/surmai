@@ -7,9 +7,10 @@ import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx
 import { useEffect } from 'react';
 import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
-import { IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
+import { IconAdjustmentsPlus, IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
 import { UserList } from '../../components/settings/UserList.tsx';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
 
 export const Settings = () => {
   const { t } = useTranslation();
@@ -46,6 +47,9 @@ export const Settings = () => {
           <Tabs.Tab value="datasets" leftSection={<IconSettings size={12} />}>
             {t('dataset_section', 'Datasets')}
           </Tabs.Tab>
+          <Tabs.Tab value="integrations" leftSection={<IconAdjustmentsPlus size={12} />}>
+            {t('integrations_section', 'Integrations')}
+          </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="users">
           <UserList />
@@ -58,6 +62,9 @@ export const Settings = () => {
         </Tabs.Panel>
         <Tabs.Panel value="datasets">
           <Datasets />
+        </Tabs.Panel>
+        <Tabs.Panel value="integrations">
+          <ThirdPartyIntegrations />
         </Tabs.Panel>
       </Tabs>
     </Container>

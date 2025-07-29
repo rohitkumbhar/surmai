@@ -94,3 +94,18 @@ type ExportedTrip struct {
 	Activities      []*Activity       `json:"activities"`
 	Attachments     []*Attachment     `json:"attachments"`
 }
+
+type Airport struct {
+	Id         string `json:"id"`
+	Name       string `json:"name"`
+	Latitude   string `json:"latitude"`
+	Longitude  string `json:"longitude"`
+	Timezone   string `json:"timezone"`
+	IataCode   string `json:"iataCode"`
+	IsoCountry string `json:"isoCountry"`
+}
+
+type Airline struct {
+	Id   string `json:"id"`
+	Name string `json:"name"`
+}

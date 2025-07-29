@@ -56,6 +56,13 @@ func (surmai *SurmaiApp) BindRoutes() {
 		tripRoutes.POST("/export", R.ExportTrip)
 		tripRoutes.POST("/calendar", R.GenerateIcsData)
 
+		// General Utility Routes
+		se.Router.GET("/api/surmai/flight-route/{flightNumber}",
+			func(e *core.RequestEvent) error {
+				return R.GetFlightRoute(e, surmai.TimezoneFinder)
+			},
+		).Bind(apis.RequireAuth())
+
 		// Public routes
 		se.Router.GET("/site-settings.json", func(e *core.RequestEvent) error {
 			return R.SiteSettings(e, surmai.DemoMode)
