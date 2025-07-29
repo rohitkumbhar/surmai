@@ -8,21 +8,21 @@ import { useTranslation } from 'react-i18next';
 import { IconPlaneArrival, IconPlaneDeparture } from '@tabler/icons-react';
 
 export const AirportSelect = ({
-                                propName,
-                                form,
-                                label,
-                                required,
-                                description,
-                                withAsterisk,
-                                currentValue,
-                              }: {
+  propName,
+  form,
+  label,
+  required,
+  description,
+  withAsterisk,
+  currentValue,
+}: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
   description: string;
   required: boolean;
   withAsterisk: boolean;
-  currentValue?: Airport
+  currentValue?: Airport;
 }) => {
   const { t } = useTranslation();
   const [search, setSearch] = useDebouncedState('', 200);
@@ -88,7 +88,7 @@ export const AirportSelect = ({
           required={required}
           withAsterisk={withAsterisk}
           rightSection={
-            (currentValue || value) ? (
+            currentValue || value ? (
               <CloseButton
                 size="sm"
                 onMouseDown={(event) => event.preventDefault()}
@@ -110,7 +110,7 @@ export const AirportSelect = ({
             )
           }
           // @ts-expect-error its ok
-          value={currentValue ? currentValue.iataCode : (value?.iataCode || value)}
+          value={currentValue ? currentValue.iataCode : value?.iataCode || value}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();

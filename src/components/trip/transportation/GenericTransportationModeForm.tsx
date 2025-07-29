@@ -19,13 +19,13 @@ import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 
 export const GenericTransportationModeForm = ({
-                                                transportationType,
-                                                trip,
-                                                transportation,
-                                                onSuccess,
-                                                onCancel,
-                                                exitingAttachments,
-                                              }: {
+  transportationType,
+  trip,
+  transportation,
+  onSuccess,
+  onCancel,
+  exitingAttachments,
+}: {
   transportationType: string;
   trip: Trip;
   transportation?: Transportation;

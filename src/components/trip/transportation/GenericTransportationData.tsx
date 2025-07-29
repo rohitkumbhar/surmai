@@ -16,11 +16,11 @@ import { transportationConfig } from './config.tsx';
 import { FlightForm } from './FlightForm.tsx';
 
 export const GenericTransportationData = ({
-                                            trip,
-                                            transportation,
-                                            refetch,
-                                            tripAttachments,
-                                          }: {
+  trip,
+  transportation,
+  refetch,
+  tripAttachments,
+}: {
   trip: Trip;
   transportation: Transportation;
   refetch: () => void;
@@ -39,7 +39,7 @@ export const GenericTransportationData = ({
       : transportationConfig['default'];
 
   const transportationAttachments = tripAttachments?.filter((attachment) =>
-    transportation.attachmentReferences?.includes(attachment.id),
+    transportation.attachmentReferences?.includes(attachment.id)
   );
 
   return (
@@ -60,8 +60,7 @@ export const GenericTransportationData = ({
             confirm: t('delete', 'Delete'),
             cancel: t('cancel', 'Cancel'),
           },
-          onCancel: () => {
-          },
+          onCancel: () => {},
           onConfirm: () => {
             deleteTransportation(transportation.id).then(() => {
               showDeleteNotification({
@@ -72,7 +71,7 @@ export const GenericTransportationData = ({
                   {
                     origin: transportation.origin,
                     destination: transportation.destination,
-                  },
+                  }
                 ),
               });
               refetch();

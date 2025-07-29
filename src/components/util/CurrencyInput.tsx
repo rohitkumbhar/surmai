@@ -8,7 +8,7 @@ export const CurrencyInput = ({
   currencyCodeProps,
   label,
   description,
-  maxWidth = 280
+  maxWidth = 280,
 }: {
   currencyCodeKey: string;
   costKey: string;
@@ -16,8 +16,7 @@ export const CurrencyInput = ({
   currencyCodeProps: any;
   label: string;
   description: string;
-  maxWidth? : number
-
+  maxWidth?: number;
 }) => {
   const select = (
     <Select

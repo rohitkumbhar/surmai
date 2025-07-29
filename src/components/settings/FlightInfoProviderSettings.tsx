@@ -1,6 +1,6 @@
 import { Button, Collapse, Group, Select, Switch, Text, TextInput } from '@mantine/core';
 import { IconDeviceFloppy } from '@tabler/icons-react';
-import { getSettingsForKey } from '../../lib/api';
+import { getSettingsForKey, setSettingsForKey } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
@@ -13,15 +13,16 @@ export type FlightInfoProviderSettings = {
   apiKey?: string;
 };
 
+const settingsKey = 'flight_info_provider';
+
 export const FlightInfoProviderSettings = () => {
   const { t } = useTranslation();
   const {
-    isPending,
     data: flightInfo,
     refetch,
   } = useQuery({
-    queryKey: ['getSettingsForKey', 'flight_info_provider'],
-    queryFn: () => getSettingsForKey<FlightInfoProviderSettings>('flight_info_provider'),
+    queryKey: ['getSettingsForKey', settingsKey],
+    queryFn: () => getSettingsForKey<FlightInfoProviderSettings>(settingsKey),
   });
 
   const [opened, { open: openForm, close: closeForm }] = useDisclosure(flightInfo?.enabled);
@@ -49,21 +50,18 @@ export const FlightInfoProviderSettings = () => {
   });
 
   const handleSubmission = (values: FlightInfoProviderSettings) => {
-    // setOAuth2Provider(values)
-    //   .then(() => refetch())
-    //   .then(() => {
-    //     showSaveSuccessNotification({
-    //       title: t('oauth2_settings_form', 'OAuth2 Settings'),
-    //       message: t('oauth_settings_updated', 'OAuth2 Settings updated'),
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     showErrorNotification({
-    //       error: err,
-    //       title: t('oauth2_settings_form', 'OAuth2 Settings'),
-    //       message: t('oauth_settings_update_failed', 'OAuth2 Settings could not be updated'),
-    //     });
-    //   });
+    console.log('values', values);
+
+    const payload = {
+      enabled: values.enabled,
+      provider: values.provider,
+      apiKey: values.apiKey,
+    };
+
+    setSettingsForKey(settingsKey, payload);
+    refetch();
+
+
   };
 
   return (
@@ -90,7 +88,7 @@ export const FlightInfoProviderSettings = () => {
         <Collapse in={opened}>
           <Group mt={'sm'}>
             <Select
-              label={t('flight_info_provider', 'Flight Info Provider')}
+              label={t(settingsKey, 'Flight Info Provider')}
               description={t('flight_info_provider_desc', 'Select Flight Info Provider')}
               data={[
                 { value: 'adsbdb', label: 'adsbdb.com' },

@@ -8,14 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { IconPlane } from '@tabler/icons-react';
 
 export const AirlineSelect = ({
-                                propName,
-                                form,
-                                label,
-                                description,
-                                required,
-                                withAsterisk,
-                                currentValue,
-                              }: {
+  propName,
+  form,
+  label,
+  description,
+  required,
+  withAsterisk,
+  currentValue,
+}: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
@@ -104,7 +104,7 @@ export const AirlineSelect = ({
             )
           }
           // @ts-expect-error shh
-          value={currentValue ? currentValue.name : (value?.name ? value.name : value)}
+          value={currentValue ? currentValue.name : value?.name ? value.name : value}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();

@@ -13,10 +13,10 @@ import { CarRentalForm } from './CarRentalForm.tsx';
 import { FlightForm } from './FlightForm.tsx';
 
 export const TransportationPanel = ({
-                                      trip,
-                                      tripAttachments,
-                                      refetchTrip,
-                                    }: {
+  trip,
+  tripAttachments,
+  refetchTrip,
+}: {
   trip: Trip;
   tripAttachments?: Attachment[];
   refetchTrip: () => void;
@@ -25,7 +25,6 @@ export const TransportationPanel = ({
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const [carRentalFormOpened, { open: openRentalForm, close: closeRentalForm }] = useDisclosure(false);
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
-
 
   const [newTransportationType, setNewTransportationType] = useState<string>('flight');
   const isMobile = useMediaQuery('(max-width: 50em)');

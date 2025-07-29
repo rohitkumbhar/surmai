@@ -17,9 +17,10 @@ func init() {
 		surmaiSettings.Fields.Add(
 
 			&core.TextField{
-				Name:       "key",
+				Name:       "id",
 				Required:   true,
 				PrimaryKey: true,
+				Pattern:    "^[a-z0-9_]+$",
 			},
 			&core.JSONField{
 				Name:     "value",
@@ -38,7 +39,6 @@ func init() {
 			},
 		)
 
-		surmaiSettings.AddIndex("idx_key", false, "key", "")
 		return app.Save(surmaiSettings)
 
 	}, func(app core.App) error {

@@ -70,7 +70,7 @@ export {
   enableUserSignups,
   disableOAuth2Provider,
   sendUserAccountInvitation,
-  getSettingsForKey,
+  getSettingsForKey, setSettingsForKey
 } from './pocketbase/settings.ts';
 
 export { sendCollaborationInvitation, listInvitations, invitationAction } from './pocketbase/invitations.ts';

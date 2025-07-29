@@ -115,12 +115,12 @@ export type TransportationFormSchema = {
   assignedSeats?: string;
 };
 
-export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' |'destination'> & {
-  flightNumber?: string
-  seats? : string
-  origin?: Airport
-  destination: Airport
-}
+export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' | 'destination'> & {
+  flightNumber?: string;
+  seats?: string;
+  origin?: Airport;
+  destination: Airport;
+};
 
 export type CroppedImage = {
   height: number;
