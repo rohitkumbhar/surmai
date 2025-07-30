@@ -33,7 +33,7 @@ export const Settings = () => {
         </Text>
       </Header>
 
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="users" keepMounted={false}>
         <Tabs.List>
           <Tabs.Tab value="users" leftSection={<IconUsers size={12} />}>
             {t('users_section', 'Users')}

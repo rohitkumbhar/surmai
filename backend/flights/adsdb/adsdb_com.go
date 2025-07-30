@@ -51,7 +51,7 @@ type ADSBResponse struct {
 
 type AdsbDbCom struct{}
 
-func (adsb AdsbDbCom) GetFlightRoute(flightNumber string, tzf tzf.F) (*flights.FlightRoute, error) {
+func (adsb AdsbDbCom) GetFlightRoute(flightNumber string, config flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 
 	// Create the URL with the flight number parameter
 	url := fmt.Sprintf("https://api.adsbdb.com/v0/callsign/%s", flightNumber)

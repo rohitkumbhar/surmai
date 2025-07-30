@@ -15,5 +15,11 @@ type FlightRoute struct {
 }
 
 type DataProvider interface {
-	GetFlightRoute(flightNumber string, tzf tzf.F) (*FlightRoute, error)
+	GetFlightRoute(flightNumber string, config FlightInfoProviderConfig, tzf tzf.F) (*FlightRoute, error)
+}
+
+type FlightInfoProviderConfig struct {
+	Enabled  bool   `json:"enabled"`
+	Provider string `json:"provider"`
+	ApiKey   string `json:"apiKey"`
 }

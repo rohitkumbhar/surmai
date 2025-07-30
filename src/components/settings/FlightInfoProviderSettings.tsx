@@ -1,11 +1,12 @@
-import { Button, Collapse, Group, Select, Switch, Text, TextInput } from '@mantine/core';
+import { Button, Collapse, Group, Select, Skeleton, Switch, Text, TextInput } from '@mantine/core';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import { getSettingsForKey, setSettingsForKey } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 export type FlightInfoProviderSettings = {
   enabled: boolean;
@@ -17,10 +18,7 @@ const settingsKey = 'flight_info_provider';
 
 export const FlightInfoProviderSettings = () => {
   const { t } = useTranslation();
-  const {
-    data: flightInfo,
-    refetch,
-  } = useQuery({
+  const { data: flightInfo, refetch } = useQuery({
     queryKey: ['getSettingsForKey', settingsKey],
     queryFn: () => getSettingsForKey<FlightInfoProviderSettings>(settingsKey),
   });
@@ -37,6 +35,19 @@ export const FlightInfoProviderSettings = () => {
     },
   });
 
+  useEffect(() => {
+    if (flightInfo?.enabled) {
+      form.setValues({
+        enabled: !!flightInfo?.enabled,
+        provider: flightInfo?.provider,
+        apiKey: flightInfo?.apiKey,
+      });
+      // form.reset();
+      openForm();
+      console.log('opened form');
+    }
+  }, [flightInfo]);
+
   form.watch('enabled', ({ value }) => {
     if (value) {
       openForm();
@@ -49,7 +60,7 @@ export const FlightInfoProviderSettings = () => {
     setApiKeyRequired(value === 'flightaware');
   });
 
-  const handleSubmission = (values: FlightInfoProviderSettings) => {
+  const handleSubmission = async (values: FlightInfoProviderSettings) => {
     console.log('values', values);
 
     const payload = {
@@ -58,15 +69,22 @@ export const FlightInfoProviderSettings = () => {
       apiKey: values.apiKey,
     };
 
-    setSettingsForKey(settingsKey, payload);
-    refetch();
-
-
+    setSettingsForKey(settingsKey, payload)
+      .then(() => {
+        showSaveSuccessNotification({
+          title: t('flight_info_provider', 'Flight Info Provider'),
+          message: t('flight_info_provider_success', 'Updated flight information provider configuration'),
+        });
+      })
+      .then(() => refetch());
   };
+
+  if (!flightInfo) {
+    return <Skeleton></Skeleton>;
+  }
 
   return (
     <div style={{ width: '100%' }}>
-      <Text mb={'md'}>{t('flight_info', 'Flight Information')}</Text>
       <form onSubmit={form.onSubmit(handleSubmission)}>
         <Group justify="space-between">
           <div>
@@ -88,15 +106,15 @@ export const FlightInfoProviderSettings = () => {
         <Collapse in={opened}>
           <Group mt={'sm'}>
             <Select
-              label={t(settingsKey, 'Flight Info Provider')}
+              label={t('flight_info_provider', 'Flight Info Provider')}
               description={t('flight_info_provider_desc', 'Select Flight Info Provider')}
+              miw={'200px'}
+              required
               data={[
                 { value: 'adsbdb', label: 'adsbdb.com' },
                 { value: 'flightaware', label: 'flightaware.com' },
               ]}
               key={form.key('provider')}
-              miw={'200px'}
-              required
               {...form.getInputProps('provider')}
             />
 
