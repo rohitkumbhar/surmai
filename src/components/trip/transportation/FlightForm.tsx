@@ -22,6 +22,7 @@ import { AirportSelect } from './AirportSelect.tsx';
 import { AirlineSelect } from './AirlineSelect.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { IconChairDirector, IconCodeCircle, IconPlane } from '@tabler/icons-react';
+import { useDebouncedCallback } from '@mantine/hooks';
 
 export const FlightForm = ({
   trip,
@@ -47,7 +48,11 @@ export const FlightForm = ({
   );
   const [airline, setAirline] = useState<Airline>(transportation?.metadata?.provider);
 
-  const loadFlightInfo = (f: UseFormReturnType<unknown>, flightNumber: string) => {
+  const _loadFlightInfo = (f: UseFormReturnType<unknown>, flightNumber: string) => {
+    if (!flightNumber || flightNumber === '' || flightNumber === transportation?.metadata?.flightNumber) {
+      return;
+    }
+
     getFlightRoute(flightNumber).then((route) => {
       const origin = route?.origin;
       const destination = route?.destination;
@@ -69,6 +74,10 @@ export const FlightForm = ({
       }
     });
   };
+
+  const getFlightInfo = useDebouncedCallback((f: UseFormReturnType<unknown>, flightNumber: string) => {
+    _loadFlightInfo(f, flightNumber);
+  }, 500);
 
   const form = useForm<FlightFormSchema>({
     mode: 'uncontrolled',
@@ -155,7 +164,7 @@ export const FlightForm = ({
             {...form.getInputProps('flightNumber')}
             onBlur={(ev) => {
               // @ts-expect-error it ok
-              loadFlightInfo(form, ev.target.value);
+              getFlightInfo(form, ev.target.value);
             }}
           />
 

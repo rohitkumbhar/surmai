@@ -1,0 +1,215 @@
+import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
+import { Box, Divider, Grid, Group, HoverCard, Modal, rem, Stack, Text, Title, Tooltip } from '@mantine/core';
+import { IconCar, IconInfoCircle } from '@tabler/icons-react';
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
+import { useTranslation } from 'react-i18next';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { DataLine } from '../DataLine.tsx';
+import { openConfirmModal } from '@mantine/modals';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { typeIcons } from './typeIcons.ts';
+import { formatDateTime } from '../../../lib/time.ts';
+import { showDeleteNotification } from '../../../lib/notifications.tsx';
+import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
+import { transportationConfig } from './config.tsx';
+import { FlightForm } from './FlightForm.tsx';
+
+export const FlightData = ({
+  trip,
+  transportation,
+  refetch,
+  tripAttachments,
+}: {
+  trip: Trip;
+  transportation: Transportation;
+  refetch: () => void;
+  tripAttachments?: Attachment[];
+}) => {
+  const { t } = useTranslation();
+  const isMobile = useMediaQuery('(max-width: 50em)');
+  const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
+
+  // @ts-expect-error Icon type
+  const TypeIcon = typeIcons[transportation.type] || IconCar;
+  const config =
+    transportation.type in transportationConfig
+      ? transportationConfig[transportation.type]
+      : transportationConfig['default'];
+
+  const transportationAttachments = tripAttachments?.filter((attachment) =>
+    transportation.attachmentReferences?.includes(attachment.id)
+  );
+
+  return (
+    <DataLine
+      onEdit={() => {
+        openFlightForm();
+      }}
+      onDelete={() => {
+        openConfirmModal({
+          title: t('delete_flight', 'Delete Flight'),
+          confirmProps: { color: 'red' },
+          children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
+          labels: {
+            confirm: t('delete', 'Delete'),
+            cancel: t('cancel', 'Cancel'),
+          },
+          onCancel: () => {},
+          onConfirm: () => {
+            deleteTransportation(transportation.id).then(() => {
+              showDeleteNotification({
+                title: t('transportation_section_name', 'Transportation'),
+                message: t('flight_deleted', 'Flight from {{origin}} to {{destination}} has been deleted', {
+                  origin: transportation.origin,
+                  destination: transportation.destination,
+                }),
+              });
+              refetch();
+            });
+          },
+        });
+      }}
+    >
+      <Modal
+        opened={flightFormOpened}
+        size="auto"
+        fullScreen={isMobile}
+        title={t('transportation_edit_flight', 'Edit Flight')}
+        onClose={closeFlightForm}
+      >
+        <FlightForm
+          transportation={transportation}
+          exitingAttachments={transportationAttachments}
+          trip={trip}
+          onSuccess={() => {
+            refetch();
+            closeFlightForm();
+          }}
+          onCancel={() => {
+            closeFlightForm();
+          }}
+        />
+      </Modal>
+      <Grid align={'top'} p={'xs'} grow={false}>
+        <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
+          <Box component="div" visibleFrom={'md'}>
+            <Tooltip label={t(`transportation_flight`, 'Flight')}>
+              <TypeIcon
+                size={'xs'}
+                stroke={0.5}
+                style={{
+                  color: 'var(--mantine-primary-color-6)',
+                  width: rem(50),
+                  height: rem(50),
+                }}
+              />
+            </Tooltip>
+          </Box>
+          <Box component="div" hiddenFrom={'md'}>
+            <Title size={'lg'}>{t(`transportation_flight`, 'Flight')}</Title>
+            <Divider mt={'5px'} />
+          </Box>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('transportation_from', 'From')}
+          </Text>
+          {!transportation.metadata.origin && <Text size="md">{transportation.origin}</Text>}
+          {transportation.metadata.origin && (
+            <HoverCard withArrow width={200} shadow="lg">
+              <HoverCard.Target>
+                <Group>
+                  <Text size="md">
+                    {transportation.origin}
+                    &nbsp;
+                    <IconInfoCircle size={12} />
+                  </Text>
+                </Group>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Stack>
+                  <Text size="md">{transportation.metadata.origin.name}</Text>
+                  <TimezoneInfo timezone={transportation.metadata.origin.timezone} />
+                </Stack>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          )}
+          <Text size="xs">{formatDateTime(transportation.departureTime)}</Text>
+          <Text size="xs">{transportation.metadata.originAddress}</Text>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('transportation_to', 'To')}
+          </Text>
+
+          {!transportation.metadata.destination && <Text size="md">{transportation.destination}</Text>}
+          {transportation.metadata.destination && (
+            <HoverCard withArrow width={200} shadow="md">
+              <HoverCard.Target>
+                <Group>
+                  <Text size="md">
+                    {transportation.destination}
+                    &nbsp;
+                    <IconInfoCircle size={12} />
+                  </Text>
+                </Group>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Stack>
+                  <Text size="md">{transportation.metadata.destination.name}</Text>
+                  <TimezoneInfo timezone={transportation.metadata.destination.timezone} />
+                </Stack>
+              </HoverCard.Dropdown>
+            </HoverCard>
+          )}
+          <Text size="xs">{formatDateTime(transportation.arrivalTime)}</Text>
+          <Text size="xs">{transportation.metadata.destinationAddress}</Text>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('flight_number', 'Flight Number')}
+          </Text>
+          <Group gap={1}>
+            <Text size="md">{transportation.metadata.flightNumber || 'Unknown'}</Text>
+          </Group>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {config.strings.providerLabel}
+          </Text>
+          <Group gap={1}>
+            <Text size="md">{transportation.metadata.provider?.name || transportation.metadata.provider}</Text>
+          </Group>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="sm" c={'dimmed'}>
+            {config.strings.reservationLabel}
+          </Text>
+          <Text size="md">{transportation.metadata.reservation || ''}</Text>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('seats', 'Seats')}
+          </Text>
+          <Text size="md">{transportation.metadata.seats || ''}</Text>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('cost', 'Cost')}
+          </Text>
+          <Text size="md">
+            {transportation.cost.value ? `${transportation.cost.value} ${transportation.cost.currency || ''}` : ''}
+          </Text>
+        </Grid.Col>
+      </Grid>
+      {transportationAttachments && (
+        <Attachments
+          onDelete={(attachmentId) =>
+            deleteTransportationAttachment(transportation.id, attachmentId).then(() => refetch())
+          }
+          attachments={transportationAttachments}
+        />
+      )}
+    </DataLine>
+  );
+};

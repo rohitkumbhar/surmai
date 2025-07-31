@@ -11,6 +11,7 @@ import { GenericTransportationModeForm } from './GenericTransportationModeForm.t
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { CarRentalForm } from './CarRentalForm.tsx';
 import { FlightForm } from './FlightForm.tsx';
+import { FlightData } from './FlightData.tsx';
 
 export const TransportationPanel = ({
   trip,
@@ -50,7 +51,7 @@ export const TransportationPanel = ({
   };
 
   return (
-    <Container py={'xs'} size="xl">
+    <Container p={'xs'} size="xl">
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
@@ -137,12 +138,7 @@ export const TransportationPanel = ({
           return (
             <Fragment key={t.id}>
               {t.type === 'flight' && (
-                <GenericTransportationData
-                  refetch={refetchData}
-                  tripAttachments={tripAttachments}
-                  trip={trip}
-                  transportation={t}
-                />
+                <FlightData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} transportation={t} />
               )}
               {t.type === 'rental_car' && (
                 <CarRentalData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} rental={t} />
