@@ -14,6 +14,7 @@ export const AirlineSelect = ({
   description,
   required,
   withAsterisk,
+  currentValue,
 }: {
   propName: string;
   form: UseFormReturnType<unknown>;
@@ -21,17 +22,14 @@ export const AirlineSelect = ({
   description: string;
   required: boolean;
   withAsterisk: boolean;
+  currentValue?: Airline;
 }) => {
   const { t } = useTranslation();
-  const currentValues = form.getValues();
   const [search, setSearch] = useDebouncedState('', 200);
   const [searchResults, setSearchResults] = useState<Airline[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const existingValue =
-    // @ts-expect-error its ok
-    currentValues && currentValues[propName] ? currentValues[propName].name || currentValues[propName] : undefined;
-  const [value, setValue] = useState<string | undefined>(existingValue);
+  const [value, setValue] = useState<string | Airline | undefined>(currentValue);
   const inputRef = useRef<HTMLInputElement>(null);
   const combobox = useCombobox();
 
@@ -102,10 +100,11 @@ export const AirlineSelect = ({
                 aria-label="Clear value"
               />
             ) : (
-              <IconPlane />
+              <IconPlane size={15} />
             )
           }
-          value={value}
+          // @ts-expect-error shh
+          value={currentValue ? currentValue.name : value?.name ? value.name : value}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();

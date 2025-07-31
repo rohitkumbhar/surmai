@@ -70,6 +70,8 @@ export {
   enableUserSignups,
   disableOAuth2Provider,
   sendUserAccountInvitation,
+  getSettingsForKey,
+  setSettingsForKey,
 } from './pocketbase/settings.ts';
 
 export { sendCollaborationInvitation, listInvitations, invitationAction } from './pocketbase/invitations.ts';
@@ -93,3 +95,5 @@ export {
 } from './pocketbase/lodgings.ts';
 
 export { getTripAttachments, deleteAttachment, uploadAttachments } from './pocketbase/attachments.ts';
+
+export { getFlightRoute, type FlightRoute } from './pocketbase/flights.ts';

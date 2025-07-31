@@ -50,3 +50,8 @@ export interface OAuthSettingsFormType {
   tokenURL?: string;
   userInfoURL?: string;
 }
+
+export type UserModel = {
+  createRule?: string;
+  oauth2?: OAuthSettings;
+};

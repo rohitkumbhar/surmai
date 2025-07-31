@@ -1,7 +1,7 @@
 import { pb, pbAdmin } from './pocketbase.ts';
 
 import { SmtpSettings } from '../../../types/settings.ts';
-import { OAuthSettingsFormType } from '../../../types/auth.ts';
+import { OAuthSettingsFormType, UserModel } from '../../../types/auth.ts';
 
 export const getSmtpSettings = async (): Promise<SmtpSettings | undefined> => {
   const settings = await pbAdmin.settings.getAll();
@@ -33,7 +33,7 @@ export const sendTestEmail = () => {
   return pbAdmin.settings.testEmail('_superusers', email, 'verification');
 };
 
-export const getUsersMetadata = () => {
+export const getUsersMetadata = (): Promise<UserModel> => {
   return pbAdmin.collections.getOne('users');
 };
 
@@ -115,4 +115,27 @@ export const sendUserAccountInvitation = (email: string, message: string) => {
     method: 'POST',
     body: { email: email, message: message },
   });
+};
+
+export const getSettingsForKey = <T>(key: string): Promise<T> => {
+  return pbAdmin
+    .collection('surmai_settings')
+    .getOne(key)
+    .then((settings) => {
+      return settings.value;
+    })
+    .catch(() => {
+      return Promise.resolve();
+    });
+};
+
+export const setSettingsForKey = (key: string, value: any) => {
+  return pbAdmin
+    .collection('surmai_settings')
+    .update(key, {
+      value,
+    })
+    .catch(() => {
+      return Promise.resolve();
+    });
 };

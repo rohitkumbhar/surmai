@@ -10,10 +10,11 @@ import { currencyCodes } from '../util/currencyCodes.ts';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 export const UserSettingsForm = () => {
   const { user, reloadUser } = useCurrentUser();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const appCtx = useSurmaiContext();
 
@@ -38,10 +39,17 @@ export const UserSettingsForm = () => {
         currencyCode: values.currencyCode,
         timezone: values.timezone,
         mapsProvider: values.mapsProvider,
-      }).then(() => {
-        appCtx.changeColor?.(values.colorScheme);
-        reloadUser?.();
-      });
+      })
+        .then(() => {
+          appCtx.changeColor?.(values.colorScheme);
+          reloadUser?.();
+        })
+        .then(() => {
+          showSaveSuccessNotification({
+            title: i18n.t('user_profile', 'User Profile'),
+            message: i18n.t('user_settings_updated', 'User Setting updated'),
+          });
+        });
     }
   };
 
@@ -101,7 +109,6 @@ export const UserSettingsForm = () => {
           ]}
           key={form.key('mapsProvider')}
           {...form.getInputProps('mapsProvider')}
-          searchable
           withCheckIcon={false}
         ></Select>
 

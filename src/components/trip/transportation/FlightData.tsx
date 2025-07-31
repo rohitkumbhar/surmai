@@ -7,7 +7,6 @@ import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
 import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { typeIcons } from './typeIcons.ts';
 import { formatDateTime } from '../../../lib/time.ts';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
@@ -15,7 +14,7 @@ import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { transportationConfig } from './config.tsx';
 import { FlightForm } from './FlightForm.tsx';
 
-export const GenericTransportationData = ({
+export const FlightData = ({
   trip,
   transportation,
   refetch,
@@ -28,7 +27,6 @@ export const GenericTransportationData = ({
 }) => {
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
-  const [opened, { open, close }] = useDisclosure(false);
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
 
   // @ts-expect-error Icon type
@@ -45,15 +43,11 @@ export const GenericTransportationData = ({
   return (
     <DataLine
       onEdit={() => {
-        if (transportation.type === 'flight') {
-          openFlightForm();
-        } else {
-          open();
-        }
+        openFlightForm();
       }}
       onDelete={() => {
         openConfirmModal({
-          title: t('delete_transportation', 'Delete Transportation'),
+          title: t('delete_flight', 'Delete Flight'),
           confirmProps: { color: 'red' },
           children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
           labels: {
@@ -65,14 +59,10 @@ export const GenericTransportationData = ({
             deleteTransportation(transportation.id).then(() => {
               showDeleteNotification({
                 title: t('transportation_section_name', 'Transportation'),
-                message: t(
-                  'transportation_deleted',
-                  'Transportation from {{origin}} to {{destination}} has been deleted',
-                  {
-                    origin: transportation.origin,
-                    destination: transportation.destination,
-                  }
-                ),
+                message: t('flight_deleted', 'Flight from {{origin}} to {{destination}} has been deleted', {
+                  origin: transportation.origin,
+                  destination: transportation.destination,
+                }),
               });
               refetch();
             });
@@ -80,27 +70,6 @@ export const GenericTransportationData = ({
         });
       }}
     >
-      <Modal
-        opened={opened}
-        size="auto"
-        fullScreen={isMobile}
-        title={t('transportation_edit_' + transportation.type, 'Edit Transportation')}
-        onClose={close}
-      >
-        <GenericTransportationModeForm
-          transportationType={transportation.type}
-          transportation={transportation}
-          exitingAttachments={transportationAttachments}
-          trip={trip}
-          onSuccess={() => {
-            refetch();
-            close();
-          }}
-          onCancel={() => {
-            close();
-          }}
-        />
-      </Modal>
       <Modal
         opened={flightFormOpened}
         size="auto"
@@ -124,7 +93,7 @@ export const GenericTransportationData = ({
       <Grid align={'top'} p={'xs'} grow={false}>
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
-            <Tooltip label={t(`transportation_${transportation.type}`, `${transportation.type}`)}>
+            <Tooltip label={t(`transportation_flight`, 'Flight')}>
               <TypeIcon
                 size={'xs'}
                 stroke={0.5}
@@ -137,12 +106,11 @@ export const GenericTransportationData = ({
             </Tooltip>
           </Box>
           <Box component="div" hiddenFrom={'md'}>
-            <Title size={'lg'}>{t(`transportation_${transportation.type}`, `${transportation.type}`)}</Title>
+            <Title size={'lg'}>{t(`transportation_flight`, 'Flight')}</Title>
             <Divider mt={'5px'} />
           </Box>
         </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
             {t('transportation_from', 'From')}
           </Text>
@@ -169,8 +137,7 @@ export const GenericTransportationData = ({
           <Text size="xs">{formatDateTime(transportation.departureTime)}</Text>
           <Text size="xs">{transportation.metadata.originAddress}</Text>
         </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2.5 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
             {t('transportation_to', 'To')}
           </Text>
@@ -198,8 +165,15 @@ export const GenericTransportationData = ({
           <Text size="xs">{formatDateTime(transportation.arrivalTime)}</Text>
           <Text size="xs">{transportation.metadata.destinationAddress}</Text>
         </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('flight_number', 'Flight Number')}
+          </Text>
+          <Group gap={1}>
+            <Text size="md">{transportation.metadata.flightNumber || 'Unknown'}</Text>
+          </Group>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
             {config.strings.providerLabel}
           </Text>
@@ -207,14 +181,19 @@ export const GenericTransportationData = ({
             <Text size="md">{transportation.metadata.provider?.name || transportation.metadata.provider}</Text>
           </Group>
         </Grid.Col>
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="sm" c={'dimmed'}>
             {config.strings.reservationLabel}
           </Text>
           <Text size="md">{transportation.metadata.reservation || ''}</Text>
         </Grid.Col>
-
-        <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
+          <Text size="xs" c={'dimmed'}>
+            {t('seats', 'Seats')}
+          </Text>
+          <Text size="md">{transportation.metadata.seats || ''}</Text>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>

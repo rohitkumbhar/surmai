@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { CarRentalForm } from './CarRentalForm.tsx';
+import { FlightForm } from './FlightForm.tsx';
+import { FlightData } from './FlightData.tsx';
 
 export const TransportationPanel = ({
   trip,
@@ -23,6 +25,8 @@ export const TransportationPanel = ({
   const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const [carRentalFormOpened, { open: openRentalForm, close: closeRentalForm }] = useDisclosure(false);
+  const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
+
   const [newTransportationType, setNewTransportationType] = useState<string>('flight');
   const isMobile = useMediaQuery('(max-width: 50em)');
   const tripId = trip.id;
@@ -47,7 +51,7 @@ export const TransportationPanel = ({
   };
 
   return (
-    <Container py={'xs'} size="xl">
+    <Container p={'xs'} size="xl">
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
@@ -65,6 +69,26 @@ export const TransportationPanel = ({
           }}
           onCancel={() => {
             closeForm();
+          }}
+        />
+      </Modal>
+
+      <Modal
+        opened={flightFormOpened}
+        fullScreen={isMobile}
+        size="auto"
+        title={t('transportation_add_new_flight', 'Add new flight')}
+        onClose={() => {
+          closeForm();
+        }}
+      >
+        <FlightForm
+          trip={trip}
+          onSuccess={() => {
+            refetchData().then(() => closeFlightForm());
+          }}
+          onCancel={() => {
+            closeFlightForm();
           }}
         />
       </Modal>
@@ -94,6 +118,8 @@ export const TransportationPanel = ({
           onClick={(type) => {
             if (type === 'car_rental') {
               openRentalForm();
+            } else if (type === 'flight') {
+              openFlightForm();
             } else {
               setNewTransportationType(type);
               openForm();
@@ -112,12 +138,7 @@ export const TransportationPanel = ({
           return (
             <Fragment key={t.id}>
               {t.type === 'flight' && (
-                <GenericTransportationData
-                  refetch={refetchData}
-                  tripAttachments={tripAttachments}
-                  trip={trip}
-                  transportation={t}
-                />
+                <FlightData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} transportation={t} />
               )}
               {t.type === 'rental_car' && (
                 <CarRentalData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} rental={t} />

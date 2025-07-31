@@ -1,32 +1,36 @@
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import {
+  Airline,
+  Airport,
   Attachment,
   CreateTransportation,
+  FlightFormSchema,
   Transportation,
-  TransportationFormSchema,
   Trip,
 } from '../../../types/trips.ts';
 import { useForm, UseFormReturnType } from '@mantine/form';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
+import { createTransportationEntry, getFlightRoute, uploadAttachments } from '../../../lib/api';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import dayjs from 'dayjs';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
-import { PlaceSelect } from '../../places/PlaceSelect.tsx';
+import i18n from '../../../lib/i18n.ts';
+import { AirportSelect } from './AirportSelect.tsx';
+import { AirlineSelect } from './AirlineSelect.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
+import { IconChairDirector, IconCodeCircle, IconPlane } from '@tabler/icons-react';
+import { useDebouncedCallback } from '@mantine/hooks';
 
-export const GenericTransportationModeForm = ({
-  transportationType,
+export const FlightForm = ({
   trip,
   transportation,
   onSuccess,
   onCancel,
   exitingAttachments,
 }: {
-  transportationType: string;
   trip: Trip;
   transportation?: Transportation;
   onSuccess: () => void;
@@ -38,7 +42,44 @@ export const GenericTransportationModeForm = ({
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
 
-  const form = useForm<TransportationFormSchema>({
+  const [origin, setOrigin] = useState<Airport>(transportation?.metadata?.origin || transportation?.origin);
+  const [destination, setDestination] = useState<Airport>(
+    transportation?.metadata?.destination || transportation?.destination
+  );
+  const [airline, setAirline] = useState<Airline>(transportation?.metadata?.provider);
+
+  const _loadFlightInfo = (f: UseFormReturnType<unknown>, flightNumber: string) => {
+    if (!flightNumber || flightNumber === '' || flightNumber === transportation?.metadata?.flightNumber) {
+      return;
+    }
+
+    getFlightRoute(flightNumber).then((route) => {
+      const origin = route?.origin;
+      const destination = route?.destination;
+      const airline = route?.airline;
+
+      if (origin) {
+        f.setFieldValue('origin', origin);
+        setOrigin(origin);
+      }
+
+      if (destination) {
+        f.setFieldValue('destination', destination);
+        setDestination(destination);
+      }
+
+      if (airline) {
+        f.setFieldValue('provider', airline);
+        setAirline(airline);
+      }
+    });
+  };
+
+  const getFlightInfo = useDebouncedCallback((f: UseFormReturnType<unknown>, flightNumber: string) => {
+    _loadFlightInfo(f, flightNumber);
+  }, 500);
+
+  const form = useForm<FlightFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
       origin: transportation?.metadata?.origin || transportation?.origin,
@@ -49,8 +90,8 @@ export const GenericTransportationModeForm = ({
       reservation: transportation?.metadata?.reservation,
       cost: transportation?.cost?.value,
       currencyCode: transportation?.cost?.currency || user?.currencyCode || 'USD',
-      originAddress: transportation?.metadata?.originAddress || '',
-      destinationAddress: transportation?.metadata?.destinationAddress || '',
+      flightNumber: transportation?.metadata?.flightNumber || '',
+      seats: transportation?.metadata?.seats || '',
     },
     validate: {},
   });
@@ -59,9 +100,9 @@ export const GenericTransportationModeForm = ({
   const handleFormSubmit = (values) => {
     setSaving(true);
     const payload: CreateTransportation = {
-      type: transportationType,
-      origin: values.origin.name || values.origin,
-      destination: values.destination.name || values.destination,
+      type: 'flight',
+      origin: values.origin.iataCode || values.origin,
+      destination: values.destination.iataCode || values.destination,
       cost: {
         value: values.cost,
         currency: values.currencyCode,
@@ -74,8 +115,8 @@ export const GenericTransportationModeForm = ({
         reservation: values.reservation,
         origin: values.origin,
         destination: values.destination,
-        originAddress: values.originAddress,
-        destinationAddress: values.destinationAddress,
+        flightNumber: values.flightNumber,
+        seats: values.seats,
       },
     };
 
@@ -114,30 +155,45 @@ export const GenericTransportationModeForm = ({
     <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
       <Stack>
         <Group>
-          <PlaceSelect
-            form={form as UseFormReturnType<unknown>}
-            propName={'origin'}
-            presetDestinations={trip.destinations || []}
-            label={t('transportation_from', 'From')}
-            description={t('origin_place', 'Origin Place')}
-            key={form.key('origin')}
-            {...form.getInputProps('origin')}
-          />
           <TextInput
-            name={'originAddress'}
-            label={t('address', 'Address')}
-            data-testid={'originAddress'}
-            description={t('origin_address', 'Address of the car port, bus station etc.')}
-            required
-            key={form.key('originAddress')}
-            {...form.getInputProps('originAddress')}
+            name={'flightNumber'}
+            label={t('transportation_flight_number', 'Flight NUmber')}
+            key={form.key('flightNumber')}
+            rightSection={<IconPlane size={15} />}
+            description={t('flight_number_desc', 'Flight Number')}
+            {...form.getInputProps('flightNumber')}
+            onBlur={(ev) => {
+              // @ts-expect-error it ok
+              getFlightInfo(form, ev.target.value);
+            }}
+          />
+
+          <TextInput
+            name={'reservation'}
+            label={t('transportation_confirmation_code', 'Confirmation Code')}
+            key={form.key('reservation')}
+            description={t('reservation_desc', 'Ticket Id, Confirmation code etc')}
+            {...form.getInputProps('reservation')}
+            rightSection={<IconCodeCircle size={15} />}
+          />
+        </Group>
+        <Group>
+          <AirportSelect
+            form={form as unknown as UseFormReturnType<unknown>}
+            propName={'origin'}
+            label={i18n.t('transportation_from', 'From')}
+            description={i18n.t('airport_from_desc', 'Departure Airport')}
+            required={true}
+            withAsterisk={true}
+            currentValue={origin}
           />
 
           <DateTimePicker
+            highlightToday
             valueFormat="lll"
             name={'departureTime'}
             description={t('departure_time_desc', 'Departure date and time')}
-            miw={rem('200px')}
+            miw={rem('280px')}
             label={t('transportation_departure_time', 'Departure')}
             clearable
             required
@@ -153,23 +209,14 @@ export const GenericTransportationModeForm = ({
           />
         </Group>
         <Group>
-          <PlaceSelect
-            form={form as UseFormReturnType<unknown>}
+          <AirportSelect
+            form={form as unknown as UseFormReturnType<unknown>}
             propName={'destination'}
-            presetDestinations={trip.destinations || []}
-            label={t('transportation_to', 'To')}
-            description={t('destination_place', 'Destination Place')}
-            key={form.key('destination')}
-            {...form.getInputProps('destination')}
-          />
-          <TextInput
-            name={'destinationAddress'}
-            label={t('address', 'Address')}
-            data-testid={'destinationAddress'}
-            description={t('destination_address', 'Address of the car port, bus station etc.')}
-            required
-            key={form.key('destinationAddress')}
-            {...form.getInputProps('destinationAddress')}
+            label={i18n.t('transportation_to', 'To')}
+            description={i18n.t('airport_to_desc', 'Arrival Airport')}
+            required={true}
+            withAsterisk={true}
+            currentValue={destination}
           />
           <DateTimePicker
             valueFormat="lll"
@@ -177,7 +224,7 @@ export const GenericTransportationModeForm = ({
             label={t('transportation_arrival_time', 'Arrival')}
             description={t('arrival_time_desc', 'Arrival date and time')}
             required
-            miw={rem('200px')}
+            miw={rem('280px')}
             defaultDate={trip.startDate}
             minDate={trip.startDate}
             maxDate={dayjs(trip.endDate).endOf('day').toDate()}
@@ -191,20 +238,23 @@ export const GenericTransportationModeForm = ({
           />
         </Group>
         <Group>
-          <TextInput
-            name={'provider'}
-            label={t('transportation_provider', 'Provider')}
-            description={t('transportation_provider_desc', 'Service provider. Bus/Ferry Company etc')}
-            required
-            key={form.key('provider')}
-            {...form.getInputProps('provider')}
+          <AirlineSelect
+            form={form as unknown as UseFormReturnType<unknown>}
+            propName={'provider'}
+            label={t('transportation_airline', 'Airline')}
+            description={t('airline_desc', 'Select an Airline')}
+            required={true}
+            withAsterisk={true}
+            currentValue={airline}
           />
+
           <TextInput
-            name={'reservation'}
-            label={t('transportation_reservation', 'Reservation')}
-            key={form.key('reservation')}
-            description={t('reservation_desc', 'Ticket Id, Confirmation code etc')}
-            {...form.getInputProps('reservation')}
+            name={'seats'}
+            label={t('seats', 'Seats')}
+            key={form.key('seats')}
+            description={t('seats_desc', 'Reserved seats, if any')}
+            rightSection={<IconChairDirector size={15} />}
+            {...form.getInputProps('seats')}
           />
         </Group>
         <Group>

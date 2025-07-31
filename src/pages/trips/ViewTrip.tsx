@@ -18,6 +18,7 @@ import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 import { TripAttachments } from '../../components/trip/attachments/TripAttachments.tsx';
+import './ViewTrip.module.css';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');

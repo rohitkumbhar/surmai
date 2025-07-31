@@ -8,6 +8,7 @@ export const CurrencyInput = ({
   currencyCodeProps,
   label,
   description,
+  maxWidth = 280,
 }: {
   currencyCodeKey: string;
   costKey: string;
@@ -15,6 +16,7 @@ export const CurrencyInput = ({
   currencyCodeProps: any;
   label: string;
   description: string;
+  maxWidth?: number;
 }) => {
   const select = (
     <Select
@@ -53,6 +55,7 @@ export const CurrencyInput = ({
       allowDecimal={true}
       allowLeadingZeros={false}
       decimalScale={2}
+      maw={rem(maxWidth)}
       {...costProps}
     />
   );
