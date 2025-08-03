@@ -24,3 +24,4 @@ dist-ssr
 test-results
 backend/pb_data
 backend/pb_test_data
+.env.local
