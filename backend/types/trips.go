@@ -2,6 +2,12 @@ package types
 
 import "github.com/pocketbase/pocketbase/tools/types"
 
+type VersionInfo struct {
+	Tag    string `json:"tag"`
+	Commit string `json:"commit"`
+	Dirty  bool   `json:"dirty"`
+}
+
 type UploadedFile struct {
 	Id          string `json:"id"`
 	FileName    string `json:"fileName"`

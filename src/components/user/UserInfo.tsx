@@ -7,11 +7,13 @@ import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Invitation } from '../../types/invitations.ts';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 
 export const UserInfo = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { t } = useTranslation();
+  const { version } = useSurmaiContext();
 
   const { data: invitations } = useQuery<Invitation[]>({
     queryKey: ['listInvitations'],
@@ -61,11 +63,11 @@ export const UserInfo = () => {
         >
           {t('logout', 'Logout')}
         </Menu.Item>
-        {import.meta.env.PACKAGE_VERSION && (
+        {version && (
           <>
             <Menu.Divider />
             <Menu.Item>
-              <Text size={'xs'} c={'dimmed'}>{`Version ${import.meta.env.PACKAGE_VERSION}`}</Text>
+              <Text size={'xs'} c={'dimmed'}>{`Version ${version.tag}${version.dirty ? '*' : ''}`}</Text>
             </Menu.Item>
           </>
         )}
