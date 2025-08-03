@@ -21,6 +21,7 @@ func main() {
 		}),
 		DemoMode:   os.Getenv("SURMAI_DEMO_MODE") == "true",
 		AdminEmail: os.Getenv("SURMAI_ADMIN_EMAIL"),
+		Version:    GetRevisionInfo(),
 	}
 
 	surmai.BuildTimezoneFinder()

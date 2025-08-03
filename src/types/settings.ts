@@ -1,3 +1,5 @@
+import { VersionInfo } from '../app/versionInfo.ts';
+
 export type SmtpSettings = {
   enabled?: boolean;
   host?: string;
@@ -17,4 +19,5 @@ export type SiteSettings = {
   emailEnabled: boolean;
   signupsEnabled: boolean;
   offline: boolean;
+  version: VersionInfo;
 };

@@ -37,7 +37,13 @@ fetch(`${apiUrl}/site-settings.json`, { signal: AbortSignal.timeout(2000) })
   .catch((error) => {
     // We still need the app in offline mode
     console.log('Could not load site settings', error);
-    launchApp({ demoMode: false, emailEnabled: false, signupsEnabled: false, offline: true });
+    launchApp({
+      demoMode: false,
+      emailEnabled: false,
+      signupsEnabled: false,
+      offline: true,
+      version: { tag: 'dev' },
+    });
   });
 
 const launchApp = (settings: SiteSettings) => {

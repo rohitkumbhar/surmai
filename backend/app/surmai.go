@@ -5,6 +5,7 @@ import (
 	"backend/jobs"
 	"backend/middleware"
 	R "backend/routes"
+	"backend/types"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
@@ -17,6 +18,7 @@ type SurmaiApp struct {
 	Pb             *pocketbase.PocketBase
 	DemoMode       bool
 	AdminEmail     string
+	Version        types.VersionInfo
 	TimezoneFinder tzf.F
 }
 
@@ -65,7 +67,7 @@ func (surmai *SurmaiApp) BindRoutes() {
 
 		// Public routes
 		se.Router.GET("/site-settings.json", func(e *core.RequestEvent) error {
-			return R.SiteSettings(e, surmai.DemoMode)
+			return R.SiteSettings(e, surmai.DemoMode, surmai.Version)
 		}).Bind()
 
 		// serves static files from the provided public dir (if exists)
