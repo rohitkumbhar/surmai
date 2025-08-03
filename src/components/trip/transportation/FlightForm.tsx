@@ -157,10 +157,10 @@ export const FlightForm = ({
         <Group>
           <TextInput
             name={'flightNumber'}
-            label={t('transportation_flight_number', 'Flight NUmber')}
+            label={t('transportation_flight_number', 'Flight Number')}
             key={form.key('flightNumber')}
             rightSection={<IconPlane size={15} />}
-            description={t('flight_number_desc', 'Flight Number')}
+            description={t('flight_number_desc', 'ICAO Flight Designation')}
             {...form.getInputProps('flightNumber')}
             onBlur={(ev) => {
               // @ts-expect-error it ok
