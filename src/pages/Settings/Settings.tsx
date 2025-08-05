@@ -12,7 +12,7 @@ import { UserList } from '../../components/settings/UserList.tsx';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
 
-export const Settings = () => {
+const Settings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   usePageTitle(t('site_settings', 'Site Settings'));
@@ -70,3 +70,5 @@ export const Settings = () => {
     </Container>
   );
 };
+
+export default Settings;
