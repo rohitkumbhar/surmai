@@ -107,13 +107,7 @@ export const saveTripNotes = (tripId: string, notes: string): Promise<Trip> => {
 };
 
 export const loadEverything = (tripId: string) => {
-  return import('pdfjs-dist/build/pdf.worker.mjs?url')
-    .then((pdfjsWorker) => {
-      return fetch(pdfjsWorker.default);
-    })
-    .then(() => {
-      return getTrip(tripId);
-    })
+  return getTrip(tripId)
     .then(() => {
       return getTripAttachments(tripId);
     })

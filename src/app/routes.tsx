@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { SecureRoute } from '../auth/SecureRoute.tsx';
 import App from '../App.tsx';
 import { MyTrips } from '../pages/trips/MyTrips.tsx';
-import { Settings } from '../pages/Settings/Settings.tsx';
+// import { Settings } from '../pages/Settings/Settings.tsx';
 import { TripsContainer } from '../pages/trips/TripsContainer.tsx';
 import { CreateNewTrip } from '../pages/trips/CreateNewTrip.tsx';
 import { ViewTrip } from '../pages/trips/ViewTrip.tsx';
@@ -10,6 +10,10 @@ import { SignIn } from '../pages/SignIn/SignIn.tsx';
 import { SignUp } from '../pages/SignUp/SignUp.tsx';
 import { UserProfile } from '../pages/UserProfile/UserProfile.tsx';
 import { Invitations } from '../pages/Invitations/Invitations.tsx';
+import { lazy } from 'react';
+
+const Settings = lazy(() => import('../pages/Settings/Settings.tsx'));
+
 
 export const buildRouter = () => {
   return createBrowserRouter([
