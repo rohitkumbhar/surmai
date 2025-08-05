@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --cors",
-    "site": "vite -c vite.site.config.ts --host 0.0.0.0 --port 2030 --cors",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/icons/logo.svg",
     "build": "tsc -b && vite build",
     "build-site": "vite build -c vite.site.config.ts --emptyOutDir && cp public/icons/* docs/assets/",
