@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/app"
+	"backend/cache"
 	_ "backend/migrations"
 	"github.com/pocketbase/pocketbase"
 	"log"
@@ -24,6 +25,7 @@ func main() {
 		Version:    GetRevisionInfo(),
 	}
 
+	cache.InitCache()
 	surmai.BuildTimezoneFinder()
 	surmai.BindMigrations(isGoRun)
 	surmai.BindRoutes()
