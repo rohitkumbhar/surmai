@@ -45,7 +45,7 @@ func GetFlightRoute(e *core.RequestEvent, finder tzf.F) error {
 
 	if config.Provider == "flightaware" {
 		flightsDataProvider = flightaware.FlightAware{}
-	} else if config.Provider == "adsdb" {
+	} else if config.Provider == "adsbdb" {
 		flightsDataProvider = adsdb.AdsbDbCom{}
 	} else {
 		return e.JSON(http.StatusNotFound, "")
