@@ -6,6 +6,7 @@ toolchain go1.24.0
 
 require (
 	github.com/arran4/golang-ical v0.3.2
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	github.com/pocketbase/dbx v1.11.0
 	github.com/pocketbase/pocketbase v0.28.3
 	github.com/ringsaturn/tzf v1.0.0
