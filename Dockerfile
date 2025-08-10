@@ -33,17 +33,23 @@ RUN go mod download
 COPY backend .
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o surmai-backend
 
+FROM --platform=$BUILDPLATFORM golang:1.24.1-alpine3.21 AS litestream
+ADD https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz /tmp/litestream.tar.gz
+RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
 
 FROM alpine:3.21
 
 RUN apk add --no-cache tzdata
 
 COPY backend/init.sh /pb/init.sh
+COPY backend/litestream-init.sh /pb/litestream-init.sh
 COPY backend/datasets /datasets
 COPY --from=frontend /surmai/dist /pb_public
 COPY --from=backend /build/surmai-backend /pb/surmai-backend
+COPY --from=litestream /usr/local/bin/litestream /usr/local/bin/litestream
+COPY litestream.yaml /etc/litestream.yml
 
 EXPOSE 8080
 
 # start PocketBase
-CMD ["/pb/init.sh"]
+CMD ["/pb/litestream-init.sh"]
