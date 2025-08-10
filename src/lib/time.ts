@@ -10,7 +10,7 @@ export const calculateTimezoneDifference = (user: User | undefined, timezone: st
 };
 
 export const formatDate = (_locale: string, input: string) => {
-  return dayjs(input).format('LL');
+  return dayjs(input).format('ll');
 };
 
 export const formatTime = (input: string) => {
@@ -18,7 +18,7 @@ export const formatTime = (input: string) => {
 };
 
 export const formatDateTime = (input: string) => {
-  return dayjs(input).format('LL LT');
+  return dayjs(input).format('ll LT');
 };
 
 /*
