@@ -1,0 +1,6 @@
+dbs:
+  - path: ${PB_DATA_DIRECTORY}/data.db
+    replicas:
+      - url: ${SURMAI_DB_BKP_BUCKET_URL}
+        access-key-id: ${SURMAI_DB_BKP_ACCESS_KEY_ID}
+        secret-access-key: ${SURMAI_DB_BKP_ACCESS_KEY_SECRET}

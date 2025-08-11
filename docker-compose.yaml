@@ -14,4 +14,10 @@ services:
       SURMAI_ADMIN_EMAIL: admin@example.com # Add your default administrator email
       SURMAI_ADMIN_PASSWORD: ChangeMe123#@! # Admin password. Min 9 characters with all the fixings
       PB_DATA_DIRECTORY: /pb_data # Must match volume directory above
-    # SURMAI_DEMO_MODE: true # Enable Demo mode
+#     SURMAI_DEMO_MODE: true # Enable Demo mode
+
+#     Optional environment variables are used by
+#     Litestream replication to s3 (-compatible) storage
+#     SURMAI_DB_BKP_BUCKET_URL: s3://bucket.endpoint.url/folder
+#     SURMAI_DB_BKP_ACCESS_KEY_ID: s3_access_key_id
+#     SURMAI_DB_BKP_ACCESS_KEY_SECRET: s3_access_key_secret
