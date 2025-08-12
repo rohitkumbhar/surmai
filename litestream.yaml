@@ -2,7 +2,8 @@ dbs:
   - path: ${PB_DATA_DIRECTORY}/data.db
     replicas:
       - type: s3
-        bucket: ${SURMAI_DB_BKP_BUCKET_NAME} 
+        bucket: ${SURMAI_DB_BKP_BUCKET_NAME}
+        path: ${SURMAI_DB_BKP_BUCKET_PATH}
         endpoint: ${SURMAI_DB_BKP_ENDPOINT_URL}
         access-key-id: ${SURMAI_DB_BKP_ACCESS_KEY_ID}
         secret-access-key: ${SURMAI_DB_BKP_ACCESS_KEY_SECRET}
