@@ -85,7 +85,7 @@ const AccountInvitationEmail = `
 </head>
 <body>
 <p>Hello,</p>
-<p>{You have been invited to create an account on Surmai"</p>
+<p>You have been invited to create an account on Surmai</p>
 <p>Invitation Message:</p>
 <p style="border:1px solid #ccc; padding: 5px 5px 5px 5px"> {{ .invitationMessage }}</p>
 <p>Create an account using this <a href="{{ .applicationUrl }}/register?code={{ .invitationCode }}" target="_blank">sign up link</a></p>
