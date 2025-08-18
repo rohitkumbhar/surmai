@@ -1,4 +1,4 @@
-import { Alert, AppShell, Box, Burger, Container, Group, rem, Text } from '@mantine/core';
+import { Alert, Anchor, AppShell, Box, Burger, Container, Group, rem, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Outlet } from 'react-router-dom';
 import { Navbar } from './components/nav/Navbar.tsx';
@@ -54,7 +54,7 @@ function App() {
       <AppShell.Main>
         <ErrorBoundary FallbackComponent={Error}>
           {demoMode && (
-            <Container>
+            <Container size={'xl'}>
               <Alert variant="light" title={t('demo_instance', 'Demo Instance')} icon={<IconInfoCircle />} mb="sm">
                 <Text>
                   This is a demo instance which gets resets every hour. If you end up creating a trip that you would
@@ -66,6 +66,19 @@ function App() {
           <Outlet />
         </ErrorBoundary>
       </AppShell.Main>
+      <AppShell.Footer>
+        <Container size={'xl'}>
+          <Group h={'xl'} justify={'flex-end'}>
+            <Anchor href={'https://surmai.app/documentation'} target={'_blank'}>
+              {t('documentation', 'Documentation')}
+            </Anchor>{' '}
+            |
+            <Anchor href={'https://surmai.app/documentation/about.html'} target={'_blank'}>
+              {t('about_surmai', 'About Surmai')}
+            </Anchor>
+          </Group>
+        </Container>
+      </AppShell.Footer>
     </AppShell>
   );
 }

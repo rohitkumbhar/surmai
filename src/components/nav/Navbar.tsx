@@ -1,4 +1,4 @@
-import { Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
+import { Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import { IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
 import classes from './Navbar.module.css';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -61,7 +61,9 @@ export function Navbar({ close }: NavbarProps) {
   return (
     <nav className={classes.navbar} ref={ref}>
       <Center>
-        <FishOne size={30} />
+        <Anchor href={'https://surmai.app'} target={'_blank'}>
+          <FishOne size={30} />
+        </Anchor>
       </Center>
       <div className={classes.navbarMain}>
         <Stack justify="center" gap={0}>
