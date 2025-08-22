@@ -19,6 +19,7 @@ import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 import { TripAttachments } from '../../components/trip/attachments/TripAttachments.tsx';
 import './ViewTrip.module.css';
+import { ItineraryTimeline } from '../../components/trip/itinerary/ItineraryTimeline.tsx';
 
 export const ViewTrip = () => {
   const [docTitle, setDocTitle] = useState('Trip Details');
@@ -262,7 +263,8 @@ export const ViewTrip = () => {
           </Accordion>
         </Tabs.Panel>
         <Tabs.Panel value="itinerary">
-          <ItineraryView trip={trip} />
+          {/*<ItineraryView trip={trip} />*/}
+          <ItineraryTimeline trip={trip} />
         </Tabs.Panel>
         <Tabs.Panel value="attachments">
           <TripAttachments
