@@ -1,6 +1,5 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { CloseButton, Combobox, Group, InputBase, ScrollArea, Text, useCombobox } from '@mantine/core';
-import { useDebouncedState } from '@mantine/hooks';
 import { searchAirports } from '../../../lib/api';
 import { UseFormReturnType } from '@mantine/form';
 import { Airport } from '../../../types/trips';
@@ -64,7 +63,9 @@ export const AirportSelect = ({
       const selection = searchResults.find((item) => item.id === val);
       if (selection) {
         setValue(selection.iataCode);
-        inputRef.current.value = selection.iataCode
+        if (inputRef.current) {
+          inputRef.current.value = selection.iataCode as string;
+        }
         form.setFieldValue(propName, {
           iataCode: selection.iataCode,
           name: selection.name,
