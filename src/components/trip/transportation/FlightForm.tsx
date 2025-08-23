@@ -183,8 +183,6 @@ export const FlightForm = ({
             propName={'origin'}
             label={i18n.t('transportation_from', 'From')}
             description={i18n.t('airport_from_desc', 'Departure Airport')}
-            required={true}
-            withAsterisk={true}
             currentValue={origin}
           />
 
@@ -214,8 +212,6 @@ export const FlightForm = ({
             propName={'destination'}
             label={i18n.t('transportation_to', 'To')}
             description={i18n.t('airport_to_desc', 'Arrival Airport')}
-            required={true}
-            withAsterisk={true}
             currentValue={destination}
           />
           <DateTimePicker
