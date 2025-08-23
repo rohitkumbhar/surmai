@@ -11,21 +11,21 @@ export const AirportSelect = ({
   propName,
   form,
   label,
-  required,
+  required = true,
   description,
-  withAsterisk,
+  withAsterisk = true,
   currentValue,
 }: {
   propName: string;
   form: UseFormReturnType<unknown>;
   label: string;
   description: string;
-  required: boolean;
-  withAsterisk: boolean;
+  required?: boolean;
+  withAsterisk?: boolean;
   currentValue?: Airport;
 }) => {
   const { t } = useTranslation();
-  const [search, setSearch] = useDebouncedState('', 200);
+  const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const [value, setValue] = useState<string | Airport | undefined>(undefined);
@@ -64,6 +64,7 @@ export const AirportSelect = ({
       const selection = searchResults.find((item) => item.id === val);
       if (selection) {
         setValue(selection.iataCode);
+        inputRef.current.value = selection.iataCode
         form.setFieldValue(propName, {
           iataCode: selection.iataCode,
           name: selection.name,
@@ -110,10 +111,11 @@ export const AirportSelect = ({
             )
           }
           // @ts-expect-error its ok
-          value={currentValue ? currentValue.iataCode : value?.iataCode || value}
+          defaultValue={currentValue ? currentValue.iataCode : value?.iataCode || value}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();
+            setValue(event.currentTarget.value)
             setSearch(event.currentTarget.value);
           }}
           onClick={() => combobox.openDropdown()}

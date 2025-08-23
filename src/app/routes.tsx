@@ -14,7 +14,6 @@ import { lazy } from 'react';
 
 const Settings = lazy(() => import('../pages/Settings/Settings.tsx'));
 
-
 export const buildRouter = () => {
   return createBrowserRouter([
     {
