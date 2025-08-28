@@ -13,6 +13,11 @@ export const formatDate = (_locale: string, input: string) => {
   return dayjs(input).format('ll');
 };
 
+export const formatDateShort = ( input: string) => {
+  return dayjs(input).format('MMM D');
+};
+
+
 export const formatTime = (input: string) => {
   return dayjs(input).format('LT');
 };
