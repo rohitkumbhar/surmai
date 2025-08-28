@@ -5,13 +5,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"net/http"
+	"strings"
+	"time"
+
 	ics "github.com/arran4/golang-ical"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/samber/lo"
-	"net/http"
-	"strings"
-	"time"
 )
 
 func GenerateIcsData(e *core.RequestEvent) error {
@@ -347,7 +348,7 @@ func applyActualTimezone(t time.Time, timeZone string) time.Time {
 
 func getTimezoneValue(metadata map[string]interface{}, key string) string {
 
-	if metadata == nil || metadata[key] == nil {
+	if metadata == nil || metadata[key] == nil || metadata[key] == "" {
 		return ""
 	}
 
