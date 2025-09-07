@@ -116,7 +116,7 @@ export const AirportSelect = ({
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();
-            setValue(event.currentTarget.value)
+            setValue(event.currentTarget.value);
             setSearch(event.currentTarget.value);
           }}
           onClick={() => combobox.openDropdown()}

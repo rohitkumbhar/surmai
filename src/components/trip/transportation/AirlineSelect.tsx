@@ -70,6 +70,9 @@ export const AirlineSelect = ({
           id: selection.id,
           logo: selection.logo,
         });
+        if (inputRef?.current) {
+          inputRef.current.value = selection.name;
+        }
       }
     }
     combobox.closeDropdown();
@@ -104,7 +107,7 @@ export const AirlineSelect = ({
             )
           }
           // @ts-expect-error shh
-          value={currentValue ? currentValue.name : value?.name ? value.name : value}
+          defaultValue={currentValue ? currentValue.name : value?.name ? value.name : value}
           onChange={(event) => {
             combobox.openDropdown();
             combobox.updateSelectedOptionIndex();
