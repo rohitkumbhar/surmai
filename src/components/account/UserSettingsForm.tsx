@@ -85,10 +85,7 @@ export const UserSettingsForm = () => {
           name={'timezone'}
           label={t('timezone', 'Timezone')}
           description={t('timezone_desc', 'Your preferred timezone.')}
-          data={
-            // @ts-expect-error it exists may be
-            Intl.supportedValuesOf('timeZone')
-          }
+          data={Intl.supportedValuesOf('timeZone')}
           key={form.key('timezone')}
           {...form.getInputProps('timezone')}
           searchable
