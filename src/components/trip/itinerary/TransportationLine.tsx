@@ -114,33 +114,68 @@ const CarRentalLine = ({
   rental: Transportation;
 }) => {
   const { t } = useTranslation();
+  const { user } = useCurrentUser();
 
   if (!(showStartTime || showEndTime)) {
     return null;
   }
 
   return (
-    <Group p={'sm'} bd={'1px solid var(--mantine-primary-color-light)'}>
-      <Box visibleFrom={'md'}>
-        <IconCar
-          title={rental.type}
-          style={{
-            color: 'var(--mantine-primary-color-4)',
-            width: rem(20),
-            height: rem(20),
-          }}
-        />
-      </Box>
-      {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime)}</Badge>}
-      {showStartTime && (
-        <Text>{t('pickup_rental_car', 'Pickup rental car from {{ origin }}', { origin: rental.origin })}</Text>
+    <Stack bd={'1px solid var(--mantine-primary-color-light)'} gap={0}>
+      <Group p={'sm'}>
+        <Box visibleFrom={'md'}>
+          <IconCar
+            title={rental.type}
+            style={{
+              color: 'var(--mantine-primary-color-4)',
+              width: rem(20),
+              height: rem(20),
+            }}
+          />
+        </Box>
+        {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime)}</Badge>}
+        {showEndTime && <Badge radius={'xs'}>{formatTime(rental.arrivalTime)}</Badge>}
+        {showStartTime && (
+          <Text>
+            {t('pickup_rental_car', 'Pickup rental car from {{ origin }}', {
+              origin: rental.metadata?.rentalCompany || 'Unknown',
+            })}
+          </Text>
+        )}
+        {showEndTime && (
+          <Text>
+            {t('return_rental_car', 'Return rental car to {{ destination }}', {
+              destination: rental.metadata?.rentalCompany || 'Unknown',
+            })}
+          </Text>
+        )}
+      </Group>
+      {showStartTime && rental.origin && (
+        <Group p={'sm'}>
+          <Text size={'sm'} c={'dimmed'}>{`Pickup Location:`}</Text>
+          <Anchor href={getMapsLink(user, rental.origin)} target={'_blank'}>
+            <Group gap={0}>
+              <Text size={'sm'} c={'var(--mantine-primary-color-9)'}>
+                {rental.origin}
+              </Text>
+              <IconMap2 height={14} />
+            </Group>
+          </Anchor>
+        </Group>
       )}
-      {showEndTime && (
-        <Text>
-          {t('return_rental_car', 'Return rental car to {{ destination }}', { destination: rental.destination })}
-        </Text>
+      {showEndTime && rental.destination && (
+        <Group p={'sm'}>
+          <Text size={'sm'} c={'dimmed'}>{`Drop-off Location:`}</Text>
+          <Anchor href={getMapsLink(user, rental.destination)} target={'_blank'}>
+            <Group gap={0}>
+              <Text size={'sm'} c={'var(--mantine-primary-color-9)'}>
+                {rental.destination}
+              </Text>
+              <IconMap2 height={14} />
+            </Group>
+          </Anchor>
+        </Group>
       )}
-      {showEndTime && <Badge radius={'xs'}>{formatTime(rental.arrivalTime)}</Badge>}
-    </Group>
+    </Stack>
   );
 };
