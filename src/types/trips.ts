@@ -1,5 +1,6 @@
 import { User } from './auth.ts';
 import { RecordModel } from 'pocketbase';
+import { Dayjs } from 'dayjs';
 
 export type Participant = {
   name: string;
@@ -210,4 +211,5 @@ export interface Airline extends Omit<RecordModel, 'collectionName,collectionId'
 
 export type ItineraryLine = (Transportation | Lodging | Activity) & {
   itineraryType?: string;
+  day: Dayjs;
 };
