@@ -1,5 +1,5 @@
 import { Activity, ItineraryLine, Lodging, Transportation, Trip } from '../../../types/trips.ts';
-import { Accordion, Badge, Button, Group, rem, Stack, Text } from '@mantine/core';
+import { Accordion, Badge, Button, Card, Group, rem, Stack, Text } from '@mantine/core';
 import { IconCalendar } from '@tabler/icons-react';
 import { Fragment, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
@@ -35,9 +35,10 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
 
   const tripStart = dayjs(trip.startDate).startOf('day');
 
+  const currentDay = dayjs();
   const [itineraryStart, setItineraryStart] = useState(
-    dayjs(trip.startDate).isBefore(dayjs()) || dayjs().isBefore(dayjs(trip.endDate))
-      ? dayjs().startOf('day')
+    dayjs(trip.startDate).isBefore(currentDay) && currentDay.isBefore(dayjs(trip.endDate))
+      ? currentDay.startOf('day')
       : tripStart
   );
   const [itineraryEnd, setItineraryEnd] = useState(itineraryStart.add(1, 'day'));
@@ -91,59 +92,67 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
     setSelectedPanels(Object.keys(itineraryForDuration));
   }, [transportationItinerary, lodgingsItinerary, activitiesItinerary, itineraryStart, itineraryEnd]);
 
-  if (!selectedPanels.length) {
-    return null;
-  }
-
-  const today = dayjs().format('YYYYMMDD');
+  const today = currentDay.format('YYYYMMDD');
 
   return (
     <Stack mt={'md'}>
-      <Accordion chevronPosition={'right'} variant={'separated'} multiple={true} mt={'sm'} value={selectedPanels}>
-        {itineraryEntries.map(([start, lines]) => {
-          return (
-            <Accordion.Item value={start} key={'top_' + start}>
-              <Accordion.Control
-                icon={
-                  <IconCalendar
-                    style={{
-                      color: 'var(--mantine-primary-color-6)',
-                      width: rem(20),
-                      height: rem(20),
-                    }}
-                  />
-                }
-              >
-                <Group wrap="nowrap">
-                  <div>
-                    <Text>{dayjs(start).format('LL')}</Text>
-                  </div>
-                  {start === today && <Badge variant={'dot'}>{t('today', 'Today')}</Badge>}
-                </Group>
-              </Accordion.Control>
-              <Accordion.Panel>
-                <Stack>
-                  {(lines || []).map((entry: ItineraryLine) => {
-                    return (
-                      <Fragment key={entry.id}>
-                        {entry.itineraryType === 'transportation' && (
-                          <TransportationLine transportation={entry as Transportation} day={entry.day} />
-                        )}
-                        {entry.itineraryType === 'lodging' && (
-                          <LodgingLine lodging={entry as Lodging} day={entry.day} />
-                        )}
-                        {entry.itineraryType === 'activity' && (
-                          <ActivityLine activity={entry as Activity} day={entry.day} />
-                        )}
-                      </Fragment>
-                    );
-                  })}
-                </Stack>
-              </Accordion.Panel>
-            </Accordion.Item>
-          );
-        })}
-      </Accordion>
+      {itineraryEntries && (
+        <Accordion chevronPosition={'right'} variant={'separated'} multiple={true} mt={'sm'} value={selectedPanels}>
+          {itineraryEntries.map(([start, lines]) => {
+            return (
+              <Accordion.Item value={start} key={'top_' + start}>
+                <Accordion.Control
+                  icon={
+                    <IconCalendar
+                      style={{
+                        color: 'var(--mantine-primary-color-6)',
+                        width: rem(20),
+                        height: rem(20),
+                      }}
+                    />
+                  }
+                >
+                  <Group wrap="nowrap">
+                    <div>
+                      <Text>{dayjs(start).format('LL')}</Text>
+                    </div>
+                    {start === today && <Badge variant={'dot'}>{t('today', 'Today')}</Badge>}
+                  </Group>
+                </Accordion.Control>
+                <Accordion.Panel>
+                  <Stack>
+                    {(lines || []).map((entry: ItineraryLine) => {
+                      return (
+                        <Fragment key={entry.id}>
+                          {entry.itineraryType === 'transportation' && (
+                            <TransportationLine transportation={entry as Transportation} day={entry.day} />
+                          )}
+                          {entry.itineraryType === 'lodging' && (
+                            <LodgingLine lodging={entry as Lodging} day={entry.day} />
+                          )}
+                          {entry.itineraryType === 'activity' && (
+                            <ActivityLine activity={entry as Activity} day={entry.day} />
+                          )}
+                        </Fragment>
+                      );
+                    })}
+                  </Stack>
+                </Accordion.Panel>
+              </Accordion.Item>
+            );
+          })}
+        </Accordion>
+      )}
+      {selectedPanels.length === 0 && (
+        <Card>
+          <Text>
+            {t('nothing_on_the_agenda', 'Nothing on the agenda between {{start}} and {{end}}', {
+              start: dayjs(itineraryStart).format('LL'),
+              end: dayjs(itineraryEnd).format('LL'),
+            })}
+          </Text>
+        </Card>
+      )}
       <Group justify={'space-between'} mt={'sm'}>
         <Button
           onClick={() => {
