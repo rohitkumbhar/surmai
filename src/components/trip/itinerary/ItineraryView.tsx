@@ -34,8 +34,11 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const [activitiesItinerary, setActivitiesItinerary] = useState<{ [key: string]: Array<Activity> }>({});
 
   const tripStart = dayjs(trip.startDate).startOf('day');
-  const [itineraryStart, _setItineraryStart] = useState(
-    dayjs(trip.startDate).isBefore(dayjs()) ? dayjs().startOf('day') : tripStart
+
+  const [itineraryStart, setItineraryStart] = useState(
+    dayjs(trip.startDate).isBefore(dayjs()) && dayjs().isBefore(dayjs(trip.endDate))
+      ? dayjs().startOf('day')
+      : tripStart
   );
   const [itineraryEnd, setItineraryEnd] = useState(itineraryStart.add(1, 'day'));
 
@@ -144,7 +147,7 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
       <Group justify={'space-between'} mt={'sm'}>
         <Button
           onClick={() => {
-            _setItineraryStart(itineraryStart.add(-1, 'day'));
+            setItineraryStart(itineraryStart.add(-1, 'day'));
           }}
         >
           {t('show_previous_day', 'Show Previous Day')}
