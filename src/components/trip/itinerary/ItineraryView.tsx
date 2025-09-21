@@ -36,7 +36,7 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const tripStart = dayjs(trip.startDate).startOf('day');
 
   const [itineraryStart, setItineraryStart] = useState(
-    dayjs(trip.startDate).isBefore(dayjs()) && dayjs().isBefore(dayjs(trip.endDate))
+    dayjs(trip.startDate).isBefore(dayjs()) || dayjs().isBefore(dayjs(trip.endDate))
       ? dayjs().startOf('day')
       : tripStart
   );
