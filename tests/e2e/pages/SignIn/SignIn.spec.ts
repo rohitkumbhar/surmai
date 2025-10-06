@@ -13,16 +13,16 @@ test.describe('SignIn Page', () => {
     await expect(page.getByText('Welcome to Surmai')).toBeVisible();
 
     // Check that the form elements are visible
-    await expect(page.getByLabel('Email Address')).toBeVisible();
-    await expect(page.getByLabel('Password')).toBeVisible();
+    await expect(page.getByTestId('email')).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Forgot Password' })).toBeVisible();
   });
 
   test('should show validation error for invalid email', async ({ page }) => {
     // Enter invalid email and submit
-    await page.getByLabel('Email Address').fill('invalid-email');
-    await page.getByLabel('Password').fill('password123');
+    await page.getByTestId('email').fill('invalid-email');
+    await page.getByRole('textbox', { name: 'Password' }).fill('password123');
     await page.getByRole('button', { name: 'Sign In' }).click();
 
     // Check that validation error is shown
@@ -31,8 +31,8 @@ test.describe('SignIn Page', () => {
 
   test('should show API error for invalid credentials', async ({ page }) => {
     // Enter valid email format but incorrect credentials
-    await page.getByLabel('Email Address').fill('test@surmai.app');
-    await page.getByLabel('Password').fill('wrongpassword');
+    await page.getByTestId('email').fill('test@surmai.app');
+    await page.getByRole('textbox', { name: 'Password' }).fill('wrongpassword');
     await page.getByRole('button', { name: 'Sign In' }).click();
 
     // Check that API error notification is shown
@@ -62,7 +62,7 @@ test.describe('SignIn Page', () => {
     await page.getByRole('button', { name: 'Forgot Password' }).click();
 
     // Fill in the email address and submit
-    await page.getByLabel('Email Address').nth(1).fill('test@surmai.app');
+    await page.getByTestId('resetEmailAddress').fill('test@surmai.app');
     await page.getByRole('button', { name: 'Reset Password' }).click();
 
     // Check that success notification is shown
@@ -71,8 +71,8 @@ test.describe('SignIn Page', () => {
 
   test('should successfully sign in with valid credentials', async ({ page }) => {
     // Enter valid credentials and submit
-    await page.getByLabel('Email Address').fill('admin@test.surmai.app');
-    await page.getByLabel('Password').fill('uf3u2uo3f3uuo23#$#WAIT');
+    await page.getByTestId('email').fill('admin@test.surmai.app');
+    await page.getByRole('textbox', { name: 'Password' }).fill('uf3u2uo3f3uuo23#$#WAIT');
     await page.getByRole('button', { name: 'Sign In' }).click();
 
     // Check that we've navigated to the home page

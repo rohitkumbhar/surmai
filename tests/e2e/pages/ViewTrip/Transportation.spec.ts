@@ -1,10 +1,14 @@
 import { expect, test } from '@playwright/test';
-import { ViewTripPage } from './ViewTripPage';
-import { CreateNewTripPage, TripFormData } from '../CreateNewTrip/CreateNewTripPage';
-import * as path from 'path';
-import * as fs from 'fs';
 import dayjs from 'dayjs';
+import * as fs from 'fs';
+import * as path from 'path';
+
 import { getEndDate, getStartDate } from './helper.ts';
+import { ViewTripPage } from './ViewTripPage';
+import { CreateNewTripPage } from '../CreateNewTrip/CreateNewTripPage';
+
+import type { TripFormData } from '../CreateNewTrip/CreateNewTripPage';
+
 
 const __dirname = import.meta.dirname;
 test.describe('Trip Transportation', () => {

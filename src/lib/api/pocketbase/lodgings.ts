@@ -1,7 +1,8 @@
-import { CreateLodging, Lodging } from '../../../types/trips.ts';
+import { deleteAttachment } from './attachments.ts';
 import { pb } from './pocketbase.ts';
 import { convertSavedToBrowserDate } from '../../time.ts';
-import { deleteAttachment } from './attachments.ts';
+
+import type { CreateLodging, Lodging } from '../../../types/trips.ts';
 
 const lodgings = pb.collection('lodgings');
 

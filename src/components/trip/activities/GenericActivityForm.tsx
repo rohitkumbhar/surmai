@@ -1,16 +1,18 @@
-import { Activity, ActivityFormSchema, Attachment, CreateActivity, Trip } from '../../../types/trips.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
-import { useState } from 'react';
 import { Button, FileButton, Group, Stack, Text, Textarea, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { useForm } from '@mantine/form';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { createActivityEntry, updateActivityEntry, uploadAttachments } from '../../../lib/api';
-
-import { fakeAsUtcString } from '../../../lib/time.ts';
 import i18n from '../../../lib/i18n.ts';
+import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+
+import type { Activity, ActivityFormSchema, Attachment, CreateActivity, Trip } from '../../../types/trips.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericActivityForm = ({
   trip,

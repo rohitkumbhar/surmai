@@ -1,10 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { MantineProvider } from '@mantine/core';
 import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
 import { AirportSelect } from '../../../../../src/components/trip/transportation/AirportSelect';
 import * as api from '../../../../../src/lib/api';
-import { Airport } from '../../../../../src/types/trips';
-import { MantineProvider } from '@mantine/core';
+
+import type { Airport } from '../../../../../src/types/trips';
+
 
 // Mock the API module
 vi.mock('../../../../../src/lib/api', () => ({

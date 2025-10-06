@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { ViewTripPage } from './ViewTripPage';
-import { CreateNewTripPage, TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 import dayjs from 'dayjs';
+
+import { ViewTripPage } from './ViewTripPage';
+import { CreateNewTripPage } from '../CreateNewTrip/CreateNewTripPage';
+
+import type { TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 
 test.describe('View Trip Page', () => {
   let viewTripPage: ViewTripPage;
@@ -61,8 +64,8 @@ test.describe('View Trip Page', () => {
     await viewTripPage.expectTripDetailsVisible(tripData.name);
 
     // Check that the trip dates are visible
-    const startDateStr = dayjs(tripData.startDate).format('MMMM D, YYYY');
-    const endDateStr = dayjs(tripData.endDate).format('MMMM D, YYYY');
+    const startDateStr = dayjs(tripData.startDate).format('MMM D, YYYY');
+    const endDateStr = dayjs(tripData.endDate).format('MMM D, YYYY');
     await expect(
       page.locator('#app-header').getByText(`${startDateStr} - ${endDateStr}`, { exact: false })
     ).toBeVisible();

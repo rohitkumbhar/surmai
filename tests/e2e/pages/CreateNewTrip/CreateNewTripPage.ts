@@ -1,5 +1,7 @@
-import { expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
 import dayjs from 'dayjs';
+
+import type { Page } from '@playwright/test';
 
 export interface TripFormData {
   name: string;

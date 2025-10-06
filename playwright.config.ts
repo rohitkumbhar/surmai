@@ -11,19 +11,22 @@ export default defineConfig({
     headless: true,
     baseURL: 'http://localhost:6173',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: 'only-on-failure'
   },
   projects: [
     {
       name: 'setup',
       testMatch: /.*\.setup\.ts/,
       timeout: 5 * 60000,
+      // use: { ...devices['Desktop Firefox'] },
     },
     {
       name: 'authenticated-tests',
       use: {
         ...devices['Desktop Firefox'],
         storageState: 'tests/playwright/.auth/user.json',
+        viewport: { width: 1920, height: 1080 },
+
       },
       dependencies: ['setup'],
       testIgnore: /SignIn|SignUp/,

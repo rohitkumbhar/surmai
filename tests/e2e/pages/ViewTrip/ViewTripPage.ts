@@ -1,5 +1,8 @@
-import { expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+
 import { getSelectorString } from './helper.ts';
+
+import type { Page } from '@playwright/test';
 
 export class ViewTripPage {
   private page: Page;
@@ -94,7 +97,7 @@ export class ViewTripPage {
 
     await this.selectDatePickerValue('drop-off-time', carRentalData.dropOffTime);
 
-    await this.page.getByLabel('Destination').click()
+    await this.page.getByRole('textbox', { name: 'Destination' }).click()
     await this.page.getByRole('option').first().click()
 
     await this.page.getByRole('button', { name: 'Save' }).click();
@@ -205,7 +208,7 @@ export class ViewTripPage {
     await this.page.waitForTimeout(100);
     await this.selectDatePickerValue('lodging-end-date', lodgingData.endDate);
 
-    await this.page.getByLabel('Destination').click();
+    await this.page.getByRole('textbox', { name: 'Destination' }).click();
     await this.page.getByRole('option').first().click();
 
     // Save the lodging
@@ -244,11 +247,11 @@ export class ViewTripPage {
       await this.page.getByLabel('Description').fill(activityData.description);
     }
 
-    await this.page.getByLabel('Destination').click();
+    await this.page.getByRole('textbox', { name: 'Destination' }).click();
     await this.page.getByRole('option').first().click();
 
     // Save the activity
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByRole('button', { name: 'Save', exact: true }).click();
   }
 
   /**
@@ -265,7 +268,7 @@ export class ViewTripPage {
     await this.page.locator('[class="tiptap ProseMirror"]').fill(noteText);
 
     // Save the note
-    await this.page.getByRole('button', { name: 'Save' }).click();
+    await this.page.getByTestId('save-notes-btn').click();
   }
 
   /**

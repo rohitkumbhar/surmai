@@ -1,11 +1,14 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { CloseButton, Combobox, Group, InputBase, Text, useCombobox } from '@mantine/core';
 import { useDebouncedState } from '@mantine/hooks';
-import { searchAirlines } from '../../../lib/api';
-import { UseFormReturnType } from '@mantine/form';
-import { Airline } from '../../../types/trips';
-import { useTranslation } from 'react-i18next';
 import { IconPlane } from '@tabler/icons-react';
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { searchAirlines } from '../../../lib/api';
+
+import type { Airline } from '../../../types/trips';
+import type { UseFormReturnType } from '@mantine/form';
+import type { MutableRefObject } from 'react';
 
 export const AirlineSelect = ({
   propName,

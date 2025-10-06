@@ -1,12 +1,13 @@
 import { Alert, Anchor, AppShell, Box, Burger, Container, Group, rem, Text } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { Outlet } from 'react-router-dom';
-import { Navbar } from './components/nav/Navbar.tsx';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Error } from './components/error/Error.tsx';
 import { IconInfoCircle } from '@tabler/icons-react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
+import { Outlet } from 'react-router-dom';
+
 import { useSurmaiContext } from './app/useSurmaiContext.ts';
+import { Error } from './components/error/Error.tsx';
+import { Navbar } from './components/nav/Navbar.tsx';
 import { UserInfo } from './components/user/UserInfo.tsx';
 import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
 

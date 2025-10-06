@@ -1,6 +1,7 @@
-import { CroppedImage } from '../../types/trips.ts';
 import { useState } from 'react';
 import Cropper from 'react-easy-crop';
+
+import type { CroppedImage } from '../../types/trips.ts';
 
 export const CropModal = ({
   file,

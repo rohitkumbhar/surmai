@@ -1,14 +1,16 @@
-import { Trip } from '../../../types/trips.ts';
-import { useTranslation } from 'react-i18next';
 import { Divider, Flex, Group, Stack, Text, Title } from '@mantine/core';
-import { ParticipantData } from './ParticipantData.tsx';
-import { BasicInfoMenu } from './BasicInfoMenu.tsx';
-import { DestinationCard } from './DestinationCard.tsx';
-import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { useQuery } from '@tanstack/react-query';
-import { listCollaborators } from '../../../lib/api';
-import { User } from '../../../types/auth.ts';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+
+import { BasicInfoMenu } from './BasicInfoMenu.tsx';
+import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
+import { DestinationCard } from './DestinationCard.tsx';
+import { ParticipantData } from './ParticipantData.tsx';
+import { listCollaborators } from '../../../lib/api';
+
+import type { User } from '../../../types/auth.ts';
+import type { Trip } from '../../../types/trips.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();

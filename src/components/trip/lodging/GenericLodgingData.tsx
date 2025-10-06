@@ -1,18 +1,20 @@
-import { Attachment, Lodging, Trip } from '../../../types/trips.ts';
 import { Anchor, Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal } from '@mantine/modals';
 import { IconCar } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { DataLine } from '../DataLine.tsx';
-import { openConfirmModal } from '@mantine/modals';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteLodging, deleteLodgingAttachments } from '../../../lib/api';
+
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
-import { formatDate, formatTime } from '../../../lib/time.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { deleteLodging, deleteLodgingAttachments } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { getMapsLink } from '../../../lib/places.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { formatDate, formatTime } from '../../../lib/time.ts';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { DataLine } from '../DataLine.tsx';
+
+import type { Attachment, Lodging, Trip } from '../../../types/trips.ts';
 
 export const GenericLodgingData = ({
   trip,

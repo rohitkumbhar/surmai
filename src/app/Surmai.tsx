@@ -1,18 +1,20 @@
-import { useEffect, useState } from 'react';
-import { Notifications } from '@mantine/notifications';
-import { ModalsProvider } from '@mantine/modals';
-import { RouterProvider } from 'react-router-dom';
 import { MantineProvider } from '@mantine/core';
-import { currentUser } from '../lib/api';
-import { buildTheme } from './theme.ts';
-import { buildRouter } from './routes.tsx';
-import { modals } from './modals.ts';
-import { SiteSettings } from '../types/settings.ts';
-import { useNetwork } from '@mantine/hooks';
-import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
-import { SurmaiContext as SurmaiContext1 } from './SurmaiContext.tsx';
 import { DatesProvider } from '@mantine/dates';
+import { useNetwork } from '@mantine/hooks';
+import { ModalsProvider } from '@mantine/modals';
+import { Notifications } from '@mantine/notifications';
+import dayjs from 'dayjs';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { RouterProvider } from 'react-router-dom';
+
+import { modals } from './modals.ts';
+import { buildRouter } from './routes.tsx';
+import { SurmaiContext as SurmaiContext1 } from './SurmaiContext.tsx';
+import { buildTheme } from './theme.ts';
+import { currentUser } from '../lib/api';
+
+import type { SiteSettings } from '../types/settings.ts';
 
 export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');

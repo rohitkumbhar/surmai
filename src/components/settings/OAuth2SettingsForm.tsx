@@ -11,13 +11,15 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { OAuthSettings, OAuthSettingsFormType } from '../../types/auth.ts';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceFloppy, IconWebhook } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+
 import { apiUrl, setOAuth2Provider } from '../../lib/api';
 import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+
+import type { OAuthSettings, OAuthSettingsFormType } from '../../types/auth.ts';
 
 interface OAuth2SettingsFormProps {
   oauthConfig?: OAuthSettings;

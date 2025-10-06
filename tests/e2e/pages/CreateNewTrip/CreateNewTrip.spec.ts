@@ -1,6 +1,7 @@
 import { expect, test } from '@playwright/test';
-import { CreateNewTripPage } from './CreateNewTripPage';
 import dayjs from 'dayjs';
+
+import { CreateNewTripPage } from './CreateNewTripPage';
 
 test.describe('Create New Trip Page', () => {
   let createNewTripPage: CreateNewTripPage;

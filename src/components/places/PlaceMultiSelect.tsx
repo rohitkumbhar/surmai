@@ -1,11 +1,14 @@
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Anchor, Combobox, Group, Pill, PillsInput, Text, useCombobox } from '@mantine/core';
 import { useClickOutside, useDebouncedState } from '@mantine/hooks';
-import { searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
-import { UseFormReturnType } from '@mantine/form';
-import { Place } from '../../types/trips';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { searchPlaces } from '../../lib/api';
+
+import type { Place } from '../../types/trips';
+import type { UseFormReturnType } from '@mantine/form';
+import type { MutableRefObject } from 'react';
 
 export function PlaceMultiSelect({ propName, form }: { propName: string; form: UseFormReturnType<unknown> }) {
   const { t } = useTranslation();

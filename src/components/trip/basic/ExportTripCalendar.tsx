@@ -1,11 +1,13 @@
-import { ContextModalProps } from '@mantine/modals';
-import { Trip } from '../../../types/trips.ts';
 import { Alert, Button, Center, Container, Text } from '@mantine/core';
-import { useState } from 'react';
-import { exportCalendar } from '../../../lib/api';
-import { useTranslation } from 'react-i18next';
-import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { IconClockExclamation } from '@tabler/icons-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { exportCalendar } from '../../../lib/api';
+import { showErrorNotification } from '../../../lib/notifications.tsx';
+
+import type { Trip } from '../../../types/trips.ts';
+import type { ContextModalProps } from '@mantine/modals';
 
 export const ExportTripCalendarModal = ({
   innerProps,

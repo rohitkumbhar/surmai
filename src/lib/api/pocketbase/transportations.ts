@@ -1,7 +1,8 @@
-import { pb } from './pocketbase.ts';
-import { CreateTransportation, Transportation } from '../../../types/trips.ts';
-import { convertSavedToBrowserDate } from '../../time.ts';
 import { deleteAttachment } from './attachments.ts';
+import { pb } from './pocketbase.ts';
+import { convertSavedToBrowserDate } from '../../time.ts';
+
+import type { CreateTransportation, Transportation } from '../../../types/trips.ts';
 
 const transportations = pb.collection('transportations');
 

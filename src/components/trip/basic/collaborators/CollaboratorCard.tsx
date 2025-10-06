@@ -1,11 +1,13 @@
-import { forwardRef } from 'react';
-import { Trip } from '../../../../types/trips.ts';
-import { User } from '../../../../types/auth.ts';
-import { useTranslation } from 'react-i18next';
 import { ActionIcon, Avatar, Card, Group, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
-import { deleteCollaborator, getAttachmentUrl } from '../../../../lib/api';
 import { IconTrash } from '@tabler/icons-react';
+import { forwardRef } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { deleteCollaborator, getAttachmentUrl } from '../../../../lib/api';
+
+import type { User } from '../../../../types/auth.ts';
+import type { Trip } from '../../../../types/trips.ts';
 
 export const CollaboratorButton = forwardRef<
   HTMLDivElement,

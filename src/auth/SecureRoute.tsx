@@ -1,13 +1,11 @@
-import { createContext, useEffect, useState } from 'react';
-import { authRefresh, currentUser } from '../lib/api';
-import { User } from '../types/auth.ts';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSurmaiContext } from '../app/useSurmaiContext.ts';
 
-export const AuthContext = createContext<{
-  user?: User;
-  reloadUser?: () => void;
-}>({});
+import { AuthContext } from './AuthContext';
+import { useSurmaiContext } from '../app/useSurmaiContext.ts';
+import { authRefresh, currentUser } from '../lib/api';
+
+import type { User } from '../types/auth.ts';
 
 export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
   const [user, setCurrentUser] = useState<User>();

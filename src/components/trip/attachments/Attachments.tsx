@@ -1,6 +1,6 @@
-import { Attachment } from '../../../types/trips.ts';
 import { Anchor, Badge, CloseButton, Divider, Group, Text } from '@mantine/core';
-import { getAttachmentUrl } from '../../../lib/api';
+import { useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal, openContextModal } from '@mantine/modals';
 import {
   IconFile,
   IconFileTypeBmp,
@@ -10,9 +10,11 @@ import {
   IconFileTypePng,
 } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-import { openConfirmModal, openContextModal } from '@mantine/modals';
-import { useMediaQuery } from '@mantine/hooks';
+
+import { getAttachmentUrl } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
+
+import type { Attachment } from '../../../types/trips.ts';
 
 export const Attachments = ({
   attachments,

@@ -1,9 +1,11 @@
 import { Stack, TagsInput, Textarea, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useTranslation } from 'react-i18next';
-import { UseFormReturnType } from '@mantine/form';
-import { CreateTripForm } from '../../../types/trips.ts';
+
 import { PlaceMultiSelect } from '../../places/PlaceMultiSelect.tsx';
+
+import type { CreateTripForm } from '../../../types/trips.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 interface EditTripBasicFormProps {
   form: UseFormReturnType<CreateTripForm>;

@@ -1,16 +1,17 @@
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { useForm } from '@mantine/form';
-import { UserSettingsFormType } from '../../types/auth.ts';
 import { Button, Group, Select, Stack, TextInput } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
-import { updateUser } from '../../lib/api';
-
-import { currencyCodes } from '../util/currencyCodes.ts';
+import { useForm } from '@mantine/form';
 import { IconDeviceFloppy } from '@tabler/icons-react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+
+import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { updateUser } from '../../lib/api';
 import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { currencyCodes } from '../util/currencyCodes.ts';
+
+import type { UserSettingsFormType } from '../../types/auth.ts';
 
 export const UserSettingsForm = () => {
   const { user, reloadUser } = useCurrentUser();

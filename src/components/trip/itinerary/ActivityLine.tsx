@@ -1,10 +1,13 @@
-import { Activity } from '../../../types/trips.ts';
-import dayjs, { Dayjs } from 'dayjs';
 import { Anchor, Badge, Box, Group, rem, Stack, Text } from '@mantine/core';
 import { IconActivity, IconMap2 } from '@tabler/icons-react';
-import { formatTime } from '../../../lib/time.ts';
-import { getMapsLink } from '../../../lib/places.ts';
+import dayjs from 'dayjs';
+
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { getMapsLink } from '../../../lib/places.ts';
+import { formatTime } from '../../../lib/time.ts';
+
+import type { Activity } from '../../../types/trips.ts';
+import type { Dayjs } from 'dayjs';
 
 export const ActivityLine = ({ activity, day }: { activity: Activity; day: Dayjs }) => {
   const showStartTime = dayjs(activity.startDate).startOf('day').isSame(day);

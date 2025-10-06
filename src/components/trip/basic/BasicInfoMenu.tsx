@@ -1,6 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
 import { Button, Menu, rem, Text } from '@mantine/core';
+import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal, openContextModal } from '@mantine/modals';
 import {
   IconCalendar,
   IconChevronDown,
@@ -11,12 +11,14 @@ import {
   IconTrash,
   IconUsers,
 } from '@tabler/icons-react';
-import { openConfirmModal, openContextModal } from '@mantine/modals';
-import { Trip } from '../../../types/trips.ts';
-import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib/api';
-import { useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
+
+import type { Trip } from '../../../types/trips.ts';
 
 export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();

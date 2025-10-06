@@ -1,13 +1,15 @@
-import { Activity, Attachment, Trip } from '../../../types/trips.ts';
-import { useQuery } from '@tanstack/react-query';
-import { listActivities } from '../../../lib/api';
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
-import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useQuery } from '@tanstack/react-query';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
 import { GenericActivityData } from './GenericActivityData.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { listActivities } from '../../../lib/api';
+
+import type { Activity, Attachment, Trip } from '../../../types/trips.ts';
 
 export const ActivitiesPanel = ({
   trip,

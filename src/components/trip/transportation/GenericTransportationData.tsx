@@ -1,19 +1,21 @@
-import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Group, HoverCard, Modal, rem, Stack, Text, Title, Tooltip } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal } from '@mantine/modals';
 import { IconCar, IconInfoCircle } from '@tabler/icons-react';
-import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { useTranslation } from 'react-i18next';
+
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
-import { openConfirmModal } from '@mantine/modals';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
-import { typeIcons } from './typeIcons.ts';
-import { formatDateTime } from '../../../lib/time.ts';
-import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { transportationConfig } from './config.tsx';
 import { FlightForm } from './FlightForm.tsx';
+import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
+import { typeIcons } from './typeIcons.ts';
+import { showDeleteNotification } from '../../../lib/notifications.tsx';
+import { formatDateTime } from '../../../lib/time.ts';
+import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
+
+import type { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 
 export const GenericTransportationData = ({
   trip,

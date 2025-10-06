@@ -1,9 +1,10 @@
-import { calculateTimezoneDifference } from '../../lib/time.ts';
 import { Badge, Group, HoverCard, Stack, Text } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import dayjs from 'dayjs';
 import { IconClock } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { calculateTimezoneDifference } from '../../lib/time.ts';
 
 export const TimezoneInfo = ({ timezone }: { timezone?: string }) => {
   const { t } = useTranslation();

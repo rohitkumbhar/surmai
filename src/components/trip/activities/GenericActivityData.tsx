@@ -1,15 +1,17 @@
-import { Activity, Attachment, Trip } from '../../../types/trips.ts';
 import { Box, Grid, Modal, rem, Text } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { DataLine } from '../DataLine.tsx';
-import { openConfirmModal } from '@mantine/modals';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { deleteActivity, deleteActivityAttachments } from '../../../lib/api';
-import { GenericActivityForm } from './GenericActivityForm.tsx';
+import { openConfirmModal } from '@mantine/modals';
 import { IconActivity } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+
+import { GenericActivityForm } from './GenericActivityForm.tsx';
+import { deleteActivity, deleteActivityAttachments } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { DataLine } from '../DataLine.tsx';
+
+import type { Activity, Attachment, Trip } from '../../../types/trips.ts';
 
 export const GenericActivityData = ({
   trip,

@@ -1,5 +1,6 @@
 import { pb } from './pocketbase.ts';
-import { Invitation } from '../../../types/invitations.ts';
+
+import type { Invitation } from '../../../types/invitations.ts';
 
 export const sendCollaborationInvitation = (email: string, message: string, tripId: string): Promise<Invitation> => {
   return pb.collection('invitations').create({

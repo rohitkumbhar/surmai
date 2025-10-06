@@ -1,23 +1,23 @@
-import { useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
+import { Button, Group, Stack } from '@mantine/core';
 import { getTaskListExtension, Link, RichTextEditor } from '@mantine/tiptap';
-import TipTapTaskList from '@tiptap/extension-task-list';
-import TaskItem from '@tiptap/extension-task-item';
-import Underline from '@tiptap/extension-underline';
-import Superscript from '@tiptap/extension-superscript';
-import SubScript from '@tiptap/extension-subscript';
+import { IconDeviceFloppy } from '@tabler/icons-react';
+import { Color } from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
-import Table from '@tiptap/extension-table';
+import { Placeholder } from '@tiptap/extension-placeholder';
+import SubScript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import { Table } from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import TableRow from '@tiptap/extension-table-row';
-import { Color } from '@tiptap/extension-color';
-import { TextStyle } from '@tiptap/extension-text-style';
+import TaskItem from '@tiptap/extension-task-item';
+import TipTapTaskList from '@tiptap/extension-task-list';
 import TextAlign from '@tiptap/extension-text-align';
-import { Placeholder } from '@tiptap/extension-placeholder';
-import { Button, Group, Stack } from '@mantine/core';
-import { IconDeviceFloppy } from '@tabler/icons-react';
+import { TextStyle } from '@tiptap/extension-text-style';
+import { useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
 import { useTranslation } from 'react-i18next';
+
 import { InsertTableControl } from './InsertTableControl.tsx';
 import styles from './TripNotes.module.css';
 
@@ -26,12 +26,12 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       getTaskListExtension(TipTapTaskList),
       TaskItem.configure({
         nested: false,
       }),
-      Underline,
+      //      Underline,
       Link,
       Superscript,
       SubScript,
@@ -135,6 +135,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       </RichTextEditor>
       <Group justify={'flex-end'}>
         <Button
+          data-testid="save-notes-btn"
           leftSection={<IconDeviceFloppy />}
           onClick={() => {
             onSave(editor?.getHTML() || '');

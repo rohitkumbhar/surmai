@@ -1,11 +1,12 @@
 import { Container, Paper, SimpleGrid, Tabs, Text, Title } from '@mantine/core';
+import { IconInfoCircle, IconKey } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+
+import { ChangePasswordForm } from '../../components/account/ChangePasswordForm.tsx';
+import { UserAvatarForm } from '../../components/account/UserAvatarForm.tsx';
 import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
 import { Header } from '../../components/nav/Header.tsx';
-import { UserAvatarForm } from '../../components/account/UserAvatarForm.tsx';
-import { ChangePasswordForm } from '../../components/account/ChangePasswordForm.tsx';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
-import { IconInfoCircle, IconKey } from '@tabler/icons-react';
 
 export const UserProfile = () => {
   const { t } = useTranslation();

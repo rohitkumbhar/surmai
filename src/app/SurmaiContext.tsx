@@ -1,5 +1,6 @@
 import { createContext } from 'react';
-import { SiteSettings } from '../types/settings.ts';
+
+import type { SiteSettings } from '../types/settings.ts';
 
 export const SurmaiContext = createContext<
   SiteSettings & {

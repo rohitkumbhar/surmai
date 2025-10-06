@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react';
 import { Anchor, Combobox, Group, Text, TextInput, useCombobox } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
-import { searchPlaces } from '../../lib/api';
 import { nanoid } from 'nanoid';
-import { UseFormReturnType } from '@mantine/form';
-import { Place } from '../../types/trips';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { searchPlaces } from '../../lib/api';
+
+import type { Place } from '../../types/trips';
+import type { UseFormReturnType } from '@mantine/form';
 
 export function PlaceSelect({
   propName,

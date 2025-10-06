@@ -1,13 +1,15 @@
-import { ContextModalProps } from '@mantine/modals';
-import { Trip } from '../../../../types/trips.ts';
 import { Alert, Container, Text } from '@mantine/core';
-import { sendCollaborationInvitation } from '../../../../lib/api';
+import { useDisclosure } from '@mantine/hooks';
 import { IconMacroOff } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+
 import { useSurmaiContext } from '../../../../app/useSurmaiContext.ts';
-import { useDisclosure } from '@mantine/hooks';
+import { sendCollaborationInvitation } from '../../../../lib/api';
 import { showErrorNotification, showSaveSuccessNotification } from '../../../../lib/notifications.tsx';
 import { InvitationForm } from '../../../invitations/InvitationForm.tsx';
+
+import type { Trip } from '../../../../types/trips.ts';
+import type { ContextModalProps } from '@mantine/modals';
 
 export const Collaborators = ({
   context,

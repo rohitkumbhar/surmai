@@ -12,16 +12,17 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
-import { useEffect, useState } from 'react';
-import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest, startOAuthFlow } from '../../lib/api';
-import { useTranslation } from 'react-i18next';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { IconBrandApple, IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest, startOAuthFlow } from '../../lib/api';
+import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
 
 const oauthIcons: { [key: string]: React.ReactNode } = {
   google: <IconBrandGoogle size={16} stroke={1} />,
@@ -99,6 +100,7 @@ export const SignIn = () => {
           <TextInput
             name={'resetEmailAddress'}
             label={t('reset_email_address', 'Email Address')}
+            data-testid={'resetEmailAddress'}
             placeholder="you@domain.com"
             mt={'md'}
             onChange={(event) => setResetEmailAddress(event.target.value)}
@@ -159,6 +161,7 @@ export const SignIn = () => {
               <TextInput
                 name={'email'}
                 label={t('email_address', 'Email Address')}
+                data-testid={'email'}
                 placeholder="you@domain.com"
                 mt={'md'}
                 required
@@ -227,20 +230,19 @@ export const SignIn = () => {
             {oauthInfo &&
               oauthInfo.map((oa) => {
                 return (
-                  <>
-                    <Button
-                      fullWidth={true}
-                      justify={'flex-start'}
-                      leftSection={oauthIcons[oa.name]}
-                      onClick={() => {
-                        startOAuthFlow(oa.name).then(() => {
-                          navigate('/');
-                        });
-                      }}
-                    >
-                      {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
-                    </Button>
-                  </>
+                  <Button
+                    key={oa.name}
+                    fullWidth={true}
+                    justify={'flex-start'}
+                    leftSection={oauthIcons[oa.name]}
+                    onClick={() => {
+                      startOAuthFlow(oa.name).then(() => {
+                        navigate('/');
+                      });
+                    }}
+                  >
+                    {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
+                  </Button>
                 );
               })}
           </Stack>

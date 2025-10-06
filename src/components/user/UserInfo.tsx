@@ -1,13 +1,15 @@
-import classes from './UserInfo.module.css';
 import { Avatar, Group, Menu, rem, Text, UnstyledButton } from '@mantine/core';
 import { IconChevronDown, IconLogout, IconPinInvoke, IconUser } from '@tabler/icons-react';
-import { Link, useNavigate } from 'react-router-dom';
-import { getAttachmentUrl, listInvitations, logoutCurrentUser } from '../../lib/api';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Invitation } from '../../types/invitations.ts';
+import { useTranslation } from 'react-i18next';
+import { Link, useNavigate } from 'react-router-dom';
+
+import classes from './UserInfo.module.css';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { getAttachmentUrl, listInvitations, logoutCurrentUser } from '../../lib/api';
+
+import type { Invitation } from '../../types/invitations.ts';
 
 export const UserInfo = () => {
   const navigate = useNavigate();

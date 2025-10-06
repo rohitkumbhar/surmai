@@ -1,7 +1,7 @@
-import { useTranslation } from 'react-i18next';
-import { useForm } from '@mantine/form';
 import { Button, Group, Textarea, TextInput } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconMail } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
 
 export const InvitationForm = ({
   handleSubmit,

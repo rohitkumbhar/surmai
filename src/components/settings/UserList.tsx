@@ -1,5 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
-import { deleteUserAdminAction, getAttachmentUrl, listAllUsers } from '../../lib/api';
 import {
   ActionIcon,
   Avatar,
@@ -15,15 +13,19 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { IconKey, IconTrash } from '@tabler/icons-react';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { ChangeUserPasswordForm } from './ChangeUserPasswordForm.tsx';
-import { useState } from 'react';
-import { User } from '../../types/auth.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
+import { IconKey, IconTrash } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { ChangeUserPasswordForm } from './ChangeUserPasswordForm.tsx';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { deleteUserAdminAction, getAttachmentUrl, listAllUsers } from '../../lib/api';
 import { showDeleteNotification } from '../../lib/notifications.tsx';
+
+import type { User } from '../../types/auth.ts';
 
 export const UserList = () => {
   const { user: currentUser } = useCurrentUser();

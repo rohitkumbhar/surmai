@@ -16,7 +16,7 @@ test.describe('SignUp Page', () => {
     // Check that the form elements are visible
     await expect(page.getByLabel('Name')).toBeVisible();
     await expect(page.getByLabel('Email')).toBeVisible();
-    await expect(page.getByLabel('Password')).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'Password' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Create An Account' })).toBeVisible();
   });
 
@@ -24,7 +24,7 @@ test.describe('SignUp Page', () => {
     // Enter invalid email and submit
     await page.getByLabel('Name').fill('Test User');
     await page.getByLabel('Email').fill('invalid-email');
-    await page.getByLabel('Password').fill('Password123!');
+    await page.getByRole('textbox', { name: 'Password' }).fill('Password123!');
     await page.getByRole('button', { name: 'Create An Account' }).click();
 
     // Check that validation error is shown
@@ -46,7 +46,7 @@ test.describe('SignUp Page', () => {
     // Fill in the form with valid data
     await page.getByLabel('Name').fill('Test User');
     await page.getByLabel('Email').fill('test@surmai.app');
-    await page.getByLabel('Password').fill('Password123!');
+    await page.getByRole('textbox', { name: 'Password' }).fill('Password123!');
     await page.getByRole('button', { name: 'Create An Account' }).click();
 
     // Check that API error notification is shown
@@ -58,7 +58,7 @@ test.describe('SignUp Page', () => {
     // Fill in the form with valid data
     await page.getByLabel('Name').fill('Test User');
     await page.getByLabel('Email').fill(`test-${nanoid(5)}@surmai.app`);
-    await page.getByLabel('Password').fill('Password123!');
+    await page.getByRole('textbox', { name: 'Password' }).fill('Password123!');
     await page.getByRole('button', { name: 'Create An Account' }).click();
 
     await page.waitForSelector('text=Welcome to Surmai');
@@ -123,7 +123,7 @@ test.describe('SignUp Page', () => {
     // Fill in the form and submit
     await page.getByLabel('Name').fill('Test User');
     await page.getByLabel('Email').fill('test@surmai.app');
-    await page.getByLabel('Password').fill('Password123!');
+    await page.getByRole('textbox', { name: 'Password' }).fill('Password123!');
     await page.getByRole('button', { name: 'Create An Account' }).click();
 
     await page.waitForResponse(/create-user/);

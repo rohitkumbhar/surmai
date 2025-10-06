@@ -1,10 +1,11 @@
 import { AspectRatio, Avatar, Button, Stack } from '@mantine/core';
-import { getAttachmentUrl, updateUserAvatar } from '../../lib/api';
-import { openContextModal } from '@mantine/modals';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from '@mantine/hooks';
+import { openContextModal } from '@mantine/modals';
 import { IconUserHexagon } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { getAttachmentUrl, updateUserAvatar } from '../../lib/api';
 
 export const UserAvatarForm = () => {
   const { user, reloadUser } = useCurrentUser();

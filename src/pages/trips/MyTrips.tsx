@@ -12,18 +12,20 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import classes from './MyTrips.module.css';
-import { useNavigate } from 'react-router-dom';
-import { listPastTrips, listUpcomingTrips } from '../../lib/api';
 import { useQuery } from '@tanstack/react-query';
-import { Trip } from '../../types/trips.ts';
-import { TripCard } from '../../components/trip/TripCard.tsx';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Header } from '../../components/nav/Header.tsx';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import classes from './MyTrips.module.css';
+import { Header } from '../../components/nav/Header.tsx';
 import { ImportTripAction } from '../../components/trip/ImportTripAction.tsx';
+import { TripCard } from '../../components/trip/TripCard.tsx';
+import { listPastTrips, listUpcomingTrips } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { showErrorNotification } from '../../lib/notifications.tsx';
+
+import type { Trip } from '../../types/trips.ts';
 
 export const MyTrips = () => {
   const navigate = useNavigate();
