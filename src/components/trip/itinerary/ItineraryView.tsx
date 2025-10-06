@@ -11,8 +11,41 @@ import { LodgingLine } from './LodgingLine.tsx';
 import { TransportationLine } from './TransportationLine.tsx';
 import { listActivities, listLodgings, listTransportations } from '../../../lib/api';
 
-
 import type { Activity, ItineraryLine, Lodging, Transportation, Trip } from '../../../types/trips.ts';
+
+const getDailyItinerary = (
+  day: string,
+  transportationItinerary: { [key: string]: Array<Transportation> },
+  lodgingsItinerary: { [key: string]: Array<Lodging> },
+  activitiesItinerary: { [key: string]: Array<Activity> }
+): Array<ItineraryLine> => {
+  const d = dayjs(day);
+  const daily = [
+    ...(transportationItinerary[day] || []).map((e) => ({ ...e, itineraryType: 'transportation', day: d })),
+    ...(lodgingsItinerary[day] || []).map((e) => ({ ...e, itineraryType: 'lodging', day: d })),
+    ...(activitiesItinerary[day] || []).map((e) => ({ ...e, itineraryType: 'activity', day: d })),
+  ];
+  return daily.sort(compareItineraryLine);
+};
+
+const getItineraryForDuration = (
+  startDay: string,
+  endDay: string,
+  transportationItinerary: { [key: string]: Array<Transportation> },
+  lodgingsItinerary: { [key: string]: Array<Lodging> },
+  activitiesItinerary: { [key: string]: Array<Activity> }
+): Record<PropertyKey, ItineraryLine[] | undefined> => {
+  let expanded: ItineraryLine[] = [];
+  for (let m = dayjs(startDay); m.isBefore(endDay) || m.isSame(endDay); m = m.add(1, 'day')) {
+    expanded = [
+      ...expanded,
+      ...getDailyItinerary(m.toISOString(), transportationItinerary, lodgingsItinerary, activitiesItinerary),
+    ];
+  }
+  return Object.groupBy(expanded, ({ day }: ItineraryLine) => {
+    return day.startOf('day').format('YYYYMMDD');
+  });
+};
 
 export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const tripId = trip.id;
@@ -46,29 +79,6 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
   );
   const [itineraryEnd, setItineraryEnd] = useState(itineraryStart.add(1, 'day'));
 
-  const getDailyItinerary = (day: string): Array<ItineraryLine> => {
-    const d = dayjs(day);
-    const daily = [
-      ...(transportationItinerary[day] || []).map((e) => ({ ...e, itineraryType: 'transportation', day: d })),
-      ...(lodgingsItinerary[day] || []).map((e) => ({ ...e, itineraryType: 'lodging', day: d })),
-      ...(activitiesItinerary[day] || []).map((e) => ({ ...e, itineraryType: 'activity', day: d })),
-    ];
-    return daily.sort(compareItineraryLine);
-  };
-
-  const getItineraryForDuration = (
-    startDay: string,
-    endDay: string
-  ): Record<PropertyKey, ItineraryLine[] | undefined> => {
-    let expanded: ItineraryLine[] = [];
-    for (let m = dayjs(startDay); m.isBefore(endDay) || m.isSame(endDay); m = m.add(1, 'day')) {
-      expanded = [...expanded, ...getDailyItinerary(m.toISOString())];
-    }
-    return Object.groupBy(expanded, ({ day }: ItineraryLine) => {
-      return day.startOf('day').format('YYYYMMDD');
-    });
-  };
-
   useEffect(() => {
     if (transportations) {
       setTransportationItinerary(buildTransportationIndex(transportations));
@@ -89,7 +99,10 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
   useEffect(() => {
     const itineraryForDuration = getItineraryForDuration(
       itineraryStart.format('YYYYMMDD'),
-      itineraryEnd.format('YYYYMMDD')
+      itineraryEnd.format('YYYYMMDD'),
+      transportationItinerary,
+      lodgingsItinerary,
+      activitiesItinerary
     );
     setItineraryEntries(Object.entries(itineraryForDuration));
     setSelectedPanels(Object.keys(itineraryForDuration));
