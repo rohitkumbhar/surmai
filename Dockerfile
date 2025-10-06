@@ -1,23 +1,24 @@
-FROM --platform=$BUILDPLATFORM node:23 AS frontend
+FROM --platform=$BUILDPLATFORM node:24 AS frontend
 ARG TARGETOS
 ARG TARGETARCH
 
 WORKDIR /surmai
-RUN mkdir node_modules
+RUN corepack enable
 
 COPY package.json .
-RUN npm install --no-audit
+COPY pnpm-lock.yaml .
+RUN pnpm install --frozen-lockfile
 
 ADD src src
 ADD public public
-COPY .eslintrc.cjs .
+COPY eslint.config.js .
 COPY index.html .
 COPY postcss.config.js .
 COPY tsconfig.app.json .
 COPY tsconfig.json .
 COPY tsconfig.node.json .
 COPY vite.config.ts .
-RUN npm run build
+RUN pnpm run build
 
 FROM --platform=$BUILDPLATFORM golang:1.24.1-alpine3.21 AS backend
 ARG TARGETOS
