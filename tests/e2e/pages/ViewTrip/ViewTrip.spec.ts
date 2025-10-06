@@ -61,8 +61,8 @@ test.describe('View Trip Page', () => {
     await viewTripPage.expectTripDetailsVisible(tripData.name);
 
     // Check that the trip dates are visible
-    const startDateStr = dayjs(tripData.startDate).format('MMMM D, YYYY');
-    const endDateStr = dayjs(tripData.endDate).format('MMMM D, YYYY');
+    const startDateStr = dayjs(tripData.startDate).format('MMM D, YYYY');
+    const endDateStr = dayjs(tripData.endDate).format('MMM D, YYYY');
     await expect(
       page.locator('#app-header').getByText(`${startDateStr} - ${endDateStr}`, { exact: false })
     ).toBeVisible();

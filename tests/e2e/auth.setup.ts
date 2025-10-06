@@ -13,8 +13,8 @@ setup('authenticate', async ({ page }) => {
   await page.goto(`/login`);
 
   // Fill in the login form
-  await page.getByLabel('Email Address').fill(email);
-  await page.getByLabel('Password').fill(password);
+  await page.getByTestId('email').fill(email);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
 
   // Submit the form
   await page.getByRole('button', { name: 'Sign In' }).click();
@@ -29,6 +29,8 @@ setup('authenticate', async ({ page }) => {
 
   await page.goto('/settings');
   await page.getByRole('tab', { name: 'Datasets' }).click();
+
+  await page.waitForTimeout(1000)
 
   const loadAirportsLocator = page.getByRole('button', { name: 'Load Airports' });
   const airportsLocatorCount = await loadAirportsLocator.count();

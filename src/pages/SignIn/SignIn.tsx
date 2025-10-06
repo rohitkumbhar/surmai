@@ -99,6 +99,7 @@ export const SignIn = () => {
           <TextInput
             name={'resetEmailAddress'}
             label={t('reset_email_address', 'Email Address')}
+            data-testid={'resetEmailAddress'}
             placeholder="you@domain.com"
             mt={'md'}
             onChange={(event) => setResetEmailAddress(event.target.value)}
@@ -159,6 +160,7 @@ export const SignIn = () => {
               <TextInput
                 name={'email'}
                 label={t('email_address', 'Email Address')}
+                data-testid={'email'}
                 placeholder="you@domain.com"
                 mt={'md'}
                 required
@@ -227,20 +229,19 @@ export const SignIn = () => {
             {oauthInfo &&
               oauthInfo.map((oa) => {
                 return (
-                  <>
-                    <Button
-                      fullWidth={true}
-                      justify={'flex-start'}
-                      leftSection={oauthIcons[oa.name]}
-                      onClick={() => {
-                        startOAuthFlow(oa.name).then(() => {
-                          navigate('/');
-                        });
-                      }}
-                    >
-                      {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
-                    </Button>
-                  </>
+                  <Button
+                    key={oa.name}
+                    fullWidth={true}
+                    justify={'flex-start'}
+                    leftSection={oauthIcons[oa.name]}
+                    onClick={() => {
+                      startOAuthFlow(oa.name).then(() => {
+                        navigate('/');
+                      });
+                    }}
+                  >
+                    {t('sign_in_with', 'Sign In With {{ name }}', { name: oa.displayName })}
+                  </Button>
                 );
               })}
           </Stack>

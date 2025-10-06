@@ -3,14 +3,14 @@ import StarterKit from '@tiptap/starter-kit';
 import { getTaskListExtension, Link, RichTextEditor } from '@mantine/tiptap';
 import TipTapTaskList from '@tiptap/extension-task-list';
 import TaskItem from '@tiptap/extension-task-item';
-import Underline from '@tiptap/extension-underline';
+//import Underline from '@tiptap/extension-underline';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import Highlight from '@tiptap/extension-highlight';
-import Table from '@tiptap/extension-table';
-import TableCell from '@tiptap/extension-table-cell';
-import TableHeader from '@tiptap/extension-table-header';
-import TableRow from '@tiptap/extension-table-row';
+import { Table } from '@tiptap/extension-table';
+import { TableCell } from '@tiptap/extension-table-cell';
+import { TableHeader } from '@tiptap/extension-table-header';
+import { TableRow } from '@tiptap/extension-table-row';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
 import TextAlign from '@tiptap/extension-text-align';
@@ -26,12 +26,12 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       getTaskListExtension(TipTapTaskList),
       TaskItem.configure({
         nested: false,
       }),
-      Underline,
+//      Underline,
       Link,
       Superscript,
       SubScript,
@@ -42,7 +42,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       Placeholder.configure({
         placeholder: t(
           'notes_placeholder',
-          'You can use notes to jot down anything that is not covered under Organization or just for brainstorming with collaborators. For example, a task list or links to local attractions.'
+          'You can use notes to jot down anything that is not covered under Organization or just for brainstorming with collaborators. For example, a task list or links to local attractions.',
         ),
       }),
       Table.configure({
@@ -135,6 +135,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       </RichTextEditor>
       <Group justify={'flex-end'}>
         <Button
+          data-testid='save-notes-btn'
           leftSection={<IconDeviceFloppy />}
           onClick={() => {
             onSave(editor?.getHTML() || '');
