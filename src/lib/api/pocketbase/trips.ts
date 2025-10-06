@@ -18,8 +18,6 @@ import type {
   TripResponse,
 } from '../../../types/trips.ts';
 
-
-
 const trips = pb.collection('trips');
 
 export const createTrip = async (data: NewTrip) => {

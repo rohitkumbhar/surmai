@@ -8,7 +8,6 @@ import classes from './Navbar.module.css';
 import { isAdmin, logoutCurrentUser } from '../../lib/api';
 import { FishOne } from '../logo/FishOne.tsx';
 
-
 interface NavbarLinkProps {
   icon: typeof IconHome2;
   label: string;

@@ -24,7 +24,6 @@ import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest,
 import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
 
-
 const oauthIcons: { [key: string]: React.ReactNode } = {
   google: <IconBrandGoogle size={16} stroke={1} />,
   facebook: <IconBrandFacebook size={16} stroke={1} />,

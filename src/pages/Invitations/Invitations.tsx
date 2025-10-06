@@ -47,7 +47,13 @@ export const Invitations = () => {
       )}
       <Group align={'top'}>
         {invitations?.map((invitation) => {
-          return <TripCollaborationInvitationCard invitation={invitation} onUpdate={refetchInvitations} key={invitation.id}/>;
+          return (
+            <TripCollaborationInvitationCard
+              invitation={invitation}
+              onUpdate={refetchInvitations}
+              key={invitation.id}
+            />
+          );
         })}
       </Group>
     </Container>

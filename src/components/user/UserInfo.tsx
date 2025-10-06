@@ -9,9 +9,7 @@ import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { getAttachmentUrl, listInvitations, logoutCurrentUser } from '../../lib/api';
 
-
 import type { Invitation } from '../../types/invitations.ts';
-
 
 export const UserInfo = () => {
   const navigate = useNavigate();

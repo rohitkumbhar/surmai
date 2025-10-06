@@ -7,7 +7,7 @@ import { searchAirports } from '../../../lib/api';
 
 import type { Airport } from '../../../types/trips';
 import type { UseFormReturnType } from '@mantine/form';
-import type { MutableRefObject} from 'react';
+import type { MutableRefObject } from 'react';
 
 export const AirportSelect = ({
   propName,

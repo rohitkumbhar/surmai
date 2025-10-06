@@ -1,4 +1,3 @@
-
 import { pb, pbAdmin } from './pocketbase.ts';
 
 import type { User } from '../../../types/auth.ts';

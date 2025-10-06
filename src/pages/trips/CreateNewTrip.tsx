@@ -15,11 +15,6 @@ import { showErrorNotification } from '../../lib/notifications.tsx';
 
 import type { CreateTripForm, NewTrip } from '../../types/trips.ts';
 
-
-
-
-
-
 export const CreateNewTrip = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();

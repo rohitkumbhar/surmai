@@ -1,4 +1,3 @@
-
 import type { User } from './auth.ts';
 import type { Dayjs } from 'dayjs';
 import type { RecordModel } from 'pocketbase';

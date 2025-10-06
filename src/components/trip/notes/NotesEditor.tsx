@@ -31,7 +31,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       TaskItem.configure({
         nested: false,
       }),
-//      Underline,
+      //      Underline,
       Link,
       Superscript,
       SubScript,
@@ -42,7 +42,7 @@ const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: strin
       Placeholder.configure({
         placeholder: t(
           'notes_placeholder',
-          'You can use notes to jot down anything that is not covered under Organization or just for brainstorming with collaborators. For example, a task list or links to local attractions.',
+          'You can use notes to jot down anything that is not covered under Organization or just for brainstorming with collaborators. For example, a task list or links to local attractions.'
         ),
       }),
       Table.configure({

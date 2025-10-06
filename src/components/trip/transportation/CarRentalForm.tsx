@@ -13,7 +13,13 @@ import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
-import type { Attachment, CarRentalFormSchema, CreateTransportation, Transportation, Trip } from '../../../types/trips.ts';
+import type {
+  Attachment,
+  CarRentalFormSchema,
+  CreateTransportation,
+  Transportation,
+  Trip,
+} from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const CarRentalForm = ({

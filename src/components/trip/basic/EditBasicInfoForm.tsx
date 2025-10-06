@@ -13,10 +13,6 @@ import { showErrorNotification } from '../../../lib/notifications.tsx';
 import type { CreateTripForm, Trip } from '../../../types/trips.ts';
 import type { ContextModalProps } from '@mantine/modals';
 
-
-
-
-
 export const EditBasicInfoForm = ({
   context,
   id,

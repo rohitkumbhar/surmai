@@ -6,10 +6,9 @@ import { useTranslation } from 'react-i18next';
 
 import { searchPlaces } from '../../lib/api';
 
-
 import type { Place } from '../../types/trips';
 import type { UseFormReturnType } from '@mantine/form';
-import type { MutableRefObject} from 'react';
+import type { MutableRefObject } from 'react';
 
 export function PlaceMultiSelect({ propName, form }: { propName: string; form: UseFormReturnType<unknown> }) {
   const { t } = useTranslation();

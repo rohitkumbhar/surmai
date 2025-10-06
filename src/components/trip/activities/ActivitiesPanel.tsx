@@ -9,7 +9,6 @@ import { GenericActivityData } from './GenericActivityData.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { listActivities } from '../../../lib/api';
 
-
 import type { Activity, Attachment, Trip } from '../../../types/trips.ts';
 
 export const ActivitiesPanel = ({

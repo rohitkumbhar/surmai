@@ -9,7 +9,6 @@ import { GenericLodgingData } from './GenericLodgingData.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { listLodgings } from '../../../lib/api';
 
-
 import type { Attachment, Lodging, Trip } from '../../../types/trips.ts';
 
 export const LodgingPanel = ({

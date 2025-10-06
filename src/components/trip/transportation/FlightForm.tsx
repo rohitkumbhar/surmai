@@ -16,7 +16,15 @@ import i18n from '../../../lib/i18n.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
-import type { Airline, Airport, Attachment, CreateTransportation, FlightFormSchema, Transportation, Trip } from '../../../types/trips.ts';
+import type {
+  Airline,
+  Airport,
+  Attachment,
+  CreateTransportation,
+  FlightFormSchema,
+  Transportation,
+  Trip,
+} from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const FlightForm = ({

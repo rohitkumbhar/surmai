@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { getAttachmentUrl, logoutCurrentUser } from '../../lib/api';
 
-
 export function UserButton() {
   const [, setUserMenuOpened] = useState(false);
   const navigate = useNavigate();

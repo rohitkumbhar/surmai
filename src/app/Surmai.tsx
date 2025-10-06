@@ -16,9 +16,6 @@ import { currentUser } from '../lib/api';
 
 import type { SiteSettings } from '../types/settings.ts';
 
-
-
-
 export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');
   const { online } = useNetwork();
