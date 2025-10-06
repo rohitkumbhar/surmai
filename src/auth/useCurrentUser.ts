@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { AuthContext } from './SecureRoute.tsx';
+import { AuthContext } from './AuthContext.ts';
 
 export const useCurrentUser = () => {
   return useContext(AuthContext);
