@@ -239,7 +239,7 @@ export const GenericTransportationModeForm = ({
             <Group>
               <FileButton
                 onChange={setFiles}
-                accept="application/pdf,image/png,image/jpeg,image/gif,image/webp"
+                accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
                 form={'files'}
                 name={'files'}
                 multiple

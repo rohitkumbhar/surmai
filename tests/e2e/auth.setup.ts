@@ -28,8 +28,7 @@ setup('authenticate', async ({ page }) => {
 
   await page.goto('/settings');
   await page.getByRole('tab', { name: 'Datasets' }).click();
-
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(1000);
 
   const loadAirportsLocator = page.getByRole('button', { name: 'Load Airports' });
   const airportsLocatorCount = await loadAirportsLocator.count();

@@ -221,7 +221,7 @@ export const GenericTransportationData = ({
             {t('cost', 'Cost')}
           </Text>
           <Text size="md">
-            {transportation.cost.value ? `${transportation.cost.value} ${transportation.cost.currency || ''}` : ''}
+            {transportation.cost?.value ? `${transportation.cost.value} ${transportation.cost?.currency || ''}` : ''}
           </Text>
         </Grid.Col>
       </Grid>

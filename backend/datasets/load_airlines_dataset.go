@@ -3,9 +3,10 @@ package datasets
 import (
 	"encoding/json"
 	"errors"
-	"github.com/pocketbase/pocketbase/core"
 	"log"
 	"os"
+
+	"github.com/pocketbase/pocketbase/core"
 )
 
 type AirlineDatasetEntry struct {
@@ -16,7 +17,7 @@ type AirlineDatasetEntry struct {
 
 func LoadAirlinesDataset(app core.App) (int, error) {
 
-	places, err := app.FindCollectionByNameOrId("airlines")
+	airlines, err := app.FindCollectionByNameOrId("airlines")
 	if err != nil {
 		return -1, errors.New("collection `airlines` does not exists")
 	}
@@ -42,7 +43,7 @@ func LoadAirlinesDataset(app core.App) (int, error) {
 
 	for _, airline := range payload {
 
-		record := core.NewRecord(places)
+		record := core.NewRecord(airlines)
 		record.Set("name", airline.Name)
 		record.Set("code", airline.Id)
 		record.Set("logo", airline.Logo)
