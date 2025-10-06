@@ -11,16 +11,17 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import classes from '../../pages/Settings/Settings.module.css';
-import { useTranslation } from 'react-i18next';
 import { useForm } from '@mantine/form';
-import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib/api';
+import { IconDeviceFloppy, IconMail } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
-import { IconDeviceFloppy, IconMail } from '@tabler/icons-react';
-import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { useTranslation } from 'react-i18next';
 
-import { SmtpSettings } from '../../types/settings.ts';
+import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib/api';
+import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import classes from '../../pages/Settings/Settings.module.css';
+
+import type { SmtpSettings } from '../../types/settings.ts';
 
 export const SmtpSettingsForm = () => {
   const {

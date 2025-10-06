@@ -1,5 +1,5 @@
-import { User } from '../types/auth.ts';
-import { Place } from '../types/trips.ts';
+import type { User } from '../types/auth.ts';
+import type { Place } from '../types/trips.ts';
 
 export const getMapsUrl = (user: User | undefined, destination: Place): string => {
   if (user?.mapsProvider === 'google') {

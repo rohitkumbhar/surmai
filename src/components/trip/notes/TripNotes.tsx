@@ -1,11 +1,13 @@
-import { Trip } from '../../../types/trips.ts';
 import { Button, Group, Paper, Text } from '@mantine/core';
-import { saveTripNotes } from '../../../lib/api';
-import { showSaveSuccessNotification } from '../../../lib/notifications.tsx';
-import { useTranslation } from 'react-i18next';
 import { IconPencil } from '@tabler/icons-react';
 import { lazy, Suspense, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import styles from './TripNotes.module.css';
+import { saveTripNotes } from '../../../lib/api';
+import { showSaveSuccessNotification } from '../../../lib/notifications.tsx';
+
+import type { Trip } from '../../../types/trips.ts';
 
 const NotesEditor = lazy(() => import('./NotesEditor.tsx'));
 

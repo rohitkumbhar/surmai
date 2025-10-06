@@ -1,7 +1,8 @@
-import { Document, Page, pdfjs } from 'react-pdf';
-import { useState } from 'react';
-import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { Stack } from '@mantine/core';
+import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
+import { useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+
 import styles from './PDFViewer.module.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;

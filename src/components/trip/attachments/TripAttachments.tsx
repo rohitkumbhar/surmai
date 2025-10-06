@@ -1,11 +1,13 @@
-import { Attachment, Trip } from '../../../types/trips.ts';
 import { ActionIcon, Anchor, Button, FileButton, Group, Paper, ScrollArea, Table, Text } from '@mantine/core';
-import { IconTrash, IconUpload } from '@tabler/icons-react';
-import { openConfirmModal, openContextModal } from '@mantine/modals';
-import { useTranslation } from 'react-i18next';
-import { deleteAttachment, getAttachmentUrl, uploadAttachments } from '../../../lib/api';
 import { useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal, openContextModal } from '@mantine/modals';
+import { IconTrash, IconUpload } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+
+import { deleteAttachment, getAttachmentUrl, uploadAttachments } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
+
+import type { Attachment, Trip } from '../../../types/trips.ts';
 
 export const TripAttachments = ({
   trip,

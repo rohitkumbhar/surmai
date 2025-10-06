@@ -1,6 +1,8 @@
+
 import { pb, pbAdmin } from './pocketbase.ts';
-import { User } from '../../../types/auth.ts';
-import { ClientResponseError } from 'pocketbase';
+
+import type { User } from '../../../types/auth.ts';
+import type { ClientResponseError } from 'pocketbase';
 
 export const authWithUsernameAndPassword = async ({ email, password }: { email: string; password: string }) => {
   return pbAdmin

@@ -1,15 +1,21 @@
-import { CreateTripForm, Trip } from '../../../types/trips.ts';
-import { useTranslation } from 'react-i18next';
-import { useForm } from '@mantine/form';
-import { basicInfoFormValidation } from './validation.ts';
-import { updateTrip } from '../../../lib/api';
-import { EditTripBasicForm } from './EditTripBasicForm.tsx';
 import { Button, Group } from '@mantine/core';
-import { ContextModalProps } from '@mantine/modals';
+import { useForm } from '@mantine/form';
+import dayjs from 'dayjs';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { EditTripBasicForm } from './EditTripBasicForm.tsx';
+import { basicInfoFormValidation } from './validation.ts';
+import { updateTrip } from '../../../lib/api';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
-import dayjs from 'dayjs';
+
+import type { CreateTripForm, Trip } from '../../../types/trips.ts';
+import type { ContextModalProps } from '@mantine/modals';
+
+
+
+
 
 export const EditBasicInfoForm = ({
   context,

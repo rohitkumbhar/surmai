@@ -1,17 +1,20 @@
 import { Button, FileButton, Group, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import { Attachment, CarRentalFormSchema, CreateTransportation, Transportation, Trip } from '../../../types/trips.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { useForm } from '@mantine/form';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
+
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
+import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
-import dayjs from 'dayjs';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+
+import type { Attachment, CarRentalFormSchema, CreateTransportation, Transportation, Trip } from '../../../types/trips.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const CarRentalForm = ({
   trip,

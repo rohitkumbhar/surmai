@@ -1,16 +1,17 @@
 import { Container, Tabs, Text } from '@mantine/core';
+import { IconAdjustmentsPlus, IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
 import { Header } from '../../components/nav/Header.tsx';
 import { Configuration } from '../../components/settings/Configuration.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
 import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx';
-import { useEffect } from 'react';
-import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
-import { useNavigate } from 'react-router-dom';
-import { IconAdjustmentsPlus, IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
-import { UserList } from '../../components/settings/UserList.tsx';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
+import { UserList } from '../../components/settings/UserList.tsx';
+import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
+import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
 const Settings = () => {
   const { t } = useTranslation();

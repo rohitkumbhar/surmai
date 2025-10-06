@@ -1,4 +1,5 @@
 import { NumberInput, rem, Select } from '@mantine/core';
+
 import { currencyCodes } from './currencyCodes.ts';
 
 export const CurrencyInput = ({

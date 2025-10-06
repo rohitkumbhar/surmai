@@ -1,15 +1,17 @@
-import { IconPencil, IconPhoto } from '@tabler/icons-react';
 import { ActionIcon, AspectRatio, Badge, Card, Group, Image, Overlay, Text } from '@mantine/core';
-import classes from './TripCard.module.css';
-import { Trip } from '../../types/trips.ts';
-import { getAttachmentUrl, uploadTripCoverImage } from '../../lib/api';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { nanoid } from 'nanoid';
 import { useHover, useMediaQuery } from '@mantine/hooks';
 import { openContextModal } from '@mantine/modals';
-import { useState } from 'react';
+import { IconPencil, IconPhoto } from '@tabler/icons-react';
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import classes from './TripCard.module.css';
+import { getAttachmentUrl, uploadTripCoverImage } from '../../lib/api';
+
+import type { Trip } from '../../types/trips.ts';
 
 export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
   const navigateFunction = useNavigate();

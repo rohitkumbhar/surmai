@@ -1,7 +1,10 @@
 import { expect, test } from '@playwright/test';
-import { ViewTripPage } from './ViewTripPage';
-import { CreateNewTripPage, TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 import dayjs from 'dayjs';
+
+import { ViewTripPage } from './ViewTripPage';
+import { CreateNewTripPage } from '../CreateNewTrip/CreateNewTripPage';
+
+import type { TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 
 test.describe('Trip Notes', () => {
   let viewTripPage: ViewTripPage;

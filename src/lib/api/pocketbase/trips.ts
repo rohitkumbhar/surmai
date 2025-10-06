@@ -1,5 +1,13 @@
+import dayjs from 'dayjs';
+
+import { listActivities } from './activities.ts';
+import { getTripAttachments } from './attachments.ts';
+import { listLodgings } from './lodgings.ts';
 import { pb } from './pocketbase.ts';
-import {
+import { listTransportations } from './transportations.ts';
+
+import type { User } from '../../../types/auth.ts';
+import type {
   Activity,
   Attachment,
   Collaborator,
@@ -9,12 +17,8 @@ import {
   Trip,
   TripResponse,
 } from '../../../types/trips.ts';
-import { listActivities } from './activities.ts';
-import { User } from '../../../types/auth.ts';
-import { listTransportations } from './transportations.ts';
-import { listLodgings } from './lodgings.ts';
-import { getTripAttachments } from './attachments.ts';
-import dayjs from 'dayjs';
+
+
 
 const trips = pb.collection('trips');
 

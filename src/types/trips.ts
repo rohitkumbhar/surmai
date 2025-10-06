@@ -1,6 +1,7 @@
-import { User } from './auth.ts';
-import { RecordModel } from 'pocketbase';
-import { Dayjs } from 'dayjs';
+
+import type { User } from './auth.ts';
+import type { Dayjs } from 'dayjs';
+import type { RecordModel } from 'pocketbase';
 
 export type Participant = {
   name: string;

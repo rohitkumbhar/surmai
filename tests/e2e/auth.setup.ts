@@ -1,5 +1,4 @@
 import { test as setup } from '@playwright/test';
-
 import * as path from 'path';
 
 const __dirname = import.meta.dirname;

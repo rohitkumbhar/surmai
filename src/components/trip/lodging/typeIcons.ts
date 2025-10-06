@@ -1,5 +1,6 @@
-import { LodgingType } from '../../../types/trips.ts';
 import { IconBedFlat, IconBuildingEstate, IconHome, IconTent } from '@tabler/icons-react';
+
+import { LodgingType } from '../../../types/trips.ts';
 
 export const typeIcons = {
   [LodgingType.HOTEL]: IconBuildingEstate,

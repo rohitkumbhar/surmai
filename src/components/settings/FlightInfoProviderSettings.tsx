@@ -1,11 +1,12 @@
 import { Button, Collapse, Group, Select, Skeleton, Switch, Text, TextInput } from '@mantine/core';
-import { IconDeviceFloppy } from '@tabler/icons-react';
-import { getSettingsForKey, setSettingsForKey } from '../../lib/api';
-import { useTranslation } from 'react-i18next';
-import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
+import { IconDeviceFloppy } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { getSettingsForKey, setSettingsForKey } from '../../lib/api';
 import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 export type FlightInfoProviderSettings = {

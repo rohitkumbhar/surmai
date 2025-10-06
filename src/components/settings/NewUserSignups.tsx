@@ -1,9 +1,11 @@
-import classes from '../../pages/Settings/Settings.module.css';
 import { Group, Switch, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+
 import { disableUserSignups, enableUserSignups } from '../../lib/api';
 import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
-import { useTranslation } from 'react-i18next';
-import { UserModel } from '../../types/auth.ts';
+import classes from '../../pages/Settings/Settings.module.css';
+
+import type { UserModel } from '../../types/auth.ts';
 
 export const NewUserSignups = ({ userModel, refetch }: { userModel?: UserModel; refetch: () => void }) => {
   const { t } = useTranslation();

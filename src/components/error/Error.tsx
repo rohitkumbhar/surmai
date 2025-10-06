@@ -1,7 +1,10 @@
-import { ServerError } from './ServerError.tsx';
-import { ClientResponseError } from 'pocketbase';
-import { NotFound } from './NotFound.tsx';
+
 import { useNavigate } from 'react-router-dom';
+
+import { NotFound } from './NotFound.tsx';
+import { ServerError } from './ServerError.tsx';
+
+import type { ClientResponseError } from 'pocketbase';
 
 export const Error = ({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) => {
   const navigate = useNavigate();

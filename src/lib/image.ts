@@ -1,4 +1,4 @@
-import { CroppedImage } from '../types/trips.ts';
+import type { CroppedImage } from '../types/trips.ts';
 
 export const createImage = (url: string): Promise<HTMLImageElement> =>
   new Promise((resolve, reject) => {
@@ -86,7 +86,6 @@ export async function getCroppedImg(
   );
 
   // As a file
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return new Promise((resolve, _reject) => {
     croppedCanvas.toBlob((file) => {
       resolve(file);

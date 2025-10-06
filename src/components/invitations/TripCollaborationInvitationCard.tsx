@@ -1,10 +1,12 @@
-import { IconMail } from '@tabler/icons-react';
 import { Blockquote, Button, Card, Group, Text } from '@mantine/core';
-import { Invitation } from '../../types/invitations.ts';
+import { IconMail } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+
 import classes from './TripCollaborationInvitationCard.module.css';
 import { invitationAction } from '../../lib/api';
 import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
+
+import type { Invitation } from '../../types/invitations.ts';
 
 export const TripCollaborationInvitationCard = ({
   invitation,

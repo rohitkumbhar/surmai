@@ -12,16 +12,18 @@ import {
   Text,
   TextInput,
 } from '@mantine/core';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from '@mantine/form';
-import { useEffect, useState } from 'react';
-import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest, startOAuthFlow } from '../../lib/api';
-import { useTranslation } from 'react-i18next';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
-import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { IconBrandApple, IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest, startOAuthFlow } from '../../lib/api';
+import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
+
 
 const oauthIcons: { [key: string]: React.ReactNode } = {
   google: <IconBrandGoogle size={16} stroke={1} />,

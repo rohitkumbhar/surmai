@@ -1,12 +1,15 @@
 import { Alert, Button, Container, Paper, Text, TextInput } from '@mantine/core';
-import { useForm, UseFormReturnType } from '@mantine/form';
+import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { createUserWithPassword } from '../../lib/api';
 import { useTranslation } from 'react-i18next';
-import { FancyPasswordInput } from '../../components/account/FancyPasswordInput.tsx';
-import { SignUpForm } from '../../types/auth.ts';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { FancyPasswordInput } from '../../components/account/FancyPasswordInput.tsx';
+import { createUserWithPassword } from '../../lib/api';
+
+import type { SignUpForm } from '../../types/auth.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const SignUp = () => {
   const [apiError, setApiError] = useState<string>();

@@ -1,7 +1,7 @@
 import { pb, pbAdmin } from './pocketbase.ts';
 
-import { SmtpSettings } from '../../../types/settings.ts';
-import { OAuthSettingsFormType, UserModel } from '../../../types/auth.ts';
+import type { OAuthSettingsFormType, UserModel } from '../../../types/auth.ts';
+import type { SmtpSettings } from '../../../types/settings.ts';
 
 export const getSmtpSettings = async (): Promise<SmtpSettings | undefined> => {
   const settings = await pbAdmin.settings.getAll();

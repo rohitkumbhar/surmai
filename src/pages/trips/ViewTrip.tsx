@@ -1,23 +1,25 @@
-import { useParams } from 'react-router-dom';
 import { Accordion, Alert, Container, Group, LoadingOverlay, rem, Tabs, Text } from '@mantine/core';
-import { IconBed, IconCalendar, IconInfoSquare, IconPlane, IconRefresh, IconWifiOff } from '@tabler/icons-react';
-import { Attachment, Trip } from '../../types/trips.ts';
-import { getTrip, getTripAttachments } from '../../lib/api';
-import { Header } from '../../components/nav/Header.tsx';
-import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
-import { useQuery } from '@tanstack/react-query';
-import { TransportationPanel } from '../../components/trip/transportation/TransportationPanel.tsx';
-import { useTranslation } from 'react-i18next';
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
+import { IconBed, IconCalendar, IconInfoSquare, IconPlane, IconRefresh, IconWifiOff } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
-import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
-import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
-import { formatDate } from '../../lib/time.ts';
+import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
+
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
-import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
+import { Header } from '../../components/nav/Header.tsx';
+import { ActivitiesPanel } from '../../components/trip/activities/ActivitiesPanel.tsx';
 import { TripAttachments } from '../../components/trip/attachments/TripAttachments.tsx';
+import { BasicInfo } from '../../components/trip/basic/BasicInfo.tsx';
+import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
+import { LodgingPanel } from '../../components/trip/lodging/LodgingPanel.tsx';
+import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
+import { TransportationPanel } from '../../components/trip/transportation/TransportationPanel.tsx';
+import { getTrip, getTripAttachments } from '../../lib/api';
+import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { formatDate } from '../../lib/time.ts';
+
+import type { Attachment, Trip } from '../../types/trips.ts';
 import './ViewTrip.module.css';
 
 export const ViewTrip = () => {

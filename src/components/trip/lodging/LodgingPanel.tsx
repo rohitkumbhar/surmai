@@ -1,13 +1,16 @@
-import { Attachment, Lodging, Trip } from '../../../types/trips.ts';
-import { useQuery } from '@tanstack/react-query';
-import { listLodgings } from '../../../lib/api';
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
-import { AddLodgingMenu } from './AddLodgingMenu.tsx';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { AddLodgingMenu } from './AddLodgingMenu.tsx';
 import { GenericLodgingData } from './GenericLodgingData.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { listLodgings } from '../../../lib/api';
+
+
+import type { Attachment, Lodging, Trip } from '../../../types/trips.ts';
 
 export const LodgingPanel = ({
   trip,

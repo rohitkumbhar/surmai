@@ -1,11 +1,14 @@
-import { User } from '../../types/auth.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
-import { useTranslation } from 'react-i18next';
-import { FancyPasswordInput } from '../account/FancyPasswordInput.tsx';
 import { Button, Container, Group, PasswordInput, Text } from '@mantine/core';
+import { useForm } from '@mantine/form';
 import { IconRefreshDot } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+
 import { updateUserAdminAction } from '../../lib/api';
 import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { FancyPasswordInput } from '../account/FancyPasswordInput.tsx';
+
+import type { User } from '../../types/auth.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const ChangeUserPasswordForm = ({
   user,

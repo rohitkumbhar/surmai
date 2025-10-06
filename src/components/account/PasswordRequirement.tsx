@@ -1,5 +1,5 @@
-import { IconCheck, IconX } from '@tabler/icons-react';
 import { Box, rem, Text } from '@mantine/core';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 export const PasswordRequirement = ({ meets, label }: { meets: boolean; label: string }) => {
   return (

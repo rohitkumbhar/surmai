@@ -1,17 +1,24 @@
 import { Accordion, Button, Container, Group, rem, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { IconInfoSquare } from '@tabler/icons-react';
-import { createTrip } from '../../lib/api';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { CreateTripForm, NewTrip } from '../../types/trips.ts';
+
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { Header } from '../../components/nav/Header.tsx';
 import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
 import { basicInfoFormValidation } from '../../components/trip/basic/validation.ts';
-import { useTranslation } from 'react-i18next';
-import { Header } from '../../components/nav/Header.tsx';
-import { useState } from 'react';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { createTrip } from '../../lib/api';
 import { showErrorNotification } from '../../lib/notifications.tsx';
-import dayjs from 'dayjs';
+
+import type { CreateTripForm, NewTrip } from '../../types/trips.ts';
+
+
+
+
+
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();

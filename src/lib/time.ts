@@ -1,5 +1,6 @@
-import { User } from '../types/auth.ts';
 import dayjs from 'dayjs';
+
+import type { User } from '../types/auth.ts';
 
 export const calculateTimezoneDifference = (user: User | undefined, timezone: string) => {
   const baseline = dayjs().format('YYYY-MM-DD HH:mm:ss');

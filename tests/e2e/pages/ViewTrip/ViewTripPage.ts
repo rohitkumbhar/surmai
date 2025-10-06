@@ -1,5 +1,8 @@
-import { expect, Page } from '@playwright/test';
+import { expect } from '@playwright/test';
+
 import { getSelectorString } from './helper.ts';
+
+import type { Page } from '@playwright/test';
 
 export class ViewTripPage {
   private page: Page;

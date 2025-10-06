@@ -1,22 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/tiptap/styles.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import './lib/i18n';
-
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import utc from 'dayjs/plugin/utc';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
 import { SurmaiApp } from './app/Surmai.tsx';
+import './index.css';
 import { apiUrl } from './lib/api';
-import { SiteSettings } from './types/settings.ts';
+import './lib/i18n';
+
+import type { SiteSettings } from './types/settings.ts';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

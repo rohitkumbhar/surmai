@@ -1,28 +1,23 @@
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import {
-  Airline,
-  Airport,
-  Attachment,
-  CreateTransportation,
-  FlightFormSchema,
-  Transportation,
-  Trip,
-} from '../../../types/trips.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { createTransportationEntry, getFlightRoute, uploadAttachments } from '../../../lib/api';
+import { useForm } from '@mantine/form';
+import { useDebouncedCallback } from '@mantine/hooks';
+import { IconChairDirector, IconCodeCircle, IconPlane } from '@tabler/icons-react';
+import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { AirlineSelect } from './AirlineSelect.tsx';
+import { AirportSelect } from './AirportSelect.tsx';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import dayjs from 'dayjs';
+import { createTransportationEntry, getFlightRoute, uploadAttachments } from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import i18n from '../../../lib/i18n.ts';
-import { AirportSelect } from './AirportSelect.tsx';
-import { AirlineSelect } from './AirlineSelect.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
-import { IconChairDirector, IconCodeCircle, IconPlane } from '@tabler/icons-react';
-import { useDebouncedCallback } from '@mantine/hooks';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+
+import type { Airline, Airport, Attachment, CreateTransportation, FlightFormSchema, Transportation, Trip } from '../../../types/trips.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const FlightForm = ({
   trip,

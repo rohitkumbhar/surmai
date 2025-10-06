@@ -1,17 +1,19 @@
-import { Attachment, CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
-import { useState } from 'react';
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { useTranslation } from 'react-i18next';
-import { createLodgingEntry, updateLodgingEntry, uploadAttachments } from '../../../lib/api';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { createLodgingEntry, updateLodgingEntry, uploadAttachments } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
+import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+
+import type { Attachment, CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericLodgingForm = ({
   trip,

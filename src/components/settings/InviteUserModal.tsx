@@ -1,12 +1,14 @@
-import { ContextModalProps } from '@mantine/modals';
-import { useTranslation } from 'react-i18next';
 import { ActionIcon, Alert, Code, Container, CopyButton, Group, Text, Title, Tooltip } from '@mantine/core';
-import { IconCheck, IconCopy, IconMacroOff } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { InvitationForm } from '../invitations/InvitationForm.tsx';
-import { sendUserAccountInvitation } from '../../lib/api';
+import { IconCheck, IconCopy, IconMacroOff } from '@tabler/icons-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { sendUserAccountInvitation } from '../../lib/api';
+import { InvitationForm } from '../invitations/InvitationForm.tsx';
+
+import type { ContextModalProps } from '@mantine/modals';
 
 export const InviteUserModal = ({ context, id }: ContextModalProps) => {
   const { t } = useTranslation();

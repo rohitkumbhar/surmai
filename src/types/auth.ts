@@ -1,4 +1,4 @@
-import { RecordModel } from 'pocketbase';
+import type { RecordModel } from 'pocketbase';
 
 export interface User extends RecordModel {
   id: string;

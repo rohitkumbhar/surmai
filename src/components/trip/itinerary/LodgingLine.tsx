@@ -1,12 +1,15 @@
-import { Lodging } from '../../../types/trips.ts';
-import dayjs, { Dayjs } from 'dayjs';
 import { Anchor, Badge, Box, Group, rem, Stack, Text } from '@mantine/core';
-import { typeIcons } from '../lodging/typeIcons.ts';
-import { formatTime } from '../../../lib/time.ts';
-import { useTranslation } from 'react-i18next';
-import { getMapsLink } from '../../../lib/places.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { IconMap2 } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { getMapsLink } from '../../../lib/places.ts';
+import { formatTime } from '../../../lib/time.ts';
+import { typeIcons } from '../lodging/typeIcons.ts';
+
+import type { Lodging } from '../../../types/trips.ts';
+import type { Dayjs } from 'dayjs';
 
 export const LodgingLine = ({ lodging, day }: { lodging: Lodging; day: Dayjs }) => {
   // @ts-expect-error Icon type

@@ -1,9 +1,10 @@
 import { Card, Group, LoadingOverlay, Text, Title } from '@mantine/core';
-import { getUsersMetadata } from '../../lib/api';
-import { useTranslation } from 'react-i18next';
-import { OAuth2SettingsForm } from './OAuth2SettingsForm.tsx';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+
 import { NewUserSignups } from './NewUserSignups.tsx';
+import { OAuth2SettingsForm } from './OAuth2SettingsForm.tsx';
+import { getUsersMetadata } from '../../lib/api';
 
 export const Configuration = () => {
   const {

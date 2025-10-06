@@ -1,13 +1,15 @@
-import { Transportation } from '../../../types/trips.ts';
 import { Anchor, Badge, Box, Group, rem, Stack, Text } from '@mantine/core';
-import { typeIcons } from '../transportation/typeIcons.ts';
 import { IconCar, IconMap2 } from '@tabler/icons-react';
-import dayjs, { Dayjs } from 'dayjs';
-
-import { formatTime } from '../../../lib/time.ts';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { getMapsLink } from '../../../lib/places.ts';
+
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { getMapsLink } from '../../../lib/places.ts';
+import { formatTime } from '../../../lib/time.ts';
+import { typeIcons } from '../transportation/typeIcons.ts';
+
+import type { Transportation } from '../../../types/trips.ts';
+import type { Dayjs } from 'dayjs';
 
 export const TransportationLine = ({ transportation, day }: { transportation: Transportation; day: Dayjs }) => {
   const type = transportation.type;

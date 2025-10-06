@@ -1,11 +1,13 @@
 import { Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
-import { IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
-import classes from './Navbar.module.css';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { FishOne } from '../logo/FishOne.tsx';
 import { useClickOutside } from '@mantine/hooks';
-import { isAdmin, logoutCurrentUser } from '../../lib/api';
+import { IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import classes from './Navbar.module.css';
+import { isAdmin, logoutCurrentUser } from '../../lib/api';
+import { FishOne } from '../logo/FishOne.tsx';
+
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;

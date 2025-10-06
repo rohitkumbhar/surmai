@@ -1,8 +1,8 @@
-import { Activity, CreateActivity } from '../../../types/trips.ts';
-import { pb } from './pocketbase.ts';
-
-import { convertSavedToBrowserDate } from '../../time.ts';
 import { deleteAttachment } from './attachments.ts';
+import { pb } from './pocketbase.ts';
+import { convertSavedToBrowserDate } from '../../time.ts';
+
+import type { Activity, CreateActivity } from '../../../types/trips.ts';
 
 const activities = pb.collection('activities');
 export const listActivities = async (tripId: string): Promise<Activity[]> => {

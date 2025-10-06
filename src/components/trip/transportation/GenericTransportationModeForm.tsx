@@ -1,22 +1,25 @@
 import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
-import {
+import { useForm } from '@mantine/form';
+import dayjs from 'dayjs';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
+import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
+import { fakeAsUtcString } from '../../../lib/time.ts';
+import { PlaceSelect } from '../../places/PlaceSelect.tsx';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+
+import type {
   Attachment,
   CreateTransportation,
   Transportation,
   TransportationFormSchema,
   Trip,
 } from '../../../types/trips.ts';
-import { useForm, UseFormReturnType } from '@mantine/form';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import dayjs from 'dayjs';
-import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
-import { PlaceSelect } from '../../places/PlaceSelect.tsx';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericTransportationModeForm = ({
   transportationType,

@@ -1,9 +1,10 @@
 import { Button, Group, rem, Text, useMantineTheme } from '@mantine/core';
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import classes from './UploadImageForm.module.css';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
+import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import classes from './UploadImageForm.module.css';
 
 export const ImageDropZone = ({ setUploadedFile }: { setUploadedFile: (val: File) => void }) => {
   const theme = useMantineTheme();

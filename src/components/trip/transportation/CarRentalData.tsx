@@ -1,13 +1,15 @@
-import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
+import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { IconArticle } from '@tabler/icons-react';
-import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { useTranslation } from 'react-i18next';
+
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
 import { CarRentalForm } from './CarRentalForm.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
+
+import type { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 
 export const CarRentalData = ({
   trip,

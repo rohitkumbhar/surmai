@@ -1,15 +1,18 @@
-import { Activity, ItineraryLine, Lodging, Transportation, Trip } from '../../../types/trips.ts';
 import { Accordion, Badge, Button, Card, Group, rem, Stack, Text } from '@mantine/core';
 import { IconCalendar } from '@tabler/icons-react';
-import { Fragment, useEffect, useState } from 'react';
-import dayjs from 'dayjs';
 import { useQuery } from '@tanstack/react-query';
-import { listActivities, listLodgings, listTransportations } from '../../../lib/api';
-import { buildActivitiesIndex, buildLodgingIndex, buildTransportationIndex, compareItineraryLine } from './helper.ts';
-import { TransportationLine } from './TransportationLine.tsx';
-import { LodgingLine } from './LodgingLine.tsx';
-import { ActivityLine } from './ActivityLine.tsx';
+import dayjs from 'dayjs';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { ActivityLine } from './ActivityLine.tsx';
+import { buildActivitiesIndex, buildLodgingIndex, buildTransportationIndex, compareItineraryLine } from './helper.ts';
+import { LodgingLine } from './LodgingLine.tsx';
+import { TransportationLine } from './TransportationLine.tsx';
+import { listActivities, listLodgings, listTransportations } from '../../../lib/api';
+
+
+import type { Activity, ItineraryLine, Lodging, Transportation, Trip } from '../../../types/trips.ts';
 
 export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const tripId = trip.id;

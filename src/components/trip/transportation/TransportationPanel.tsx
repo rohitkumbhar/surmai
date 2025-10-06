@@ -1,17 +1,19 @@
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
-import { Attachment, Transportation, Trip } from '../../../types/trips.ts';
-import { AddTransportationMenu } from './AddTransportationMenu.tsx';
-import { Fragment, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { listTransportations } from '../../../lib/api';
-import { CarRentalData } from './CarRentalData.tsx';
-import { GenericTransportationData } from './GenericTransportationData.tsx';
-import { useTranslation } from 'react-i18next';
-import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useQuery } from '@tanstack/react-query';
+import { Fragment, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { AddTransportationMenu } from './AddTransportationMenu.tsx';
+import { CarRentalData } from './CarRentalData.tsx';
 import { CarRentalForm } from './CarRentalForm.tsx';
-import { FlightForm } from './FlightForm.tsx';
 import { FlightData } from './FlightData.tsx';
+import { FlightForm } from './FlightForm.tsx';
+import { GenericTransportationData } from './GenericTransportationData.tsx';
+import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
+import { listTransportations } from '../../../lib/api';
+
+import type { Attachment, Transportation, Trip } from '../../../types/trips.ts';
 
 export const TransportationPanel = ({
   trip,
