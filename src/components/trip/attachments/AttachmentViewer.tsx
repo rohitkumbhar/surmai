@@ -3,8 +3,8 @@ import { IconDownload } from '@tabler/icons-react';
 
 import { ImageViewer } from './ImageViewer.tsx';
 import { PDFViewer } from './PDFViewer.tsx';
-
 import type { ContextModalProps } from '@mantine/modals';
+import { HtmlViewer } from './HtmlViewer.tsx';
 
 export const AttachmentViewer = ({
   innerProps,
@@ -17,7 +17,7 @@ export const AttachmentViewer = ({
   const extension = fileName.split('.').pop()?.toLowerCase();
   const isPdf = extension === 'pdf';
   const isImage = extension && ['jpg', 'jpeg', 'png', 'webp', 'bmp'].includes(extension);
-
+  const isHtml = extension && ['html', 'htm'].includes(extension);
   return (
     <Container>
       <Group>
@@ -36,6 +36,7 @@ export const AttachmentViewer = ({
         {' '}
         {isPdf && <PDFViewer documentUrl={attachmentUrl} />}
         {isImage && <ImageViewer imageUrl={attachmentUrl} imageName={fileName} />}
+        {isHtml && <HtmlViewer url={attachmentUrl} />}
         {!(isPdf || isImage) && <div> Unable to render this file</div>}
       </Group>
     </Container>

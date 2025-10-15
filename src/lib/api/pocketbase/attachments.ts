@@ -35,3 +35,18 @@ export const getTripAttachments = (tripId: string): Promise<Attachment[]> => {
 export const deleteAttachment = (attachmentId: string) => {
   return pb.collection('trip_attachments').delete(attachmentId);
 };
+
+export const getHtmlFile = async (url: string) => {
+  try {
+    const response = await fetch(url);
+
+    // Check if the request was successful
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.text();
+  } catch (error) {
+    console.error('Error fetching file:', error);
+    throw error;
+  }
+};

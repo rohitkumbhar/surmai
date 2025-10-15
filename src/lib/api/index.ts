@@ -94,6 +94,6 @@ export {
   deleteLodgingAttachments,
 } from './pocketbase/lodgings.ts';
 
-export { getTripAttachments, deleteAttachment, uploadAttachments } from './pocketbase/attachments.ts';
+export { getTripAttachments, deleteAttachment, uploadAttachments, getHtmlFile } from './pocketbase/attachments.ts';
 
 export { getFlightRoute, type FlightRoute } from './pocketbase/flights.ts';

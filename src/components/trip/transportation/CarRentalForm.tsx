@@ -224,7 +224,7 @@ export const CarRentalForm = ({
               <Group>
                 <FileButton
                   onChange={setFiles}
-                  accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp"
+                  accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp,text/html"
                   form={'files'}
                   name={'files'}
                   multiple
