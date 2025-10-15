@@ -126,8 +126,8 @@ importers:
         specifier: ^18.3.0
         version: 18.3.0
       pdfjs-dist:
-        specifier: 5.4.149
-        version: 5.4.149
+        specifier: 5.3.93
+        version: 5.3.93
       pocketbase:
         specifier: 0.26.2
         version: 0.26.2
@@ -4107,10 +4107,6 @@ packages:
 
   pdfjs-dist@5.3.93:
     resolution: {integrity: sha512-w3fQKVL1oGn8FRyx5JUG5tnbblggDqyx2XzA5brsJ5hSuS+I0NdnJANhmeWKLjotdbPQucLBug5t0MeWr0AAdg==}
-    engines: {node: '>=20.16.0 || >=22.3.0'}
-
-  pdfjs-dist@5.4.149:
-    resolution: {integrity: sha512-Xe8/1FMJEQPUVSti25AlDpwpUm2QAVmNOpFP0SIahaPIOKBKICaefbzogLdwey3XGGoaP4Lb9wqiw2e9Jqp0LA==}
     engines: {node: '>=20.16.0 || >=22.3.0'}
 
   perfect-debounce@2.0.0:
@@ -9410,10 +9406,6 @@ snapshots:
   pathval@2.0.1: {}
 
   pdfjs-dist@5.3.93:
-    optionalDependencies:
-      '@napi-rs/canvas': 0.1.80
-
-  pdfjs-dist@5.4.149:
     optionalDependencies:
       '@napi-rs/canvas': 0.1.80
 
