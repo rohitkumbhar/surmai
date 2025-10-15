@@ -96,4 +96,6 @@ export {
 
 export { getTripAttachments, deleteAttachment, uploadAttachments, getHtmlFile } from './pocketbase/attachments.ts';
 
+export { listExpenses, createExpense, updateExpense, deleteExpense, addAttachmentsToExpense } from './pocketbase/expenses.ts';
+
 export { getFlightRoute, type FlightRoute } from './pocketbase/flights.ts';

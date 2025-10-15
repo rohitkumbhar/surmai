@@ -80,6 +80,16 @@ type Activity struct {
 	Metadata             map[string]any  `json:"metadata"`
 }
 
+type Expense struct {
+	Id                   string         `json:"id"`
+	Name                 string         `json:"name"`
+	Cost                 *Cost          `json:"cost"`
+	OccurredOn           types.DateTime `json:"occurredOn"`
+	Notes                string         `json:"notes"`
+	Category             string         `json:"category"`
+	AttachmentReferences []string       `json:"attachmentReferences"`
+}
+
 type Trip struct {
 	Id                 string         `json:"id"`
 	Name               string         `json:"name"`
@@ -91,6 +101,7 @@ type Trip struct {
 	CoverImage         *UploadedFile  `json:"coverImage"`
 	CoverImageFileName string         `json:"coverImageFileName"`
 	Notes              string         `json:"notes"`
+	Budget             *Cost          `json:"budget"`
 }
 
 type ExportedTrip struct {
@@ -98,6 +109,7 @@ type ExportedTrip struct {
 	Transportations []*Transportation `json:"transportations"`
 	Lodgings        []*Lodging        `json:"lodgings"`
 	Activities      []*Activity       `json:"activities"`
+	Expenses        []*Expense        `json:"expenses"`
 	Attachments     []*Attachment     `json:"attachments"`
 }
 

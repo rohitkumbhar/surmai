@@ -28,6 +28,7 @@ func ImportJsonFile(e core.App, fileContents []byte, ownerId string) (string, er
 	_, _ = createTransportations(e, trip.Id, &data)
 	_, _ = createLodgings(e, trip.Id, &data)
 	_, _ = createActivities(e, trip.Id, &data)
+	_, _ = createExpenses(e, trip.Id, &data)
 	return trip.Id, nil
 }
 
@@ -126,6 +127,33 @@ func createActivities(app core.App, tripId string, tripData *bt.ExportedTrip) ([
 	return records, nil
 }
 
+func createExpenses(app core.App, tripId string, tripData *bt.ExportedTrip) ([]*core.Record, error) {
+
+	collection, _ := app.FindCollectionByNameOrId("trip_expenses")
+	records := make([]*core.Record, 0, len(tripData.Expenses))
+	if tripData.Expenses != nil {
+
+		for _, e := range tripData.Expenses {
+			record := core.NewRecord(collection)
+			record.Set("name", e.Name)
+			record.Set("cost", e.Cost)
+			record.Set("occurredOn", e.OccurredOn)
+			record.Set("notes", e.Notes)
+			record.Set("category", e.Category)
+			record.Set("trip", tripId)
+			record.Set("attachmentReferences", e.AttachmentReferences)
+
+			err := app.Save(record)
+			if err != nil {
+				return nil, err
+			}
+			records = append(records, record)
+		}
+	}
+
+	return records, nil
+}
+
 func importBasicTripInfo(app core.App, userId string, data *bt.ExportedTrip) (*core.Record, error) {
 	trips, _ := app.FindCollectionByNameOrId("trips")
 	record := core.NewRecord(trips)
@@ -139,6 +167,7 @@ func importBasicTripInfo(app core.App, userId string, data *bt.ExportedTrip) (*c
 	record.Set("participants", tripData.Participants)
 	record.Set("ownerId", userId)
 	record.Set("notes", tripData.Notes)
+	record.Set("budget", tripData.Budget)
 
 	if tripData.CoverImage != nil {
 		file, fileErr := im.GetFile(tripData.CoverImage)

@@ -9,15 +9,17 @@ import { GenericActivityData } from './GenericActivityData.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { listActivities } from '../../../lib/api';
 
-import type { Activity, Attachment, Trip } from '../../../types/trips.ts';
+import type { Activity, Attachment, Expense, Trip } from '../../../types/trips.ts';
 
 export const ActivitiesPanel = ({
   trip,
   tripAttachments,
+  expenseMap,
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
@@ -55,6 +57,7 @@ export const ActivitiesPanel = ({
       >
         <GenericActivityForm
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetchData();
             closeForm();
@@ -83,7 +86,7 @@ export const ActivitiesPanel = ({
           {data.map((t: Activity) => {
             return (
               <Fragment key={t.id}>
-                <GenericActivityData refetch={refetchData} trip={trip} activity={t} tripAttachments={tripAttachments} />
+                <GenericActivityData refetch={refetchData} trip={trip} activity={t} tripAttachments={tripAttachments} expenseMap={expenseMap} />
               </Fragment>
             );
           })}

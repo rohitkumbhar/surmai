@@ -9,15 +9,17 @@ import { GenericLodgingData } from './GenericLodgingData.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { listLodgings } from '../../../lib/api';
 
-import type { Attachment, Lodging, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, Trip } from '../../../types/trips.ts';
 
 export const LodgingPanel = ({
   trip,
   tripAttachments,
+  expenseMap,
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
@@ -57,6 +59,7 @@ export const LodgingPanel = ({
         <GenericLodgingForm
           type={newLodgingType}
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetchData();
             closeForm();
@@ -86,7 +89,7 @@ export const LodgingPanel = ({
         {data.map((t: Lodging) => {
           return (
             <Fragment key={t.id}>
-              <GenericLodgingData refetch={refetchData} trip={trip} lodging={t} tripAttachments={tripAttachments} />
+              <GenericLodgingData refetch={refetchData} trip={trip} lodging={t} tripAttachments={tripAttachments} expenseMap={expenseMap} />
             </Fragment>
           );
         })}

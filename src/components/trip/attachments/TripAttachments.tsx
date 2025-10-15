@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, Button, FileButton, Group, ScrollArea, Table, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, FileButton, Grid, Group, ScrollArea, Stack, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
@@ -21,97 +21,88 @@ export const TripAttachments = ({
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
 
-  const rows = (tripAttachments || []).map((attachment: Attachment) => {
-    return (
-      <Table.Tr key={attachment.id}>
-        <Table.Td>
-          <Group gap="sm">
-            <Anchor
-              href={'#'}
-              target={'_blank'}
-              onClick={(event) => {
-                event.preventDefault();
-                const url = getAttachmentUrl(attachment, attachment.file);
-                openContextModal({
-                  modal: 'attachmentViewer',
-                  title: attachment.name,
-                  radius: 'md',
-                  withCloseButton: true,
-                  fullScreen: isMobile,
-                  size: 'auto',
-                  innerProps: {
-                    fileName: attachment.name,
-                    attachmentUrl: url,
-                  },
-                });
-              }}
-              rel="noreferrer"
-              key={attachment.id}
-            >
-              {attachment.name}
-            </Anchor>
-          </Group>
-        </Table.Td>
+  const openAttachmentViewer = (attachment: Attachment) => {
+    const url = getAttachmentUrl(attachment, attachment.file);
+    openContextModal({
+      modal: 'attachmentViewer',
+      title: attachment.name,
+      radius: 'md',
+      withCloseButton: true,
+      fullScreen: isMobile,
+      size: 'auto',
+      innerProps: {
+        fileName: attachment.name,
+        attachmentUrl: url,
+      },
+    });
+  };
 
-        <Table.Td>
-          <Group>
-            <ActionIcon
-              variant="default"
-              size="xl"
-              aria-label={t('delete_attachment', 'Delete Attachment')}
-              onClick={() => {
-                openConfirmModal({
-                  title: t('delete_attachment', 'Delete Attachment'),
-                  confirmProps: { color: 'red' },
-                  children: (
-                    <Text size="sm">
-                      {t(
-                        'attachment_deletion_confirmation',
-                        'Deleting "{{attachmentName}}". This action cannot be undone.',
-                        { attachmentName: attachment.name }
-                      )}
-                    </Text>
-                  ),
-                  labels: {
-                    confirm: t('delete', 'Delete'),
-                    cancel: t('cancel', 'Cancel'),
-                  },
-                  onCancel: () => {},
-                  onConfirm: () => {
-                    deleteAttachment(attachment.id).then(() => {
-                      refetchTrip();
-                      showDeleteNotification({
-                        title: t('attachments', 'Attachments'),
-                        message: t('attachment_deleted', 'Attachment {{name}} has been deleted', {
-                          name: attachment.name,
-                        }),
-                      });
-                    });
-                  },
-                });
-              }}
-              title={t('delete_attachment', 'Delete Attachment')}
-            >
-              <IconTrash size={20} stroke={1.5} />
-            </ActionIcon>
-          </Group>
-        </Table.Td>
-      </Table.Tr>
-    );
-  });
+  const handleDelete = (attachment: Attachment, event: React.MouseEvent) => {
+    event.stopPropagation();
+    openConfirmModal({
+      title: t('delete_attachment', 'Delete Attachment'),
+      confirmProps: { color: 'red' },
+      children: (
+        <Text size="sm">
+          {t(
+            'attachment_deletion_confirmation',
+            'Deleting "{{attachmentName}}". This action cannot be undone.',
+            { attachmentName: attachment.name }
+          )}
+        </Text>
+      ),
+      labels: {
+        confirm: t('delete', 'Delete'),
+        cancel: t('cancel', 'Cancel'),
+      },
+      onCancel: () => {},
+      onConfirm: () => {
+        deleteAttachment(attachment.id).then(() => {
+          refetchTrip();
+          showDeleteNotification({
+            title: t('attachments', 'Attachments'),
+            message: t('attachment_deleted', 'Attachment {{name}} has been deleted', {
+              name: attachment.name,
+            }),
+          });
+        });
+      },
+    });
+  };
 
   return (
     <>
-      <ScrollArea h={500} mt={'sm'}>
-        <Table>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t('file_name', 'File Name')}</Table.Th>
-              <Table.Th>{t('actions', 'Actions')}</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
+      <ScrollArea mah={520} mt={'sm'} scrollbars={'y'}>
+        <Grid gutter="md">
+          {(tripAttachments || []).map((attachment: Attachment) => (
+            <Grid.Col key={attachment.id} span={{ base: 12, sm: 6, md: 4 }}>
+              <Card
+                withBorder
+                padding="md"
+                radius="md"
+                style={{ cursor: 'pointer' }}
+                onClick={() => openAttachmentViewer(attachment)}
+              >
+                <Group justify="space-between" align="flex-start">
+                  <Stack gap={4} style={{ flex: 1, overflow: 'hidden' }}>
+                    <Text fw={500} size="sm" lineClamp={2}>
+                      {attachment.name}
+                    </Text>
+                  </Stack>
+                  <ActionIcon
+                    variant="default"
+                    color="red"
+                    aria-label={t('delete_attachment', 'Delete Attachment')}
+                    onClick={(event) => handleDelete(attachment, event)}
+                    title={t('delete_attachment', 'Delete Attachment')}
+                  >
+                    <IconTrash size={18} />
+                  </ActionIcon>
+                </Group>
+              </Card>
+            </Grid.Col>
+          ))}
+        </Grid>
       </ScrollArea>
       <Group justify={'flex-end'} mt={'md'}>
         <FileButton

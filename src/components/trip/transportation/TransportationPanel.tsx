@@ -13,15 +13,17 @@ import { GenericTransportationData } from './GenericTransportationData.tsx';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { listTransportations } from '../../../lib/api';
 
-import type { Attachment, Transportation, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
 
 export const TransportationPanel = ({
   trip,
   tripAttachments,
+  expenseMap,
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
@@ -67,6 +69,7 @@ export const TransportationPanel = ({
         <GenericTransportationModeForm
           transportationType={newTransportationType}
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetchData().then(() => closeForm());
           }}
@@ -107,6 +110,7 @@ export const TransportationPanel = ({
       >
         <CarRentalForm
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetchData().then(() => closeRentalForm());
           }}
@@ -144,7 +148,7 @@ export const TransportationPanel = ({
                 <FlightData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} transportation={t} />
               )}
               {t.type === 'rental_car' && (
-                <CarRentalData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} rental={t} />
+                <CarRentalData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} rental={t} expenseMap={expenseMap} />
               )}
               {t.type === 'bus' && (
                 <GenericTransportationData
@@ -152,6 +156,7 @@ export const TransportationPanel = ({
                   tripAttachments={tripAttachments}
                   trip={trip}
                   transportation={t}
+                  expenseMap={expenseMap}
                 />
               )}
               {t.type === 'boat' && (
@@ -160,6 +165,7 @@ export const TransportationPanel = ({
                   tripAttachments={tripAttachments}
                   trip={trip}
                   transportation={t}
+                  expenseMap={expenseMap}
                 />
               )}
               {t.type === 'train' && (
@@ -168,6 +174,7 @@ export const TransportationPanel = ({
                   tripAttachments={tripAttachments}
                   trip={trip}
                   transportation={t}
+                  expenseMap={expenseMap}
                 />
               )}
               {t.type === 'car' && (
@@ -176,6 +183,7 @@ export const TransportationPanel = ({
                   tripAttachments={tripAttachments}
                   trip={trip}
                   transportation={t}
+                  expenseMap={expenseMap}
                 />
               )}
             </Fragment>
@@ -193,7 +201,7 @@ export const TransportationPanel = ({
         {rentalAgreements.map((t: Transportation) => {
           return (
             <Fragment key={t.id}>
-              <CarRentalData refetch={refetchData} trip={trip} rental={t} tripAttachments={tripAttachments} />
+              <CarRentalData refetch={refetchData} trip={trip} rental={t} tripAttachments={tripAttachments} expenseMap={expenseMap} />
             </Fragment>
           );
         })}

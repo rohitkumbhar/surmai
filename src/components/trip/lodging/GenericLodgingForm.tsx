@@ -6,13 +6,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createLodgingEntry, updateLodgingEntry, uploadAttachments } from '../../../lib/api';
+import { createLodgingEntry, updateLodgingEntry, uploadAttachments, createExpense, updateExpense, deleteExpense } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
-import type { Attachment, CreateLodging, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
+import type { Attachment, CreateLodging, Expense, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericLodgingForm = ({
@@ -22,6 +22,7 @@ export const GenericLodgingForm = ({
   onSuccess,
   onCancel,
   exitingAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   lodging?: Lodging;
@@ -29,19 +30,24 @@ export const GenericLodgingForm = ({
   onSuccess: () => void;
   onCancel: () => void;
   exitingAttachments?: Attachment[] | undefined;
+  expenseMap?: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
+  
+  // Get expense from map if lodging has an expenseId
+  const expense = lodging?.expenseId && expenseMap ? expenseMap.get(lodging.expenseId) : undefined;
+  
   const form = useForm<LodgingFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
       type: type,
       name: lodging?.name,
       address: lodging?.address,
-      cost: lodging?.cost?.value,
-      currencyCode: lodging?.cost?.currency || user?.currencyCode || 'USD',
+      cost: expense?.cost?.value,
+      currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       startDate: lodging?.startDate,
       endDate: lodging?.endDate,
       confirmationCode: lodging?.confirmationCode,
@@ -49,43 +55,91 @@ export const GenericLodgingForm = ({
     },
   });
 
-  const handleFormSubmit = (values: LodgingFormSchema) => {
+  const handleFormSubmit = async (values: LodgingFormSchema) => {
     setSaving(true);
-    const data = {
-      type: type,
-      name: values.name,
-      address: values.address,
-      startDate: fakeAsUtcString(values.startDate),
-      endDate: fakeAsUtcString(values.endDate),
-      confirmationCode: values.confirmationCode,
-      trip: trip.id,
-      cost: {
-        value: values.cost,
-        currency: values.currencyCode,
-      },
-      attachmentReferences: lodging?.attachmentReferences || [],
-      metadata: {
-        place: values.place,
-      },
-    };
-
-    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
+    
+    try {
+      // Upload attachments first
+      const attachments = await uploadAttachments(trip.id, files);
+      
+      // Handle expense creation/update/deletion based on cost value
+      let expenseId = lodging?.expenseId;
+      
+      // Check if expenseId exists in expenseMap, set to null if not found
+      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
+        expenseId = undefined;
+      }
+      
+      const hasCost = values.cost && values.cost > 0;
+      
+      if (hasCost) {
+        if (expenseId) {
+          // Update existing expense - only update cost
+          await updateExpense(expenseId, {
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+          });
+        } else {
+          // Create new expense with all fields
+          const expenseData = {
+            name: `Lodging: ${values.name}`,
+            trip: trip.id,
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+            occurredOn: fakeAsUtcString(values.startDate),
+            category: 'lodging',
+          };
+          const newExpense = await createExpense(expenseData);
+          expenseId = newExpense.id;
+        }
+      } else if (expenseId) {
+        // Delete expense if cost is removed
+        await deleteExpense(expenseId);
+        expenseId = undefined;
+      }
+      
+      // Prepare lodging data
+      const data = {
+        type: type,
+        name: values.name,
+        address: values.address,
+        startDate: fakeAsUtcString(values.startDate),
+        endDate: fakeAsUtcString(values.endDate),
+        confirmationCode: values.confirmationCode,
+        trip: trip.id,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        attachmentReferences: lodging?.attachmentReferences || [],
+        metadata: {
+          place: values.place,
+        },
+        expenseId: expenseId,
+      };
+      
+      // Update or create lodging
       if (lodging?.id) {
         data.attachmentReferences = [
           ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
           ...attachments.map((attachment: Attachment) => attachment.id),
         ];
-        updateLodgingEntry(lodging.id, data as unknown as CreateLodging).then(() => {
-          onSuccess();
-        });
+        await updateLodgingEntry(lodging.id, data as unknown as CreateLodging);
       } else {
         data.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        createLodgingEntry(data as unknown as CreateLodging).then(() => {
-          onSuccess();
-        });
+        await createLodgingEntry(data as unknown as CreateLodging);
       }
+      
+      onSuccess();
+    } catch (error) {
+      console.error('Error saving lodging:', error);
+    } finally {
       setSaving(false);
-    });
+    }
   };
 
   return (

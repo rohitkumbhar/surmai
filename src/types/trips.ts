@@ -31,6 +31,7 @@ export type Trip = {
   participants?: Participant[];
   destinations?: Place[];
   collaborators?: User[];
+  budget?: Cost;
 };
 
 export type NewTrip = Omit<Trip, 'id'>;
@@ -49,6 +50,8 @@ export type CreateTripForm = {
   coverImage?: string;
   participants?: string[];
   destinations?: Place[];
+  budgetAmount?: number;
+  budgetCurrency?: string;
 };
 
 export type Cost = {
@@ -62,6 +65,19 @@ export type Attachment = {
   file: string;
 };
 
+export type Expense = {
+  id: string;
+  name: string;
+  trip: string;
+  cost?: Cost;
+  occurredOn?: string;
+  notes?: string;
+  category?: string;
+  attachmentReferences?: string[];
+};
+
+export type CreateExpense = Omit<Expense, 'id'>;
+
 export type Transportation = {
   id: string;
   type: string;
@@ -74,6 +90,7 @@ export type Transportation = {
   metadata: { [key: string]: any };
   attachments?: string[];
   attachmentReferences?: string[];
+  expenseId?: string;
 };
 
 export type CreateTransportation = {
@@ -149,6 +166,7 @@ export type Lodging = {
   metadata?: { [key: string]: any };
   attachments?: string[];
   attachmentReferences?: string[];
+  expenseId?: string;
 };
 
 export type CreateLodging = Omit<Lodging, 'id'>;
@@ -183,6 +201,7 @@ export interface Activity extends RecordModel {
   trip: string;
   attachments?: string[];
   attachmentReferences?: string[];
+  expenseId?: string;
 }
 
 export type CreateActivity = Omit<Activity, 'id'>;

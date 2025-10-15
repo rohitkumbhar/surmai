@@ -7,15 +7,17 @@ import { BasicInfo } from './basic/BasicInfo';
 import { LodgingPanel } from './lodging/LodgingPanel';
 import { TransportationPanel } from './transportation/TransportationPanel';
 
-import type { Attachment, Trip } from '../../types/trips';
+import type { Attachment, Expense, Trip } from '../../types/trips';
 
 export const OrganizationTab = ({
   trip,
   tripAttachments,
+  expenseMap,
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments: Attachment[];
+  expenseMap: Map<string, Expense>;
   refetchTrip: () => void;
 }) => {
   return (
@@ -71,7 +73,7 @@ export const OrganizationTab = ({
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
-          <TransportationPanel trip={trip} tripAttachments={tripAttachments} refetchTrip={refetchTrip} />
+          <TransportationPanel trip={trip} tripAttachments={tripAttachments} expenseMap={expenseMap} refetchTrip={refetchTrip} />
         </Accordion.Panel>
       </Accordion.Item>
 
@@ -97,7 +99,7 @@ export const OrganizationTab = ({
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
-          <LodgingPanel trip={trip} tripAttachments={tripAttachments} refetchTrip={refetchTrip} />
+          <LodgingPanel trip={trip} tripAttachments={tripAttachments} expenseMap={expenseMap} refetchTrip={refetchTrip} />
         </Accordion.Panel>
       </Accordion.Item>
 
@@ -123,7 +125,7 @@ export const OrganizationTab = ({
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
-          <ActivitiesPanel trip={trip} tripAttachments={tripAttachments} refetchTrip={refetchTrip} />
+          <ActivitiesPanel trip={trip} tripAttachments={tripAttachments} expenseMap={expenseMap} refetchTrip={refetchTrip} />
         </Accordion.Panel>
       </Accordion.Item>
     </Accordion>

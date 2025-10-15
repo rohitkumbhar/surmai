@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
+import { createTransportationEntry, uploadAttachments, createExpense, updateExpense, deleteExpense } from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
@@ -15,6 +15,7 @@ import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import type {
   Attachment,
   CreateTransportation,
+  Expense,
   Transportation,
   TransportationFormSchema,
   Trip,
@@ -28,6 +29,7 @@ export const GenericTransportationModeForm = ({
   onSuccess,
   onCancel,
   exitingAttachments,
+  expenseMap,
 }: {
   transportationType: string;
   trip: Trip;
@@ -35,11 +37,15 @@ export const GenericTransportationModeForm = ({
   onSuccess: () => void;
   onCancel: () => void;
   exitingAttachments?: Attachment[];
+  expenseMap?: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
+
+  // Get expense from map if transportation has an expenseId
+  const expense = transportation?.expenseId && expenseMap ? expenseMap.get(transportation.expenseId) : undefined;
 
   const form = useForm<TransportationFormSchema>({
     mode: 'uncontrolled',
@@ -50,8 +56,8 @@ export const GenericTransportationModeForm = ({
       arrivalTime: transportation?.arrivalTime,
       provider: transportation?.metadata?.provider,
       reservation: transportation?.metadata?.reservation,
-      cost: transportation?.cost?.value,
-      currencyCode: transportation?.cost?.currency || user?.currencyCode || 'USD',
+      cost: expense?.cost?.value,
+      currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       originAddress: transportation?.metadata?.originAddress || '',
       destinationAddress: transportation?.metadata?.destinationAddress || '',
     },
@@ -59,58 +65,99 @@ export const GenericTransportationModeForm = ({
   });
 
   // @ts-expect-error it ok
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async (values) => {
     setSaving(true);
-    const payload: CreateTransportation = {
-      type: transportationType,
-      origin: values.origin.name || values.origin,
-      destination: values.destination.name || values.destination,
-      cost: {
-        value: values.cost,
-        currency: values.currencyCode,
-      },
-      departureTime: fakeAsUtcString(values.departureTime),
-      arrivalTime: fakeAsUtcString(values.arrivalTime),
-      trip: trip.id,
-      metadata: {
-        provider: values.provider,
-        reservation: values.reservation,
-        origin: values.origin,
-        destination: values.destination,
-        originAddress: values.originAddress,
-        destinationAddress: values.destinationAddress,
-      },
-    };
-
-    uploadAttachments(trip.id, files)
-      .then((attachments: Attachment[]) => {
-        if (transportation?.id) {
-          payload.attachmentReferences = [
-            ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-            ...attachments.map((attachment: Attachment) => attachment.id),
-          ];
-          updateTransportation(transportation.id, payload)
-            .then(() => {
-              onSuccess();
-            })
-            .catch((error) => {
-              console.log('error => ', error);
-            });
+    
+    try {
+      // Upload attachments first
+      const attachments = await uploadAttachments(trip.id, files);
+      
+      // Handle expense creation/update/deletion based on cost value
+      let expenseId = transportation?.expenseId;
+      
+      // Check if expenseId exists in expenseMap, set to null if not found
+      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
+        expenseId = undefined;
+      }
+      
+      const hasCost = values.cost && values.cost > 0;
+      
+      if (hasCost) {
+        if (expenseId) {
+          // Update existing expense - only update cost
+          await updateExpense(expenseId, {
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+          });
         } else {
-          payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-          createTransportationEntry(payload)
-            .then(() => {
-              onSuccess();
-            })
-            .catch((error) => {
-              console.log('error => ', error);
-            });
+          // Create new expense with all fields
+          const originName = values.origin.name || values.origin;
+          const destinationName = values.destination.name || values.destination;
+          const expenseData = {
+            name: `Transportation: ${originName} -> ${destinationName}`,
+            trip: trip.id,
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+            occurredOn: fakeAsUtcString(values.departureTime),
+            category: 'transportation',
+          };
+          const newExpense = await createExpense(expenseData);
+          expenseId = newExpense.id;
         }
-        setSaving(false);
-      })
-      .catch((error) => {
-        console.log('error => ', error);
-      });
+      } else if (expenseId) {
+        // Delete expense if cost is removed
+        await deleteExpense(expenseId);
+        expenseId = undefined;
+      }
+      
+      // Prepare transportation data
+      const payload: CreateTransportation = {
+        type: transportationType,
+        origin: values.origin.name || values.origin,
+        destination: values.destination.name || values.destination,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        departureTime: fakeAsUtcString(values.departureTime),
+        arrivalTime: fakeAsUtcString(values.arrivalTime),
+        trip: trip.id,
+        metadata: {
+          provider: values.provider,
+          reservation: values.reservation,
+          origin: values.origin,
+          destination: values.destination,
+          originAddress: values.originAddress,
+          destinationAddress: values.destinationAddress,
+        },
+      };
+
+      // Update or create transportation
+      if (transportation?.id) {
+        payload.attachmentReferences = [
+          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+          ...attachments.map((attachment: Attachment) => attachment.id),
+        ];
+        // @ts-expect-error expenseId is valid
+        payload.expenseId = expenseId;
+        await updateTransportation(transportation.id, payload);
+      } else {
+        payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+        // @ts-expect-error expenseId is valid
+        payload.expenseId = expenseId;
+        await createTransportationEntry(payload);
+      }
+      
+      onSuccess();
+    } catch (error) {
+      console.error('Error saving transportation:', error);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

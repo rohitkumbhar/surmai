@@ -11,18 +11,20 @@ import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 
-import type { Activity, Attachment, Trip } from '../../../types/trips.ts';
+import type { Activity, Attachment, Expense, Trip } from '../../../types/trips.ts';
 
 export const GenericActivityData = ({
   trip,
   activity,
   refetch,
   tripAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   activity: Activity;
   refetch: () => void;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
@@ -31,6 +33,11 @@ export const GenericActivityData = ({
   const attachments = tripAttachments?.filter((attachment) => {
     return activity.attachmentReferences?.includes(attachment.id);
   });
+
+  // Get expense from map, handle null/undefined cases
+  const expense = activity.expenseId ? expenseMap.get(activity.expenseId) : undefined;
+  const costValue = expense?.cost?.value;
+  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -72,6 +79,7 @@ export const GenericActivityData = ({
           activity={activity}
           trip={trip}
           exitingAttachments={attachments}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetch();
             closeForm();
@@ -134,7 +142,7 @@ export const GenericActivityData = ({
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{activity.cost?.value ? `${activity.cost.value} ${activity.cost.currency || ''}` : ''}</Text>
+          <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
       {attachments && (

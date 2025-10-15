@@ -29,6 +29,8 @@ export const CreateNewTrip = () => {
       dateRange: [null, null],
       destinations: [],
       participants: [],
+      budgetAmount: undefined,
+      budgetCurrency: user?.currencyCode || 'USD',
     },
     validate: basicInfoFormValidation,
   });
@@ -44,7 +46,7 @@ export const CreateNewTrip = () => {
       <form
         onSubmit={form.onSubmit(async (values) => {
           setCreatingTrip(true);
-          const { name, description, dateRange, participants, destinations } = values;
+          const { name, description, dateRange, participants, destinations, budgetAmount, budgetCurrency } = values;
 
           const startDate = dayjs(dayjs(dateRange[0]).startOf('day')).tz(dayjs.tz.guess());
           const endDate = dayjs(dayjs(dateRange[1]).endOf('day')).tz(dayjs.tz.guess());
@@ -69,6 +71,9 @@ export const CreateNewTrip = () => {
                 timezone: d.timezone,
               };
             }),
+            budget: budgetAmount && budgetCurrency 
+              ? { value: budgetAmount, currency: budgetCurrency }
+              : undefined,
           };
 
           createTrip(data)
