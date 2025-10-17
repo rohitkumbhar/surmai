@@ -40,7 +40,11 @@ export const ViewTrip = () => {
     queryFn: () => getTrip(tripId || ''),
   });
 
-  const { data: tripAttachments, refetch: refetchAttachments } = useQuery<Attachment[]>({
+  const {
+    data: tripAttachments,
+    refetch: refetchAttachments,
+    isPending: attachmentsPending,
+  } = useQuery<Attachment[]>({
     queryKey: ['getTripAttachments', tripId],
     queryFn: () => getTripAttachments(tripId || ''),
   });
@@ -50,13 +54,15 @@ export const ViewTrip = () => {
     key: `offline-cache-timestamp-${tripId}`,
   });
 
+  const [activeTab, setActiveTab] = useState<string | null>('organization');
+
   useEffect(() => {
     if (trip) {
       setDocTitle(trip.name);
     }
   }, [trip]);
 
-  if (isPending) {
+  if (isPending || attachmentsPending) {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
@@ -121,7 +127,7 @@ export const ViewTrip = () => {
         </Alert>
       )}
 
-      <Tabs defaultValue="organization">
+      <Tabs value={activeTab} onChange={setActiveTab} keepMounted={false}>
         <Tabs.List>
           <Tabs.Tab value="organization">{t('organization', 'Organization')}</Tabs.Tab>
           <Tabs.Tab value="itinerary">{t('itinerary', 'Itinerary')}</Tabs.Tab>

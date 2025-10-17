@@ -50,27 +50,35 @@ const getItineraryForDuration = (
 export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const tripId = trip.id;
   const { t } = useTranslation();
-  const { data: activities } = useQuery<Activity[]>({
-    queryKey: ['listActivities', tripId],
-    queryFn: () => listActivities(tripId || ''),
+
+  const { data: activities } = useQuery<{ [key: string]: Activity[] }>({
+    queryKey: ['buildActivitiesIndex', tripId],
+    queryFn: async () => {
+      const activitiesResult = await listActivities(tripId || '');
+      return buildActivitiesIndex(activitiesResult);
+    },
   });
 
-  const { data: transportations } = useQuery<Transportation[]>({
-    queryKey: ['listTransportations', trip.id],
-    queryFn: () => listTransportations(trip.id || ''),
+  const { data: transportations } = useQuery<{ [key: string]: Transportation[] }>({
+    queryKey: ['buildTransportationIndex', tripId],
+    queryFn: async () => {
+      const transportationsResult = await listTransportations(tripId || '');
+      return buildTransportationIndex(transportationsResult);
+    },
   });
 
-  const { data: lodgings } = useQuery<Lodging[]>({
-    queryKey: ['listLodgings', tripId],
-    queryFn: () => listLodgings(tripId || ''),
+  const { data: lodgings } = useQuery<{ [key: string]: Lodging[] }>({
+    queryKey: ['buildLodgingIndex', tripId],
+    queryFn: async () => {
+      const lodgingsResult = await listLodgings(tripId || '');
+      return buildLodgingIndex(lodgingsResult);
+    },
   });
 
-  const [transportationItinerary, setTransportationItinerary] = useState<{ [key: string]: Array<Transportation> }>({});
-  const [lodgingsItinerary, setLodgingItinerary] = useState<{ [key: string]: Array<Lodging> }>({});
-  const [activitiesItinerary, setActivitiesItinerary] = useState<{ [key: string]: Array<Activity> }>({});
+  const [itineraryEntries, setItineraryEntries] = useState<[string, ItineraryLine[] | undefined][]>();
+  const [selectedPanels, setSelectedPanels] = useState<string[]>();
 
   const tripStart = dayjs(trip.startDate).startOf('day');
-
   const currentDay = dayjs();
   const [itineraryStart, setItineraryStart] = useState(
     dayjs(trip.startDate).isBefore(currentDay) && currentDay.isBefore(dayjs(trip.endDate))
@@ -80,33 +88,16 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const [itineraryEnd, setItineraryEnd] = useState(itineraryStart.add(1, 'day'));
 
   useEffect(() => {
-    if (transportations) {
-      setTransportationItinerary(buildTransportationIndex(transportations));
-    }
-
-    if (lodgings) {
-      setLodgingItinerary(buildLodgingIndex(lodgings));
-    }
-
-    if (activities) {
-      setActivitiesItinerary(buildActivitiesIndex(activities));
-    }
-  }, [activities, lodgings, transportations, trip]);
-
-  const [itineraryEntries, setItineraryEntries] = useState<[string, ItineraryLine[] | undefined][]>([]);
-  const [selectedPanels, setSelectedPanels] = useState<string[]>([]);
-
-  useEffect(() => {
     const itineraryForDuration = getItineraryForDuration(
       itineraryStart.format('YYYYMMDD'),
       itineraryEnd.format('YYYYMMDD'),
-      transportationItinerary,
-      lodgingsItinerary,
-      activitiesItinerary
+      transportations || {},
+      lodgings || {},
+      activities || {}
     );
     setItineraryEntries(Object.entries(itineraryForDuration));
     setSelectedPanels(Object.keys(itineraryForDuration));
-  }, [transportationItinerary, lodgingsItinerary, activitiesItinerary, itineraryStart, itineraryEnd]);
+  }, [transportations, lodgings, activities, itineraryStart, itineraryEnd]);
 
   const today = currentDay.format('YYYYMMDD');
 
@@ -159,7 +150,7 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
           })}
         </Accordion>
       )}
-      {selectedPanels.length === 0 && (
+      {selectedPanels && selectedPanels.length === 0 && (
         <Card>
           <Text>
             {t('nothing_on_the_agenda', 'Nothing on the agenda between {{start}} and {{end}}', {
