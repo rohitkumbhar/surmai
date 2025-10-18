@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, Button, FileButton, Group, Paper, ScrollArea, Table, Text } from '@mantine/core';
+import { ActionIcon, Anchor, Button, FileButton, Group, ScrollArea, Table, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
@@ -101,7 +101,18 @@ export const TripAttachments = ({
   });
 
   return (
-    <Paper bg={'var(--mantine-color-body)'} mt={'md'} p={'md'}>
+    <>
+      <ScrollArea h={500} mt={'sm'}>
+        <Table>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th>{t('file_name', 'File Name')}</Table.Th>
+              <Table.Th>{t('actions', 'Actions')}</Table.Th>
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
+        </Table>
+      </ScrollArea>
       <Group justify={'flex-end'} mt={'md'}>
         <FileButton
           onChange={(files: File[]) => {
@@ -131,17 +142,6 @@ export const TripAttachments = ({
           }}
         </FileButton>
       </Group>
-      <ScrollArea mt={'md'}>
-        <Table miw={800} verticalSpacing="sm" striped>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>{t('file_name', 'File Name')}</Table.Th>
-              <Table.Th>{t('actions', 'Actions')}</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>{rows}</Table.Tbody>
-        </Table>
-      </ScrollArea>
-    </Paper>
+    </>
   );
 };

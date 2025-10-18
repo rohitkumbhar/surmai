@@ -1,10 +1,11 @@
 import { Button, Container, Group, Space } from '@mantine/core';
 import { IconDownload } from '@tabler/icons-react';
 
+import { HtmlViewer } from './HtmlViewer.tsx';
 import { ImageViewer } from './ImageViewer.tsx';
 import { PDFViewer } from './PDFViewer.tsx';
+
 import type { ContextModalProps } from '@mantine/modals';
-import { HtmlViewer } from './HtmlViewer.tsx';
 
 export const AttachmentViewer = ({
   innerProps,

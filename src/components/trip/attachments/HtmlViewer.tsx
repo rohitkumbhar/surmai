@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
 import DOMPurify from 'dompurify';
+import { useEffect, useState } from 'react';
+
 import { getHtmlFile } from '../../../lib/api';
 
 export const HtmlViewer = ({ url }: { url: string }) => {
