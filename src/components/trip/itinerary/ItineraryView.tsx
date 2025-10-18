@@ -102,7 +102,7 @@ export const ItineraryView = ({ trip }: { trip: Trip }) => {
   const today = currentDay.format('YYYYMMDD');
 
   return (
-    <Stack mt={'md'}>
+    <Stack mt={'sm'}>
       {itineraryEntries && (
         <Accordion chevronPosition={'right'} variant={'separated'} multiple={true} mt={'sm'} value={selectedPanels}>
           {itineraryEntries.map(([start, lines]) => {

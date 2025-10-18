@@ -77,11 +77,12 @@ export const LodgingPanel = ({
       </Flex>
       <Stack mt={'sm'}>
         <Title order={5}>{t('lodging_section_name', 'Lodging')}</Title>
-        {!data || data.length === 0 && (
-          <Card withBorder>
-            <Text c={'dimmed'}>{t('lodging_no_data', 'No Lodgings')}</Text>
-          </Card>
-        )}
+        {!data ||
+          (data.length === 0 && (
+            <Card withBorder>
+              <Text c={'dimmed'}>{t('lodging_no_data', 'No Lodgings')}</Text>
+            </Card>
+          ))}
         {data.map((t: Lodging) => {
           return (
             <Fragment key={t.id}>

@@ -48,8 +48,9 @@ export const TransportationPanel = ({
   const rentalAgreements = (data || []).filter((t) => t.type === 'rental_car');
   const tickets = (data || []).filter((t) => t.type !== 'rental_car');
 
-  const refetchData = () => {
-    return refetch().then(() => refetchTrip());
+  const refetchData = async () => {
+    await refetch();
+    return refetchTrip();
   };
 
   return (
