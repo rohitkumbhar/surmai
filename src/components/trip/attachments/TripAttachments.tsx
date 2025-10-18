@@ -1,4 +1,4 @@
-import { ActionIcon, Anchor, Button, Container, FileButton, Group, ScrollArea, Table, Text } from '@mantine/core';
+import { ActionIcon, Anchor, Button, FileButton, Group, ScrollArea, Table, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
@@ -101,9 +101,9 @@ export const TripAttachments = ({
   });
 
   return (
-    <Container mt={'sm'}>
-      <ScrollArea mt={'md'} h={500}>
-        <Table verticalSpacing="5" striped>
+    <>
+      <ScrollArea h={500} mt={'sm'}>
+        <Table>
           <Table.Thead>
             <Table.Tr>
               <Table.Th>{t('file_name', 'File Name')}</Table.Th>
@@ -142,6 +142,6 @@ export const TripAttachments = ({
           }}
         </FileButton>
       </Group>
-    </Container>
+    </>
   );
 };
