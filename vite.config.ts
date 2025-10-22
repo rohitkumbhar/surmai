@@ -99,6 +99,10 @@ export default defineConfig(({ mode }) => {
           target: 'http://localhost:9090',
           changeOrigin: false,
         },
+        '/site-settings.json': {
+          target: 'http://localhost:9090',
+          changeOrigin: false,
+        },
       },
     },
     test: {
