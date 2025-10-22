@@ -1,5 +1,5 @@
-import { pb } from './pocketbase.ts';
 import { uploadAttachments } from './attachments.ts';
+import { pb } from './pocketbase.ts';
 
 import type { Attachment, CreateExpense, Expense } from '../../../types/trips.ts';
 
@@ -25,9 +25,11 @@ export const deleteExpense = async (expenseId: string) => {
   return expenses.delete(expenseId);
 };
 
-export const addAttachmentsToExpense = async (
-  params: { tripId: string; expenseId: string; files: File[] }
-): Promise<{ added: Attachment[] }> => {
+export const addAttachmentsToExpense = async (params: {
+  tripId: string;
+  expenseId: string;
+  files: File[];
+}): Promise<{ added: Attachment[] }> => {
   const { tripId, expenseId, files } = params;
   const uploaded = await uploadAttachments(tripId, files);
   const ids = uploaded.map((a) => a.id);

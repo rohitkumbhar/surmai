@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Anchor,
   Badge,
   Button,
   Card,
@@ -20,42 +21,86 @@ import {
   Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { openConfirmModal } from '@mantine/modals';
+import { useMediaQuery } from '@mantine/hooks';
+import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { createExpense, deleteExpense, listExpenses, updateExpense, uploadAttachments } from '../../../lib/api';
+import {
+  createExpense,
+  deleteExpense,
+  getAttachmentUrl,
+  listExpenses,
+  updateExpense,
+  uploadAttachments,
+} from '../../../lib/api';
+import i18n from '../../../lib/i18n.ts';
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 
-const EXPENSE_CATEGORIES = [
-  'lodging',
-  'transportation',
-  'food',
-  'entertainment',
-  'shopping',
-  'activities',
-  'healthcare',
-  'communication',
-  'insurance',
-  'visa_fees',
-  'souvenirs',
-  'tips',
-  'other',
-];
+const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
+  lodging: {
+    label: i18n.t('expense_category_lodging', 'Lodging'),
+    color: 'blue',
+  },
+  transportation: {
+    label: i18n.t('expense_category_transportation', 'Transportation'),
+    color: 'cyan',
+  },
+  food: {
+    label: i18n.t('expense_category_food', 'Food'),
+    color: 'teal',
+  },
+  entertainment: {
+    label: i18n.t('expense_category_entertainment', 'Entertainment'),
+    color: 'green',
+  },
+  shopping: {
+    label: i18n.t('expense_category_shopping', 'Shopping'),
+    color: 'lime',
+  },
+  activities: {
+    label: i18n.t('expense_category_activities', 'Activities'),
+    color: 'yellow',
+  },
+  healthcare: {
+    label: i18n.t('expense_category_healthcare', 'Healthcare'),
+    color: 'orange',
+  },
+  communication: {
+    label: i18n.t('expense_category_communication', 'Communication'),
+    color: 'red',
+  },
+  insurance: {
+    label: i18n.t('expense_category_insurance', 'Insurance'),
+    color: 'red',
+  },
+  visa_fees: {
+    label: i18n.t('expense_category_visa_fees', 'Visa Fees'),
+    color: 'pink',
+  },
+  souvenirs: {
+    label: i18n.t('expense_category_souvenirs', 'Souvenirs'),
+    color: 'grape',
+  },
+  tips: {
+    label: i18n.t('expense_category_tips', 'Tips'),
+    color: 'violet',
+  },
+  other: {
+    label: i18n.t('expense_category_other', 'Other'),
+    color: 'indigo',
+  },
+};
 
-export const ExpensesPanel = ({
-                                trip,
-                                tripAttachments,
-                              }: {
-  trip: Trip;
-  tripAttachments?: Attachment[];
-}) => {
+const EXPENSE_CATEGORIES = Object.keys(EXPENSE_CATEGORY_DATA);
+
+export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttachments?: Attachment[] }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,6 +116,7 @@ export const ExpensesPanel = ({
   const [category, setCategory] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [existingAttachments, setExistingAttachments] = useState<Attachment[]>([]);
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
   const { data: expenses, isLoading } = useQuery<Expense[]>({
     queryKey: ['listExpenses', trip.id],
@@ -164,7 +210,6 @@ export const ExpensesPanel = ({
     },
   });
 
-
   const handleDelete = () => {
     if (!selectedExpense) return;
     openConfirmModal({
@@ -185,6 +230,22 @@ export const ExpensesPanel = ({
           message: t('expense_deleted', 'Expense {{name}} has been deleted', { name: selectedExpense.name }),
         });
         closeModal();
+      },
+    });
+  };
+
+  const openAttachmentViewer = (attachment: Attachment) => {
+    const url = getAttachmentUrl(attachment, attachment.file);
+    openContextModal({
+      modal: 'attachmentViewer',
+      title: attachment.name,
+      radius: 'md',
+      withCloseButton: true,
+      fullScreen: isMobile,
+      size: 'auto',
+      innerProps: {
+        fileName: attachment.name,
+        attachmentUrl: url,
       },
     });
   };
@@ -210,6 +271,14 @@ export const ExpensesPanel = ({
     return sortDirection === 'asc' ? comparison : -comparison;
   });
 
+  let expenseAttachmentsMap: { [key: string]: Attachment[] } = {};
+  (expenses || []).forEach((e: Expense) => {
+    const expenseAttachments = tripAttachments?.filter(
+      (a) => e.attachmentReferences && e.attachmentReferences.includes(a.id)
+    );
+    expenseAttachmentsMap = { ...expenseAttachmentsMap, [e.id]: expenseAttachments || [] };
+  });
+
   // Calculate statistics
   const totalExpenses = sortedExpenses.reduce((sum, exp) => {
     return sum + (exp.cost?.value || 0);
@@ -220,21 +289,16 @@ export const ExpensesPanel = ({
   const budgetPercentage = budgetAmount > 0 ? Math.min((totalExpenses / budgetAmount) * 100, 100) : 0;
 
   // Group expenses by category
-  const categoryTotals = sortedExpenses.reduce((acc, exp) => {
-    const cat = exp.category || 'other';
-    acc[cat] = (acc[cat] || 0) + (exp.cost?.value || 0);
-    return acc;
-  }, {} as Record<string, number>);
+  const categoryTotals = sortedExpenses.reduce(
+    (acc, exp) => {
+      const cat = exp.category || 'other';
+      acc[cat] = (acc[cat] || 0) + (exp.cost?.value || 0);
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
-  const sortedCategories = Object.entries(categoryTotals)
-    .sort(([, a], [, b]) => b - a);
-
-  // Category colors
-  const categoryColors = [
-    'blue', 'cyan', 'teal', 'green', 'lime',
-    'yellow', 'orange', 'red', 'pink', 'grape',
-    'violet', 'indigo',
-  ];
+  const sortedCategories = Object.entries(categoryTotals).sort(([, a], [, b]) => b - a);
 
   const expenseCards = sortedExpenses.map((exp) => (
     <Grid.Col key={exp.id} span={{ base: 12, sm: 6, md: 4 }}>
@@ -242,7 +306,9 @@ export const ExpensesPanel = ({
         <Stack gap="xs">
           <Group justify="space-between" align="flex-start">
             <Stack gap={4} style={{ flex: 1 }}>
-              <Text fw={500} size="lg" lineClamp={1}>{exp.name}</Text>
+              <Text fw={500} size="lg" lineClamp={1}>
+                {exp.name}
+              </Text>
               {/*{exp.notes && (
                 <Text size="sm" c="dimmed">
                   {exp.notes}
@@ -262,24 +328,48 @@ export const ExpensesPanel = ({
           <Flex direction="column" gap="xs" mt="xs">
             {exp.occurredOn && (
               <Group gap="xs">
-                <Text size="sm" fw={500}>{t('date', 'Date')}:</Text>
-                <Text size="sm" c="dimmed">{dayjs(exp.occurredOn).format('ll')}</Text>
+                <Text size="sm" fw={500}>
+                  {t('date', 'Date')}:
+                </Text>
+                <Text size="sm" c="dimmed">
+                  {dayjs(exp.occurredOn).format('ll')}
+                </Text>
               </Group>
             )}
 
             <Group gap="xs">
-              <Text size="sm" fw={500}>{t('category', 'Category')}:</Text>
+              <Text size="sm" fw={500}>
+                {t('category', 'Category')}:
+              </Text>
               <Badge variant="light" size="sm">
-                {t(`expense_category_${exp.category || 'other'}`, (exp.category || 'other').replace(/_/g, ' '))}
+                {EXPENSE_CATEGORY_DATA[exp.category || 'other'].label}
               </Badge>
             </Group>
 
             {exp.cost && (
               <Group gap="xs">
-                <Text size="sm" fw={500}>{t('amount', 'Amount')}:</Text>
+                <Text size="sm" fw={500}>
+                  {t('amount', 'Amount')}:
+                </Text>
                 <Text size="sm" fw={600} c="blue">
                   {exp.cost.value} {exp.cost.currency}
                 </Text>
+              </Group>
+            )}
+            {exp.id in expenseAttachmentsMap && (
+              <Group>
+                {expenseAttachmentsMap[exp.id].map((attachment) => {
+                  return (
+                    <Anchor
+                      size="sm"
+                      onClick={() => {
+                        openAttachmentViewer(attachment);
+                      }}
+                    >
+                      {attachment.name}
+                    </Anchor>
+                  );
+                })}
               </Group>
             )}
           </Flex>
@@ -351,31 +441,31 @@ export const ExpensesPanel = ({
                     />
                     <Stack gap="xs">
                       <Group justify="space-between">
-                        <Text size="sm" c="dimmed">{t('used', 'Used')}:</Text>
+                        <Text size="sm" c="dimmed">
+                          {t('used', 'Used')}:
+                        </Text>
                         <Text size="sm" fw={600}>
                           {totalExpenses.toFixed(2)} {budgetCurrency}
                         </Text>
                       </Group>
                       <Group justify="space-between">
-                        <Text size="sm" c="dimmed">{t('budget', 'Budget')}:</Text>
+                        <Text size="sm" c="dimmed">
+                          {t('budget', 'Budget')}:
+                        </Text>
                         <Text size="sm" fw={600}>
                           {budgetAmount.toFixed(2)} {budgetCurrency}
                         </Text>
                       </Group>
                       <Group justify="space-between">
-                        <Text size="sm" c="dimmed">{t('remaining', 'Remaining')}:</Text>
-                        <Text
-                          size="sm"
-                          fw={600}
-                          c={budgetAmount - totalExpenses < 0 ? 'red' : 'green'}
-                        >
+                        <Text size="sm" c="dimmed">
+                          {t('remaining', 'Remaining')}:
+                        </Text>
+                        <Text size="sm" fw={600} c={budgetAmount - totalExpenses < 0 ? 'red' : 'green'}>
                           {(budgetAmount - totalExpenses).toFixed(2)} {budgetCurrency}
                         </Text>
                       </Group>
                     </Stack>
                   </Group>
-
-
                 </>
               ) : (
                 <Text size="sm" c="dimmed" ta="center" py="xl">
@@ -399,13 +489,13 @@ export const ExpensesPanel = ({
                     <RingProgress
                       size={200}
                       thickness={32}
-                      sections={sortedCategories.map(([category, amount], index) => {
+                      sections={sortedCategories.map(([category, amount], _index) => {
                         const percentage = (amount / totalExpenses) * 100;
-                        const color = categoryColors[index % categoryColors.length];
+                        const color = EXPENSE_CATEGORY_DATA[category]?.color || 'red';
                         return {
                           value: percentage,
                           color: color,
-                          tooltip: `${t(`expense_category_${category}`, category.replace(/_/g, ' '))}: ${amount.toFixed(2)} ${budgetCurrency}`,
+                          tooltip: `${EXPENSE_CATEGORY_DATA[category].label}: ${amount.toFixed(2)} ${budgetCurrency}`,
                         };
                       })}
                       label={
@@ -421,14 +511,12 @@ export const ExpensesPanel = ({
                           </Text>
                         </Stack>
                       }
-
                     />
 
                     <Stack gap="xs" mt="sm">
-                      {sortedCategories.map(([category, amount], index) => {
-                        const color = categoryColors[index % categoryColors.length];
+                      {sortedCategories.map(([category, amount], _index) => {
+                        const color = EXPENSE_CATEGORY_DATA[category]?.color || 'red';
                         const percentage = (amount / totalExpenses) * 100;
-
                         return (
                           <Group key={category} justify="space-between" wrap="nowrap">
                             <Group gap="xs" wrap="nowrap">
@@ -442,7 +530,7 @@ export const ExpensesPanel = ({
                                 }}
                               />
                               <Text size="sm" fw={500}>
-                                {t(`expense_category_${category}`, category.replace(/_/g, ' '))}
+                                {EXPENSE_CATEGORY_DATA[category].label}
                               </Text>
                             </Group>
                             <Group gap="xs" wrap="nowrap">
@@ -460,7 +548,6 @@ export const ExpensesPanel = ({
                   </Group>
 
                   {/* Legend */}
-
                 </>
               ) : (
                 <Text size="sm" c="dimmed" ta="center" py="xl">
@@ -478,13 +565,13 @@ export const ExpensesPanel = ({
         </Group>
       ) : sortedExpenses.length === 0 ? (
         <Card withBorder p="xl">
-          <Text c="dimmed" ta="center">{t('no_expenses', 'No expenses yet')}</Text>
+          <Text c="dimmed" ta="center">
+            {t('no_expenses', 'No expenses yet')}
+          </Text>
         </Card>
       ) : (
         <ScrollArea h={540} scrollbars="y">
-          <Grid gutter="sm">
-            {expenseCards}
-          </Grid>
+          <Grid gutter="sm">{expenseCards}</Grid>
         </ScrollArea>
       )}
 
@@ -497,7 +584,7 @@ export const ExpensesPanel = ({
         <Stack gap="md">
           <TextInput
             label={t('name', 'Name')}
-            description={t('e.g._meals', 'e.g. Dinner at The French Laundry')}
+            description={t('e_g_meals', 'e.g. Dinner at The French Laundry')}
             value={name}
             onChange={(e) => setName(e.currentTarget.value)}
             required
@@ -509,7 +596,7 @@ export const ExpensesPanel = ({
             onChange={setCategory}
             data={EXPENSE_CATEGORIES.map((cat) => ({
               value: cat,
-              label: t(`expense_category_${cat}`, cat.replace(/_/g, ' ')),
+              label: EXPENSE_CATEGORY_DATA[cat].label,
             }))}
             clearable
           />
@@ -533,7 +620,6 @@ export const ExpensesPanel = ({
               }}
               label={t('amount', 'Amount')}
               description="Value"
-
             />
             <DateInput
               label={t('date', 'Date')}
@@ -550,9 +636,7 @@ export const ExpensesPanel = ({
           />
 
           <Stack gap="xs">
-            <Title size="md">
-              {t('attachments', 'Attachments')}
-            </Title>
+            <Title size="md">{t('attachments', 'Attachments')}</Title>
             <Text size="xs" c="dimmed">
               {t('expense_attachments_desc', 'Upload receipts, invoices or other related documents')}
             </Text>
@@ -560,7 +644,9 @@ export const ExpensesPanel = ({
             {files.length > 0 && (
               <Stack gap="xs">
                 {files.map((file, index) => (
-                  <Text key={index} size="sm">{file.name}</Text>
+                  <Text key={index} size="sm">
+                    {file.name}
+                  </Text>
                 ))}
               </Stack>
             )}
@@ -577,7 +663,9 @@ export const ExpensesPanel = ({
                       <Stack gap={4}>
                         {existingAttachments.length > 0 && (
                           <Text size="xs" c="dimmed">
-                            {t('existing_files_count', '{{count}} existing file(s)', { count: existingAttachments.length })}
+                            {t('existing_files_count', '{{count}} existing file(s)', {
+                              count: existingAttachments.length,
+                            })}
                           </Text>
                         )}
                         <Button {...props} variant="default" size="sm">
@@ -599,12 +687,7 @@ export const ExpensesPanel = ({
 
           <Group justify="space-between" mt="md">
             {selectedExpense ? (
-              <Button
-                color="red"
-                variant="outline"
-                leftSection={<IconTrash size={16} />}
-                onClick={handleDelete}
-              >
+              <Button color="red" variant="outline" leftSection={<IconTrash size={16} />} onClick={handleDelete}>
                 {t('delete', 'Delete')}
               </Button>
             ) : (

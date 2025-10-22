@@ -1,9 +1,9 @@
 import PocketBase, { LocalAuthStore } from 'pocketbase';
 
-const isProd = import.meta.env.PROD;
+// const isProd = import.meta.env.PROD;
 
 // Using location.origin means we can't serve under a sub-path
-export const pocketBaseUrl: string = isProd ? window.location.origin : import.meta.env.VITE_POCKETBASE_ENDPOINT;
+export const pocketBaseUrl: string = window.location.origin;
 
 export const pocketBaseClients = {
   user: new PocketBase(pocketBaseUrl, new LocalAuthStore('pb_user')),

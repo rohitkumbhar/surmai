@@ -93,6 +93,14 @@ export default defineConfig(({ mode }) => {
         }),
       },
     },
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:9090',
+          changeOrigin: false,
+        },
+      },
+    },
     test: {
       globals: true,
       environment: 'jsdom',
