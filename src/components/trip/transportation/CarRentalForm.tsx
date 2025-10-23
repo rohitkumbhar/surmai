@@ -6,7 +6,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createTransportationEntry, uploadAttachments, createExpense, updateExpense, deleteExpense } from '../../../lib/api';
+import {
+  createTransportationEntry,
+  uploadAttachments,
+  createExpense,
+  updateExpense,
+  deleteExpense,
+} from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
@@ -65,21 +71,21 @@ export const CarRentalForm = ({
   // @ts-expect-error it ok
   const handleFormSubmit = async (values) => {
     setSaving(true);
-    
+
     try {
       // Upload attachments first
       const attachments = await uploadAttachments(trip.id, files);
-      
+
       // Handle expense creation/update/deletion based on cost value
       let expenseId = carRental?.expenseId;
-      
+
       // Check if expenseId exists in expenseMap, set to null if not found
       if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
         expenseId = undefined;
       }
-      
+
       const hasCost = values.cost && values.cost > 0;
-      
+
       if (hasCost) {
         if (expenseId) {
           // Update existing expense - only update cost
@@ -109,7 +115,7 @@ export const CarRentalForm = ({
         await deleteExpense(expenseId);
         expenseId = undefined;
       }
-      
+
       // Prepare transportation data
       const carRentalData: CreateTransportation = {
         type: 'rental_car',
@@ -144,13 +150,13 @@ export const CarRentalForm = ({
         carRentalData.expenseId = expenseId;
         await createTransportationEntry(carRentalData);
       }
-      
+
       onSuccess();
     } catch (error) {
       console.error('Error saving car rental:', error);
       showErrorNotification({
         error,
-        title: t('car_rental_creation_failed', 'Unable to save Car Rental Entry'),
+        title: t('car_rental_creation_failed', 'Unable to save Car Rental'),
         message: 'Please try again later.',
       });
     } finally {

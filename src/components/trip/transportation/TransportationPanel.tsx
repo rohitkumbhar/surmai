@@ -90,6 +90,7 @@ export const TransportationPanel = ({
       >
         <FlightForm
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetchData().then(() => closeFlightForm());
           }}
@@ -145,10 +146,22 @@ export const TransportationPanel = ({
           return (
             <Fragment key={t.id}>
               {t.type === 'flight' && (
-                <FlightData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} transportation={t} />
+                <FlightData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                  expenseMap={expenseMap}
+                />
               )}
               {t.type === 'rental_car' && (
-                <CarRentalData refetch={refetchData} tripAttachments={tripAttachments} trip={trip} rental={t} expenseMap={expenseMap} />
+                <CarRentalData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  rental={t}
+                  expenseMap={expenseMap}
+                />
               )}
               {t.type === 'bus' && (
                 <GenericTransportationData
@@ -201,7 +214,13 @@ export const TransportationPanel = ({
         {rentalAgreements.map((t: Transportation) => {
           return (
             <Fragment key={t.id}>
-              <CarRentalData refetch={refetchData} trip={trip} rental={t} tripAttachments={tripAttachments} expenseMap={expenseMap} />
+              <CarRentalData
+                refetch={refetchData}
+                trip={trip}
+                rental={t}
+                tripAttachments={tripAttachments}
+                expenseMap={expenseMap}
+              />
             </Fragment>
           );
         })}

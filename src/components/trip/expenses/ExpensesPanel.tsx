@@ -12,7 +12,6 @@ import {
   Modal,
   Paper,
   RingProgress,
-  ScrollArea,
   Select,
   SimpleGrid,
   Stack,
@@ -570,9 +569,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
           </Text>
         </Card>
       ) : (
-        <ScrollArea h={540} scrollbars="y">
-          <Grid gutter="sm">{expenseCards}</Grid>
-        </ScrollArea>
+        <Grid gutter="sm">{expenseCards}</Grid>
       )}
 
       <Modal
