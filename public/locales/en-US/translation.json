@@ -162,6 +162,7 @@
   "export_trip_description": "Exporting this trip will create a zip file containing all the trip data.",
   "failed_to_create_expense": "Failed to create expense",
   "failed_to_update_expense": "Failed to update expense",
+  "flight_creation_failed": "Unable to save flight",
   "flight_deleted": "Flight from {{origin}} to {{destination}} has been deleted",
   "flight_info_provider": "Flight Info Provider",
   "flight_info_provider_desc": "Select Flight Info Provider",
