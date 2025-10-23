@@ -14,18 +14,20 @@ import { formatDate, formatTime } from '../../../lib/time.ts';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
 
-import type { Attachment, Lodging, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, Trip } from '../../../types/trips.ts';
 
 export const GenericLodgingData = ({
   trip,
   lodging,
   refetch,
   tripAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   lodging: Lodging;
   refetch: () => void;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
 }) => {
   const { t, i18n } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
@@ -37,6 +39,11 @@ export const GenericLodgingData = ({
   const attachments = tripAttachments?.filter((attachment) => {
     return lodging.attachmentReferences?.includes(attachment.id);
   });
+
+  // Get expense from map, handle null/undefined cases
+  const expense = lodging.expenseId ? expenseMap.get(lodging.expenseId) : undefined;
+  const costValue = expense?.cost?.value;
+  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -79,6 +86,7 @@ export const GenericLodgingData = ({
           lodging={lodging}
           exitingAttachments={attachments}
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetch();
             closeForm();
@@ -154,14 +162,15 @@ export const GenericLodgingData = ({
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{lodging.cost?.value ? `${lodging.cost.value} ${lodging.cost.currency || ''}` : ''}</Text>
+          <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
       {attachments && (
         <Attachments
           attachments={attachments}
-          onDelete={(attachmentId) => {
-            return deleteLodgingAttachments(lodging.id, attachmentId).then(() => refetch());
+          onDelete={async (attachmentId) => {
+            await deleteLodgingAttachments(lodging.id, attachmentId);
+            return refetch();
           }}
         />
       )}

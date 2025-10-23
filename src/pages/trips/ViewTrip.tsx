@@ -2,21 +2,22 @@ import { Alert, Container, Group, LoadingOverlay, Tabs, Text } from '@mantine/co
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { IconRefresh, IconWifiOff } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { Header } from '../../components/nav/Header.tsx';
 import { TripAttachments } from '../../components/trip/attachments/TripAttachments.tsx';
+import { ExpensesPanel } from '../../components/trip/expenses/ExpensesPanel.tsx';
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 import { OrganizationTab } from '../../components/trip/OrganizationTab.tsx';
-import { getTrip, getTripAttachments } from '../../lib/api';
+import { getTrip, getTripAttachments, listExpenses } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { formatDate } from '../../lib/time.ts';
 
-import type { Attachment, Trip } from '../../types/trips.ts';
+import type { Attachment, Expense, Trip } from '../../types/trips.ts';
 
 import './ViewTrip.module.css';
 
@@ -47,6 +48,23 @@ export const ViewTrip = () => {
     queryFn: () => getTripAttachments(tripId || ''),
   });
 
+  const {
+    data: expenses,
+    isPending: expensesPending,
+    refetch: refetchExpenses,
+  } = useQuery<Expense[]>({
+    queryKey: ['listExpenses', tripId],
+    queryFn: () => listExpenses(tripId || ''),
+  });
+
+  const expenseMap = useMemo(() => {
+    const map = new Map<string, Expense>();
+    expenses?.forEach((expense) => {
+      map.set(expense.id, expense);
+    });
+    return map;
+  }, [expenses]);
+
   const [showAlert, { close: closeAlert }] = useDisclosure(true);
   const [offlineCacheTimestamp] = useLocalStorage<string | null>({
     key: `offline-cache-timestamp-${tripId}`,
@@ -60,7 +78,7 @@ export const ViewTrip = () => {
     }
   }, [trip]);
 
-  if (isPending || attachmentsPending) {
+  if (isPending || attachmentsPending || expensesPending) {
     return <LoadingOverlay visible={true} zIndex={1000} overlayProps={{ radius: 'sm', blur: 2 }} />;
   }
 
@@ -130,6 +148,7 @@ export const ViewTrip = () => {
           <Tabs.Tab value="organization">{t('organization', 'Organization')}</Tabs.Tab>
           <Tabs.Tab value="itinerary">{t('itinerary', 'Itinerary')}</Tabs.Tab>
           <Tabs.Tab value="attachments">{t('attachments', 'Attachments')}</Tabs.Tab>
+          <Tabs.Tab value="expenses">{t('expenses', 'Expenses')}</Tabs.Tab>
           <Tabs.Tab value="notes">{t('notes', 'Notes')}</Tabs.Tab>
         </Tabs.List>
 
@@ -137,8 +156,11 @@ export const ViewTrip = () => {
           <OrganizationTab
             trip={trip}
             tripAttachments={tripAttachments || []}
-            refetchTrip={() => {
-              refetchTrip().then(() => refetchAttachments());
+            expenseMap={expenseMap}
+            refetchTrip={async () => {
+              await refetchTrip();
+              await refetchAttachments();
+              await refetchExpenses();
             }}
           />
         </Tabs.Panel>
@@ -151,9 +173,13 @@ export const ViewTrip = () => {
             tripAttachments={tripAttachments}
             refetchTrip={async () => {
               await refetchTrip();
-              return await refetchAttachments();
+              await refetchAttachments();
+              await refetchExpenses();
             }}
           />
+        </Tabs.Panel>
+        <Tabs.Panel value="expenses">
+          <ExpensesPanel trip={trip} tripAttachments={tripAttachments} />
         </Tabs.Panel>
         <Tabs.Panel value="notes">
           <TripNotes refetch={refetchTrip} trip={trip} />

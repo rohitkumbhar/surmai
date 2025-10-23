@@ -3,6 +3,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { useTranslation } from 'react-i18next';
 
 import { PlaceMultiSelect } from '../../places/PlaceMultiSelect.tsx';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
 import type { CreateTripForm } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
@@ -59,6 +60,16 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         acceptValueOnBlur
         description={t('trip_travellers_description', 'Names of people going on this trip. Separate names by comma.')}
         placeholder={''}
+      />
+
+      <CurrencyInput
+        costKey={form.key('budgetAmount')}
+        costProps={form.getInputProps('budgetAmount')}
+        currencyCodeKey={form.key('budgetCurrency')}
+        currencyCodeProps={form.getInputProps('budgetCurrency')}
+        label={t('trip_budget', 'Budget')}
+        description={t('trip_budget_description', 'Optional: Total budget for this trip')}
+        maxWidth={280}
       />
     </Stack>
   );

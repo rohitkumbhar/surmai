@@ -6,7 +6,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createTransportationEntry, uploadAttachments } from '../../../lib/api';
+import {
+  createTransportationEntry,
+  uploadAttachments,
+  createExpense,
+  updateExpense,
+  deleteExpense,
+} from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
@@ -17,6 +23,7 @@ import type {
   Attachment,
   CarRentalFormSchema,
   CreateTransportation,
+  Expense,
   Transportation,
   Trip,
 } from '../../../types/trips.ts';
@@ -28,17 +35,22 @@ export const CarRentalForm = ({
   onSuccess,
   onCancel,
   exitingAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   carRental?: Transportation;
   onSuccess: () => void;
   onCancel: () => void;
   exitingAttachments?: Attachment[];
+  expenseMap?: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
+
+  // Get expense from map if carRental has an expenseId
+  const expense = carRental?.expenseId && expenseMap ? expenseMap.get(carRental.expenseId) : undefined;
 
   const form = useForm<CarRentalFormSchema>({
     mode: 'uncontrolled',
@@ -49,60 +61,107 @@ export const CarRentalForm = ({
       pickupTime: carRental?.departureTime,
       dropOffTime: carRental?.arrivalTime,
       confirmationCode: carRental?.metadata?.confirmationCode,
-      cost: carRental?.cost?.value,
-      currencyCode: carRental?.cost?.currency || user?.currencyCode || 'USD',
+      cost: expense?.cost?.value,
+      currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       place: carRental?.metadata?.place,
     },
     validate: {},
   });
 
   // @ts-expect-error it ok
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async (values) => {
     setSaving(true);
-    const carRentalData: CreateTransportation = {
-      type: 'rental_car',
-      trip: trip.id,
-      origin: values.pickupLocation,
-      destination: values.dropOffLocation,
-      cost: {
-        value: values.cost,
-        currency: values.currencyCode,
-      },
-      departureTime: fakeAsUtcString(values.pickupTime),
-      arrivalTime: fakeAsUtcString(values.dropOffTime),
-      metadata: {
-        confirmationCode: values.confirmationCode,
-        rentalCompany: values.rentalCompany,
-        place: values.place,
-      },
-    };
 
-    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
+    try {
+      // Upload attachments first
+      const attachments = await uploadAttachments(trip.id, files);
+
+      // Handle expense creation/update/deletion based on cost value
+      let expenseId = carRental?.expenseId;
+
+      // Check if expenseId exists in expenseMap, set to null if not found
+      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
+        expenseId = undefined;
+      }
+
+      const hasCost = values.cost && values.cost > 0;
+
+      if (hasCost) {
+        if (expenseId) {
+          // Update existing expense - only update cost
+          await updateExpense(expenseId, {
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+          });
+        } else {
+          // Create new expense with all fields
+          const expenseData = {
+            name: `Car Rental: ${values.rentalCompany}`,
+            trip: trip.id,
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+            occurredOn: fakeAsUtcString(values.pickupTime),
+            category: 'transportation',
+          };
+          const newExpense = await createExpense(expenseData);
+          expenseId = newExpense.id;
+        }
+      } else if (expenseId) {
+        // Delete expense if cost is removed
+        await deleteExpense(expenseId);
+        expenseId = undefined;
+      }
+
+      // Prepare transportation data
+      const carRentalData: CreateTransportation = {
+        type: 'rental_car',
+        trip: trip.id,
+        origin: values.pickupLocation,
+        destination: values.dropOffLocation,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        departureTime: fakeAsUtcString(values.pickupTime),
+        arrivalTime: fakeAsUtcString(values.dropOffTime),
+        metadata: {
+          confirmationCode: values.confirmationCode,
+          rentalCompany: values.rentalCompany,
+          place: values.place,
+        },
+      };
+
+      // Update or create transportation
       if (carRental?.id) {
         carRentalData.attachmentReferences = [
           ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
           ...attachments.map((attachment: Attachment) => attachment.id),
         ];
-        updateTransportation(carRental.id, carRentalData).then(() => {
-          onSuccess();
-        });
+        // @ts-expect-error expenseId is valid
+        carRentalData.expenseId = expenseId;
+        await updateTransportation(carRental.id, carRentalData);
       } else {
         carRentalData.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        createTransportationEntry(carRentalData)
-          .then(() => {
-            onSuccess();
-          })
-          .catch((error) => {
-            console.log('error => ', JSON.stringify(error));
-            showErrorNotification({
-              error,
-              title: t('car_rental_creation_failed', 'Unable to create Car Rental Entry'),
-              message: 'Please try again later.',
-            });
-          });
+        // @ts-expect-error expenseId is valid
+        carRentalData.expenseId = expenseId;
+        await createTransportationEntry(carRentalData);
       }
+
+      onSuccess();
+    } catch (error) {
+      console.error('Error saving car rental:', error);
+      showErrorNotification({
+        error,
+        title: t('car_rental_creation_failed', 'Unable to save Car Rental'),
+        message: 'Please try again later.',
+      });
+    } finally {
       setSaving(false);
-    });
+    }
   };
 
   return (

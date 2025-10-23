@@ -15,18 +15,20 @@ import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { formatDateTime } from '../../../lib/time.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 
-import type { Attachment, Transportation, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
 
 export const GenericTransportationData = ({
   trip,
   transportation,
   refetch,
   tripAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   transportation: Transportation;
   refetch: () => void;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
@@ -43,6 +45,11 @@ export const GenericTransportationData = ({
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     transportation.attachmentReferences?.includes(attachment.id)
   );
+
+  // Get expense from map, handle null/undefined cases
+  const expense = transportation.expenseId ? expenseMap.get(transportation.expenseId) : undefined;
+  const costValue = expense?.cost?.value;
+  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -94,6 +101,7 @@ export const GenericTransportationData = ({
           transportation={transportation}
           exitingAttachments={transportationAttachments}
           trip={trip}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetch();
             close();
@@ -221,7 +229,7 @@ export const GenericTransportationData = ({
             {t('cost', 'Cost')}
           </Text>
           <Text size="md">
-            {transportation.cost?.value ? `${transportation.cost.value} ${transportation.cost?.currency || ''}` : ''}
+            {costValue ? `${costValue} ${costCurrency || ''}` : ''}
           </Text>
         </Grid.Col>
       </Grid>

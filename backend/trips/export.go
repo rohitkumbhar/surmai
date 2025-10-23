@@ -20,6 +20,7 @@ func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File) err
 	transportations := exportTransportations(app, trip)
 	lodgings := exportLodgings(app, trip)
 	activities := exportActivities(app, trip)
+	expenses := exportExpenses(app, trip)
 	attachments, _ := writeAttachmentsWithMapping(app, trip, zipWriter)
 
 	exportedTrip := bt.ExportedTrip{
@@ -27,6 +28,7 @@ func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File) err
 		Transportations: transportations,
 		Lodgings:        lodgings,
 		Activities:      activities,
+		Expenses:        expenses,
 		Attachments:     attachments,
 	}
 
@@ -52,6 +54,7 @@ func exportTrip(app core.App, trip *core.Record, zipWriter *zip.Writer) bt.Trip 
 		Destinations:       getDestinations(trip),
 		Participants:       getParticipants(trip),
 	}
+	_ = trip.UnmarshalJSONField("budget", &t.Budget)
 
 	// add cover image
 	coverImageFileName := trip.GetString("coverImage")
@@ -185,6 +188,29 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 		_ = tr.UnmarshalJSONField("cost", &ct.Cost)
 		payload = append(payload, &ct)
 		e.Logger().Debug("Exported Transportation  data", "id", tr.Id)
+	}
+
+	return payload
+}
+
+func exportExpenses(e core.App, trip *core.Record) []*bt.Expense {
+
+	expenses, _ := e.FindAllRecords("trip_expenses",
+		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
+
+	var payload []*bt.Expense
+	for _, exp := range expenses {
+		ct := bt.Expense{
+			Id:                   exp.Id,
+			Name:                 exp.GetString("name"),
+			OccurredOn:           exp.GetDateTime("occurredOn"),
+			Notes:                exp.GetString("notes"),
+			Category:             exp.GetString("category"),
+			AttachmentReferences: exp.GetStringSlice("attachmentReferences"),
+		}
+		_ = exp.UnmarshalJSONField("cost", &ct.Cost)
+		payload = append(payload, &ct)
+		e.Logger().Debug("Exported Expense data", "id", exp.Id)
 	}
 
 	return payload

@@ -5,13 +5,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createActivityEntry, updateActivityEntry, uploadAttachments } from '../../../lib/api';
+import { createActivityEntry, updateActivityEntry, uploadAttachments, createExpense, updateExpense, deleteExpense } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
-import type { Activity, ActivityFormSchema, Attachment, CreateActivity, Trip } from '../../../types/trips.ts';
+import type { Activity, ActivityFormSchema, Attachment, CreateActivity, Expense, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericActivityForm = ({
@@ -20,67 +20,121 @@ export const GenericActivityForm = ({
   onSuccess,
   onCancel,
   exitingAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   activity?: Activity;
   onSuccess: () => void;
   onCancel: () => void;
   exitingAttachments?: Attachment[];
+  expenseMap?: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
+  
+  // Get expense from map if activity has an expenseId
+  const expense = activity?.expenseId && expenseMap ? expenseMap.get(activity.expenseId) : undefined;
+  
   const form = useForm<ActivityFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
       name: activity?.name,
       description: activity?.description,
       address: activity?.address,
-      cost: activity?.cost?.value,
-      currencyCode: activity?.cost?.currency || user?.currencyCode || 'USD',
+      cost: expense?.cost?.value,
+      currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       startDate: activity?.startDate,
       endDate: activity?.endDate,
       place: activity?.metadata?.place,
     },
   });
 
-  const handleFormSubmit = (values: ActivityFormSchema) => {
+  const handleFormSubmit = async (values: ActivityFormSchema) => {
     setSaving(true);
-    const data = {
-      name: values.name,
-      description: values.description,
-      address: values.address,
-      startDate: fakeAsUtcString(values.startDate),
-      endDate: fakeAsUtcString(values.endDate),
-      trip: trip.id,
-      cost: {
-        value: values.cost,
-        currency: values.currencyCode,
-      },
-      attachmentReferences: activity?.attachmentReferences || [],
-      metadata: {
-        place: values.place,
-      },
-    };
-
-    uploadAttachments(trip.id, files).then((attachments: Attachment[]) => {
+    
+    try {
+      // Upload attachments first
+      const attachments = await uploadAttachments(trip.id, files);
+      
+      // Handle expense creation/update/deletion based on cost value
+      let expenseId = activity?.expenseId;
+      
+      // Check if expenseId exists in expenseMap, set to null if not found
+      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
+        expenseId = undefined;
+      }
+      
+      const hasCost = values.cost && values.cost > 0;
+      
+      if (hasCost) {
+        if (expenseId) {
+          // Update existing expense - only update cost
+          await updateExpense(expenseId, {
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+          });
+        } else {
+          // Create new expense with all fields
+          const expenseData = {
+            name: `Activity: ${values.name}`,
+            trip: trip.id,
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+            occurredOn: fakeAsUtcString(values.startDate),
+            category: 'activities',
+          };
+          const newExpense = await createExpense(expenseData);
+          expenseId = newExpense.id;
+        }
+      } else if (expenseId) {
+        // Delete expense if cost is removed
+        await deleteExpense(expenseId);
+        expenseId = undefined;
+      }
+      
+      // Prepare activity data
+      const data = {
+        name: values.name,
+        description: values.description,
+        address: values.address,
+        startDate: fakeAsUtcString(values.startDate),
+        endDate: fakeAsUtcString(values.endDate),
+        trip: trip.id,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        attachmentReferences: activity?.attachmentReferences || [],
+        metadata: {
+          place: values.place,
+        },
+        expenseId: expenseId,
+      };
+      
+      // Update or create activity
       if (activity?.id) {
         data.attachmentReferences = [
           ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
           ...attachments.map((attachment: Attachment) => attachment.id),
         ];
-        updateActivityEntry(activity.id, data as unknown as CreateActivity).then(() => {
-          onSuccess();
-        });
+        await updateActivityEntry(activity.id, data as unknown as CreateActivity);
       } else {
         data.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        createActivityEntry(data as unknown as CreateActivity).then(() => {
-          onSuccess();
-        });
+        await createActivityEntry(data as unknown as CreateActivity);
       }
+      
+      onSuccess();
+    } catch (error) {
+      console.error('Error saving activity:', error);
+    } finally {
       setSaving(false);
-    });
+    }
   };
 
   return (

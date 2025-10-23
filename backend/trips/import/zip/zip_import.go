@@ -42,6 +42,9 @@ func ImportZip(e core.App, zipReader *zip.Reader, ownerId string) (string, error
 	// create activities
 	importActivities(e, attachmentReferenceMapping, data, tripId)
 
+	// create expenses
+	importExpenses(e, attachmentReferenceMapping, data, tripId)
+
 	return tripId, nil
 }
 
@@ -60,6 +63,24 @@ func importActivities(app core.App, mapping map[string]string, tripData bt.Expor
 			record.Set("metadata", a.Metadata)
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, a.AttachmentReferences))
+			_ = app.Save(record)
+		}
+	}
+}
+
+func importExpenses(app core.App, mapping map[string]string, tripData bt.ExportedTrip, tripId string) {
+
+	collection, _ := app.FindCollectionByNameOrId("trip_expenses")
+	if tripData.Expenses != nil {
+		for _, e := range tripData.Expenses {
+			record := core.NewRecord(collection)
+			record.Set("name", e.Name)
+			record.Set("cost", e.Cost)
+			record.Set("occurredOn", e.OccurredOn)
+			record.Set("notes", e.Notes)
+			record.Set("category", e.Category)
+			record.Set("trip", tripId)
+			record.Set("attachmentReferences", getMappedAttachments(mapping, e.AttachmentReferences))
 			_ = app.Save(record)
 		}
 	}
@@ -157,6 +178,7 @@ func importBasicTripInfo(app core.App, trip *bt.Trip, ownerId string, zipReader 
 	record.Set("participants", trip.Participants)
 	record.Set("ownerId", ownerId)
 	record.Set("notes", trip.Notes)
+	record.Set("budget", trip.Budget)
 
 	if trip.CoverImageFileName != "" {
 		coverImageFile, readError := zipReader.Open(fmt.Sprintf("files/%s", trip.CoverImageFileName))

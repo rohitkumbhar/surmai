@@ -10,9 +10,17 @@ import { useTranslation } from 'react-i18next';
 import { AirlineSelect } from './AirlineSelect.tsx';
 import { AirportSelect } from './AirportSelect.tsx';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createTransportationEntry, getFlightRoute, uploadAttachments } from '../../../lib/api';
+import {
+  createExpense,
+  createTransportationEntry,
+  deleteExpense,
+  getFlightRoute,
+  updateExpense,
+  uploadAttachments,
+} from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import i18n from '../../../lib/i18n.ts';
+import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 
@@ -21,6 +29,7 @@ import type {
   Airport,
   Attachment,
   CreateTransportation,
+  Expense,
   FlightFormSchema,
   Transportation,
   Trip,
@@ -33,12 +42,14 @@ export const FlightForm = ({
   onSuccess,
   onCancel,
   exitingAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   transportation?: Transportation;
   onSuccess: () => void;
   onCancel: () => void;
   exitingAttachments?: Attachment[];
+  expenseMap?: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -82,6 +93,7 @@ export const FlightForm = ({
     _loadFlightInfo(f, flightNumber);
   }, 500);
 
+  const expense = transportation?.expenseId && expenseMap ? expenseMap.get(transportation.expenseId) : undefined;
   const form = useForm<FlightFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -91,8 +103,8 @@ export const FlightForm = ({
       arrivalTime: transportation?.arrivalTime,
       provider: transportation?.metadata?.provider,
       reservation: transportation?.metadata?.reservation,
-      cost: transportation?.cost?.value,
-      currencyCode: transportation?.cost?.currency || user?.currencyCode || 'USD',
+      cost: expense?.cost?.value,
+      currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       flightNumber: transportation?.metadata?.flightNumber || '',
       seats: transportation?.metadata?.seats || '',
     },
@@ -100,58 +112,126 @@ export const FlightForm = ({
   });
 
   // @ts-expect-error it ok
-  const handleFormSubmit = (values) => {
+  const handleFormSubmit = async (values) => {
     setSaving(true);
-    const payload: CreateTransportation = {
-      type: 'flight',
-      origin: values.origin.iataCode || values.origin,
-      destination: values.destination.iataCode || values.destination,
-      cost: {
-        value: values.cost,
-        currency: values.currencyCode,
-      },
-      departureTime: fakeAsUtcString(values.departureTime),
-      arrivalTime: fakeAsUtcString(values.arrivalTime),
-      trip: trip.id,
-      metadata: {
-        provider: values.provider,
-        reservation: values.reservation,
-        origin: values.origin,
-        destination: values.destination,
-        flightNumber: values.flightNumber,
-        seats: values.seats,
-      },
-    };
 
-    uploadAttachments(trip.id, files)
-      .then((attachments: Attachment[]) => {
-        if (transportation?.id) {
-          payload.attachmentReferences = [
-            ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-            ...attachments.map((attachment: Attachment) => attachment.id),
-          ];
-          updateTransportation(transportation.id, payload)
-            .then(() => {
-              onSuccess();
-            })
-            .catch((error) => {
-              console.log('error => ', error);
-            });
+    try {
+      // Upload attachments first
+      const attachments = await uploadAttachments(trip.id, files);
+
+      // Handle expense creation/update/deletion based on cost value
+      let expenseId = transportation?.expenseId;
+
+      // Check if expenseId exists in expenseMap, set to null if not found
+      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
+        expenseId = undefined;
+      }
+
+      const hasCost = values.cost && values.cost > 0;
+      if (hasCost) {
+        if (expenseId) {
+          // Update existing expense - only update cost
+          await updateExpense(expenseId, {
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+          });
         } else {
-          payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-          createTransportationEntry(payload)
-            .then(() => {
-              onSuccess();
-            })
-            .catch((error) => {
-              console.log('error => ', error);
-            });
+          // Create new expense with all fields
+          const expenseData = {
+            name: `Flight: ${values.origin.iataCode || values.origin} to ${values.destination.iataCode || values.destination}`,
+            trip: trip.id,
+            cost: {
+              value: values.cost as number,
+              currency: values.currencyCode as string,
+            },
+            occurredOn: fakeAsUtcString(values.departureTime),
+            category: 'transportation',
+          };
+          const newExpense = await createExpense(expenseData);
+          expenseId = newExpense.id;
         }
-        setSaving(false);
-      })
-      .catch((error) => {
-        console.log('error => ', error);
+      } else if (expenseId) {
+        // Delete expense if cost is removed
+        await deleteExpense(expenseId);
+        expenseId = undefined;
+      }
+
+      const payload: CreateTransportation = {
+        type: 'flight',
+        origin: values.origin.iataCode || values.origin,
+        destination: values.destination.iataCode || values.destination,
+        cost: {
+          value: values.cost,
+          currency: values.currencyCode,
+        },
+        departureTime: fakeAsUtcString(values.departureTime),
+        arrivalTime: fakeAsUtcString(values.arrivalTime),
+        trip: trip.id,
+        metadata: {
+          provider: values.provider,
+          reservation: values.reservation,
+          origin: values.origin,
+          destination: values.destination,
+          flightNumber: values.flightNumber,
+          seats: values.seats,
+        },
+      };
+
+      if (transportation?.id) {
+        transportation.attachmentReferences = [
+          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+          ...attachments.map((attachment: Attachment) => attachment.id),
+        ];
+        transportation.expenseId = expenseId;
+        await updateTransportation(transportation.id, payload);
+      } else {
+        payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+        // @ts-expect-error expenseId is valid
+        payload.expenseId = expenseId;
+        await createTransportationEntry(payload);
+      }
+      onSuccess();
+    } catch (error) {
+      console.error('Error saving car rental:', error);
+      showErrorNotification({
+        error,
+        title: t('flight_creation_failed', 'Unable to save Flight'),
+        message: 'Please try again later.',
       });
+    } finally {
+      setSaving(false);
+    }
+    // uploadAttachments(trip.id, files)
+    //   .then((attachments: Attachment[]) => {
+    //     if (transportation?.id) {
+    //       payload.attachmentReferences = [
+    //         ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
+    //         ...attachments.map((attachment: Attachment) => attachment.id),
+    //       ];
+    //       updateTransportation(transportation.id, payload)
+    //         .then(() => {
+    //           onSuccess();
+    //         })
+    //         .catch((error) => {
+    //           console.log('error => ', error);
+    //         });
+    //     } else {
+    //       payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
+    //       createTransportationEntry(payload)
+    //         .then(() => {
+    //           onSuccess();
+    //         })
+    //         .catch((error) => {
+    //           console.log('error => ', error);
+    //         });
+    //     }
+    //     setSaving(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log('error => ', error);
+    //   });
   };
 
   return (

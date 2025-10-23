@@ -1,11 +1,11 @@
 {
   "name": "surmai",
   "private": true,
-  "version": "0.3.8",
+  "version": "0.4.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0 --cors",
+    "dev": "vite --host 0.0.0.0",
     "generate-pwa-assets": "pwa-assets-generator --preset minimal-2023 public/icons/logo.svg",
     "build": "tsc -b && vite build",
     "build-site": "vite build -c vite.site.config.ts --emptyOutDir && cp public/icons/* docs/assets/",

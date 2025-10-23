@@ -7,10 +7,10 @@ import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { ParticipantData } from './ParticipantData.tsx';
-import { listCollaborators } from '../../../lib/api';
+import { listCollaborators, listExpenses } from '../../../lib/api';
 
 import type { User } from '../../../types/auth.ts';
-import type { Trip } from '../../../types/trips.ts';
+import type { Expense, Trip } from '../../../types/trips.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
@@ -18,6 +18,11 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
   const { data: collaborators } = useQuery<User[]>({
     queryKey: ['listCollaborators', trip.id],
     queryFn: () => listCollaborators({ tripId: trip.id }),
+  });
+
+  const { data: expenses } = useQuery<Expense[]>({
+    queryKey: ['listExpenses', trip.id],
+    queryFn: () => listExpenses(trip.id),
   });
 
   return (
@@ -32,6 +37,15 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
       </Title>
       <Text size={'sm'}>{`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}</Text>
       <Divider />
+      <Group>
+        <Text>
+          {t('budget', 'Budget')}: {trip.budget?.value ? `${trip.budget.value} ${trip.budget.currency}` : t('no_budget_set', 'No budget set')}
+        </Text>
+        <Text>
+          {t('spent', 'Spent')}: {((expenses || []).reduce((sum, e) => sum + (e.cost?.value || 0), 0)).toFixed(2)}{' '}
+          {trip.budget?.currency || (expenses && expenses[0]?.cost?.currency) || ''}
+        </Text>
+      </Group>
       <Text mt={'md'}>{t('trip_destinations', 'Destinations')}</Text>
       <Group>
         {(trip.destinations || []).map((destination) => {

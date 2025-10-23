@@ -9,18 +9,20 @@ import { DataLine } from '../DataLine.tsx';
 import { CarRentalForm } from './CarRentalForm.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 
-import type { Attachment, Transportation, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
 
 export const CarRentalData = ({
   trip,
   rental,
   refetch,
   tripAttachments,
+  expenseMap,
 }: {
   trip: Trip;
   rental: Transportation;
   refetch: () => void;
   tripAttachments?: Attachment[];
+  expenseMap: Map<string, Expense>;
 }) => {
   const { t, i18n } = useTranslation();
   const isMobile = useMediaQuery('(max-width: 50em)');
@@ -28,6 +30,11 @@ export const CarRentalData = ({
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     rental.attachmentReferences?.includes(attachment.id)
   );
+
+  // Get expense from map, handle null/undefined cases
+  const expense = rental.expenseId ? expenseMap.get(rental.expenseId) : undefined;
+  const costValue = expense?.cost?.value;
+  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -53,6 +60,7 @@ export const CarRentalData = ({
           carRental={rental}
           trip={trip}
           exitingAttachments={transportationAttachments}
+          expenseMap={expenseMap}
           onSuccess={() => {
             refetch();
             close();
@@ -120,7 +128,7 @@ export const CarRentalData = ({
             {t('cost', 'Cost')}
           </Text>
           <Text size="md">
-            {rental.cost.value ? `${rental.cost.value} ${rental.cost.currency || ''}` : t('unknown', 'Unknown')}
+            {costValue ? `${costValue} ${costCurrency || ''}` : ''}
           </Text>
         </Grid.Col>
       </Grid>
