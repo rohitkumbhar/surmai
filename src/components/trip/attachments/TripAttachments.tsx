@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Card, FileButton, Grid, Group, ScrollArea, Stack, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, FileButton, Grid, Group, Stack, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
@@ -44,11 +44,9 @@ export const TripAttachments = ({
       confirmProps: { color: 'red' },
       children: (
         <Text size="sm">
-          {t(
-            'attachment_deletion_confirmation',
-            'Deleting "{{attachmentName}}". This action cannot be undone.',
-            { attachmentName: attachment.name }
-          )}
+          {t('attachment_deletion_confirmation', 'Deleting "{{attachmentName}}". This action cannot be undone.', {
+            attachmentName: attachment.name,
+          })}
         </Text>
       ),
       labels: {
@@ -72,39 +70,10 @@ export const TripAttachments = ({
 
   return (
     <>
-      <ScrollArea mah={520} mt={'sm'} scrollbars={'y'}>
-        <Grid gutter="md">
-          {(tripAttachments || []).map((attachment: Attachment) => (
-            <Grid.Col key={attachment.id} span={{ base: 12, sm: 6, md: 4 }}>
-              <Card
-                withBorder
-                padding="md"
-                radius="md"
-                style={{ cursor: 'pointer' }}
-                onClick={() => openAttachmentViewer(attachment)}
-              >
-                <Group justify="space-between" align="flex-start">
-                  <Stack gap={4} style={{ flex: 1, overflow: 'hidden' }}>
-                    <Text fw={500} size="sm" lineClamp={2}>
-                      {attachment.name}
-                    </Text>
-                  </Stack>
-                  <ActionIcon
-                    variant="default"
-                    color="red"
-                    aria-label={t('delete_attachment', 'Delete Attachment')}
-                    onClick={(event) => handleDelete(attachment, event)}
-                    title={t('delete_attachment', 'Delete Attachment')}
-                  >
-                    <IconTrash size={18} />
-                  </ActionIcon>
-                </Group>
-              </Card>
-            </Grid.Col>
-          ))}
-        </Grid>
-      </ScrollArea>
-      <Group justify={'flex-end'} mt={'md'}>
+      <Group justify={'space-between'} align={'center'} mt={'sm'}>
+        <Text size={'sm'} c={'dimmed'}>
+          {t('all_attachments_desc', 'All attachments from Transportations, Lodgings, Activities and Expenses')}
+        </Text>
         <FileButton
           onChange={(files: File[]) => {
             uploadAttachments(trip.id, files)
@@ -133,6 +102,43 @@ export const TripAttachments = ({
           }}
         </FileButton>
       </Group>
+      {(!tripAttachments || tripAttachments.length === 0) && (
+        <Card withBorder padding="lg" radius="md" mt={'sm'}>
+          <Text size="sm" c="dimmed" ta="center" py="xl">
+            {t('no_attachments', 'No attachments yet')}
+          </Text>
+        </Card>
+      )}
+      <Grid gutter="md" mt={'sm'}>
+        {(tripAttachments || []).map((attachment: Attachment) => (
+          <Grid.Col key={attachment.id} span={{ base: 12, sm: 6, md: 4 }}>
+            <Card
+              withBorder
+              padding="md"
+              radius="md"
+              style={{ cursor: 'pointer' }}
+              onClick={() => openAttachmentViewer(attachment)}
+            >
+              <Group justify="space-between" align="flex-start">
+                <Stack gap={4} style={{ flex: 1, overflow: 'hidden' }}>
+                  <Text fw={500} size="sm" lineClamp={2}>
+                    {attachment.name}
+                  </Text>
+                </Stack>
+                <ActionIcon
+                  variant="default"
+                  color="red"
+                  aria-label={t('delete_attachment', 'Delete Attachment')}
+                  onClick={(event) => handleDelete(attachment, event)}
+                  title={t('delete_attachment', 'Delete Attachment')}
+                >
+                  <IconTrash size={18} />
+                </ActionIcon>
+              </Group>
+            </Card>
+          </Grid.Col>
+        ))}
+      </Grid>
     </>
   );
 };
