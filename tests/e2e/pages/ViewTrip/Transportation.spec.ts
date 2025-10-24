@@ -9,7 +9,6 @@ import { CreateNewTripPage } from '../CreateNewTrip/CreateNewTripPage';
 
 import type { TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 
-
 const __dirname = import.meta.dirname;
 test.describe('Trip Transportation', () => {
   let viewTripPage: ViewTripPage;
@@ -71,7 +70,7 @@ test.describe('Trip Transportation', () => {
   });
 
   test.beforeEach(async ({ page }) => {
-    page.on('console', (msg) => console.log(msg.text()));
+    // page.on('console', (msg) => console.log(msg.text()));
 
     // Initialize the ViewTripPage
     viewTripPage = new ViewTripPage(page);

@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('SignIn Page', () => {
   test.beforeEach(async ({ page }) => {
-    page.on('console', (msg) => console.log(msg.text()));
+    // page.on('console', (msg) => console.log(msg.text()));
 
     // Navigate to the sign-in page before each test
     await page.goto('/signin');

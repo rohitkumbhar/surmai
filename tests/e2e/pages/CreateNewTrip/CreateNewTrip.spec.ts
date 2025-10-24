@@ -7,7 +7,7 @@ test.describe('Create New Trip Page', () => {
   let createNewTripPage: CreateNewTripPage;
 
   test.beforeEach(async ({ page }) => {
-    page.on('console', (msg) => console.log(msg.text()));
+    // page.on('console', (msg) => console.log(msg.text()));
 
     // Initialize the Page Object
     createNewTripPage = new CreateNewTripPage(page);
