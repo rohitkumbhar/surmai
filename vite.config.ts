@@ -96,11 +96,11 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: 'http://localhost:9090',
+          target: process.env.PLAYWRIGHT_TEST_BACKEND || 'http://localhost:9090',
           changeOrigin: false,
         },
         '/site-settings.json': {
-          target: 'http://localhost:9090',
+          target: process.env.PLAYWRIGHT_TEST_BACKEND || 'http://localhost:9090',
           changeOrigin: false,
         },
       },

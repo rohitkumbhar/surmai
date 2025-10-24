@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid';
 
 test.describe('SignUp Page', () => {
   test.beforeEach(async ({ page }) => {
-    page.on('console', (msg) => console.log(msg.text()));
+    // page.on('console', (msg) => console.log(msg.text()));
 
     // Navigate to the sign-up page before each test
     await page.goto('/register');

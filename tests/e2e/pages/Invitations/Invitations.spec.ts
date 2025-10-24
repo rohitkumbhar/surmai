@@ -5,7 +5,7 @@ import { expect, test } from '@playwright/test';
 
 test.describe('Invitations Page', () => {
   test.beforeEach(async ({ page }) => {
-    page.on('console', (msg) => console.log(msg.text()));
+    // page.on('console', (msg) => console.log(msg.text()));
 
     // Navigate to the invitations page before each test
     await page.goto('/invitations');
