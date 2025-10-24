@@ -279,6 +279,6 @@ export class ViewTripPage {
     await this.switchToTab('Attachments');
 
     // Check that the attachment is visible
-    await expect(this.page.getByRole('link', { name: attachmentName })).toBeVisible();
+    await expect(this.page.getByText(attachmentName)).toBeVisible();
   }
 }
