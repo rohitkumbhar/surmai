@@ -676,6 +676,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
         onClose={closeModal}
         title={selectedExpense ? t('edit_expense', 'Edit Expense') : t('add_expense', 'Add Expense')}
         size="lg"
+        fullScreen={isMobile}
       >
         <Stack gap="md">
           <TextInput
