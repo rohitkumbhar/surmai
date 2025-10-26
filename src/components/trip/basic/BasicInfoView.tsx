@@ -57,7 +57,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         })}
       </Group>
       <Divider />
-      <Text mt={'md'}>{t('trip_travellers', 'Travellers')}</Text>
+      <Text mt={'md'}>{t('trip_travellers', 'Travelers')}</Text>
       <Group>
         {(trip.participants || []).map((person, index) => {
           return (
