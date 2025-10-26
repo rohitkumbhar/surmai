@@ -491,7 +491,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               )}
             </Stack>
             <Card.Section px="md" mt={'xl'}>
-              <Anchor size="sm" href="https://www.exchangerate-api.com" ta="end">
+              <Anchor size="sm" href="https://www.exchangerate-api.com" ta="end" target="_blank">
                 Rates By Exchange Rate API
               </Anchor>
             </Card.Section>
@@ -676,6 +676,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
         onClose={closeModal}
         title={selectedExpense ? t('edit_expense', 'Edit Expense') : t('add_expense', 'Add Expense')}
         size="lg"
+        fullScreen={isMobile}
       >
         <Stack gap="md">
           <TextInput
