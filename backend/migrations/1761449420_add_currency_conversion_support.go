@@ -7,25 +7,25 @@ import (
 
 func init() {
 	m.Register(func(app core.App) error {
+		// add up queries...
 
-		collectionId, _ := app.FindCollectionByNameOrId("surmai_settings")
+		//create a table for currency data
+		// id, currency code, conversion_rate, updated_date
+		collectionId, _ := app.FindCollectionByNameOrId("currency_conversions")
 		if collectionId != nil {
 			return nil
 		}
 
-		surmaiSettings := core.NewBaseCollection("surmai_settings")
-		surmaiSettings.Fields.Add(
+		currencyConversions := core.NewBaseCollection("currency_conversions")
+		currencyConversions.Fields.Add(
 
 			&core.TextField{
-				Name:       "id",
-				Required:   true,
-				PrimaryKey: true,
-				Pattern:    "^[a-z0-9_]+$",
+				Name:     "currencyCode",
+				Required: true,
 			},
-			&core.JSONField{
-				Name:     "value",
-				MaxSize:  1000,
-				Required: false,
+			&core.NumberField{
+				Name:     "conversionRate",
+				Required: true,
 			},
 			&core.AutodateField{
 				Name:     "created",
@@ -39,11 +39,11 @@ func init() {
 			},
 		)
 
-		return app.Save(surmaiSettings)
-
+		return app.Save(currencyConversions)
 	}, func(app core.App) error {
+		// add down queries...
 
-		settings, err := app.FindCollectionByNameOrId("surmai_settings")
+		settings, err := app.FindCollectionByNameOrId("currency_conversions")
 		if err != nil {
 			return err
 		}

@@ -1,3 +1,4 @@
+import { ConversionRate } from '../../../types/expenses.ts';
 import { pb, pbAdmin } from './pocketbase.ts';
 
 export const loadDataset = (name: string) => {
@@ -58,4 +59,15 @@ export const searchAirlines = (query: string) => {
   return pb.collection('airlines').getList(1, 10, {
     filter: `name~"${query}"`,
   });
+};
+
+// Returns the list of conversion rates for the specified currency
+// The rates are based of USD
+export const getCurrencyConversionRates = async (currencies: string[]) => {
+  const condition = currencies.map((code) => `currencyCode = '${code.toUpperCase()}'`).join(' || ');
+  console.log('callingwith condition', condition);
+  const res = await pb.collection('currency_conversions').getList(1, currencies.length, {
+    filter: `(${condition})`,
+  });
+  return res.items as unknown as ConversionRate[];
 };
