@@ -76,6 +76,10 @@ export type Expense = {
   attachmentReferences?: string[];
 };
 
+export type ConvertedExpense = Expense & {
+  convertedCost?: Cost;
+};
+
 export type CreateExpense = Omit<Expense, 'id'>;
 
 export type Transportation = {

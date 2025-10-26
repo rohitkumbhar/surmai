@@ -32,15 +32,18 @@ import {
   createExpense,
   deleteExpense,
   getAttachmentUrl,
+  getCurrencyConversionRates,
   listExpenses,
   updateExpense,
   uploadAttachments,
 } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-
+import type { ConversionRate } from '../../../types/expenses.ts';
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
+import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { convertExpenses, getExpenseTotalsByCurrency, getRandomColor } from './helper.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
   lodging: {
@@ -101,6 +104,7 @@ const EXPENSE_CATEGORIES = Object.keys(EXPENSE_CATEGORY_DATA);
 
 export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttachments?: Attachment[] }) => {
   const { t } = useTranslation();
+  const { user } = useCurrentUser();
   const queryClient = useQueryClient();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
@@ -109,7 +113,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [name, setName] = useState('');
   const [amount, setAmount] = useState<number | ''>('');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState(trip.budget?.currency || user?.currencyCode || 'USD');
   const [occurredOn, setOccurredOn] = useState<string | null>(null);
   const [notes, setNotes] = useState('');
   const [category, setCategory] = useState<string | null>(null);
@@ -117,10 +121,24 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const [existingAttachments, setExistingAttachments] = useState<Attachment[]>([]);
   const isMobile = useMediaQuery('(max-width: 50em)');
 
-  const { data: expenses, isLoading } = useQuery<Expense[]>({
+  const { data: rawExpenses, isLoading } = useQuery<Expense[]>({
     queryKey: ['listExpenses', trip.id],
     queryFn: () => listExpenses(trip.id),
   });
+
+  const expenseCurrencies = rawExpenses?.map((e) => e.cost?.currency || 'USD');
+  const currencyCodes = new Set([
+    trip.budget?.currency || 'USD',
+    user?.currencyCode || 'USD',
+    ...(expenseCurrencies || []),
+  ]);
+  const { data: rates } = useQuery<ConversionRate[]>({
+    queryKey: ['getCurrencyConversionRates', Array.from(currencyCodes)],
+    queryFn: () => getCurrencyConversionRates(Array.from(currencyCodes)),
+  });
+
+  const expenses = convertExpenses(user, trip, rawExpenses || [], rates || []);
+  const totalsByCurrency = getExpenseTotalsByCurrency(user, trip, expenses || []);
 
   const openModalForAdd = () => {
     resetForm();
@@ -131,7 +149,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const openModalForEdit = (expense: Expense) => {
     setName(expense.name);
     setAmount(expense.cost?.value || '');
-    setCurrency(expense.cost?.currency || 'USD');
+    setCurrency(expense.cost?.currency || trip.budget?.currency || user?.currencyCode || 'USD');
     setOccurredOn(expense.occurredOn || null);
     setNotes(expense.notes || '');
     setCategory(expense.category || null);
@@ -151,7 +169,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const resetForm = () => {
     setName('');
     setAmount('');
-    setCurrency('USD');
+    setCurrency(trip.budget?.currency || user?.currencyCode || 'USD');
     setOccurredOn(null);
     setNotes('');
     setCategory(null);
@@ -262,8 +280,8 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
       const catB = b.category || '';
       comparison = catA.localeCompare(catB);
     } else if (sortBy === 'amount') {
-      const amountA = a.cost?.value || 0;
-      const amountB = b.cost?.value || 0;
+      const amountA = a.convertedCost?.value || 0;
+      const amountB = b.convertedCost?.value || 0;
       comparison = amountA - amountB;
     }
 
@@ -280,7 +298,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
 
   // Calculate statistics
   const totalExpenses = sortedExpenses.reduce((sum, exp) => {
-    return sum + (exp.cost?.value || 0);
+    return sum + (exp.convertedCost?.value || 0);
   }, 0);
 
   const budgetAmount = trip.budget?.value || 0;
@@ -291,7 +309,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const categoryTotals = sortedExpenses.reduce(
     (acc, exp) => {
       const cat = exp.category || 'other';
-      acc[cat] = (acc[cat] || 0) + (exp.cost?.value || 0);
+      acc[cat] = (acc[cat] || 0) + (exp.convertedCost?.value || 0);
       return acc;
     },
     {} as Record<string, number>
@@ -345,13 +363,13 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               </Badge>
             </Group>
 
-            {exp.cost && (
+            {exp.convertedCost && (
               <Group gap="xs">
                 <Text size="sm" fw={500}>
                   {t('amount', 'Amount')}:
                 </Text>
                 <Text size="sm" fw={600} c="blue">
-                  {exp.cost.value} {exp.cost.currency}
+                  {exp.convertedCost.value} {exp.convertedCost.currency}
                 </Text>
               </Group>
             )}
@@ -412,7 +430,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
 
       {/* Stat Cards */}
       {!isLoading && sortedExpenses.length > 0 && (
-        <SimpleGrid cols={{ base: 1, md: 2 }} spacing="md" mb="md">
+        <SimpleGrid cols={{ base: 1, md: 3 }} spacing="md" mb="md">
           {/* Budget Usage Card */}
           <Card withBorder padding="md" radius="md">
             <Stack gap="md">
@@ -472,6 +490,11 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
                 </Text>
               )}
             </Stack>
+            <Card.Section px="md" mt={'xl'}>
+              <Anchor size="sm" href="https://www.exchangerate-api.com" ta="end">
+                Rates By Exchange Rate API
+              </Anchor>
+            </Card.Section>
           </Card>
 
           {/* Expenses by Category Card */}
@@ -555,6 +578,82 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               )}
             </Stack>
           </Card>
+
+          {/* Expenses by Currency */}
+          <Card withBorder padding="lg" radius="md">
+            <Stack gap="md">
+              <Text size="lg" fw={600}>
+                {t('expenses_by_curency', 'Expenses by Currency')}
+              </Text>
+
+              {Object.keys(totalsByCurrency).length > 0 ? (
+                <>
+                  {/* Pie Chart */}
+                  <Group justify="center" mt="xs">
+                    <RingProgress
+                      size={200}
+                      thickness={32}
+                      sections={Object.entries(totalsByCurrency).map(([currencyCode, amount], _index) => {
+                        const percentage = (amount.convertedTotal / totalExpenses) * 100;
+                        const color = getRandomColor(currencyCode) || 'red';
+                        return {
+                          value: percentage,
+                          color: color,
+                          tooltip: `${amount.total.toFixed(2)} ${currencyCode}`,
+                        };
+                      })}
+                      label={
+                        <Stack gap={0} align="center">
+                          <Text size="lg" fw={700} ta="center">
+                            {Object.keys(totalsByCurrency).length}
+                          </Text>
+                          <Text size="xs" c="dimmed" ta="center">
+                            {t('currencies', 'Currencies')}
+                          </Text>
+                        </Stack>
+                      }
+                    />
+
+                    <Stack gap="xs" mt="sm">
+                      {Object.entries(totalsByCurrency).map(([currencyCode, amount], _index) => {
+                        const color = getRandomColor(currencyCode) || 'red';
+                        const percentage = (amount.convertedTotal / totalExpenses) * 100;
+                        return (
+                          <Group key={currencyCode} justify="space-between" wrap="nowrap">
+                            <Group gap="xs" wrap="nowrap">
+                              <div
+                                style={{
+                                  width: 12,
+                                  height: 12,
+                                  borderRadius: 2,
+                                  backgroundColor: `var(--mantine-color-${color}-6)`,
+                                  flexShrink: 0,
+                                }}
+                              />
+                              <Text size="sm" fw={500}>
+                                {`${currencyCode} ${amount.total.toFixed(2)} `}
+                              </Text>
+                            </Group>
+                            <Group gap="xs" wrap="nowrap">
+                              <Text size="sm" c="dimmed">
+                                {percentage.toFixed(1)}%
+                              </Text>
+                            </Group>
+                          </Group>
+                        );
+                      })}
+                    </Stack>
+                  </Group>
+
+                  {/* Legend */}
+                </>
+              ) : (
+                <Text size="sm" c="dimmed" ta="center" py="xl">
+                  {t('no_expenses', 'No expenses yet')}
+                </Text>
+              )}
+            </Stack>
+          </Card>
         </SimpleGrid>
       )}
 
@@ -612,7 +711,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               currencyCodeKey="expense-currency"
               currencyCodeProps={{
                 value: currency,
-                onChange: (v: string | null) => setCurrency(v || 'USD'),
+                onChange: (v: string | null) => setCurrency(v || user?.currencyCode || 'USD'),
                 required: true,
               }}
               label={t('amount', 'Amount')}

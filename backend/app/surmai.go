@@ -6,12 +6,13 @@ import (
 	"backend/middleware"
 	R "backend/routes"
 	"backend/types"
+	"os"
+
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 	"github.com/ringsaturn/tzf"
-	"os"
 )
 
 type SurmaiApp struct {
@@ -112,6 +113,20 @@ func (surmai *SurmaiApp) BindEventHooks() {
 func (surmai *SurmaiApp) StartJobs() {
 	surmai.startInvitationCleanupJob()
 	surmai.startDemoModeSetupJob()
+	surmai.startSyncCurrencyConversionRatesJob()
+
+}
+
+func (surmai *SurmaiApp) startSyncCurrencyConversionRatesJob() {
+
+	job := &jobs.SyncCurrencyDataJob{
+		Pb: surmai.Pb,
+	}
+
+	// run job every hour
+	surmai.Pb.Cron().MustAdd("SyncCurrencyDataJob", "0 * * * *", func() {
+		job.Execute()
+	})
 }
 
 func (surmai *SurmaiApp) startInvitationCleanupJob() {

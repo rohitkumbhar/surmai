@@ -1,11 +1,12 @@
 package jobs
 
 import (
-	"backend/trips/import"
+	_import "backend/trips/import"
+	"os"
+
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
-	"os"
 )
 
 type ImportDemoDataJob struct {
@@ -29,7 +30,7 @@ func (job *ImportDemoDataJob) deleteAllTrips() {
 
 	records, err := pbApp.FindAllRecords("trips")
 	if err != nil {
-		logger.Error("ImportDemoDataJob.Execute FindAllRecords error:%v", err)
+		logger.Error("ImportDemoDataJob.Execute FindAllRecords error", "error", err)
 		return
 	}
 
