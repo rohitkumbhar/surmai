@@ -491,7 +491,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               )}
             </Stack>
             <Card.Section px="md" mt={'xl'}>
-              <Anchor size="sm" href="https://www.exchangerate-api.com" ta="end">
+              <Anchor size="sm" href="https://www.exchangerate-api.com" ta="end" target="_blank">
                 Rates By Exchange Rate API
               </Anchor>
             </Card.Section>
