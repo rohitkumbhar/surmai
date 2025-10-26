@@ -5,20 +5,13 @@
 * [Rationale](#rationale)
 * [Mobile Apps](#mobile-apps)
 * [Screenshots / Screencasts](#screenshots--screencasts)
-    * [Desktop](#desktop)
-    * [Mobile](#mobile)
 * [Demo](#demo)
 * [Installation](#installation)
-    * [By cloning the repository](#by-cloning-the-repository)
-        * [Required Environment Variables](#required-environment-variables)
-    * [Docker Image](#docker-image)
 * [Credits](#credits)
     * [PocketBase](#pocketbase)
     * [Mantine](#mantine)
     * [Icon](#icon)
-    * [Bundled Data](#bundled-data)
-        * [Airports](#airports)
-        * [Cities](#cities)
+    * [Data](#data)
 * [Possibly FAQ](#possibly-faq)
     * [Why so ugly tho?](#why-so-ugly-tho)
     * [Why not use ${other_thing}?](#why-not-use-other_thing)
@@ -105,7 +98,7 @@ building and prettier for formatting.
 
 [Fish SVG Vector](https://www.svgrepo.com/svg/280960/fish)
 
-## Bundled Data
+## Data
 
 ### Airports
 
@@ -119,6 +112,10 @@ From [countries-states-cities-database](https://github.com/dr5hn/countries-state
 
 From [dotmarn/Airlines](https://github.com/dotmarn/Airlines)
 
+### Currency Conversion
+
+From ExchangeRate-APIs [open acces endpoint](https://www.exchangerate-api.com/docs/free)
+
 # Possibly FAQ
 
 ### Why so ugly tho?
@@ -127,6 +124,4 @@ From [dotmarn/Airlines](https://github.com/dotmarn/Airlines)
 
 ### Why not use ${other_thing}?
 
-I wanted to learn React/Typescript, that's about it. So many side projects have languished because I gave up when it
-came
-to building the UI. I wanted this one to be different.
+I wanted to learn React/Typescript, that's about it. So many side projects have languished because I gave up when it came to building the UI. I wanted this one to be different.
