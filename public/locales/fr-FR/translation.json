@@ -101,6 +101,7 @@
   "invite_collaborator": "Inviter un collaborateur",
   "invite_new_user": "Inviter un nouvel utilisateur",
   "itinerary": "Itinéraire",
+  "home": "Accueil",
   "keep_it_brief": "Votre message est limité à 200 caractères maximum. Actuellement à {{ curVal }} caractères.",
   "load_airlines": "Charger les compagnies aériennes",
   "load_airports": "Charger les aéroports",

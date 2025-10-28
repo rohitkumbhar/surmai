@@ -38,9 +38,9 @@ export function Navbar({ close }: NavbarProps) {
   const isCurrentUserAdmin = isAdmin();
   const { t } = useTranslation();
   const mainNav = [
-    { icon: IconHome2, label: 'Home', route: '/' },
+    { icon: IconHome2, label: t('home', 'Home'), route: '/' },
     { icon: IconPinInvoke, label: t('invitations', 'Invitations'), route: '/invitations' },
-    { icon: IconSettings, label: 'Settings', route: '/settings', isAdmin: true },
+    { icon: IconSettings, label: t('settings', 'Settings'), route: '/settings', isAdmin: true },
   ];
 
   const navigate = useNavigate();
