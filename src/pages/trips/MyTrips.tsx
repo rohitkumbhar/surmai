@@ -111,7 +111,7 @@ export const MyTrips = () => {
           <Title order={3} className={classes.title} ta="start" mt="sm">
             {t('upcoming_trips', 'Upcoming Trips')}
             <Text size={'xs'} c={'dimmed'}>
-              All future trips ordered by start date
+              {t('upcoming_trips_under', 'All future trips ordered by start date')}
             </Text>
           </Title>
         </Group>
@@ -153,7 +153,7 @@ export const MyTrips = () => {
         <Title order={3} className={classes.title} ta="start" mt="xl">
           {t('past_trips', 'Past Trips')}
           <Text size={'xs'} c={'dimmed'}>
-            In the last 12 months
+            {t('past_trips_under', 'In the last 12 months')}
           </Text>
         </Title>
         <Box>
