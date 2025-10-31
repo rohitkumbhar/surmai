@@ -68,8 +68,8 @@ export class CreateNewTripPage {
 
     // Add participants
     for (const participant of data.participants) {
-      await this.page.getByRole('textbox', { name: 'Travellers' }).click();
-      await this.page.getByRole('textbox', { name: 'Travellers' }).fill(participant);
+      await this.page.getByRole('textbox', { name: 'Travelers' }).click();
+      await this.page.getByRole('textbox', { name: 'Travelers' }).fill(participant);
       await this.page.keyboard.press('Enter');
     }
   }
