@@ -396,38 +396,37 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   ));
 
   return (
+    <Group justify="space-between" align="center" mb="md">
+      <Select
+        label={t('sort_by', 'Sort by')}
+        placeholder={t('select_sort', 'Select sorting')}
+        value={sortBy ? `${sortBy}-${sortDirection}` : null}
+        onChange={(value) => {
+          if (value) {
+            const [column, direction] = value.split('-') as ['date' | 'category' | 'amount', 'asc' | 'desc'];
+            setSortBy(column);
+            setSortDirection(direction);
+          } else {
+            setSortBy(null);
+            setSortDirection('asc');
+          }
+        }}
+        data={[
+          { value: 'date-asc', label: `${t('date', 'Date')} (${t('ascending', 'Ascending')})` },
+          { value: 'date-desc', label: `${t('date', 'Date')} (${t('descending', 'Descending')})` },
+          { value: 'category-asc', label: `${t('category', 'Category')} (${t('ascending', 'Ascending')})` },
+          { value: 'category-desc', label: `${t('category', 'Category')} (${t('descending', 'Descending')})` },
+          { value: 'amount-asc', label: `${t('amount', 'Amount')} (${t('ascending', 'Ascending')})` },
+          { value: 'amount-desc', label: `${t('amount', 'Amount')} (${t('descending', 'Descending')})` },
+        ]}
+        clearable
+        style={{ maxWidth: 300 }}
+      />
+      <Button leftSection={<IconPlus size={16} />} onClick={openModalForAdd}>
+        {t('add_expense', 'Add Expense')}
+      </Button>
+    </Group>
     <Paper bg={'var(--mantine-color-body)'} mt={'sm'}>
-      <Group justify="space-between" align="center" mb="md">
-        <Select
-          label={t('sort_by', 'Sort by')}
-          placeholder={t('select_sort', 'Select sorting')}
-          value={sortBy ? `${sortBy}-${sortDirection}` : null}
-          onChange={(value) => {
-            if (value) {
-              const [column, direction] = value.split('-') as ['date' | 'category' | 'amount', 'asc' | 'desc'];
-              setSortBy(column);
-              setSortDirection(direction);
-            } else {
-              setSortBy(null);
-              setSortDirection('asc');
-            }
-          }}
-          data={[
-            { value: 'date-asc', label: `${t('date', 'Date')} (${t('ascending', 'Ascending')})` },
-            { value: 'date-desc', label: `${t('date', 'Date')} (${t('descending', 'Descending')})` },
-            { value: 'category-asc', label: `${t('category', 'Category')} (${t('ascending', 'Ascending')})` },
-            { value: 'category-desc', label: `${t('category', 'Category')} (${t('descending', 'Descending')})` },
-            { value: 'amount-asc', label: `${t('amount', 'Amount')} (${t('ascending', 'Ascending')})` },
-            { value: 'amount-desc', label: `${t('amount', 'Amount')} (${t('descending', 'Descending')})` },
-          ]}
-          clearable
-          style={{ maxWidth: 300 }}
-        />
-        <Button leftSection={<IconPlus size={16} />} onClick={openModalForAdd}>
-          {t('add_expense', 'Add Expense')}
-        </Button>
-      </Group>
-
       {/* Stat Cards */}
       {!isLoading && sortedExpenses.length > 0 && (
         <SimpleGrid cols={{ base: 1, md: 3 }} spacing="md" mb="md">
