@@ -11,7 +11,6 @@ import {
   Group,
   Loader,
   Modal,
-  Paper,
   RingProgress,
   Select,
   SimpleGrid,
@@ -29,6 +28,7 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import {
   createExpense,
   deleteExpense,
@@ -44,7 +44,6 @@ import type { ConversionRate } from '../../../types/expenses.ts';
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { convertExpenses, getExpenseTotalsByCurrency, getRandomColor } from './helper.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
   lodging: {
