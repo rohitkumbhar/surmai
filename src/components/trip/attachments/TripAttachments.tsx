@@ -1,4 +1,4 @@
-import { ActionIcon, Button, Card, FileButton, Grid, Group, Stack, Text } from '@mantine/core';
+import { ActionIcon, Button, Card, Container, FileButton, Grid, Group, Stack, Text } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
@@ -69,8 +69,8 @@ export const TripAttachments = ({
   };
 
   return (
-    <>
-      <Group justify={'space-between'} align={'center'} mt={'sm'}>
+    <Container mt={'sm'} size={'xl'}>
+      <Group justify={'space-between'} align={'center'}>
         <Text size={'sm'} c={'dimmed'}>
           {t('all_attachments_desc', 'All attachments from Transportations, Lodgings, Activities and Expenses')}
         </Text>
@@ -139,6 +139,6 @@ export const TripAttachments = ({
           </Grid.Col>
         ))}
       </Grid>
-    </>
+    </Container>
   );
 };

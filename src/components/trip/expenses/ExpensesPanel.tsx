@@ -4,13 +4,13 @@ import {
   Badge,
   Button,
   Card,
+  Container,
   FileButton,
   Flex,
   Grid,
   Group,
   Loader,
   Modal,
-  Paper,
   RingProgress,
   Select,
   SimpleGrid,
@@ -28,6 +28,7 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import {
   createExpense,
   deleteExpense,
@@ -43,7 +44,6 @@ import type { ConversionRate } from '../../../types/expenses.ts';
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { convertExpenses, getExpenseTotalsByCurrency, getRandomColor } from './helper.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
   lodging: {
@@ -396,7 +396,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   ));
 
   return (
-    <Paper bg={'var(--mantine-color-body)'} mt={'sm'}>
+    <Container mt={'sm'} size={'xl9'}>
       <Group justify="space-between" align="center" mb="md">
         <Select
           label={t('sort_by', 'Sort by')}
@@ -801,6 +801,6 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
           </Group>
         </Stack>
       </Modal>
-    </Paper>
+    </Container>
   );
 };
