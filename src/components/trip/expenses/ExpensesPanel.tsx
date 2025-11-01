@@ -4,6 +4,7 @@ import {
   Badge,
   Button,
   Card,
+  Container,
   FileButton,
   Flex,
   Grid,
@@ -396,7 +397,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   ));
 
   return (
-    <Paper bg={'var(--mantine-color-body)'} mt={'sm'}>
+    <Container mt={'sm'} size={'xl9'}>
       <Group justify="space-between" align="center" mb="md">
         <Select
           label={t('sort_by', 'Sort by')}
@@ -801,6 +802,6 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
           </Group>
         </Stack>
       </Modal>
-    </Paper>
+    </Container>
   );
 };
