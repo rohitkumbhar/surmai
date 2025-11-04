@@ -28,7 +28,6 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
         case 'es-MX':
           import('dayjs/locale/es-mx')
             .then(() => {
-              console.log('es-mx loaded');
               dayjs.locale('es-mx');
               setLocale('es-mx');
             })
@@ -40,9 +39,19 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
         case 'fr-FR':
           import('dayjs/locale/fr')
             .then(() => {
-              console.log('fr loaded');
               dayjs.locale('fr');
               setLocale('fr-FR');
+            })
+            .catch((err) => {
+              console.log('could not load locale', err);
+            });
+          break;
+        case 'ja':
+        case 'ja-JP':
+          import('dayjs/locale/ja')
+            .then(() => {
+              dayjs.locale('ja');
+              setLocale('ja-JP');
             })
             .catch((err) => {
               console.log('could not load locale', err);
