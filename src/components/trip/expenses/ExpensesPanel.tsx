@@ -44,6 +44,7 @@ import type { ConversionRate } from '../../../types/expenses.ts';
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { convertExpenses, getExpenseTotalsByCurrency, getRandomColor } from './helper.ts';
+import { fakeAsUtcString } from '../../../lib/time.ts';
 
 const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
   lodging: {
@@ -191,7 +192,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
         name: name.trim(),
         trip: trip.id,
         cost: { value: Number(amount), currency },
-        occurredOn: occurredOn ? dayjs(occurredOn).format('YYYY-MM-DD') : undefined,
+        occurredOn: occurredOn ? fakeAsUtcString(occurredOn) : undefined,
         notes: notes.trim() || undefined,
         category: category || undefined,
         attachmentReferences: allAttachmentIds,

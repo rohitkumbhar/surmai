@@ -1,5 +1,6 @@
 import { uploadAttachments } from './attachments.ts';
 import { pb } from './pocketbase.ts';
+import { convertSavedToBrowserDate } from '../../time.ts';
 
 import type { Attachment, CreateExpense, Expense } from '../../../types/trips.ts';
 
@@ -10,7 +11,12 @@ export const listExpenses = async (tripId: string): Promise<Expense[]> => {
     filter: `trip="${tripId}"`,
     sort: '-occurredOn,-created',
   });
-  return res.items as unknown as Expense[];
+  return res.items.map((entry) => {
+    return {
+      ...entry,
+      occurredOn: entry.occurredOn ? convertSavedToBrowserDate(entry.occurredOn) : entry.occurredOn,
+    } as unknown as Expense;
+  });
 };
 
 export const createExpense = async (payload: CreateExpense): Promise<Expense> => {
