@@ -194,7 +194,6 @@ export const FlightForm = ({
       }
       onSuccess();
     } catch (error) {
-      console.error('Error saving car rental:', error);
       showErrorNotification({
         error,
         title: t('flight_creation_failed', 'Unable to save Flight'),
