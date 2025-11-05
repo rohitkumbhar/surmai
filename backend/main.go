@@ -4,10 +4,12 @@ import (
 	"backend/app"
 	"backend/cache"
 	_ "backend/migrations"
-	"github.com/pocketbase/pocketbase"
 	"log"
 	"os"
 	"strings"
+
+	_ "github.com/joho/godotenv/autoload"
+	"github.com/pocketbase/pocketbase"
 )
 
 func main() {
