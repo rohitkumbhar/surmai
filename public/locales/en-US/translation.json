@@ -91,6 +91,7 @@
   "currencies": "Currencies",
   "currency_code": "Currency Code",
   "currency_code_desc": "Set your default currency code",
+  "dark_mode_toggle": "Dark Mode Toggle",
   "data_privacy_notice": "Data Privacy",
   "data_privacy_notice_details": "These integrations are offered as convenience. The service providers have not been vetted for their data privacy practices.",
   "dataset": "Dataset",
