@@ -16,6 +16,7 @@ export const listActivities = async (tripId: string): Promise<Activity[]> => {
     return {
       ...entry,
       startDate: convertSavedToBrowserDate(entry.startDate),
+      endDate: convertSavedToBrowserDate(entry.endDate),
     };
   });
 };
