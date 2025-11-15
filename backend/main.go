@@ -4,11 +4,12 @@ import (
 	"backend/app"
 	"backend/cache"
 	_ "backend/migrations"
+	"fmt"
 	"log"
 	"os"
 	"strings"
 
-	_ "github.com/joho/godotenv/autoload"
+	"github.com/joho/godotenv"
 	"github.com/pocketbase/pocketbase"
 )
 
@@ -16,6 +17,13 @@ func main() {
 
 	// loosely check if it was executed using "go run"
 	isGoRun := strings.HasPrefix(os.Args[0], os.TempDir())
+
+	if isGoRun {
+		if err := godotenv.Load(); err != nil {
+			fmt.Printf("Error loading .env file: %v\n", err)
+			fmt.Println("Continuing with system environment variables")
+		}
+	}
 
 	surmai := &app.SurmaiApp{
 		Pb: pocketbase.NewWithConfig(pocketbase.Config{
