@@ -4,6 +4,7 @@ import (
 	"backend/app"
 	"backend/cache"
 	_ "backend/migrations"
+
 	"fmt"
 	"log"
 	"os"
@@ -16,7 +17,8 @@ import (
 func main() {
 
 	// loosely check if it was executed using "go run"
-	isGoRun := strings.HasPrefix(os.Args[0], os.TempDir())
+	isGoRun := strings.HasPrefix(os.Args[0], os.TempDir()) ||
+		strings.Contains(os.Args[0], "go-build")
 
 	if isGoRun {
 		if err := godotenv.Load(); err != nil {
