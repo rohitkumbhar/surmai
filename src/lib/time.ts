@@ -50,7 +50,10 @@ export const fakeAsUtcString = (date: string | undefined): string => {
   return dayjs(date, 'UTC').format('YYYY-MM-DDTHH:mm:ss[Z]');
 };
 
-export const convertSavedToBrowserDate = (dateString: string) => {
+export const convertSavedToBrowserDate = (dateString: string | undefined) => {
+  if (!dateString) {
+    return undefined;
+  }
   const d = dayjs.tz(dateString, 'UTC');
   return d.format('YYYY-MM-DDTHH:mm:ss');
 };
