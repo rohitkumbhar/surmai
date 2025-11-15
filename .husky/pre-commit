@@ -1,2 +1,4 @@
 npm test
-git reset backend/.env
+if [ -f "backend/.env" ]; then
+  git reset backend/.env
+fi
