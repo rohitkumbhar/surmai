@@ -9,6 +9,8 @@ export interface User extends RecordModel {
   avatar?: string;
   timezone?: string;
   mapsProvider?: string;
+  websiteAppearance?: 'light' | 'dark' | 'auto';
+  preferredLanguage?: string;
 }
 
 export type SignUpForm = {
@@ -23,6 +25,8 @@ export interface UserSettingsFormType {
   colorScheme?: string;
   timezone?: string;
   mapsProvider?: string;
+  websiteAppearance?: 'light' | 'dark' | 'auto';
+  preferredLanguage?: string;
 }
 
 export interface OAuthProvider {

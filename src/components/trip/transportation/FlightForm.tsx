@@ -196,7 +196,7 @@ export const FlightForm = ({
     } catch (error) {
       showErrorNotification({
         error,
-        title: t('flight_creation_failed', 'Unable to save Flight'),
+        title: t('flight_creation_failed', 'Unable to save flight'),
         message: 'Please try again later.',
       });
     } finally {

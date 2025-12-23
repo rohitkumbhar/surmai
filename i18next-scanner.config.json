@@ -5,7 +5,6 @@
   "output": "./",
   "options": {
     "debug": true,
-    "removeUnusedKeys": true,
     "sort": true,
     "attr": {
       "list": [

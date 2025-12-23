@@ -40,7 +40,7 @@ export const UserAvatarForm = () => {
                 saveUploadedImage: (uploadedImage: File | Blob) => {
                   updateUserAvatar(user.id, uploadedImage).then(() => {
                     if (reloadUser) {
-                      reloadUser();
+                      reloadUser(true);
                     }
                   });
                 },

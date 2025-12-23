@@ -87,6 +87,7 @@
     "@vite-pwa/assets-generator": "^1.0.1",
     "@vitejs/plugin-react": "^5.0.3",
     "autoprefixer": "^10.4.21",
+    "baseline-browser-mapping": "^2.9.11",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-config-xo": "^0.49.0",

@@ -18,6 +18,7 @@ import { apiUrl } from './lib/api';
 import './lib/i18n';
 
 import type { SiteSettings } from './types/settings.ts';
+import { configureI18next } from './lib/i18n.ts';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -29,12 +30,14 @@ const queryClient = new QueryClient();
 
 fetch(`${apiUrl}/site-settings.json`, { signal: AbortSignal.timeout(2000) })
   .then((result) => result.json())
-  .then((settings: SiteSettings) => {
+  .then(async (settings: SiteSettings) => {
     // This fetch call is cached by the service worker.
     // Setting the offline value from the browser state
     const siteSettings = { ...settings, offline: !navigator.onLine };
+    await configureI18next();
     launchApp(siteSettings);
   })
+
   .catch((error) => {
     // We still need the app in offline mode
     console.log('Could not load site settings', error);
