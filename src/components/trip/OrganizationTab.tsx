@@ -73,7 +73,12 @@ export const OrganizationTab = ({
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
-          <TransportationPanel trip={trip} tripAttachments={tripAttachments} expenseMap={expenseMap} refetchTrip={refetchTrip} />
+          <TransportationPanel
+            trip={trip}
+            tripAttachments={tripAttachments}
+            expenseMap={expenseMap}
+            refetchTrip={refetchTrip}
+          />
         </Accordion.Panel>
       </Accordion.Item>
 
@@ -99,7 +104,12 @@ export const OrganizationTab = ({
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
-          <LodgingPanel trip={trip} tripAttachments={tripAttachments} expenseMap={expenseMap} refetchTrip={refetchTrip} />
+          <LodgingPanel
+            trip={trip}
+            tripAttachments={tripAttachments}
+            expenseMap={expenseMap}
+            refetchTrip={refetchTrip}
+          />
         </Accordion.Panel>
       </Accordion.Item>
 
@@ -125,7 +135,12 @@ export const OrganizationTab = ({
           </Group>
         </Accordion.Control>
         <Accordion.Panel>
-          <ActivitiesPanel trip={trip} tripAttachments={tripAttachments} expenseMap={expenseMap} refetchTrip={refetchTrip} />
+          <ActivitiesPanel
+            trip={trip}
+            tripAttachments={tripAttachments}
+            expenseMap={expenseMap}
+            refetchTrip={refetchTrip}
+          />
         </Accordion.Panel>
       </Accordion.Item>
     </Accordion>

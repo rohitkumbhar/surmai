@@ -6,7 +6,13 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createTransportationEntry, uploadAttachments, createExpense, updateExpense, deleteExpense } from '../../../lib/api';
+import {
+  createTransportationEntry,
+  uploadAttachments,
+  createExpense,
+  updateExpense,
+  deleteExpense,
+} from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
@@ -67,21 +73,21 @@ export const GenericTransportationModeForm = ({
   // @ts-expect-error it ok
   const handleFormSubmit = async (values) => {
     setSaving(true);
-    
+
     try {
       // Upload attachments first
       const attachments = await uploadAttachments(trip.id, files);
-      
+
       // Handle expense creation/update/deletion based on cost value
       let expenseId = transportation?.expenseId;
-      
+
       // Check if expenseId exists in expenseMap, set to null if not found
       if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
         expenseId = undefined;
       }
-      
+
       const hasCost = values.cost && values.cost > 0;
-      
+
       if (hasCost) {
         if (expenseId) {
           // Update existing expense - only update cost
@@ -113,7 +119,7 @@ export const GenericTransportationModeForm = ({
         await deleteExpense(expenseId);
         expenseId = undefined;
       }
-      
+
       // Prepare transportation data
       const payload: CreateTransportation = {
         type: transportationType,
@@ -151,7 +157,7 @@ export const GenericTransportationModeForm = ({
         payload.expenseId = expenseId;
         await createTransportationEntry(payload);
       }
-      
+
       onSuccess();
     } catch (error) {
       console.error('Error saving transportation:', error);

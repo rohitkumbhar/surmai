@@ -71,9 +71,7 @@ export const CreateNewTrip = () => {
                 timezone: d.timezone,
               };
             }),
-            budget: budgetAmount && budgetCurrency 
-              ? { value: budgetAmount, currency: budgetCurrency }
-              : undefined,
+            budget: budgetAmount && budgetCurrency ? { value: budgetAmount, currency: budgetCurrency } : undefined,
           };
 
           createTrip(data)

@@ -8,14 +8,14 @@ import { listTransportations } from './transportations.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type {
-    Activity,
-    Attachment,
-    Collaborator,
-    Lodging,
-    NewTrip,
-    Transportation,
-    Trip,
-    TripResponse,
+  Activity,
+  Attachment,
+  Collaborator,
+  Lodging,
+  NewTrip,
+  Transportation,
+  Trip,
+  TripResponse,
 } from '../../../types/trips.ts';
 
 const trips = pb.collection('trips');

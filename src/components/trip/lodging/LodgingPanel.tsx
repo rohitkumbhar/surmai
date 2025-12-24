@@ -89,7 +89,13 @@ export const LodgingPanel = ({
         {data.map((t: Lodging) => {
           return (
             <Fragment key={t.id}>
-              <GenericLodgingData refetch={refetchData} trip={trip} lodging={t} tripAttachments={tripAttachments} expenseMap={expenseMap} />
+              <GenericLodgingData
+                refetch={refetchData}
+                trip={trip}
+                lodging={t}
+                tripAttachments={tripAttachments}
+                expenseMap={expenseMap}
+              />
             </Fragment>
           );
         })}

@@ -228,9 +228,7 @@ export const GenericTransportationData = ({
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">
-            {costValue ? `${costValue} ${costCurrency || ''}` : ''}
-          </Text>
+          <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
       {transportationAttachments && (
