@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { useSurmaiContext } from './app/useSurmaiContext.ts';
+import { DarkModeToggle } from './components/darkmodetoggle/DarkModeToggle.tsx';
 import { Error } from './components/error/Error.tsx';
 import { Navbar } from './components/nav/Navbar.tsx';
 import { UserInfo } from './components/user/UserInfo.tsx';
@@ -39,6 +40,7 @@ function App() {
             </Group>
             <Group gap={'xs'} mt={'sm'} visibleFrom={'xs'}>
               <UserInfo />
+              <DarkModeToggle />
             </Group>
           </Group>
         </Container>
