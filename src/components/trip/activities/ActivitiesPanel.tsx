@@ -86,7 +86,13 @@ export const ActivitiesPanel = ({
           {data.map((t: Activity) => {
             return (
               <Fragment key={t.id}>
-                <GenericActivityData refetch={refetchData} trip={trip} activity={t} tripAttachments={tripAttachments} expenseMap={expenseMap} />
+                <GenericActivityData
+                  refetch={refetchData}
+                  trip={trip}
+                  activity={t}
+                  tripAttachments={tripAttachments}
+                  expenseMap={expenseMap}
+                />
               </Fragment>
             );
           })}

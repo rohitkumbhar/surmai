@@ -75,9 +75,10 @@ export const EditBasicInfoForm = ({
           participants: values.participants?.map((name) => {
             return { name: name };
           }),
-          budget: values.budgetAmount && values.budgetCurrency 
-            ? { value: values.budgetAmount, currency: values.budgetCurrency }
-            : undefined,
+          budget:
+            values.budgetAmount && values.budgetCurrency
+              ? { value: values.budgetAmount, currency: values.budgetCurrency }
+              : undefined,
         };
         updateTrip(trip.id, data as unknown as Trip)
           .then(() => {

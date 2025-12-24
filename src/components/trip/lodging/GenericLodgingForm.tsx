@@ -6,7 +6,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { createLodgingEntry, updateLodgingEntry, uploadAttachments, createExpense, updateExpense, deleteExpense } from '../../../lib/api';
+import {
+  createLodgingEntry,
+  updateLodgingEntry,
+  uploadAttachments,
+  createExpense,
+  updateExpense,
+  deleteExpense,
+} from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
@@ -36,10 +43,10 @@ export const GenericLodgingForm = ({
   const [files, setFiles] = useState<File[]>([]);
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
-  
+
   // Get expense from map if lodging has an expenseId
   const expense = lodging?.expenseId && expenseMap ? expenseMap.get(lodging.expenseId) : undefined;
-  
+
   const form = useForm<LodgingFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
@@ -57,21 +64,21 @@ export const GenericLodgingForm = ({
 
   const handleFormSubmit = async (values: LodgingFormSchema) => {
     setSaving(true);
-    
+
     try {
       // Upload attachments first
       const attachments = await uploadAttachments(trip.id, files);
-      
+
       // Handle expense creation/update/deletion based on cost value
       let expenseId = lodging?.expenseId;
-      
+
       // Check if expenseId exists in expenseMap, set to null if not found
       if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
         expenseId = undefined;
       }
-      
+
       const hasCost = values.cost && values.cost > 0;
-      
+
       if (hasCost) {
         if (expenseId) {
           // Update existing expense - only update cost
@@ -101,7 +108,7 @@ export const GenericLodgingForm = ({
         await deleteExpense(expenseId);
         expenseId = undefined;
       }
-      
+
       // Prepare lodging data
       const data = {
         type: type,
@@ -121,7 +128,7 @@ export const GenericLodgingForm = ({
         },
         expenseId: expenseId,
       };
-      
+
       // Update or create lodging
       if (lodging?.id) {
         data.attachmentReferences = [
@@ -133,7 +140,7 @@ export const GenericLodgingForm = ({
         data.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
         await createLodgingEntry(data as unknown as CreateLodging);
       }
-      
+
       onSuccess();
     } catch (error) {
       console.error('Error saving lodging:', error);

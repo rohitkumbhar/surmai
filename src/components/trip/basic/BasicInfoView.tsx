@@ -3,14 +3,15 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import { listCollaborators, listExpenses } from '../../../lib/api';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { ParticipantData } from './ParticipantData.tsx';
-import { listCollaborators, listExpenses } from '../../../lib/api';
 
 import type { User } from '../../../types/auth.ts';
 import type { Expense, Trip } from '../../../types/trips.ts';
+import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
@@ -24,6 +25,16 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
     queryKey: ['listExpenses', trip.id],
     queryFn: () => listExpenses(trip.id),
   });
+
+  const { convertedExpenses } = useTripExpenses({
+    trip: trip,
+  });
+
+  const totalExpenses = convertedExpenses
+    ?.reduce((sum, exp) => {
+      return sum + (exp.convertedCost?.value || 0);
+    }, 0)
+    ?.toFixed(2);
 
   return (
     <Stack gap={'md'}>
@@ -39,10 +50,11 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
       <Divider />
       <Group>
         <Text>
-          {t('budget', 'Budget')}: {trip.budget?.value ? `${trip.budget.value} ${trip.budget.currency}` : t('no_budget_set', 'No budget set')}
+          {t('budget', 'Budget')}:{' '}
+          {trip.budget?.value ? `${trip.budget.value} ${trip.budget.currency}` : t('no_budget_set', 'No budget set')}
         </Text>
         <Text>
-          {t('spent', 'Spent')}: {((expenses || []).reduce((sum, e) => sum + (e.cost?.value || 0), 0)).toFixed(2)}{' '}
+          {t('spent', 'Spent')}: {totalExpenses}{' '}
           {trip.budget?.currency || (expenses && expenses[0]?.cost?.currency) || ''}
         </Text>
       </Group>
