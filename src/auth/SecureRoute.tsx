@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { AuthContext } from './AuthContext';
 import { useSurmaiContext } from '../app/useSurmaiContext.ts';
-import { authRefresh, currentUser } from '../lib/api';
+import { authRefresh, currentUser, watchUserChanges } from '../lib/api';
 
 import type { User } from '../types/auth.ts';
 
@@ -26,7 +26,12 @@ export const SecureRoute = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     currentUser()
-      .then((resolvedUser) => setCurrentUser(resolvedUser))
+      .then((resolvedUser) => {
+        setCurrentUser(resolvedUser);
+        watchUserChanges((changedUser) => {
+          setCurrentUser(changedUser);
+        });
+      })
       .catch(() => {
         navigate('/login');
       });
