@@ -1,4 +1,17 @@
-import { Alert, Anchor, AppShell, Box, Burger, Container, Group, rem, Text } from '@mantine/core';
+import {
+  Alert,
+  Anchor,
+  AppShell,
+  Box,
+  Burger,
+  Container,
+  Group,
+  MantineColorScheme,
+  rem,
+  Text,
+  useMantineColorScheme,
+  useMantineTheme,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -6,16 +19,52 @@ import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { useSurmaiContext } from './app/useSurmaiContext.ts';
+import { useCurrentUser } from './auth/useCurrentUser.ts';
 import { Error } from './components/error/Error.tsx';
 import { Navbar } from './components/nav/Navbar.tsx';
 import { UserInfo } from './components/user/UserInfo.tsx';
 import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
+import { useEffect } from 'react';
+import { updateDayJsLanguage } from './lib/i18n.ts';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
-  const { demoMode } = useSurmaiContext();
+  const { demoMode, changeColor } = useSurmaiContext();
+
   useDefaultPageTitle();
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
+  const { user, reloadUser } = useCurrentUser();
+
+  // this is the website appearance (light, dark, auto)
+  const { colorScheme: currentAppearance, setColorScheme: setAppearance } = useMantineColorScheme();
+  const { primaryColor } = useMantineTheme();
+
+  useEffect(() => {
+    let renderRequired = false;
+
+    if (user?.preferredLanguage !== i18n.language) {
+      i18n.changeLanguage(user?.preferredLanguage).then(() => {
+        updateDayJsLanguage(user?.preferredLanguage as string);
+      });
+
+      renderRequired = true;
+    }
+
+    if (user?.websiteAppearance && user?.websiteAppearance !== currentAppearance) {
+      setAppearance(user?.websiteAppearance as MantineColorScheme);
+      renderRequired = true;
+    }
+    if (changeColor && primaryColor && user?.colorScheme && primaryColor !== user?.colorScheme) {
+      // this is the theme color
+      changeColor(user.colorScheme);
+      renderRequired = true;
+    }
+
+    if (renderRequired) {
+      reloadUser?.(false);
+    }
+  }, [user]);
+
   return (
     <AppShell
       header={{

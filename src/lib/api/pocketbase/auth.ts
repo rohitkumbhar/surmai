@@ -144,3 +144,19 @@ export const startOAuthFlow = (name: string) => {
 export const sendResetPasswordRequest = (email: string) => {
   return pb.collection('users').requestPasswordReset(email);
 };
+
+export const watchUserChanges = (callback: (user: User) => void) => {
+  if (!pb.authStore.record?.id) {
+    return;
+  }
+
+  pb.collection('users').subscribe(
+    pb.authStore.record.id,
+    function (e) {
+      callback(e.record as User);
+    },
+    {
+      /* other options like expand, custom headers, etc. */
+    }
+  );
+};

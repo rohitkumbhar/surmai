@@ -156,7 +156,7 @@ export const CarRentalForm = ({
       console.error('Error saving car rental:', error);
       showErrorNotification({
         error,
-        title: t('car_rental_creation_failed', 'Unable to save Car Rental'),
+        title: t('car_rental_creation_failed', 'Unable to create Car Rental Entry'),
         message: 'Please try again later.',
       });
     } finally {

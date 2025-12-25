@@ -12,6 +12,7 @@ export {
   listAuthMethods,
   startOAuthFlow,
   sendResetPasswordRequest,
+  watchUserChanges,
 } from './pocketbase/auth.ts';
 
 export {

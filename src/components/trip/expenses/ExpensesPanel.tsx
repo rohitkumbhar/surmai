@@ -464,7 +464,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
                 </>
               ) : (
                 <Text size="sm" c="dimmed" ta="center" py="xl">
-                  {t('no_budget_set', 'No budget set for this trip')}
+                  {t('no_budget_set', 'No budget set')}
                 </Text>
               )}
             </Stack>
