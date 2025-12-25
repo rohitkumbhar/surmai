@@ -199,6 +199,15 @@ export const TransportationPanel = ({
                   expenseMap={expenseMap}
                 />
               )}
+              {t.type === 'bike' && (
+                <GenericTransportationData
+                  refetch={refetchData}
+                  tripAttachments={tripAttachments}
+                  trip={trip}
+                  transportation={t}
+                  expenseMap={expenseMap}
+                />
+              )}
             </Fragment>
           );
         })}

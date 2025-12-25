@@ -1,6 +1,7 @@
-import { IconBus, IconCar, IconPlaneInflight, IconShip, IconTrain } from '@tabler/icons-react';
+import { IconBike, IconBus, IconCar, IconPlaneInflight, IconShip, IconTrain } from '@tabler/icons-react';
 
 export const typeIcons = {
+  bike: IconBike,
   boat: IconShip,
   bus: IconBus,
   flight: IconPlaneInflight,

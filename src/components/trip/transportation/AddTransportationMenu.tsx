@@ -1,5 +1,5 @@
 import { Button, Menu, rem } from '@mantine/core';
-import { IconBus, IconCar, IconChevronDown, IconPlane, IconShip, IconTrain } from '@tabler/icons-react';
+import { IconBike, IconBus, IconCar, IconChevronDown, IconPlane, IconShip, IconTrain } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: string) => void }) => {
@@ -57,6 +57,15 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           leftSection={<IconTrain style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('transportation_train', 'Train')}
+        </Menu.Item>
+
+        <Menu.Item
+          onClick={() => {
+            onClick('bike');
+          }}
+          leftSection={<IconBike style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        >
+          {t('transportation_bike', 'Bike')}
         </Menu.Item>
 
         <Menu.Divider />
