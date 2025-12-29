@@ -1,5 +1,5 @@
 import { ActionIcon, AspectRatio, Badge, Card, Group, Image, Overlay, Text } from '@mantine/core';
-import { useHover, useMediaQuery } from '@mantine/hooks';
+import { useHover } from '@mantine/hooks';
 import { openContextModal } from '@mantine/modals';
 import { IconPencil, IconPhoto } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import classes from './TripCard.module.css';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { getAttachmentUrl, uploadTripCoverImage } from '../../lib/api';
 
 import type { Trip } from '../../types/trips.ts';
@@ -18,7 +19,7 @@ export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
   const { hovered, ref } = useHover();
   const { id, name, coverImage, destinations } = trip;
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const [tripCoverImage, setTripCoverImage] = useState<string | undefined>(coverImage);
 
   const destinationBadge = destinations?.map((destination) => (

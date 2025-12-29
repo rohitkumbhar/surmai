@@ -1,16 +1,16 @@
 import { AspectRatio, Avatar, Button, Stack } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { openContextModal } from '@mantine/modals';
 import { IconUserHexagon } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { getAttachmentUrl, updateUserAvatar } from '../../lib/api';
 
 export const UserAvatarForm = () => {
   const { user, reloadUser } = useCurrentUser();
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
 
   return (
     <Stack mt={'lg'} align={'center'}>

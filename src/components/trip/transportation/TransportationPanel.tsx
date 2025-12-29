@@ -1,5 +1,5 @@
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,7 @@ import { FlightData } from './FlightData.tsx';
 import { FlightForm } from './FlightForm.tsx';
 import { GenericTransportationData } from './GenericTransportationData.tsx';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listTransportations } from '../../../lib/api';
 
 import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
@@ -32,7 +33,7 @@ export const TransportationPanel = ({
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
 
   const [newTransportationType, setNewTransportationType] = useState<string>('flight');
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const tripId = trip.id;
   const { isPending, isError, data, error, refetch } = useQuery<Transportation[]>({
     queryKey: ['listTransportations', tripId],

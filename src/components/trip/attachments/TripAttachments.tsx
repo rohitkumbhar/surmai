@@ -1,9 +1,9 @@
-import { ActionIcon, Button, Card, Container, FileButton, Grid, Group, Stack, Text } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
+import { ActionIcon, Button, Card, FileButton, Grid, Group, Stack, Text } from '@mantine/core';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteAttachment, getAttachmentUrl, uploadAttachments } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
 
@@ -19,7 +19,7 @@ export const TripAttachments = ({
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
 
   const openAttachmentViewer = (attachment: Attachment) => {
     const url = getAttachmentUrl(attachment, attachment.file);
@@ -69,8 +69,8 @@ export const TripAttachments = ({
   };
 
   return (
-    <Container mt={'sm'} size={'xl'}>
-      <Group justify={'space-between'} align={'center'}>
+    <>
+      <Group justify={'space-between'} align={'center'} mt='sm'>
         <Text size={'sm'} c={'dimmed'}>
           {t('all_attachments_desc', 'All attachments from Transportations, Lodgings, Activities and Expenses')}
         </Text>
@@ -139,6 +139,6 @@ export const TripAttachments = ({
           </Grid.Col>
         ))}
       </Grid>
-    </Container>
+    </>
   );
 };

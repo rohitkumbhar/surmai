@@ -19,6 +19,7 @@ import { formatDate } from '../../lib/time.ts';
 
 import type { Attachment, Expense, Trip } from '../../types/trips.ts';
 
+import { TabsList } from '../../components/util/TabsList.tsx';
 import './ViewTrip.module.css';
 
 export const ViewTrip = () => {
@@ -70,7 +71,31 @@ export const ViewTrip = () => {
     key: `offline-cache-timestamp-${tripId}`,
   });
 
-  const [activeTab, setActiveTab] = useState<string | null>('organization');
+  const [activeTab, setActiveTab] = useState<string>('organization');
+
+  const tabs = [
+    {
+      key: 'organization',
+      value: t('organization', 'Organization'),
+    },
+
+    {
+      key: 'itinerary',
+      value: t('itinerary', 'Itinerary'),
+    },
+    {
+      key: 'attachments',
+      value: t('attachments', 'Attachments'),
+    },
+    {
+      key: 'expenses',
+      value: t('expenses', 'Expenses'),
+    },
+    {
+      key: 'notes',
+      value: t('notes', 'Notes'),
+    },
+  ];
 
   useEffect(() => {
     if (trip) {
@@ -85,7 +110,6 @@ export const ViewTrip = () => {
   if (isError) {
     throw error;
   }
-
   return (
     <Container py={'sm'} size="xl">
       <Header>
@@ -143,15 +167,8 @@ export const ViewTrip = () => {
         </Alert>
       )}
 
-      <Tabs value={activeTab} onChange={setActiveTab} keepMounted={false}>
-        <Tabs.List>
-          <Tabs.Tab value="organization">{t('organization', 'Organization')}</Tabs.Tab>
-          <Tabs.Tab value="itinerary">{t('itinerary', 'Itinerary')}</Tabs.Tab>
-          <Tabs.Tab value="attachments">{t('attachments', 'Attachments')}</Tabs.Tab>
-          <Tabs.Tab value="expenses">{t('expenses', 'Expenses')}</Tabs.Tab>
-          <Tabs.Tab value="notes">{t('notes', 'Notes')}</Tabs.Tab>
-        </Tabs.List>
-
+      <Tabs value={activeTab} onChange={(tabValue) => setActiveTab(tabValue || 'organization')} keepMounted={false}>
+        <TabsList tabs={tabs} changeTabFn={setActiveTab} activeTab={activeTab} />
         <Tabs.Panel value="organization">
           <OrganizationTab
             trip={trip}

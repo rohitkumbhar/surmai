@@ -1,6 +1,6 @@
 import { MantineProvider } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
-import { useNetwork } from '@mantine/hooks';
+import { useMediaQuery, useNetwork } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { useState } from 'react';
@@ -18,6 +18,7 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');
   const { online } = useNetwork();
   const theme = buildTheme(primaryColor);
+  const isMobile = useMediaQuery('(max-width: 50em)');
 
   const value = {
     ...settings,
@@ -25,6 +26,7 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
     // so use the value if set by the launch call
     offline: !online || settings.offline,
     primaryColor,
+    isMobile,
     changeColor: (colorName: string | undefined) => {
       if (colorName) {
         setPrimaryColor(colorName);

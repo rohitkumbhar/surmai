@@ -1,5 +1,5 @@
 import { Box, Grid, Modal, rem, Text } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { IconActivity } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
@@ -10,6 +10,7 @@ import { formatDate, formatTime } from '../../../lib/time.ts';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 
 import type { Activity, Attachment, Expense, Trip } from '../../../types/trips.ts';
 
@@ -28,7 +29,7 @@ export const GenericActivityData = ({
 }) => {
   const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
 
   const attachments = tripAttachments?.filter((attachment) => {
     return activity.attachmentReferences?.includes(attachment.id);
