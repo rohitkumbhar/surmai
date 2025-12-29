@@ -8,6 +8,10 @@ import { configDefaults, defineConfig } from 'vitest/config';
 export default defineConfig(({ mode }) => {
   // @ts-expect-error types
   const routeMatchCallback: RouteMatchCallback = ({ request }) => {
+    if (request?.url.includes('realtime')) {
+      return false;
+    }
+
     return request?.url.includes('api') || request?.url.includes('pdf.worker');
   };
   return {

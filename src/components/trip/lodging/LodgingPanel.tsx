@@ -1,5 +1,5 @@
 import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { AddLodgingMenu } from './AddLodgingMenu.tsx';
 import { GenericLodgingData } from './GenericLodgingData.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listLodgings } from '../../../lib/api';
 
 import type { Attachment, Expense, Lodging, Trip } from '../../../types/trips.ts';
@@ -29,7 +30,7 @@ export const LodgingPanel = ({
     queryFn: () => listLodgings(tripId || ''),
   });
 
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const [newLodgingType, setNewLodgingType] = useState<string>('hotel');
 

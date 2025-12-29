@@ -1,8 +1,9 @@
 import { Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { IconArticle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
@@ -25,7 +26,7 @@ export const CarRentalData = ({
   expenseMap: Map<string, Expense>;
 }) => {
   const { t, i18n } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const [opened, { open, close }] = useDisclosure(false);
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     rental.attachmentReferences?.includes(attachment.id)

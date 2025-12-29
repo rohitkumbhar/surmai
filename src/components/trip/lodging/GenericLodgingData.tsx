@@ -1,11 +1,12 @@
 import { Anchor, Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { IconCar } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { deleteLodging, deleteLodgingAttachments } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
@@ -31,7 +32,7 @@ export const GenericLodgingData = ({
 }) => {
   const { t, i18n } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[lodging.type] || IconCar;
   const { user } = useCurrentUser();

@@ -1,26 +1,24 @@
 import {
-  ActionIcon,
-  Anchor,
-  Badge,
-  Button,
-  Card,
-  Container,
-  FileButton,
-  Flex,
-  Grid,
-  Group,
-  Loader,
-  Modal,
-  RingProgress,
-  Select,
-  SimpleGrid,
-  Stack,
-  Text,
-  TextInput,
-  Title,
+    ActionIcon,
+    Anchor,
+    Badge,
+    Button,
+    Card,
+    FileButton,
+    Flex,
+    Grid,
+    Group,
+    Loader,
+    Modal,
+    RingProgress,
+    Select,
+    SimpleGrid,
+    Stack,
+    Text,
+    TextInput,
+    Title
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
-import { useMediaQuery } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -28,15 +26,17 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { createExpense, deleteExpense, getAttachmentUrl, updateExpense, uploadAttachments } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
-import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { getRandomColor } from './helper.ts';
 import { useTripExpenses } from './useTripExpenses.ts';
+
+import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 
 const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
   lodging: {
@@ -112,7 +112,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const [category, setCategory] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [existingAttachments, setExistingAttachments] = useState<Attachment[]>([]);
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
 
   const { convertedExpenses, totalsByCurrency, isLoading } = useTripExpenses({
     trip: trip,
@@ -374,8 +374,8 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   ));
 
   return (
-    <Container mt={'sm'} size={'xl9'}>
-      <Group justify="space-between" align="center" mb="md">
+    <>
+      <Group justify="space-between" align="center" mt='md' mb="md" p={0}>
         <Select
           label={t('sort_by', 'Sort by')}
           placeholder={t('select_sort', 'Select sorting')}
@@ -779,6 +779,6 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
           </Group>
         </Stack>
       </Modal>
-    </Container>
+    </>
   );
 };

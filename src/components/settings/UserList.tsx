@@ -13,7 +13,7 @@ import {
   Text,
   Title,
 } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconKey, IconTrash } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
@@ -21,6 +21,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ChangeUserPasswordForm } from './ChangeUserPasswordForm.tsx';
+import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { deleteUserAdminAction, getAttachmentUrl, listAllUsers } from '../../lib/api';
 import { showDeleteNotification } from '../../lib/notifications.tsx';
@@ -34,7 +35,7 @@ export const UserList = () => {
     useDisclosure(false);
 
   const [changePasswordUser, setChangePasswordUser] = useState<User | undefined>();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const [activePage, setPage] = useState(1);
 
   const {

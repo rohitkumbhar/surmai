@@ -116,9 +116,9 @@ function App() {
           <Outlet />
         </ErrorBoundary>
       </AppShell.Main>
-      <AppShell.Footer>
+      <AppShell.Footer visibleFrom={'md'}>
         <Container size={'xl'}>
-          <Group h={'xl'} justify={'flex-end'}>
+          <Group h={'xl'} justify={'flex-end'} px={'sm'}>
             <Anchor href={'https://surmai.app/documentation'} target={'_blank'}>
               {t('documentation', 'Documentation')}
             </Anchor>{' '}

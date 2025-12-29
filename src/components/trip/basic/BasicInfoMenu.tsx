@@ -1,5 +1,5 @@
 import { Button, Menu, rem, Text } from '@mantine/core';
-import { useLocalStorage, useMediaQuery } from '@mantine/hooks';
+import { useLocalStorage } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
 import {
   IconCalendar,
@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
 
@@ -23,7 +24,7 @@ import type { Trip } from '../../../types/trips.ts';
 export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
 
   const [, setOfflineCacheTimestamp] = useLocalStorage<string | null>({
     key: `offline-cache-timestamp-${trip.id}`,

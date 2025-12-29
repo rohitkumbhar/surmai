@@ -1,11 +1,12 @@
 import { Box, Divider, Grid, Group, HoverCard, Modal, rem, Stack, Text, Title, Tooltip } from '@mantine/core';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { IconCar, IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 import { transportationConfig } from './config.tsx';
 import { FlightForm } from './FlightForm.tsx';
+import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { Attachments } from '../attachments/Attachments.tsx';
@@ -30,7 +31,7 @@ export const FlightData = ({
   expenseMap: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
 
   // @ts-expect-error Icon type

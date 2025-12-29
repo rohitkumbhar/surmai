@@ -13,7 +13,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useDisclosure, useMediaQuery } from '@mantine/hooks';
+import { useDisclosure } from '@mantine/hooks';
 import { IconBrandApple, IconBrandFacebook, IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,7 +37,7 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [apiError, setApiError] = useState<string>();
-  const isMobile = useMediaQuery('(max-width: 50em)');
+  const { isMobile } = useSurmaiContext();
   const [resetEmailAddress, setResetEmailAddress] = useState<string | undefined>();
   const [oauthInfo, setOAuthInfo] = useState<Array<{ name: string; displayName: string }> | undefined>();
   const [forgotPasswordFormOpened, { open: openForgotPasswordForm, close: closeForgotPasswordForm }] =
