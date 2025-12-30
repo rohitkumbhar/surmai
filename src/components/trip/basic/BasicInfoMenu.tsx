@@ -5,6 +5,7 @@ import {
   IconCalendar,
   IconChevronDown,
   IconDownload,
+  IconFileTypePdf,
   IconPackageExport,
   IconPencil,
   IconPhoto,
@@ -16,8 +17,16 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { deleteTrip, loadEverything, uploadTripCoverImage } from '../../../lib/api';
+import {
+  deleteTrip,
+  listActivities,
+  listLodgings,
+  listTransportations,
+  loadEverything,
+  uploadTripCoverImage,
+} from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
+import { downloadDailyItinerary, downloadFullItinerary } from '../itinerary/pdfGenerator.ts';
 
 import type { Trip } from '../../../types/trips.ts';
 
@@ -165,6 +174,33 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           leftSection={<IconCalendar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('add_to_calendar', 'Add To Calendar')}
+        </Menu.Item>
+        <Menu.Divider />
+        <Menu.Item
+          onClick={async () => {
+            const [transportations, lodgings, activities] = await Promise.all([
+              listTransportations(trip.id),
+              listLodgings(trip.id),
+              listActivities(trip.id),
+            ]);
+            downloadDailyItinerary(trip, transportations, lodgings, activities);
+          }}
+          leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        >
+          {t('download_daily_itinerary_pdf', 'Download Daily Itinerary (PDF)')}
+        </Menu.Item>
+        <Menu.Item
+          onClick={async () => {
+            const [transportations, lodgings, activities] = await Promise.all([
+              listTransportations(trip.id),
+              listLodgings(trip.id),
+              listActivities(trip.id),
+            ]);
+            downloadFullItinerary(trip, transportations, lodgings, activities);
+          }}
+          leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        >
+          {t('download_full_itinerary_pdf', 'Download Full Itinerary (PDF)')}
         </Menu.Item>
         <Menu.Divider />
         <Menu.Item

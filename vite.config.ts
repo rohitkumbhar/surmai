@@ -66,6 +66,7 @@ export default defineConfig(({ mode }) => {
           ],
         },
         workbox: {
+          maximumFileSizeToCacheInBytes: 4194304,
           // Don't return index.html for any API calls
           navigateFallbackDenylist: [/^\/api/],
 

@@ -3,15 +3,15 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { listCollaborators, listExpenses } from '../../../lib/api';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { ParticipantData } from './ParticipantData.tsx';
+import { listCollaborators, listExpenses } from '../../../lib/api';
+import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type { Expense, Trip } from '../../../types/trips.ts';
-import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
