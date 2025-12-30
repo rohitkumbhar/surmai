@@ -65,7 +65,6 @@ export const searchAirlines = (query: string) => {
 // The rates are based of USD
 export const getCurrencyConversionRates = async (currencies: string[]) => {
   const condition = currencies.map((code) => `currencyCode = '${code.toUpperCase()}'`).join(' || ');
-  console.log('callingwith condition', condition);
   const res = await pb.collection('currency_conversions').getList(1, currencies.length, {
     filter: `(${condition})`,
   });

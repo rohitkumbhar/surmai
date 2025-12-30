@@ -1,22 +1,22 @@
 import {
-    ActionIcon,
-    Anchor,
-    Badge,
-    Button,
-    Card,
-    FileButton,
-    Flex,
-    Grid,
-    Group,
-    Loader,
-    Modal,
-    RingProgress,
-    Select,
-    SimpleGrid,
-    Stack,
-    Text,
-    TextInput,
-    Title
+  ActionIcon,
+  Anchor,
+  Badge,
+  Button,
+  Card,
+  FileButton,
+  Flex,
+  Grid,
+  Group,
+  Loader,
+  Modal,
+  RingProgress,
+  Select,
+  SimpleGrid,
+  Stack,
+  Text,
+  TextInput,
+  Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
@@ -26,74 +26,16 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getRandomColor } from './helper.ts';
+import { useTripExpenses } from './useTripExpenses.ts';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { createExpense, deleteExpense, getAttachmentUrl, updateExpense, uploadAttachments } from '../../../lib/api';
-import i18n from '../../../lib/i18n.ts';
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { getRandomColor } from './helper.ts';
-import { useTripExpenses } from './useTripExpenses.ts';
 
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
-
-const EXPENSE_CATEGORY_DATA: { [key: string]: { label: string; color: string } } = {
-  lodging: {
-    label: i18n.t('expense_category_lodging', 'Lodging'),
-    color: 'blue',
-  },
-  transportation: {
-    label: i18n.t('expense_category_transportation', 'Transportation'),
-    color: 'cyan',
-  },
-  food: {
-    label: i18n.t('expense_category_food', 'Food'),
-    color: 'teal',
-  },
-  entertainment: {
-    label: i18n.t('expense_category_entertainment', 'Entertainment'),
-    color: 'green',
-  },
-  shopping: {
-    label: i18n.t('expense_category_shopping', 'Shopping'),
-    color: 'lime',
-  },
-  activities: {
-    label: i18n.t('expense_category_activities', 'Activities'),
-    color: 'yellow',
-  },
-  healthcare: {
-    label: i18n.t('expense_category_healthcare', 'Healthcare'),
-    color: 'orange',
-  },
-  communication: {
-    label: i18n.t('expense_category_communication', 'Communication'),
-    color: 'red',
-  },
-  insurance: {
-    label: i18n.t('expense_category_insurance', 'Insurance'),
-    color: 'red',
-  },
-  visa_fees: {
-    label: i18n.t('expense_category_visa_fees', 'Visa Fees'),
-    color: 'pink',
-  },
-  souvenirs: {
-    label: i18n.t('expense_category_souvenirs', 'Souvenirs'),
-    color: 'grape',
-  },
-  tips: {
-    label: i18n.t('expense_category_tips', 'Tips'),
-    color: 'violet',
-  },
-  other: {
-    label: i18n.t('expense_category_other', 'Other'),
-    color: 'indigo',
-  },
-};
-
-const EXPENSE_CATEGORIES = Object.keys(EXPENSE_CATEGORY_DATA);
 
 export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttachments?: Attachment[] }) => {
   const { t } = useTranslation();
@@ -113,6 +55,63 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   const [files, setFiles] = useState<File[]>([]);
   const [existingAttachments, setExistingAttachments] = useState<Attachment[]>([]);
   const { isMobile } = useSurmaiContext();
+
+  const EXPENSE_CATEGORY_DATA: Record<string, { label: string; color: string }> = {
+    lodging: {
+      label: t('expense_category_lodging', 'Lodging'),
+      color: 'blue',
+    },
+    transportation: {
+      label: t('expense_category_transportation', 'Transportation'),
+      color: 'cyan',
+    },
+    food: {
+      label: t('expense_category_food', 'Food'),
+      color: 'teal',
+    },
+    entertainment: {
+      label: t('expense_category_entertainment', 'Entertainment'),
+      color: 'green',
+    },
+    shopping: {
+      label: t('expense_category_shopping', 'Shopping'),
+      color: 'lime',
+    },
+    activities: {
+      label: t('expense_category_activities', 'Activities'),
+      color: 'yellow',
+    },
+    healthcare: {
+      label: t('expense_category_healthcare', 'Healthcare'),
+      color: 'orange',
+    },
+    communication: {
+      label: t('expense_category_communication', 'Communication'),
+      color: 'red',
+    },
+    insurance: {
+      label: t('expense_category_insurance', 'Insurance'),
+      color: 'red',
+    },
+    visa_fees: {
+      label: t('expense_category_visa_fees', 'Visa Fees'),
+      color: 'pink',
+    },
+    souvenirs: {
+      label: t('expense_category_souvenirs', 'Souvenirs'),
+      color: 'grape',
+    },
+    tips: {
+      label: t('expense_category_tips', 'Tips'),
+      color: 'violet',
+    },
+    other: {
+      label: t('expense_category_other', 'Other'),
+      color: 'indigo',
+    },
+  };
+
+  const EXPENSE_CATEGORIES = Object.keys(EXPENSE_CATEGORY_DATA);
 
   const { convertedExpenses, totalsByCurrency, isLoading } = useTripExpenses({
     trip: trip,
@@ -294,7 +293,6 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
   );
 
   const sortedCategories = Object.entries(categoryTotals).sort(([, a], [, b]) => b - a);
-
   const expenseCards = sortedExpenses.map((exp) => (
     <Grid.Col key={exp.id} span={{ base: 12, sm: 6, md: 4 }}>
       <Card withBorder padding="sm" radius="md">
@@ -304,11 +302,6 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               <Text fw={500} size="lg" lineClamp={1}>
                 {exp.name}
               </Text>
-              {/*{exp.notes && (
-                <Text size="sm" c="dimmed">
-                  {exp.notes}
-                </Text>
-              )}*/}
             </Stack>
             <ActionIcon
               variant="default"
@@ -356,6 +349,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
                 {expenseAttachmentsMap[exp.id].map((attachment) => {
                   return (
                     <Anchor
+                      key={attachment.id}
                       size="sm"
                       onClick={() => {
                         openAttachmentViewer(attachment);
@@ -375,7 +369,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
 
   return (
     <>
-      <Group justify="space-between" align="center" mt='md' mb="md" p={0}>
+      <Group justify="space-between" align="center" mt="md" mb="md" p={0}>
         <Select
           label={t('sort_by', 'Sort by')}
           placeholder={t('select_sort', 'Select sorting')}
