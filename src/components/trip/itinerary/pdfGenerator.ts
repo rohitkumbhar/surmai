@@ -330,6 +330,116 @@ const formatItineraryLine = (line: ItineraryLine): Content => {
   }
 };
 
+const htmlToPdfMake = (html: string): Content[] => {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const parseNodes = (nodes: NodeList): Content[] => {
+    const content: Content[] = [];
+
+    nodes.forEach((node) => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        if (node.textContent?.trim()) {
+          content.push({ text: node.textContent });
+        }
+      } else if (node.nodeType === Node.ELEMENT_NODE) {
+        const element = node as HTMLElement;
+        const nodeName = element.nodeName.toLowerCase();
+
+        switch (nodeName) {
+          case 'p':
+            content.push({ text: parseNodes(element.childNodes), margin: [0, 5, 0, 5] });
+            break;
+          case 'b':
+          case 'strong':
+            content.push({ text: parseNodes(element.childNodes), bold: true });
+            break;
+          case 'i':
+          case 'em':
+            content.push({ text: parseNodes(element.childNodes), italics: true });
+            break;
+          case 'u':
+            content.push({ text: parseNodes(element.childNodes), decoration: 'underline' });
+            break;
+          case 'a':
+            content.push({
+              text: parseNodes(element.childNodes),
+              link: element.getAttribute('href') || '',
+              color: PRIMARY_COLOR,
+              decoration: 'underline',
+            });
+            break;
+          case 'h1':
+            content.push({ text: parseNodes(element.childNodes), fontSize: 20, bold: true, margin: [0, 10, 0, 5] });
+            break;
+          case 'h2':
+            content.push({ text: parseNodes(element.childNodes), fontSize: 18, bold: true, margin: [0, 8, 0, 4] });
+            break;
+          case 'h3':
+            content.push({ text: parseNodes(element.childNodes), fontSize: 16, bold: true, margin: [0, 6, 0, 3] });
+            break;
+          case 'h4':
+            content.push({ text: parseNodes(element.childNodes), fontSize: 14, bold: true, margin: [0, 4, 0, 2] });
+            break;
+          case 'ul':
+            content.push({ ul: parseNodes(element.childNodes).filter((c) => (c as any).text || (c as any).stack) });
+            break;
+          case 'ol':
+            content.push({ ol: parseNodes(element.childNodes).filter((c) => (c as any).text || (c as any).stack) });
+            break;
+          case 'li':
+            content.push({ stack: parseNodes(element.childNodes) });
+            break;
+          case 'img':
+            if (element.getAttribute('src')) {
+              content.push({
+                image: element.getAttribute('src') as string,
+                width: 400,
+                margin: [0, 5, 0, 5],
+              });
+            }
+            break;
+          case 'table':
+            {
+              const rows: any[][] = [];
+              element.querySelectorAll('tr').forEach((tr) => {
+                const row: any[] = [];
+                tr.querySelectorAll('td, th').forEach((cell) => {
+                  row.push({
+                    stack: parseNodes(cell.childNodes),
+                    bold: cell.nodeName.toLowerCase() === 'th',
+                    fillColor: cell.nodeName.toLowerCase() === 'th' ? '#f8f9fa' : undefined,
+                  });
+                });
+                if (row.length > 0) {
+                  rows.push(row);
+                }
+              });
+              if (rows.length > 0) {
+                content.push({
+                  table: {
+                    body: rows,
+                  },
+                  margin: [0, 5, 0, 5],
+                });
+              }
+            }
+            break;
+          case 'br':
+            content.push({ text: '\n' });
+            break;
+          default:
+            content.push(...parseNodes(element.childNodes));
+        }
+      }
+    });
+
+    return content;
+  };
+
+  return parseNodes(doc.body.childNodes);
+};
+
 export const downloadFullItinerary = (
   trip: Trip,
   transportations: Transportation[],
@@ -372,6 +482,11 @@ export const downloadFullItinerary = (
   allEvents.forEach((event) => {
     content.push(formatItineraryLine(event));
   });
+
+  if (trip.notes) {
+    content.push({ text: i18n.t('trip_notes', 'Notes'), style: 'sectionHeader', pageBreak: 'before' });
+    content.push(...htmlToPdfMake(trip.notes));
+  }
 
   const docDefinition: TDocumentDefinitions = {
     content,
@@ -471,6 +586,11 @@ export const downloadDailyItinerary = (
         content.push(formatItineraryLine(event));
       });
     }
+  }
+
+  if (trip.notes) {
+    content.push({ text: i18n.t('trip_notes', 'Notes'), style: 'sectionHeader', pageBreak: 'before' });
+    content.push(...htmlToPdfMake(trip.notes));
   }
 
   const docDefinition: TDocumentDefinitions = {

@@ -1,11 +1,11 @@
-import { Button, Group, Text } from '@mantine/core';
+import { Box, Button, Group, Paper, Text } from '@mantine/core';
 import { IconPencil } from '@tabler/icons-react';
 import { lazy, Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import styles from './TripNotes.module.css';
 import { saveTripNotes } from '../../../lib/api';
 import { showSaveSuccessNotification } from '../../../lib/notifications.tsx';
-import styles from './TripNotes.module.css';
 
 import type { Trip } from '../../../types/trips.ts';
 
@@ -16,9 +16,9 @@ export const TripNotes = ({ trip, refetch }: { trip: Trip; refetch: () => void }
   const [editing, setEditing] = useState(false);
 
   return (
-    <>
+    <Paper p={'xs'} mt="sm">
       {!editing && (
-        <>
+        <Box>
           {trip.notes && <div className={styles.tiptap} dangerouslySetInnerHTML={{ __html: trip.notes }} />}
           {!trip.notes && (
             <Text>
@@ -39,7 +39,7 @@ export const TripNotes = ({ trip, refetch }: { trip: Trip; refetch: () => void }
               {trip.notes ? t('edit', 'Edit') : t('start_notes', 'Add Notes')}
             </Button>
           </Group>
-        </>
+        </Box>
       )}
       {editing && (
         <Suspense fallback={<div>Loading...</div>}>
@@ -58,6 +58,6 @@ export const TripNotes = ({ trip, refetch }: { trip: Trip; refetch: () => void }
           />
         </Suspense>
       )}
-    </>
+    </Paper>
   );
 };
