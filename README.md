@@ -80,7 +80,7 @@ NOTE: The demo site is cleaned up every hour.
 # Installation
 
 Installation guide with Docker and a potential backup solution can be found in the documentation
- http://surmai.app/documentation/installation
+http://surmai.app/documentation/installation
 
 # Credits
 
@@ -116,6 +116,12 @@ From [dotmarn/Airlines](https://github.com/dotmarn/Airlines)
 
 From ExchangeRate-APIs [open acces endpoint](https://www.exchangerate-api.com/docs/free)
 
+### Translations
+Surmai uses [react-i18next](https://react.i18next.com/) for localization and [Weblate](https://weblate.org/) for
+translation. Translations are available in multiple languages and can be easily contributed to through Weblate.
+
+Project link to be added soon...
+
 # Possibly FAQ
 
 ### Why so ugly tho?
@@ -124,4 +130,5 @@ From ExchangeRate-APIs [open acces endpoint](https://www.exchangerate-api.com/do
 
 ### Why not use ${other_thing}?
 
-I wanted to learn React/Typescript, that's about it. So many side projects have languished because I gave up when it came to building the UI. I wanted this one to be different.
+I wanted to learn React/Typescript, that's about it. So many side projects have languished because I gave up when it
+came to building the UI. I wanted this one to be different.
