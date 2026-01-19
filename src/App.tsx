@@ -41,8 +41,7 @@ function App() {
 
   useEffect(() => {
     let renderRequired = false;
-
-    if (user?.preferredLanguage !== i18n.language) {
+    if (user?.preferredLanguage !== i18n.language && i18n.changeLanguage) {
       i18n.changeLanguage(user?.preferredLanguage).then(() => {
         updateDayJsLanguage(user?.preferredLanguage as string);
       });
