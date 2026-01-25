@@ -1,5 +1,4 @@
 <!-- TOC -->
-
 * [Surmai](#surmai)
 * [Features](#features)
 * [Rationale](#rationale)
@@ -8,14 +7,12 @@
 * [Demo](#demo)
 * [Installation](#installation)
 * [Credits](#credits)
-    * [PocketBase](#pocketbase)
-    * [Mantine](#mantine)
-    * [Icon](#icon)
-    * [Data](#data)
+  * [PocketBase](#pocketbase)
+  * [Mantine](#mantine)
+  * [Translations](#translations)
+  * [Icon](#icon)
+  * [Data](#data)
 * [Possibly FAQ](#possibly-faq)
-    * [Why so ugly tho?](#why-so-ugly-tho)
-    * [Why not use ${other_thing}?](#why-not-use-other_thing)
-
 <!-- TOC -->
 
 # Surmai
@@ -94,6 +91,14 @@ first-class. The PocketBase Admin UI also allows for configuration that is not a
 Surmai is a React based SPA built using the absolutely phenomenal library [Mantine](https://mantine.dev/). Vite for
 building and prettier for formatting.
 
+## Translations
+
+Surmai uses [react-i18next](https://react.i18next.com/) for localization and [Weblate](https://weblate.org/) for
+translation. Translations are available in multiple languages and can be easily contributed to through Hosted Weblate.
+
+Contribute translations here: https://hosted.weblate.org/projects/surmai/frontend/
+
+
 ## Icon
 
 [Fish SVG Vector](https://www.svgrepo.com/svg/280960/fish)
@@ -116,11 +121,6 @@ From [dotmarn/Airlines](https://github.com/dotmarn/Airlines)
 
 From ExchangeRate-APIs [open acces endpoint](https://www.exchangerate-api.com/docs/free)
 
-### Translations
-Surmai uses [react-i18next](https://react.i18next.com/) for localization and [Weblate](https://weblate.org/) for
-translation. Translations are available in multiple languages and can be easily contributed to through Weblate.
-
-Project link to be added soon...
 
 # Possibly FAQ
 
