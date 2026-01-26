@@ -41,7 +41,7 @@ const formatTransportation = (transportation: Transportation): Content => {
                 {
                   text: [
                     {
-                      text: `${i18n.t('transportation_rental_car', 'Rental Car').toUpperCase()}: `,
+                      text: `${i18n.t('transportation_rental_car', 'Car Rental').toUpperCase()}: `,
                       bold: true,
                       color: TRANSPORTATION_COLOR,
                     },
