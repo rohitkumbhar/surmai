@@ -108,6 +108,7 @@ export type CreateTransportation = {
   metadata?: { [key: string]: any };
   attachments?: string[];
   attachmentReferences?: string[];
+  expenseId?:string
 };
 
 export type CarRentalFormSchema = {

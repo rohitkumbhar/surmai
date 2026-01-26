@@ -148,12 +148,10 @@ export const GenericTransportationModeForm = ({
           ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
           ...attachments.map((attachment: Attachment) => attachment.id),
         ];
-        // @ts-expect-error expenseId is valid
         payload.expenseId = expenseId;
         await updateTransportation(transportation.id, payload);
       } else {
         payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        // @ts-expect-error expenseId is valid
         payload.expenseId = expenseId;
         await createTransportationEntry(payload);
       }

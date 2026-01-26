@@ -4,17 +4,16 @@ import { openConfirmModal } from '@mantine/modals';
 import { IconCar, IconInfoCircle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { DataLine } from '../DataLine.tsx';
-import { transportationConfig } from './config.tsx';
-import { FlightForm } from './FlightForm.tsx';
-import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
-import { typeIcons } from './typeIcons.ts';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { formatDateTime } from '../../../lib/time.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { DataLine } from '../DataLine.tsx';
+import { FlightForm } from './FlightForm.tsx';
+import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
+import { typeIcons } from './typeIcons.ts';
 
 import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
 
@@ -38,10 +37,6 @@ export const GenericTransportationData = ({
 
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[transportation.type] || IconCar;
-  const config =
-    transportation.type in transportationConfig
-      ? transportationConfig[transportation.type]
-      : transportationConfig['default'];
 
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     transportation.attachmentReferences?.includes(attachment.id)
@@ -212,7 +207,7 @@ export const GenericTransportationData = ({
 
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>
-            {config.strings.providerLabel}
+            {t('transportation_provider', 'Provider')}
           </Text>
           <Group gap={1}>
             <Text size="md">{transportation.metadata.provider?.name || transportation.metadata.provider}</Text>
@@ -220,7 +215,7 @@ export const GenericTransportationData = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="sm" c={'dimmed'}>
-            {config.strings.reservationLabel}
+            {t('transportation_reservation', 'Reservation')}
           </Text>
           <Text size="md">{transportation.metadata.reservation || ''}</Text>
         </Grid.Col>

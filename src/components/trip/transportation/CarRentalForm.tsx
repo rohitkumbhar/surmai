@@ -141,12 +141,10 @@ export const CarRentalForm = ({
           ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
           ...attachments.map((attachment: Attachment) => attachment.id),
         ];
-        // @ts-expect-error expenseId is valid
         carRentalData.expenseId = expenseId;
         await updateTransportation(carRental.id, carRentalData);
       } else {
         carRentalData.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        // @ts-expect-error expenseId is valid
         carRentalData.expenseId = expenseId;
         await createTransportationEntry(carRentalData);
       }
