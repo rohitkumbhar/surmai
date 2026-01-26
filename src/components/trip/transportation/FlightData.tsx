@@ -1,17 +1,14 @@
 import { Box, Divider, Grid, Group, HoverCard, Modal, rem, Stack, Text, Title, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
-import { IconCar, IconInfoCircle } from '@tabler/icons-react';
+import { IconInfoCircle, IconPlaneInflight } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
-
-import { transportationConfig } from './config.tsx';
 import { FlightForm } from './FlightForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
-import { typeIcons } from './typeIcons.ts';
 import { formatDateTime } from '../../../lib/time.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 
@@ -33,13 +30,6 @@ export const FlightData = ({
   const { t } = useTranslation();
   const { isMobile } = useSurmaiContext();
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
-
-  // @ts-expect-error Icon type
-  const TypeIcon = typeIcons[transportation.type] || IconCar;
-  const config =
-    transportation.type in transportationConfig
-      ? transportationConfig[transportation.type]
-      : transportationConfig['default'];
 
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     transportation.attachmentReferences?.includes(attachment.id)
@@ -105,7 +95,7 @@ export const FlightData = ({
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_flight`, 'Flight')}>
-              <TypeIcon
+              <IconPlaneInflight
                 size={'xs'}
                 stroke={0.5}
                 style={{
@@ -186,7 +176,7 @@ export const FlightData = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="xs" c={'dimmed'}>
-            {config.strings.providerLabel}
+            {t('transportation_airline', 'Airline')}
           </Text>
           <Group gap={1}>
             <Text size="md">{transportation.metadata.provider?.name || transportation.metadata.provider}</Text>
@@ -194,7 +184,7 @@ export const FlightData = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
           <Text size="sm" c={'dimmed'}>
-            {config.strings.reservationLabel}
+            {t('transportation_confirmation_code', 'Confirmation Code')}
           </Text>
           <Text size="md">{transportation.metadata.reservation || ''}</Text>
         </Grid.Col>
