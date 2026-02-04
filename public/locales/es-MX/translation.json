@@ -488,5 +488,9 @@
     "upcoming_trips_under": "Todos los viajes futuros ordenados por fecha de inicio.",
     "used": "Usado",
     "user_change_avatar": "Actualizar avatar de usuario",
-    "user_settings_updated": "Configuración del usuario actualizada."
+    "user_settings_updated": "Configuración del usuario actualizada.",
+    "appearance_auto": "Automatico",
+    "appearance_dark": "Oscuro",
+    "appearance_light": "Claro",
+    "de-DE": "Alemán (Alemánia)"
 }
