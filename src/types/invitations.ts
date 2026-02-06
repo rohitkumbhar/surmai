@@ -1,3 +1,5 @@
+import { Entity } from "./trips";
+
 export type InvitationMetadata = {
   trip: {
     name: string;
@@ -10,8 +12,7 @@ export type InvitationMetadata = {
   };
 };
 
-export type Invitation = {
-  id: string;
+export type Invitation = Entity & {
   message: string;
   from: string;
   metadata: InvitationMetadata;

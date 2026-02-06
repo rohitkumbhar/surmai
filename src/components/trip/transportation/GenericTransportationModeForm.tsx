@@ -66,6 +66,7 @@ export const GenericTransportationModeForm = ({
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       originAddress: transportation?.metadata?.originAddress || '',
       destinationAddress: transportation?.metadata?.destinationAddress || '',
+      link: transportation?.link,
     },
     validate: {},
   });
@@ -132,6 +133,7 @@ export const GenericTransportationModeForm = ({
         departureTime: fakeAsUtcString(values.departureTime),
         arrivalTime: fakeAsUtcString(values.arrivalTime),
         trip: trip.id,
+        link: values.link,
         metadata: {
           provider: values.provider,
           reservation: values.reservation,
@@ -262,6 +264,13 @@ export const GenericTransportationModeForm = ({
           />
         </Group>
         <Group>
+          <TextInput
+            name={'link'}
+            label={t('link', 'Link')}
+            key={form.key('link')}
+            description={t('link_desc', 'Related link')}
+            {...form.getInputProps('link')}
+          />
           <CurrencyInput
             costKey={form.key('cost')}
             costProps={form.getInputProps('cost')}

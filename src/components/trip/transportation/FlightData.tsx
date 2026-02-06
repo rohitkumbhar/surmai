@@ -42,6 +42,7 @@ export const FlightData = ({
 
   return (
     <DataLine
+      link={transportation.link}
       onEdit={() => {
         openFlightForm();
       }}

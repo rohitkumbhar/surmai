@@ -1,13 +1,16 @@
 import { ActionIcon, Group, Menu, Paper, rem } from '@mantine/core';
-import { IconDots, IconPencil, IconTrash } from '@tabler/icons-react';
+import { IconDots, IconLink, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 export const DataLine = ({
   children,
   onEdit,
   onDelete,
+  link = undefined,
 }: {
+  link: string | undefined;
   children: React.ReactNode;
   onEdit?: () => void;
   onDelete?: () => void;
@@ -25,6 +28,13 @@ export const DataLine = ({
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
+            {link && (
+              <Link to={link} style={{textDecoration: 'none'}} target='_blank'>
+                <Menu.Item leftSection={<IconLink style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
+                  {t('view_link', 'View Link')}
+                </Menu.Item>
+              </Link>
+            )}
             {onEdit && (
               <Menu.Item
                 onClick={onEdit}

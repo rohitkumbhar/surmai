@@ -60,6 +60,7 @@ export const CarRentalForm = ({
       dropOffLocation: carRental?.destination,
       pickupTime: carRental?.departureTime,
       dropOffTime: carRental?.arrivalTime,
+      link: carRental?.link,
       confirmationCode: carRental?.metadata?.confirmationCode,
       cost: expense?.cost?.value,
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
@@ -122,6 +123,7 @@ export const CarRentalForm = ({
         trip: trip.id,
         origin: values.pickupLocation,
         destination: values.dropOffLocation,
+        link: values.link,
         cost: {
           value: values.cost,
           currency: values.currencyCode,
@@ -257,6 +259,15 @@ export const CarRentalForm = ({
               currencyCodeProps={form.getInputProps('currencyCode')}
               label={t('car_rental_cost', 'Cost')}
               description={t('car_rental_cost_desc', 'Charges for this rental')}
+            />
+          </Group>
+          <Group>
+            <TextInput
+              name={'link'}
+              label={t('link', 'Link')}
+              key={form.key('link')}
+              description={t('link_desc', 'Related link')}
+              {...form.getInputProps('link')}
             />
           </Group>
           <Group>

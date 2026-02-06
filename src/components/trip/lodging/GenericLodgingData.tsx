@@ -1,11 +1,9 @@
 import { Anchor, Box, Divider, Grid, Modal, rem, Text, Title, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
-import { IconCar } from '@tabler/icons-react';
+import { IconHome } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { GenericLodgingForm } from './GenericLodgingForm.tsx';
-import { typeIcons } from './typeIcons.ts';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { deleteLodging, deleteLodgingAttachments } from '../../../lib/api';
@@ -14,6 +12,8 @@ import { getMapsLink } from '../../../lib/places.ts';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
+import { GenericLodgingForm } from './GenericLodgingForm.tsx';
+import { typeIcons } from './typeIcons.ts';
 
 import type { Attachment, Expense, Lodging, Trip } from '../../../types/trips.ts';
 
@@ -34,7 +34,7 @@ export const GenericLodgingData = ({
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const { isMobile } = useSurmaiContext();
   // @ts-expect-error Icon type
-  const TypeIcon = typeIcons[lodging.type] || IconCar;
+  const TypeIcon = typeIcons[lodging.type] || IconHome;
   const { user } = useCurrentUser();
 
   const attachments = tripAttachments?.filter((attachment) => {
@@ -48,6 +48,7 @@ export const GenericLodgingData = ({
 
   return (
     <DataLine
+      link={lodging.link}
       onEdit={() => {
         openForm();
       }}

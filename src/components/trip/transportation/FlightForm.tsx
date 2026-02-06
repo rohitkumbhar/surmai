@@ -2,7 +2,7 @@ import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDebouncedCallback } from '@mantine/hooks';
-import { IconChairDirector, IconCodeCircle, IconPlane } from '@tabler/icons-react';
+import { IconChairDirector, IconCodeCircle, IconLink, IconPlane } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -101,6 +101,7 @@ export const FlightForm = ({
       departureTime: transportation?.departureTime,
       destination: transportation?.metadata?.destination || transportation?.destination,
       arrivalTime: transportation?.arrivalTime,
+      link: transportation?.link,
       provider: transportation?.metadata?.provider,
       reservation: transportation?.metadata?.reservation,
       cost: expense?.cost?.value,
@@ -169,6 +170,7 @@ export const FlightForm = ({
         departureTime: fakeAsUtcString(values.departureTime),
         arrivalTime: fakeAsUtcString(values.arrivalTime),
         trip: trip.id,
+        link: values.link,
         metadata: {
           provider: values.provider,
           reservation: values.reservation,
@@ -201,35 +203,6 @@ export const FlightForm = ({
     } finally {
       setSaving(false);
     }
-    // uploadAttachments(trip.id, files)
-    //   .then((attachments: Attachment[]) => {
-    //     if (transportation?.id) {
-    //       payload.attachmentReferences = [
-    //         ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-    //         ...attachments.map((attachment: Attachment) => attachment.id),
-    //       ];
-    //       updateTransportation(transportation.id, payload)
-    //         .then(() => {
-    //           onSuccess();
-    //         })
-    //         .catch((error) => {
-    //           console.log('error => ', error);
-    //         });
-    //     } else {
-    //       payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-    //       createTransportationEntry(payload)
-    //         .then(() => {
-    //           onSuccess();
-    //         })
-    //         .catch((error) => {
-    //           console.log('error => ', error);
-    //         });
-    //     }
-    //     setSaving(false);
-    //   })
-    //   .catch((error) => {
-    //     console.log('error => ', error);
-    //   });
   };
 
   return (
@@ -335,6 +308,15 @@ export const FlightForm = ({
           />
         </Group>
         <Group>
+          <TextInput
+            name={'link'}
+            label={t('link', 'Link')}
+            key={form.key('link')}
+            description={t('link_desc', 'Related link')}
+            rightSection={<IconLink size={15} />}
+            {...form.getInputProps('link')}
+          />
+
           <CurrencyInput
             costKey={form.key('cost')}
             costProps={form.getInputProps('cost')}
