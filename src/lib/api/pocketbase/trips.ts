@@ -8,14 +8,13 @@ import { listTransportations } from './transportations.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type {
-  Activity,
-  Attachment,
-  Collaborator,
-  Lodging,
-  NewTrip,
-  Transportation,
-  Trip,
-  TripResponse,
+    Activity,
+    Attachment,
+    Collaborator,
+    Lodging,
+    NewTrip,
+    Transportation,
+    Trip
 } from '../../../types/trips.ts';
 
 const trips = pb.collection('trips');
@@ -25,40 +24,23 @@ export const createTrip = async (data: NewTrip) => {
 };
 
 export const getTrip = (tripId: string): Promise<Trip> => {
-  return trips.getOne<TripResponse>(tripId).then((trip) => {
-    return trip;
-  });
+  return trips.getOne<Trip>(tripId);
 };
 
-export const listTrips = async (): Promise<Trip[]> => {
-  const results = await trips.getFullList<TripResponse>({
-    sort: '-created',
-    expand: 'collaborators',
-  });
-  return results.map((trip) => {
-    return trip;
-  });
-};
 
 export const listUpcomingTrips = async (): Promise<Trip[]> => {
   const threshold = dayjs().format('YYYY-MM-DD');
-  const results = await trips.getFullList<TripResponse>({
+  return trips.getFullList<Trip>({
     sort: 'startDate',
     filter: `endDate >= "${threshold}"`,
-  });
-  return results.map((trip) => {
-    return trip;
   });
 };
 
 export const listPastTrips = async (): Promise<Trip[]> => {
   const threshold = dayjs().format('YYYY-MM-DD');
-  const results = await trips.getFullList<TripResponse>({
+  return trips.getFullList<Trip>({
     sort: '-endDate',
     filter: `endDate < "${threshold}"`,
-  });
-  return results.map((trip) => {
-    return trip;
   });
 };
 

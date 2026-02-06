@@ -5,11 +5,12 @@ import (
 	bt "backend/types"
 	"bytes"
 	"encoding/json"
-	"github.com/pocketbase/dbx"
-	"github.com/pocketbase/pocketbase/core"
 	"io"
 	"log"
 	"os"
+
+	"github.com/pocketbase/dbx"
+	"github.com/pocketbase/pocketbase/core"
 )
 
 func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File) error {
@@ -125,12 +126,12 @@ func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 			StartDate:            l.GetDateTime("startDate"),
 			ConfirmationCode:     l.GetString("confirmationCode"),
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
+			Link:                 l.GetString("link"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
 		payload = append(payload, &ct)
 		e.Logger().Debug("Exported Activity  data", "id", l.Id)
-
 	}
 
 	return payload
@@ -154,6 +155,7 @@ func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 			ConfirmationCode:     l.GetString("confirmationCode"),
 			Type:                 l.GetString("type"),
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
+			Link:                 l.GetString("link"),
 		}
 
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
@@ -183,6 +185,7 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 			Departure:            tr.GetDateTime("departureTime"),
 			Arrival:              tr.GetDateTime("arrivalTime"),
 			AttachmentReferences: tr.GetStringSlice("attachmentReferences"),
+			Link:                 tr.GetString("link"),
 		}
 		_ = tr.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = tr.UnmarshalJSONField("cost", &ct.Cost)

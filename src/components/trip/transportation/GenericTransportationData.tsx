@@ -49,6 +49,7 @@ export const GenericTransportationData = ({
 
   return (
     <DataLine
+      link={transportation.link}
       onEdit={() => {
         if (transportation.type === 'flight') {
           openFlightForm();

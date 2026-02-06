@@ -42,6 +42,7 @@ export const GenericActivityData = ({
 
   return (
     <DataLine
+      link={activity.link}
       onEdit={() => {
         openForm();
       }}

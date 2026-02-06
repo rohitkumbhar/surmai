@@ -54,6 +54,7 @@ export const GenericActivityForm = ({
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       startDate: activity?.startDate,
       endDate: activity?.endDate,
+      link: activity?.link,
       place: activity?.metadata?.place,
     },
   });
@@ -113,6 +114,7 @@ export const GenericActivityForm = ({
         startDate: fakeAsUtcString(values.startDate),
         endDate: fakeAsUtcString(values.endDate),
         trip: trip.id,
+        link: values.link,
         cost: {
           value: values.cost,
           currency: values.currencyCode,
@@ -222,6 +224,13 @@ export const GenericActivityForm = ({
             />
           </Group>
           <Group>
+            <TextInput
+              name={'link'}
+              label={t('link', 'Link')}
+              key={form.key('link')}
+              description={t('link_desc', 'Related link')}
+              {...form.getInputProps('link')}
+            />
             <CurrencyInput
               costKey={form.key('cost')}
               costProps={form.getInputProps('cost')}

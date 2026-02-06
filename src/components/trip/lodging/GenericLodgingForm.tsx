@@ -57,6 +57,7 @@ export const GenericLodgingForm = ({
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       startDate: lodging?.startDate,
       endDate: lodging?.endDate,
+      link: lodging?.link,
       confirmationCode: lodging?.confirmationCode,
       place: lodging?.metadata?.place?.name || '',
     },
@@ -117,6 +118,7 @@ export const GenericLodgingForm = ({
         startDate: fakeAsUtcString(values.startDate),
         endDate: fakeAsUtcString(values.endDate),
         confirmationCode: values.confirmationCode,
+        link: values.link,
         trip: trip.id,
         cost: {
           value: values.cost,
@@ -240,6 +242,15 @@ export const GenericLodgingForm = ({
               label={t('lodging_cost', 'Cost')}
               maxWidth={260}
               description={t('lodging_cost_desc', 'Charges for this accommodation')}
+            />
+          </Group>
+          <Group>
+            <TextInput
+              name={'link'}
+              label={t('link', 'Link')}
+              key={form.key('link')}
+              description={t('link_desc', 'Related link')}
+              {...form.getInputProps('link')}
             />
           </Group>
           <Group>

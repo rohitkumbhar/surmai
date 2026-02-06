@@ -2,14 +2,15 @@ import type { User } from './auth.ts';
 import type { Dayjs } from 'dayjs';
 import type { RecordModel } from 'pocketbase';
 
+export type Entity = Omit<RecordModel, 'collectionId' | 'collectionName'>;
+
 export type Participant = {
   name: string;
   email?: string;
   userId?: string;
 };
 
-export type Place = {
-  id: string;
+export type Place = Entity & {
   stateName?: string;
   countryName?: string;
   latitude?: string;
@@ -19,8 +20,7 @@ export type Place = {
   timezone?: string;
 };
 
-export type Trip = {
-  id: string;
+export type Trip = Entity & {
   ownerId: string;
   name: string;
   description?: string;
@@ -35,13 +35,6 @@ export type Trip = {
 };
 
 export type NewTrip = Omit<Trip, 'id'>;
-// pocketbase returns date as string
-
-export type TripResponse = Omit<Trip, 'startDate' | 'endDate'> & {
-  startDate: string;
-  endDate: string;
-  expand: object;
-};
 
 export type CreateTripForm = {
   name: string;
@@ -65,8 +58,7 @@ export type Attachment = {
   file: string;
 };
 
-export type Expense = {
-  id: string;
+export type Expense = Entity & {
   name: string;
   trip: string;
   cost?: Cost;
@@ -82,8 +74,7 @@ export type ConvertedExpense = Expense & {
 
 export type CreateExpense = Omit<Expense, 'id'>;
 
-export type Transportation = {
-  id: string;
+export type Transportation = Entity & {
   type: string;
   origin: string;
   destination: string;
@@ -108,7 +99,8 @@ export type CreateTransportation = {
   metadata?: { [key: string]: any };
   attachments?: string[];
   attachmentReferences?: string[];
-  expenseId?:string
+  expenseId?: string;
+  link?: string;
 };
 
 export type CarRentalFormSchema = {
@@ -120,6 +112,7 @@ export type CarRentalFormSchema = {
   confirmationCode?: string;
   cost?: number;
   currencyCode?: string;
+  link?: string;
   place?: Place;
 };
 
@@ -136,6 +129,7 @@ export type TransportationFormSchema = {
   destinationAddress?: string;
   flightNumber?: string;
   assignedSeats?: string;
+  link?: string;
 };
 
 export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' | 'destination'> & {
@@ -143,6 +137,11 @@ export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' | 'destin
   seats?: string;
   origin?: Airport;
   destination: Airport;
+};
+
+export type BikeForSchema = TransportationFormSchema & {
+  elevation?: number;
+  distance?: string;
 };
 
 export type CroppedImage = {
@@ -172,6 +171,7 @@ export type Lodging = {
   attachments?: string[];
   attachmentReferences?: string[];
   expenseId?: string;
+  link?: string;
 };
 
 export type CreateLodging = Omit<Lodging, 'id'>;
@@ -186,6 +186,7 @@ export type LodgingFormSchema = {
   endDate?: string;
   confirmationCode?: string;
   place?: Place;
+  link?: string;
 };
 
 export const enum LodgingType {
@@ -220,6 +221,7 @@ export type ActivityFormSchema = {
   startDate?: string;
   endDate?: string;
   place?: Place;
+  link?: string;
 };
 
 export interface Airport extends Omit<RecordModel, 'collectionName,collectionId'> {

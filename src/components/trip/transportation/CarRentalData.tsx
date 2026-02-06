@@ -39,6 +39,7 @@ export const CarRentalData = ({
 
   return (
     <DataLine
+      link={rental.link}
       onEdit={() => {
         open();
       }}
