@@ -50,6 +50,7 @@ type Transportation struct {
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
 	Metadata             map[string]any  `json:"metadata"`
+	Link                 string          `json:"link"`
 }
 
 type Lodging struct {
@@ -64,6 +65,7 @@ type Lodging struct {
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
 	Metadata             map[string]any  `json:"metadata"`
+	Link				 string			 `json:"link"`
 }
 
 type Activity struct {
@@ -78,6 +80,7 @@ type Activity struct {
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
 	Metadata             map[string]any  `json:"metadata"`
+	Link				 string			 `json:"link"`
 }
 
 type Expense struct {

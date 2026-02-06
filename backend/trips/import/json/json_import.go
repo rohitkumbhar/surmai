@@ -46,6 +46,7 @@ func createTransportations(app core.App, tripId string, tripData *bt.ExportedTri
 			record.Set("arrivalTime", tr.Arrival)
 			record.Set("cost", tr.Cost)
 			record.Set("metadata", tr.Metadata)
+			record.Set("link", tr.Link)
 			record.Set("trip", tripId)
 			if tr.Attachments != nil && len(tr.Attachments) > 0 {
 				attachmentReferences, _ := im.UploadAttachments(app, tr.Attachments, tripId)
@@ -78,6 +79,7 @@ func createLodgings(app core.App, tripId string, tripData *bt.ExportedTrip) ([]*
 			record.Set("endDate", l.EndDate)
 			record.Set("cost", l.Cost)
 			record.Set("metadata", l.Metadata)
+			record.Set("link", l.Link)
 			record.Set("trip", tripId)
 			if l.Attachments != nil && len(l.Attachments) > 0 {
 				attachmentReferences, _ := im.UploadAttachments(app, l.Attachments, tripId)
@@ -110,6 +112,7 @@ func createActivities(app core.App, tripId string, tripData *bt.ExportedTrip) ([
 			record.Set("startDate", a.StartDate)
 			record.Set("cost", a.Cost)
 			record.Set("metadata", a.Metadata)
+			record.Set("link", a.Link)
 			record.Set("trip", tripId)
 			if a.Attachments != nil && len(a.Attachments) > 0 {
 				attachmentReferences, _ := im.UploadAttachments(app, a.Attachments, tripId)

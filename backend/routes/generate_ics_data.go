@@ -80,7 +80,12 @@ func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip
 	activityEvent.SetSummary(activity.Name)
 	activityEvent.SetDescription(activity.Description)
 	activityEvent.SetLocation(activity.Address)
-	activityEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+
+	if activity.Link != "" {
+		activityEvent.SetURL(activity.Link)
+	} else {
+		activityEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+	}
 
 	metadata := activity.Metadata
 	placeTz := getTimezoneValue(metadata, "place")
@@ -134,7 +139,12 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	stayEvent.SetSummary(fmt.Sprintf("Stay: %s", lodging.Name))
 	stayEvent.SetLocation(lodging.Address)
 	stayEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
-	stayEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+
+	if lodging.Link != "" {
+		stayEvent.SetURL(lodging.Link)
+	} else {
+		stayEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+	}
 
 	// Check-out event (30 min)
 	checkOutEvent := cal.AddEvent(fmt.Sprintf("lodging-checkout-%s@surmai.app", lodging.Id))
@@ -159,7 +169,11 @@ func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation
 	transportEvent := cal.AddEvent(fmt.Sprintf("transport-%s@surmai.app", transportation.Id))
 	transportEvent.SetCreatedTime(time.Now())
 	transportEvent.SetDtStampTime(time.Now())
-	transportEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+	if transportation.Link != "" {
+		transportEvent.SetURL(transportation.Link)
+	} else {
+		transportEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+	}
 
 	metadata := transportation.Metadata
 
@@ -208,8 +222,7 @@ func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation
 
 	if transportation.Type == "rental_car" {
 		days := int64(arrivalTime.Sub(departureTime).Hours() / 24.0)
-		summary := fmt.Sprintf("%s Car Rental for %d day(s)",
-			metadata["provider"], days)
+		summary := fmt.Sprintf("Car Rental for %d day(s)", days)
 		transportEvent.SetSummary(summary)
 		transportEvent.SetLocation(transportation.Origin)
 
@@ -275,6 +288,7 @@ func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 			Address:          l.GetString("address"),
 			StartDate:        l.GetDateTime("startDate"),
 			ConfirmationCode: l.GetString("confirmationCode"),
+			Link:             l.GetString("link"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -298,6 +312,7 @@ func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 			EndDate:          l.GetDateTime("endDate"),
 			ConfirmationCode: l.GetString("confirmationCode"),
 			Type:             l.GetString("type"),
+			Link:             l.GetString("link"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -320,6 +335,7 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 			Destination: l.GetString("destination"),
 			Departure:   l.GetDateTime("departureTime"),
 			Arrival:     l.GetDateTime("arrivalTime"),
+			Link:        l.GetString("link"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
