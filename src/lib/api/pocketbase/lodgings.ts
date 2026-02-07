@@ -7,7 +7,7 @@ import type { CreateLodging, Lodging } from '../../../types/trips.ts';
 const lodgings = pb.collection('lodgings');
 
 export const listLodgings = async (tripId: string): Promise<Lodging[]> => {
-  const results = await lodgings.getList(1, 50, {
+  const results = await lodgings.getList(1, 150, {
     filter: `trip="${tripId}"`,
     sort: 'startDate',
   });

@@ -139,8 +139,8 @@ export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' | 'destin
   destination: Airport;
 };
 
-export type BikeForSchema = TransportationFormSchema & {
-  elevation?: number;
+export type BikeFormSchema = TransportationFormSchema & {
+  elevationGain?: string;
   distance?: string;
 };
 
