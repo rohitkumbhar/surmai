@@ -499,5 +499,6 @@
     "welcome_to_surmai": "Willkommen bei Surmai",
     "world_airline_dataset": "weltweite Fluggesellschaften",
     "world_airports_dataset": "Flughäfen weltweit",
-    "world_places_dataset": "Orte weltweit"
+    "world_places_dataset": "Orte weltweit",
+    "trip_notes": "Bemerkungen"
 }
