@@ -15,6 +15,8 @@ import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listTransportations } from '../../../lib/api';
 
 import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
+import { BikeForm } from './BikeForm.tsx';
+import { BikeData } from './BikeData.tsx';
 
 export const TransportationPanel = ({
   trip,
@@ -31,6 +33,7 @@ export const TransportationPanel = ({
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const [carRentalFormOpened, { open: openRentalForm, close: closeRentalForm }] = useDisclosure(false);
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
+  const [bikeFormOpened, { open: openBikeForm, close: closeBikeForm }] = useDisclosure(false);
 
   const [newTransportationType, setNewTransportationType] = useState<string>('flight');
   const { isMobile } = useSurmaiContext();
@@ -122,6 +125,29 @@ export const TransportationPanel = ({
         />
       </Modal>
 
+      <Modal
+        opened={bikeFormOpened}
+        size="auto"
+        fullScreen={isMobile}
+        title={t('transportation_edit_bike', 'Edit Bike `Transportation')}
+        onClose={() => {
+          closeBikeForm();
+        }}
+      >
+        <BikeForm
+          transportationType={'bike'}
+          trip={trip}
+          expenseMap={expenseMap}
+          onSuccess={() => {
+            refetch();
+            closeBikeForm();
+          }}
+          onCancel={() => {
+            closeBikeForm();
+          }}
+        />
+      </Modal>
+
       <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
         <AddTransportationMenu
           onClick={(type) => {
@@ -129,6 +155,8 @@ export const TransportationPanel = ({
               openRentalForm();
             } else if (type === 'flight') {
               openFlightForm();
+            } else if (type === 'bike') {
+              openBikeForm();
             } else {
               setNewTransportationType(type);
               openForm();
@@ -201,7 +229,7 @@ export const TransportationPanel = ({
                 />
               )}
               {t.type === 'bike' && (
-                <GenericTransportationData
+                <BikeData
                   refetch={refetchData}
                   tripAttachments={tripAttachments}
                   trip={trip}
