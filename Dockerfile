@@ -20,7 +20,7 @@ COPY tsconfig.node.json .
 COPY vite.config.ts .
 RUN pnpm run build
 
-FROM --platform=$BUILDPLATFORM golang:1.24.1-alpine3.21 AS backend
+FROM --platform=$BUILDPLATFORM golang:1.25.7-alpine3.22 AS backend
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -34,11 +34,11 @@ RUN go mod download
 COPY backend .
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o surmai-backend
 
-FROM --platform=$BUILDPLATFORM golang:1.24.1-alpine3.21 AS litestream
+FROM --platform=$BUILDPLATFORM golang:1.25.7-alpine3.22 AS litestream
 ADD https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz /tmp/litestream.tar.gz
 RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
 
-FROM alpine:3.21
+FROM alpine:3.22
 
 RUN apk add --no-cache tzdata
 
