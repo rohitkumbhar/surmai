@@ -128,8 +128,9 @@ export const Datasets = () => {
         <Grid.Col span={{ base: 12, sm: 12, md: 4, lg: 2 }}>
           {cityCount > 0 && (
             <Box size="md">
-              {cityCount}
+              <Button onClick={cityLoadConfirmationModal}>{t('reload_places', 'Reload Places')}</Button>
               <Text size="sm" c="dimmed">
+                {cityCount}&nbsp;
                 {t('places_available_suffix', 'Places Available')}
               </Text>
             </Box>
