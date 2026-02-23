@@ -5,6 +5,8 @@ import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AddTransportationMenu } from './AddTransportationMenu.tsx';
+import { BikeData } from './BikeData.tsx';
+import { BikeForm } from './BikeForm.tsx';
 import { CarRentalData } from './CarRentalData.tsx';
 import { CarRentalForm } from './CarRentalForm.tsx';
 import { FlightData } from './FlightData.tsx';
@@ -15,8 +17,6 @@ import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listTransportations } from '../../../lib/api';
 
 import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
-import { BikeForm } from './BikeForm.tsx';
-import { BikeData } from './BikeData.tsx';
 
 export const TransportationPanel = ({
   trip,
@@ -139,8 +139,9 @@ export const TransportationPanel = ({
           trip={trip}
           expenseMap={expenseMap}
           onSuccess={() => {
-            refetch();
-            closeBikeForm();
+            refetchData().then(() => {
+              closeBikeForm();
+            });
           }}
           onCancel={() => {
             closeBikeForm();
