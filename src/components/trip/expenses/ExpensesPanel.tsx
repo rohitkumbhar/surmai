@@ -330,7 +330,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
                 {t('category', 'Category')}:
               </Text>
               <Badge variant="light" size="sm">
-                {EXPENSE_CATEGORY_DATA[exp.category || 'other'].label}
+                {EXPENSE_CATEGORY_DATA[exp.category || 'other']?.label}
               </Badge>
             </Group>
 
@@ -489,7 +489,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
                         return {
                           value: percentage,
                           color: color,
-                          tooltip: `${EXPENSE_CATEGORY_DATA[category].label}: ${amount.toFixed(2)} ${budgetCurrency}`,
+                          tooltip: `${EXPENSE_CATEGORY_DATA[category]?.label}: ${amount.toFixed(2)} ${budgetCurrency}`,
                         };
                       })}
                       label={
@@ -524,7 +524,7 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
                                 }}
                               />
                               <Text size="sm" fw={500}>
-                                {EXPENSE_CATEGORY_DATA[category].label}
+                                {EXPENSE_CATEGORY_DATA[category]?.label}
                               </Text>
                             </Group>
                             <Group gap="xs" wrap="nowrap">

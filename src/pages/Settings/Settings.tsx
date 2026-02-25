@@ -2,7 +2,7 @@ import { Container, Tabs, Text } from '@mantine/core';
 import { IconAdjustmentsPlus, IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Header } from '../../components/nav/Header.tsx';
 import { Configuration } from '../../components/settings/Configuration.tsx';
@@ -16,6 +16,10 @@ import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 const Settings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { hash } = useLocation();
+  const validTabs = ['users', 'smtp', 'security', 'datasets', 'integrations'];
+  const fragment = hash.slice(1);
+  const activeTab = validTabs.includes(fragment) ? fragment : validTabs[0];
   usePageTitle(t('site_settings', 'Site Settings'));
 
   useEffect(() => {
@@ -34,7 +38,7 @@ const Settings = () => {
         </Text>
       </Header>
 
-      <Tabs defaultValue="users" keepMounted={false}>
+      <Tabs value={activeTab} onChange={(tab) => navigate({ hash: tab || 'users' }, { replace: true })} keepMounted={false}>
         <Tabs.List>
           <Tabs.Tab value="users" leftSection={<IconUsers size={12} />}>
             {t('users_section', 'Users')}
