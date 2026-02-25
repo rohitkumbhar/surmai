@@ -4,7 +4,7 @@ import { IconRefresh, IconWifiOff } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { Header } from '../../components/nav/Header.tsx';
@@ -71,8 +71,6 @@ export const ViewTrip = () => {
     key: `offline-cache-timestamp-${tripId}`,
   });
 
-  const [activeTab, setActiveTab] = useState<string>('organization');
-
   const tabs = [
     {
       key: 'organization',
@@ -96,6 +94,12 @@ export const ViewTrip = () => {
       value: t('notes', 'Notes'),
     },
   ];
+
+  const { hash } = useLocation();
+  const navigate = useNavigate();
+  const fragment = hash.slice(1);
+  const activeTab = tabs.some((tab) => tab.key === fragment) ? fragment : tabs[0].key;
+  const setActiveTab = (tab: string) => navigate({ hash: tab }, { replace: true });
 
   useEffect(() => {
     if (trip) {
