@@ -5,7 +5,6 @@ export {
   createUserWithPassword,
   isAdmin,
   getUserByEmail,
-  getUserById,
   listAllUsers,
   authRefresh,
   updateUserAvatar,

@@ -110,10 +110,6 @@ export const getUserByEmail = (email: string) => {
   return pb.collection('users').getFirstListItem(`email="${email}"`);
 };
 
-export const getUserById = (id: string): Promise<User> => {
-  return pb.collection('users').getOne<User>(id);
-};
-
 export const listAllUsers = (page: number): Promise<{ items: User[]; totalItems: number; totalPages: number }> => {
   return pbAdmin.collection<User>('users').getList(page, 25, { sort: 'name' });
 };

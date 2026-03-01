@@ -1,25 +1,24 @@
-import { ActionIcon, Anchor, Button, Card, Group, Modal, rem, Stack, Table, Text, UnstyledButton } from '@mantine/core';
+import { ActionIcon, Button, Card, Group, Modal, rem, Stack, Table, Text, UnstyledButton } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { notifications } from '@mantine/notifications';
-import { IconEdit, IconFile, IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconEdit, IconPlus, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 import { useState } from 'react';
 
-import { TravellerProfileForm } from './TravellerProfileForm.tsx';
-import { TravellerProfileModal } from './TravellerProfileModal.tsx';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import {
   createTravellerProfile,
   deleteTravellerProfile,
-  getAttachmentUrl,
   listOtherTravellerProfiles,
   listTravellerProfiles,
   updateTravellerProfile,
   uploadTravellerAttachments,
 } from '../../lib/api/index.ts';
+import { TravellerProfileForm } from './TravellerProfileForm.tsx';
+import { TravellerProfileModal } from './TravellerProfileModal.tsx';
 
 import type { NewTravellerProfile, TravellerProfile } from '../../types/trips.ts';
 
@@ -142,15 +141,6 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
       </Table.Td>
       <Table.Td>{profile.email}</Table.Td>
       <Table.Td>{profile.passportId || '-'}</Table.Td>
-      {/*<Table.Td>
-        <Group gap="xs">
-          {profile.attachments?.map((file, idx) => (
-            <Anchor key={idx} href={getAttachmentUrl(profile, file)} target="_blank" size="xs">
-              <IconFile style={{ width: rem(14), height: rem(14) }} />
-            </Anchor>
-          ))}
-        </Group>
-      </Table.Td>*/}
       <Table.Td>
         <Group justify="flex-end">
           <ActionIcon
@@ -205,7 +195,6 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
                 <Table.Th>{t('legal_name', 'Legal Name')}</Table.Th>
                 <Table.Th>{t('email', 'Email')}</Table.Th>
                 <Table.Th>{t('passport_id', 'Passport ID')}</Table.Th>
-                {/*<Table.Th>{t('attachments', 'Attachments')}</Table.Th>*/}
                 <Table.Th />
               </Table.Tr>
             </Table.Thead>
