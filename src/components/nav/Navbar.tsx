@@ -1,6 +1,6 @@
 import { Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
-import { IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
+import { IconEPassport, IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -39,6 +39,7 @@ export function Navbar({ close }: NavbarProps) {
   const { t } = useTranslation();
   const mainNav = [
     { icon: IconHome2, label: t('home', 'Home'), route: '/' },
+    { icon: IconEPassport, label: t('traveller_profiles', 'Traveller Profiles'), route: '/travellers' },
     { icon: IconPinInvoke, label: t('invitations', 'Invitations'), route: '/invitations' },
     { icon: IconSettings, label: t('settings', 'Settings'), route: '/settings', isAdmin: true },
   ];

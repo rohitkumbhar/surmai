@@ -5,6 +5,7 @@ export {
   createUserWithPassword,
   isAdmin,
   getUserByEmail,
+  getUserById,
   listAllUsers,
   authRefresh,
   updateUserAvatar,
@@ -106,3 +107,15 @@ export {
 } from './pocketbase/expenses.ts';
 
 export { getFlightRoute, type FlightRoute } from './pocketbase/flights.ts';
+
+export {
+  createTravellerProfile,
+  getTravellerProfile,
+  getMyTravellerProfile,
+  upsertMyTravellerProfile,
+  listTravellerProfiles,
+  listOtherTravellerProfiles,
+  updateTravellerProfile,
+  deleteTravellerProfile,
+  uploadTravellerAttachments,
+} from './pocketbase/traveller_profiles.ts';

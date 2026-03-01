@@ -6,7 +6,6 @@ import {
   Burger,
   Container,
   Group,
-  MantineColorScheme,
   rem,
   Text,
   useMantineColorScheme,
@@ -14,6 +13,7 @@ import {
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { IconInfoCircle } from '@tabler/icons-react';
+import { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
@@ -24,8 +24,9 @@ import { Error } from './components/error/Error.tsx';
 import { Navbar } from './components/nav/Navbar.tsx';
 import { UserInfo } from './components/user/UserInfo.tsx';
 import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
-import { useEffect } from 'react';
 import { updateDayJsLanguage } from './lib/i18n.ts';
+import type {
+  MantineColorScheme} from '@mantine/core';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();

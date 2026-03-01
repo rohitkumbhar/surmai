@@ -32,6 +32,7 @@ export type Trip = Entity & {
   destinations?: Place[];
   collaborators?: User[];
   budget?: Cost;
+  travellers?: string[];
 };
 
 export type NewTrip = Omit<Trip, 'id'>;
@@ -45,6 +46,7 @@ export type CreateTripForm = {
   destinations?: Place[];
   budgetAmount?: number;
   budgetCurrency?: string;
+  travellers?: string[];
 };
 
 export type Cost = {
@@ -239,3 +241,27 @@ export type ItineraryLine = (Transportation | Lodging | Activity) & {
   itineraryType?: string;
   day: Dayjs;
 };
+
+export type TravellerAdditionalField = {
+  key: string;
+  label: string;
+  value: string;
+};
+
+export type TravellerProfileManager = {
+  id: string;
+  email: string;
+  name?: string;
+};
+
+export type TravellerProfile = Entity & {
+  email: string;
+  legalName: string;
+  passportId?: string;
+  ownerId?: string;
+  managers?: TravellerProfileManager[];
+  attachments?: string[];
+  additionalFields?: TravellerAdditionalField[];
+};
+
+export type NewTravellerProfile = Omit<TravellerProfile, 'id'>;
