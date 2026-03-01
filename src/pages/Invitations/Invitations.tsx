@@ -21,7 +21,7 @@ export const Invitations = () => {
   usePageTitle(t('invitations', t('invitations', 'Invitations')));
 
   return (
-    <Container size={'xl'}>
+    <Container size={'xl'} px={0} py={'sm'}>
       <Header>
         <Text size={'md'} mt={'md'}>
           {t('invitations', 'Invitations')}

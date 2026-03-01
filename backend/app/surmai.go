@@ -108,6 +108,11 @@ func (surmai *SurmaiApp) BindEventHooks() {
 
 	surmai.Pb.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateTripCollaborationInvitation)
 	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
+
+	surmai.Pb.OnRecordCreate("users").BindFunc(hooks.AssignTravellerProfileOnUserCreate)
+
+	surmai.Pb.OnRecordUpdateRequest("traveller_profiles").BindFunc(hooks.RestrictManagersUpdate)
+	surmai.Pb.OnRecordEnrich("traveller_profiles").BindFunc(hooks.EnrichTravellerProfileManagers)
 }
 
 func (surmai *SurmaiApp) StartJobs() {

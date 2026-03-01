@@ -1,9 +1,11 @@
-import { Stack, TagsInput, Textarea, TextInput } from '@mantine/core';
+import { MultiSelect, Stack, Textarea, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@tanstack/react-query';
 
 import { PlaceMultiSelect } from '../../places/PlaceMultiSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { listTravellerProfiles } from '../../../lib/api/pocketbase/traveller_profiles.ts';
 
 import type { CreateTripForm } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
@@ -14,6 +16,16 @@ interface EditTripBasicFormProps {
 
 export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
   const { t } = useTranslation();
+
+  const { data: travellerProfiles } = useQuery({
+    queryKey: ['traveller_profiles'],
+    queryFn: listTravellerProfiles,
+  });
+
+  const travellerOptions = (travellerProfiles || []).map((p) => ({
+    value: p.id,
+    label: `${p.legalName} (${p.email})`,
+  }));
 
   return (
     <Stack align="stretch" justify="center" gap="md">
@@ -53,13 +65,13 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
         {...form.getInputProps('dateRange')}
       />
 
-      <TagsInput
-        label={t('trip_travellers')}
-        key={form.key('participants')}
-        {...form.getInputProps('participants')}
-        acceptValueOnBlur
-        description={t('trip_travellers_description', 'Names of people going on this trip. Separate names by comma.')}
-        placeholder={''}
+      <MultiSelect
+        label={t('traveller_profiles', 'Traveller Profiles')}
+        description={t('trip_traveller_profiles_description', 'Select traveller profiles to assign to this trip')}
+        data={travellerOptions}
+        searchable
+        key={form.key('travellers')}
+        {...form.getInputProps('travellers')}
       />
 
       <CurrencyInput

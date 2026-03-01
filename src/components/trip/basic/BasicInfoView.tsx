@@ -6,8 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
-import { ParticipantData } from './ParticipantData.tsx';
+import { TravellerCard } from './TravellerCard.tsx';
 import { listCollaborators, listExpenses } from '../../../lib/api';
+import { listTravellerProfiles } from '../../../lib/api/pocketbase/traveller_profiles.ts';
 import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 import type { User } from '../../../types/auth.ts';
@@ -25,6 +26,13 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
     queryKey: ['listExpenses', trip.id],
     queryFn: () => listExpenses(trip.id),
   });
+
+  const { data: allTravellerProfiles } = useQuery({
+    queryKey: ['traveller_profiles'],
+    queryFn: listTravellerProfiles,
+  });
+
+  const tripTravellerProfiles = (allTravellerProfiles || []).filter((p) => trip.travellers?.includes(p.id));
 
   const { convertedExpenses } = useTripExpenses({
     trip: trip,
@@ -71,13 +79,16 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
       <Divider />
       <Text mt={'md'}>{t('trip_travellers', 'Travelers')}</Text>
       <Group>
-        {(trip.participants || []).map((person, index) => {
+        {tripTravellerProfiles.map((profile) => (
+          <TravellerCard key={profile.id} profile={profile} />
+        ))}
+        {/*{(trip.participants || []).map((person, index) => {
           return (
             <Group wrap={'nowrap'} key={person.name}>
               <ParticipantData participant={person} trip={trip} index={index} refetch={refetch} />
             </Group>
           );
-        })}
+        })}*/}
       </Group>
 
       <Text mt={'md'}>{t('trip_collaborators', 'Collaborators')}</Text>

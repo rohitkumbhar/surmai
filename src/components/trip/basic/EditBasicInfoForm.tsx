@@ -41,9 +41,9 @@ export const EditBasicInfoForm = ({
         timezone: item.timezone,
       };
     }),
-    participants: trip.participants?.map((item) => item.name),
     budgetAmount: trip.budget?.value,
     budgetCurrency: trip.budget?.currency,
+    travellers: trip.travellers || [],
   };
 
   const form = useForm<CreateTripForm>({
@@ -72,13 +72,11 @@ export const EditBasicInfoForm = ({
               timezone: d.timezone,
             };
           }),
-          participants: values.participants?.map((name) => {
-            return { name: name };
-          }),
           budget:
             values.budgetAmount && values.budgetCurrency
               ? { value: values.budgetAmount, currency: values.budgetCurrency }
               : undefined,
+          travellers: values.travellers,
         };
         updateTrip(trip.id, data as unknown as Trip)
           .then(() => {

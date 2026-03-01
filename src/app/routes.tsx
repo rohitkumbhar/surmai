@@ -12,6 +12,7 @@ import { MyTrips } from '../pages/trips/MyTrips.tsx';
 import { TripsContainer } from '../pages/trips/TripsContainer.tsx';
 import { ViewTrip } from '../pages/trips/ViewTrip.tsx';
 import { UserProfile } from '../pages/UserProfile/UserProfile.tsx';
+import { ManageTravellerProfiles } from '../pages/TravellerProfiles/ManageTravellerProfiles.tsx';
 
 const Settings = lazy(() => import('../pages/Settings/Settings.tsx'));
 
@@ -32,6 +33,10 @@ export const buildRouter = () => {
         {
           path: '/profile',
           element: <UserProfile />,
+        },
+        {
+          path: '/travellers',
+          element: <ManageTravellerProfiles />,
         },
         {
           path: '/invitations',

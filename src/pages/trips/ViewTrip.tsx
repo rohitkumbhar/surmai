@@ -115,7 +115,7 @@ export const ViewTrip = () => {
     throw error;
   }
   return (
-    <Container py={'sm'} size="xl">
+    <Container py={'sm'} size="xl" px={0}>
       <Header>
         <Group mt={'md'}>
           <Text size={'md'}>{trip?.name}</Text>

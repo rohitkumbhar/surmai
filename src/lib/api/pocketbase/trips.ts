@@ -8,13 +8,14 @@ import { listTransportations } from './transportations.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type {
-    Activity,
-    Attachment,
-    Collaborator,
-    Lodging,
-    NewTrip,
-    Transportation,
-    Trip
+  Activity,
+  Attachment,
+  Collaborator,
+  Lodging,
+  NewTrip,
+  Transportation,
+  TravellerProfile,
+  Trip,
 } from '../../../types/trips.ts';
 
 const trips = pb.collection('trips');
@@ -26,7 +27,6 @@ export const createTrip = async (data: NewTrip) => {
 export const getTrip = (tripId: string): Promise<Trip> => {
   return trips.getOne<Trip>(tripId);
 };
-
 
 export const listUpcomingTrips = async (): Promise<Trip[]> => {
   const threshold = dayjs().format('YYYY-MM-DD');
@@ -59,7 +59,7 @@ export const deleteTrip = (tripId: string) => {
 };
 
 export const getAttachmentUrl = (
-  record: Trip | Transportation | Lodging | Activity | User | Attachment,
+  record: Trip | Transportation | Lodging | Activity | User | Attachment | TravellerProfile,
   fileName: string,
   options?: { [key: string]: string }
 ) => {
