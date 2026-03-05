@@ -508,5 +508,11 @@
     "transportation_bike": "Bicicleta",
     "trip_notes": "Notas",
     "website_appearance": "Apariencia de la Web",
-    "website_appearance_desc": "Elije claro, oscuro o automático según sistema"
+    "website_appearance_desc": "Elije claro, oscuro o automático según sistema",
+    "add_field": "Añadir campo",
+    "add_manager_emails_desc": "Perfil de gestores -- emails separados por coma",
+    "add_manager_emails_placeholder": "Escriba email y pulse Enter o coma",
+    "add_profile": "Añadir perfil",
+    "additional_fields": "Campos adicionales",
+    "aeroplan": "Plan de vuelo Air Canada"
 }
