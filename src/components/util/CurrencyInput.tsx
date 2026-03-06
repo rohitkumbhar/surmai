@@ -9,7 +9,6 @@ export const CurrencyInput = ({
   currencyCodeProps,
   label,
   description,
-  maxWidth = 280,
 }: {
   currencyCodeKey: string;
   costKey: string;
@@ -56,7 +55,7 @@ export const CurrencyInput = ({
       allowDecimal={true}
       allowLeadingZeros={false}
       decimalScale={2}
-      maw={rem(maxWidth)}
+      // maw={rem(maxWidth)}
       {...costProps}
     />
   );

@@ -51,7 +51,7 @@ export const LodgingPanel = ({
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={t('lodging_add_' + newLodgingType, 'Add Lodging')}
         onClose={() => {
           closeForm();

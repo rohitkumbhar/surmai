@@ -1,4 +1,4 @@
-import { Button, FileButton, Group, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Button, Grid, Group, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
@@ -7,17 +7,18 @@ import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import {
-  createTransportationEntry,
-  uploadAttachments,
   createExpense,
-  updateExpense,
+  createTransportationEntry,
   deleteExpense,
+  updateExpense,
+  uploadAttachments,
 } from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
 import type {
   Attachment,
@@ -165,173 +166,139 @@ export const CarRentalForm = ({
   };
 
   return (
-    <Stack>
-      <Title order={4}>{t('transportation_add_rental_car', 'Add Rental Car')}</Title>
-      <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
-        <Stack>
-          <Group>
-            <PlaceSelect
-              form={form as UseFormReturnType<unknown>}
-              propName={'place'}
-              presetDestinations={trip.destinations || []}
-              label={t('associated_destination', 'Destination')}
-              description={t('associated_destination_desc', 'Associated Destination')}
-              key={form.key('place')}
-              {...form.getInputProps('place')}
-            />
+    <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <PlaceSelect
+            form={form as UseFormReturnType<unknown>}
+            propName={'place'}
+            presetDestinations={trip.destinations || []}
+            label={t('associated_destination', 'Destination')}
+            description={t('associated_destination_desc', 'Associated Destination')}
+            key={form.key('place')}
+            {...form.getInputProps('place')}
+          />
+        </Grid.Col>
 
-            <TextInput
-              name={'rentalCompany'}
-              label={t('transportation_rental_company', 'Rental Company')}
-              description={t('transportation_rental_company_desc', 'Name of the Rental Company')}
-              required
-              key={form.key('rentalCompany')}
-              {...form.getInputProps('rentalCompany')}
-            />
-          </Group>
-          <Group grow>
-            <DateTimePicker
-              valueFormat="DD MMM YYYY hh:mm A"
-              name={'pickupTime'}
-              label={t('transportation_pickup_time', 'Pickup Time')}
-              description={t('transportation_pickup_time_desc', 'Date and time for pickup')}
-              clearable
-              required
-              key={form.key('pickupTime')}
-              {...form.getInputProps('pickupTime')}
-              defaultDate={trip.startDate}
-              minDate={trip.startDate}
-              maxDate={dayjs(trip.endDate).endOf('day').toDate()}
-              data-testid={'pickup-time'}
-              submitButtonProps={{
-                'aria-label': 'Submit Date',
-              }}
-            />
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            name={'rentalCompany'}
+            label={t('transportation_rental_company', 'Rental Company')}
+            description={t('transportation_rental_company_desc', 'Name of the Rental Company')}
+            required
+            key={form.key('rentalCompany')}
+            {...form.getInputProps('rentalCompany')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <DateTimePicker
+            valueFormat="DD MMM YYYY hh:mm A"
+            name={'pickupTime'}
+            label={t('transportation_pickup_time', 'Pickup Time')}
+            description={t('transportation_pickup_time_desc', 'Date and time for pickup')}
+            clearable
+            required
+            key={form.key('pickupTime')}
+            {...form.getInputProps('pickupTime')}
+            defaultDate={trip.startDate}
+            minDate={trip.startDate}
+            maxDate={dayjs(trip.endDate).endOf('day').toDate()}
+            data-testid={'pickup-time'}
+            submitButtonProps={{
+              'aria-label': 'Submit Date',
+            }}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <DateTimePicker
+            valueFormat="DD MMM YYYY hh:mm A"
+            name={'dropOffTime'}
+            label={t('transportation_dropOff_time', 'Drop Off Time')}
+            description={t('transportation_dropoff_time_desc', 'Date and time for drop-off')}
+            clearable
+            required
+            key={form.key('dropOffTime')}
+            {...form.getInputProps('dropOffTime')}
+            defaultDate={trip.startDate}
+            minDate={trip.startDate}
+            maxDate={dayjs(trip.endDate).endOf('day').toDate()}
+            data-testid={'drop-off-time'}
+            submitButtonProps={{
+              'aria-label': 'Submit Date',
+            }}
+          />
+        </Grid.Col>
 
-            <DateTimePicker
-              valueFormat="DD MMM YYYY hh:mm A"
-              name={'dropOffTime'}
-              label={t('transportation_dropOff_time', 'Drop Off Time')}
-              description={t('transportation_dropoff_time_desc', 'Date and time for drop-off')}
-              clearable
-              required
-              key={form.key('dropOffTime')}
-              {...form.getInputProps('dropOffTime')}
-              defaultDate={trip.startDate}
-              minDate={trip.startDate}
-              maxDate={dayjs(trip.endDate).endOf('day').toDate()}
-              data-testid={'drop-off-time'}
-              submitButtonProps={{
-                'aria-label': 'Submit Date',
-              }}
-            />
-          </Group>
-          <Group>
-            <TextInput
-              name={'pickupLocation'}
-              label={t('transportation_pickup_location', 'Pickup Location')}
-              description={t('transportation_pickup_location_desc', 'Address of the pickup location')}
-              required
-              key={form.key('pickupLocation')}
-              {...form.getInputProps('pickupLocation')}
-            />
-            <TextInput
-              name={'dropOffLocation'}
-              label={t('transportation_dropOff_location', 'Drop Off Location')}
-              description={t('transportation_dropOff_location_desc', 'Address of the drop-off location')}
-              required
-              key={form.key('dropOffLocation')}
-              {...form.getInputProps('dropOffLocation')}
-            />
-          </Group>
-          <Group>
-            <TextInput
-              name={'confirmationCode'}
-              label={t('transportation_confirmation_code', 'Confirmation Code')}
-              description={t('transportation_confirmation_code_desc', 'Reservation Id, Booking code etc')}
-              key={form.key('confirmationCode')}
-              {...form.getInputProps('confirmationCode')}
-            />
-            <CurrencyInput
-              costKey={form.key('cost')}
-              costProps={form.getInputProps('cost')}
-              currencyCodeKey={form.key('currencyCode')}
-              currencyCodeProps={form.getInputProps('currencyCode')}
-              label={t('car_rental_cost', 'Cost')}
-              description={t('car_rental_cost_desc', 'Charges for this rental')}
-            />
-          </Group>
-          <Group>
-            <TextInput
-              name={'link'}
-              label={t('link', 'Link')}
-              key={form.key('link')}
-              description={t('link_desc', 'Related link')}
-              {...form.getInputProps('link')}
-            />
-          </Group>
-          <Group>
-            <Stack>
-              <Group>
-                <Title size={'md'}>
-                  {t('attachments', 'Attachments')}
-                  <Text size={'xs'} c={'dimmed'}>
-                    {t(
-                      'transportation_rental_attachments_desc',
-                      'Upload any related documents for this rental e.g. confirmation email'
-                    )}
-                  </Text>
-                </Title>
-              </Group>
-              <Group>
-                {files.map((file, index) => (
-                  <Text key={index}>{file.name}</Text>
-                ))}
-              </Group>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            name={'pickupLocation'}
+            label={t('transportation_pickup_location', 'Pickup Location')}
+            description={t('transportation_pickup_location_desc', 'Address of the pickup location')}
+            required
+            key={form.key('pickupLocation')}
+            {...form.getInputProps('pickupLocation')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            name={'dropOffLocation'}
+            label={t('transportation_dropOff_location', 'Drop Off Location')}
+            description={t('transportation_dropOff_location_desc', 'Address of the drop-off location')}
+            required
+            key={form.key('dropOffLocation')}
+            {...form.getInputProps('dropOffLocation')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          {' '}
+          <TextInput
+            name={'confirmationCode'}
+            label={t('transportation_confirmation_code', 'Confirmation Code')}
+            description={t('transportation_confirmation_code_desc', 'Reservation Id, Booking code etc')}
+            key={form.key('confirmationCode')}
+            {...form.getInputProps('confirmationCode')}
+          />
+        </Grid.Col>
 
-              <Group>
-                <FileButton
-                  onChange={setFiles}
-                  accept="application/pdf,text/plain,text/html,image/png,image/jpeg,image/gif,image/webp,text/html"
-                  form={'files'}
-                  name={'files'}
-                  multiple
-                >
-                  {(props) => {
-                    if (carRental?.id) {
-                      return (
-                        <Stack>
-                          <Text
-                            size={'xs'}
-                          >{`${exitingAttachments ? exitingAttachments.length : 0} existing files`}</Text>
-                          <Button {...props}>{t('upload_more', 'Upload More')}</Button>
-                        </Stack>
-                      );
-                    } else {
-                      return <Button {...props}>{t('upload', 'Upload')}</Button>;
-                    }
-                  }}
-                </FileButton>
-              </Group>
-            </Stack>
-          </Group>
-          <Group justify={'flex-end'}>
-            <Button type={'submit'} w={'min-content'} loading={saving}>
-              {t('save', 'Save')}
-            </Button>
-            <Button
-              type={'button'}
-              variant={'default'}
-              w={'min-content'}
-              onClick={() => {
-                onCancel();
-              }}
-            >
-              {t('cancel', 'Cancel')}
-            </Button>
-          </Group>
-        </Stack>
-      </form>
-    </Stack>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <CurrencyInput
+            costKey={form.key('cost')}
+            costProps={form.getInputProps('cost')}
+            currencyCodeKey={form.key('currencyCode')}
+            currencyCodeProps={form.getInputProps('currencyCode')}
+            label={t('car_rental_cost', 'Cost')}
+            description={t('car_rental_cost_desc', 'Charges for this rental')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            name={'link'}
+            label={t('link', 'Link')}
+            key={form.key('link')}
+            description={t('link_desc', 'Related link')}
+            {...form.getInputProps('link')}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <AttachmentsUploadField files={files} setFiles={setFiles} />
+        </Grid.Col>
+      </Grid>
+
+      <Group justify={'flex-end'} pt={'md'}>
+        <Button type={'submit'} w={'min-content'} loading={saving}>
+          {t('save', 'Save')}
+        </Button>
+        <Button
+          type={'button'}
+          variant={'default'}
+          w={'min-content'}
+          onClick={() => {
+            onCancel();
+          }}
+        >
+          {t('cancel', 'Cancel')}
+        </Button>
+      </Group>
+    </form>
   );
 };

@@ -1,4 +1,4 @@
-import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Button, Grid, Group, rem, Stack, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDebouncedCallback } from '@mantine/hooks';
@@ -23,6 +23,7 @@ import i18n from '../../../lib/i18n.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
 import type {
   Airline,
@@ -208,166 +209,141 @@ export const FlightForm = ({
   return (
     <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
       <Stack>
-        <Group>
-          <TextInput
-            name={'flightNumber'}
-            label={t('transportation_flight_number', 'Flight Number')}
-            key={form.key('flightNumber')}
-            rightSection={<IconPlane size={15} />}
-            description={t('flight_number_desc', 'ICAO Flight Designation')}
-            {...form.getInputProps('flightNumber')}
-            onBlur={(ev) => {
-              // @ts-expect-error it ok
-              getFlightInfo(form, ev.target.value);
-            }}
-          />
+        <Grid>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <TextInput
+              name={'flightNumber'}
+              label={t('transportation_flight_number', 'Flight Number')}
+              key={form.key('flightNumber')}
+              rightSection={<IconPlane size={15} />}
+              description={t('flight_number_desc', 'ICAO Flight Designation')}
+              {...form.getInputProps('flightNumber')}
+              onBlur={(ev) => {
+                // @ts-expect-error it ok
+                getFlightInfo(form, ev.target.value);
+              }}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <TextInput
+              name={'reservation'}
+              label={t('transportation_confirmation_code', 'Confirmation Code')}
+              key={form.key('reservation')}
+              description={t('reservation_desc', 'Ticket Id, Confirmation code etc')}
+              {...form.getInputProps('reservation')}
+              rightSection={<IconCodeCircle size={15} />}
+            />
+          </Grid.Col>
 
-          <TextInput
-            name={'reservation'}
-            label={t('transportation_confirmation_code', 'Confirmation Code')}
-            key={form.key('reservation')}
-            description={t('reservation_desc', 'Ticket Id, Confirmation code etc')}
-            {...form.getInputProps('reservation')}
-            rightSection={<IconCodeCircle size={15} />}
-          />
-        </Group>
-        <Group>
-          <AirportSelect
-            form={form as unknown as UseFormReturnType<unknown>}
-            propName={'origin'}
-            label={i18n.t('transportation_from', 'From')}
-            description={i18n.t('airport_from_desc', 'Departure Airport')}
-            currentValue={origin}
-          />
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <AirportSelect
+              form={form as unknown as UseFormReturnType<unknown>}
+              propName={'origin'}
+              label={i18n.t('transportation_from', 'From')}
+              description={i18n.t('airport_from_desc', 'Departure Airport')}
+              currentValue={origin}
+            />
+          </Grid.Col>
 
-          <DateTimePicker
-            highlightToday
-            valueFormat="lll"
-            name={'departureTime'}
-            description={t('departure_time_desc', 'Departure date and time')}
-            miw={rem('280px')}
-            label={t('transportation_departure_time', 'Departure')}
-            clearable
-            required
-            defaultDate={trip.startDate}
-            minDate={trip.startDate}
-            maxDate={trip.endDate}
-            key={form.key('departureTime')}
-            {...form.getInputProps('departureTime')}
-            data-testid={'departure-time'}
-            submitButtonProps={{
-              'aria-label': 'Submit Date',
-            }}
-          />
-        </Group>
-        <Group>
-          <AirportSelect
-            form={form as unknown as UseFormReturnType<unknown>}
-            propName={'destination'}
-            label={i18n.t('transportation_to', 'To')}
-            description={i18n.t('airport_to_desc', 'Arrival Airport')}
-            currentValue={destination}
-          />
-          <DateTimePicker
-            valueFormat="lll"
-            name={'arrivalTime'}
-            label={t('transportation_arrival_time', 'Arrival')}
-            description={t('arrival_time_desc', 'Arrival date and time')}
-            required
-            miw={rem('280px')}
-            defaultDate={trip.startDate}
-            minDate={trip.startDate}
-            maxDate={dayjs(trip.endDate).endOf('day').toDate()}
-            clearable
-            key={form.key('arrivalTime')}
-            {...form.getInputProps('arrivalTime')}
-            data-testid={'arrival-time'}
-            submitButtonProps={{
-              'aria-label': 'Submit Date',
-            }}
-          />
-        </Group>
-        <Group>
-          <AirlineSelect
-            form={form as unknown as UseFormReturnType<unknown>}
-            propName={'provider'}
-            label={t('transportation_airline', 'Airline')}
-            description={t('airline_desc', 'Select an Airline')}
-            required={true}
-            withAsterisk={true}
-            currentValue={airline}
-          />
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <DateTimePicker
+              highlightToday
+              valueFormat="lll"
+              name={'departureTime'}
+              description={t('departure_time_desc', 'Departure date and time')}
+              miw={rem('280px')}
+              label={t('transportation_departure_time', 'Departure')}
+              clearable
+              required
+              minDate={trip.startDate}
+              maxDate={trip.endDate}
+              key={form.key('departureTime')}
+              {...form.getInputProps('departureTime')}
+              data-testid={'departure-time'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
+            />
+          </Grid.Col>
 
-          <TextInput
-            name={'seats'}
-            label={t('seats', 'Seats')}
-            key={form.key('seats')}
-            description={t('seats_desc', 'Reserved seats, if any')}
-            rightSection={<IconChairDirector size={15} />}
-            {...form.getInputProps('seats')}
-          />
-        </Group>
-        <Group>
-          <TextInput
-            name={'link'}
-            label={t('link', 'Link')}
-            key={form.key('link')}
-            description={t('link_desc', 'Related link')}
-            rightSection={<IconLink size={15} />}
-            {...form.getInputProps('link')}
-          />
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <AirportSelect
+              form={form as unknown as UseFormReturnType<unknown>}
+              propName={'destination'}
+              label={i18n.t('transportation_to', 'To')}
+              description={i18n.t('airport_to_desc', 'Arrival Airport')}
+              currentValue={destination}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <DateTimePicker
+              valueFormat="lll"
+              name={'arrivalTime'}
+              label={t('transportation_arrival_time', 'Arrival')}
+              description={t('arrival_time_desc', 'Arrival date and time')}
+              required
+              miw={rem('280px')}
+              minDate={trip.startDate}
+              maxDate={dayjs(trip.endDate).endOf('day').toDate()}
+              clearable
+              key={form.key('arrivalTime')}
+              {...form.getInputProps('arrivalTime')}
+              data-testid={'arrival-time'}
+              submitButtonProps={{
+                'aria-label': 'Submit Date',
+              }}
+            />
+          </Grid.Col>
 
-          <CurrencyInput
-            costKey={form.key('cost')}
-            costProps={form.getInputProps('cost')}
-            currencyCodeKey={form.key('currencyCode')}
-            currencyCodeProps={form.getInputProps('currencyCode')}
-            label={t('transportation_cost', 'Cost')}
-            description={t('transportation_cost_desc', 'Charges for this transportation')}
-          />
-        </Group>
-        <Group>
-          <Stack>
-            <Group>
-              <Title size={'md'}>
-                {t('attachments', 'Attachments')}
-                <Text size={'xs'} c={'dimmed'}>
-                  {t('transportation_attachments_desc', 'Upload any related documents e.g. confirmation email')}
-                </Text>
-              </Title>
-            </Group>
-            <Group>
-              {files.map((file, index) => (
-                <Text key={index}>{file.name}</Text>
-              ))}
-            </Group>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <AirlineSelect
+              form={form as unknown as UseFormReturnType<unknown>}
+              propName={'provider'}
+              label={t('transportation_airline', 'Airline')}
+              description={t('airline_desc', 'Select an Airline')}
+              required={true}
+              withAsterisk={true}
+              currentValue={airline}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <TextInput
+              name={'seats'}
+              label={t('seats', 'Seats')}
+              key={form.key('seats')}
+              description={t('seats_desc', 'Reserved seats, if any')}
+              rightSection={<IconChairDirector size={15} />}
+              {...form.getInputProps('seats')}
+            />
+          </Grid.Col>
 
-            <Group>
-              <FileButton
-                onChange={setFiles}
-                accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
-                form={'files'}
-                name={'files'}
-                multiple
-              >
-                {(props) => {
-                  if (transportation?.id) {
-                    return (
-                      <Stack>
-                        <Text
-                          size={'xs'}
-                        >{`${exitingAttachments ? exitingAttachments.length : 0} existing files`}</Text>
-                        <Button {...props}>{t('upload_more', 'Upload More')}</Button>
-                      </Stack>
-                    );
-                  } else {
-                    return <Button {...props}>{t('upload', 'Upload')}</Button>;
-                  }
-                }}
-              </FileButton>
-            </Group>
-          </Stack>
-        </Group>
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <TextInput
+              name={'link'}
+              label={t('link', 'Link')}
+              key={form.key('link')}
+              description={t('link_desc', 'Related link')}
+              rightSection={<IconLink size={15} />}
+              {...form.getInputProps('link')}
+            />
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <CurrencyInput
+              costKey={form.key('cost')}
+              costProps={form.getInputProps('cost')}
+              currencyCodeKey={form.key('currencyCode')}
+              currencyCodeProps={form.getInputProps('currencyCode')}
+              label={t('transportation_cost', 'Cost')}
+              description={t('transportation_cost_desc', 'Charges for this transportation')}
+            />
+          </Grid.Col>
+
+          <Grid.Col span={12}>
+            <AttachmentsUploadField files={files} setFiles={setFiles} />
+          </Grid.Col>
+        </Grid>
+
         <Group justify={'flex-end'}>
           <Button type={'submit'} w={'min-content'} loading={saving}>
             {t('save', 'Save')}
