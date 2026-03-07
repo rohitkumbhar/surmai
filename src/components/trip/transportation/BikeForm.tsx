@@ -1,4 +1,4 @@
-import { Button, FileButton, Group, rem, Stack, Text, TextInput, Title } from '@mantine/core';
+import { Button, Grid, Group, rem, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
@@ -12,11 +12,12 @@ import {
   deleteExpense,
   updateExpense,
   uploadAttachments,
-} from '../../../lib/api/index.ts';
+} from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
 import type {
   Attachment,
@@ -172,8 +173,8 @@ export const BikeForm = ({
 
   return (
     <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
-      <Stack>
-        <Group>
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <PlaceSelect
             form={form as UseFormReturnType<unknown>}
             propName={'origin'}
@@ -183,6 +184,8 @@ export const BikeForm = ({
             key={form.key('origin')}
             {...form.getInputProps('origin')}
           />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <TextInput
             name={'originAddress'}
             label={t('address', 'Address')}
@@ -192,7 +195,31 @@ export const BikeForm = ({
             key={form.key('originAddress')}
             {...form.getInputProps('originAddress')}
           />
+        </Grid.Col>
 
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <PlaceSelect
+            form={form as UseFormReturnType<unknown>}
+            propName={'destination'}
+            presetDestinations={trip.destinations || []}
+            label={t('transportation_to', 'To')}
+            description={t('destination_place', 'Destination Place')}
+            key={form.key('destination')}
+            {...form.getInputProps('destination')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            name={'destinationAddress'}
+            label={t('address', 'Address')}
+            data-testid={'destinationAddress'}
+            description={t('destination_address', 'Address of the car port, bus station etc.')}
+            required
+            key={form.key('destinationAddress')}
+            {...form.getInputProps('destinationAddress')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             valueFormat="lll"
             name={'departureTime'}
@@ -211,26 +238,8 @@ export const BikeForm = ({
               'aria-label': 'Submit Date',
             }}
           />
-        </Group>
-        <Group>
-          <PlaceSelect
-            form={form as UseFormReturnType<unknown>}
-            propName={'destination'}
-            presetDestinations={trip.destinations || []}
-            label={t('transportation_to', 'To')}
-            description={t('destination_place', 'Destination Place')}
-            key={form.key('destination')}
-            {...form.getInputProps('destination')}
-          />
-          <TextInput
-            name={'destinationAddress'}
-            label={t('address', 'Address')}
-            data-testid={'destinationAddress'}
-            description={t('destination_address', 'Address of the car port, bus station etc.')}
-            required
-            key={form.key('destinationAddress')}
-            {...form.getInputProps('destinationAddress')}
-          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             valueFormat="lll"
             name={'arrivalTime'}
@@ -249,8 +258,8 @@ export const BikeForm = ({
               'aria-label': 'Submit Date',
             }}
           />
-        </Group>
-        <Group>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <TextInput
             name={'elevationGain'}
             label={t('transportation_elevation_gain', 'Elevation Gain')}
@@ -258,6 +267,8 @@ export const BikeForm = ({
             key={form.key('elevationGain')}
             {...form.getInputProps('elevationGain')}
           />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <TextInput
             name={'distance'}
             label={t('transportation_distance', 'Distance')}
@@ -265,8 +276,8 @@ export const BikeForm = ({
             description={t('distance_desc', 'Distance travelled')}
             {...form.getInputProps('distance')}
           />
-        </Group>
-        <Group>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <TextInput
             name={'link'}
             label={t('link', 'Link')}
@@ -274,6 +285,8 @@ export const BikeForm = ({
             description={t('link_desc', 'Related link')}
             {...form.getInputProps('link')}
           />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <CurrencyInput
             costKey={form.key('cost')}
             costProps={form.getInputProps('cost')}
@@ -282,65 +295,27 @@ export const BikeForm = ({
             label={t('transportation_cost', 'Cost')}
             description={t('transportation_cost_desc', 'Charges for this transportation')}
           />
-        </Group>
-        <Group>
-          <Stack>
-            <Group>
-              <Title size={'md'}>
-                {t('attachments', 'Attachments')}
-                <Text size={'xs'} c={'dimmed'}>
-                  {t('transportation_attachments_desc', 'Upload any related documents e.g. confirmation email')}
-                </Text>
-              </Title>
-            </Group>
-            <Group>
-              {files.map((file, index) => (
-                <Text key={index}>{file.name}</Text>
-              ))}
-            </Group>
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <AttachmentsUploadField files={files} setFiles={setFiles} />
+        </Grid.Col>
+      </Grid>
 
-            <Group>
-              <FileButton
-                onChange={setFiles}
-                accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
-                form={'files'}
-                name={'files'}
-                multiple
-              >
-                {(props) => {
-                  if (transportation?.id) {
-                    return (
-                      <Stack>
-                        <Text
-                          size={'xs'}
-                        >{`${exitingAttachments ? exitingAttachments.length : 0} existing files`}</Text>
-                        <Button {...props}>{t('upload_more', 'Upload More')}</Button>
-                      </Stack>
-                    );
-                  } else {
-                    return <Button {...props}>{t('upload', 'Upload')}</Button>;
-                  }
-                }}
-              </FileButton>
-            </Group>
-          </Stack>
-        </Group>
-        <Group justify={'flex-end'}>
-          <Button type={'submit'} w={'min-content'} loading={saving}>
-            {t('save', 'Save')}
-          </Button>
-          <Button
-            type={'button'}
-            variant={'default'}
-            w={'min-content'}
-            onClick={() => {
-              onCancel();
-            }}
-          >
-            {t('cancel', 'Cancel')}
-          </Button>
-        </Group>
-      </Stack>
+      <Group justify={'flex-end'} pt={'md'}>
+        <Button type={'submit'} w={'min-content'} loading={saving}>
+          {t('save', 'Save')}
+        </Button>
+        <Button
+          type={'button'}
+          variant={'default'}
+          w={'min-content'}
+          onClick={() => {
+            onCancel();
+          }}
+        >
+          {t('cancel', 'Cancel')}
+        </Button>
+      </Group>
     </form>
   );
 };

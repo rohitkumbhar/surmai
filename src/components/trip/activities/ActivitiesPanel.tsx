@@ -50,7 +50,7 @@ export const ActivitiesPanel = ({
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={t('activity_add_new', 'Add Activity')}
         onClose={() => {
           closeForm();

@@ -64,7 +64,7 @@ export const TransportationPanel = ({
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={`${t('transportation_add_new', 'Add new')} ${t(newTransportationType, '{{ type }}', { type: newTransportationType })}`}
         onClose={() => {
           closeForm();
@@ -86,10 +86,10 @@ export const TransportationPanel = ({
       <Modal
         opened={flightFormOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={t('transportation_add_new_flight', 'Add new flight')}
         onClose={() => {
-          closeForm();
+          closeFlightForm();
         }}
       >
         <FlightForm
@@ -98,6 +98,7 @@ export const TransportationPanel = ({
           onSuccess={() => {
             refetchData().then(() => closeFlightForm());
           }}
+
           onCancel={() => {
             closeFlightForm();
           }}
@@ -107,7 +108,7 @@ export const TransportationPanel = ({
       <Modal
         opened={carRentalFormOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={t('transportation_add_rental_car', 'Add Rental Car')}
         onClose={() => {
           closeRentalForm();
@@ -127,7 +128,7 @@ export const TransportationPanel = ({
 
       <Modal
         opened={bikeFormOpened}
-        size="auto"
+        size="xl"
         fullScreen={isMobile}
         title={t('transportation_edit_bike', 'Edit Bike `Transportation')}
         onClose={() => {
