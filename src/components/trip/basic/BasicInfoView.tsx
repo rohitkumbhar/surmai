@@ -1,4 +1,4 @@
-import { Divider, Flex, Group, Stack, Text, Title } from '@mantine/core';
+import { Box, Card, Grid, Group, Progress, ScrollArea, Stack, Text, Title } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -7,12 +7,11 @@ import { BasicInfoMenu } from './BasicInfoMenu.tsx';
 import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { TravellerCard } from './TravellerCard.tsx';
-import { listCollaborators, listExpenses } from '../../../lib/api';
-import { listTravellerProfiles } from '../../../lib/api/pocketbase/traveller_profiles.ts';
+import { listCollaborators, listTravellerProfiles } from '../../../lib/api';
 import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 import type { User } from '../../../types/auth.ts';
-import type { Expense, Trip } from '../../../types/trips.ts';
+import type { Trip } from '../../../types/trips.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
@@ -22,86 +21,146 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
     queryFn: () => listCollaborators({ tripId: trip.id }),
   });
 
-  const { data: expenses } = useQuery<Expense[]>({
-    queryKey: ['listExpenses', trip.id],
-    queryFn: () => listExpenses(trip.id),
-  });
-
   const { data: allTravellerProfiles } = useQuery({
     queryKey: ['traveller_profiles'],
     queryFn: listTravellerProfiles,
   });
 
   const tripTravellerProfiles = (allTravellerProfiles || []).filter((p) => trip.travellers?.includes(p.id));
-
   const { convertedExpenses } = useTripExpenses({
     trip: trip,
   });
 
-  const totalExpenses = convertedExpenses
-    ?.reduce((sum, exp) => {
-      return sum + (exp.convertedCost?.value || 0);
-    }, 0)
-    ?.toFixed(2);
+  const totalExpenses = convertedExpenses?.reduce((sum, exp) => {
+    return sum + (exp.convertedCost?.value || 0);
+  }, 0);
+
+  const budgetPercentage =
+    trip.budget?.value && trip.budget?.value > 0 ? Math.min((totalExpenses / trip.budget?.value) * 100, 100) : 0;
 
   return (
-    <Stack gap={'md'}>
-      <Flex mih={30} justify="flex-end" align="center" wrap="wrap" pos={'relative'} top={'20px'}>
+    <>
+      <Group justify="flex-end" align="center" wrap="wrap">
         <BasicInfoMenu trip={trip} refetch={refetch} />
-      </Flex>
-      <Title order={1}>{trip.name}</Title>
-      <Title order={4} fw={400}>
-        {' '}
-        {trip.description}
-      </Title>
-      <Text size={'sm'}>{`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}</Text>
-      <Divider />
-      <Group>
-        <Text>
-          {t('budget', 'Budget')}:{' '}
-          {trip.budget?.value ? `${trip.budget.value} ${trip.budget.currency}` : t('no_budget_set', 'No budget set')}
-        </Text>
-        <Text>
-          {t('spent', 'Spent')}: {totalExpenses}{' '}
-          {trip.budget?.currency || (expenses && expenses[0]?.cost?.currency) || ''}
-        </Text>
       </Group>
-      <Text mt={'md'}>{t('trip_destinations', 'Destinations')}</Text>
-      <Group>
-        {(trip.destinations || []).map((destination) => {
-          return (
-            <Group wrap={'nowrap'} key={destination.id}>
-              <DestinationCard destination={destination} trip={trip} />
-            </Group>
-          );
-        })}
-      </Group>
-      <Divider />
-      <Text mt={'md'}>{t('trip_travellers', 'Travelers')}</Text>
-      <Group>
-        {tripTravellerProfiles.map((profile) => (
-          <TravellerCard key={profile.id} profile={profile} />
-        ))}
-        {/*{(trip.participants || []).map((person, index) => {
-          return (
-            <Group wrap={'nowrap'} key={person.name}>
-              <ParticipantData participant={person} trip={trip} index={index} refetch={refetch} />
-            </Group>
-          );
-        })}*/}
-      </Group>
+      <Grid pt={'md'}>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <ScrollArea h={300} scrollbarSize={2} scrollHideDelay={500}>
+            <Card withBorder radius="sm" p={'md'} h={300}>
+              <Card.Section p={'sm'}>
+                <Title order={2}>{trip.name}</Title>
+              </Card.Section>
 
-      <Text mt={'md'}>{t('trip_collaborators', 'Collaborators')}</Text>
-      <Group>
-        {collaborators &&
-          (collaborators || []).map((person) => {
-            return (
-              <Group key={person.id}>
-                <CollaboratorButton user={person} trip={trip} onSave={() => refetch()} />
+              <Card.Section p={'sm'}>
+                <Text size={'sm'}>{`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}</Text>
+              </Card.Section>
+
+              <Card.Section p={'sm'}>
+                <Text>{trip.description}</Text>
+              </Card.Section>
+            </Card>
+          </ScrollArea>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Card withBorder radius="sm" p={'md'} h={300}>
+            <Title order={5}>{t('trip_destinations', 'Destinations')}</Title>
+            <ScrollArea h={300} scrollbarSize={2} scrollHideDelay={500} pt={'md'}>
+              <Stack>
+                {(trip.destinations || []).map((destination) => {
+                  return <DestinationCard key={destination.id} destination={destination} trip={trip} />;
+                })}
+              </Stack>
+            </ScrollArea>
+          </Card>
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Title order={5}>{t('budget', 'Budget')}</Title>
+
+          {trip.budget?.value && (
+            <Card withBorder radius="sm" p={'md'} mt={'md'}>
+
+              <Progress value={budgetPercentage} size={42}>
+                <Progress.Label>
+                  <Text size={'sm'}>{`${budgetPercentage.toFixed(2)} %`}</Text>
+                </Progress.Label>
+              </Progress>
+
+              <Group>
+                <Box mt={'sm'}>
+                  <Text tt="uppercase" fz="xs" c="dimmed" fw={700}>
+                    {t('budget_total', 'Budget')}
+                  </Text>
+
+                  <Group gap={0}>
+                    <Text fw={700}>{trip.budget.value}</Text>
+                    <Text fw={700}>&nbsp;</Text>
+                    <Text fw={700} size="sm">
+                      {` ${trip.budget.currency}`}
+                    </Text>
+                  </Group>
+                </Box>
+
+                <Box mt={'sm'}>
+                  <Text tt="uppercase" fz="xs" c="dimmed" fw={700}>
+                    {t('budget_spent', 'Spent')}
+                  </Text>
+
+                  <Group gap={0}>
+                    <Text fw={700}>{totalExpenses}</Text>
+                    <Text fw={700}>&nbsp;</Text>
+                    <Text fw={700} size="sm">
+                      {` ${trip.budget.currency}`}
+                    </Text>
+                  </Group>
+                </Box>
               </Group>
-            );
-          })}
-      </Group>
-    </Stack>
+            </Card>
+          )}
+          {!trip.budget?.value && (
+            <Card withBorder radius="md" p={'md'} mt={'md'}>
+              <Text>{t('no_budget_set', 'No budget set')}</Text>
+            </Card>
+          )}
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Title order={5}>{t('trip_travellers', 'Travelers')}</Title>
+          {tripTravellerProfiles.length > 0 && (
+            <Group mt={'md'}>
+              {tripTravellerProfiles.map((profile) => (
+                <TravellerCard key={profile.id} profile={profile} />
+              ))}
+            </Group>
+          )}
+          {tripTravellerProfiles.length === 0 && (
+            <Card withBorder radius={'md'} p={'md'} mt={'md'}>
+              <Text>
+                {t(
+                  'no_travellers_no_access',
+                  'No travellers assigned to this trip or you do not have access to the assigned travellers.'
+                )}
+              </Text>
+            </Card>
+          )}
+        </Grid.Col>
+
+        <Grid.Col span={12}>
+          <Title order={5}>{t('trip_collaborators', 'Collaborators')}</Title>
+          {collaborators && (
+            <Group mt={'sm'}>
+              {(collaborators || []).map((person) => {
+                return <CollaboratorButton key={person.id} user={person} trip={trip} onSave={() => refetch()} />;
+              })}
+            </Group>
+          )}
+
+          {!collaborators ||
+            (collaborators?.length === 0 && (
+              <Card withBorder radius={'md'} p={'md'} mt={'sm'}>
+                <Text>{t('no_collaborators', 'No collaborators assigned to this trip.')}</Text>
+              </Card>
+            ))}
+        </Grid.Col>
+      </Grid>
+    </>
   );
 };
