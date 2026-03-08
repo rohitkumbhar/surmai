@@ -51,7 +51,7 @@ export const CarRentalData = ({
     >
       <Modal
         opened={opened}
-        size="auto"
+        size="xl"
         fullScreen={isMobile}
         title={t('transportation_edit_rental_car', 'Edit Rental Car')}
         onClose={() => {

@@ -88,7 +88,7 @@ export const GenericTransportationData = ({
     >
       <Modal
         opened={opened}
-        size="auto"
+        size="xl"
         fullScreen={isMobile}
         title={t('transportation_edit_' + transportation.type, 'Edit Transportation')}
         onClose={close}

@@ -4,7 +4,6 @@ import {
   Badge,
   Button,
   Card,
-  FileButton,
   Flex,
   Grid,
   Group,
@@ -16,7 +15,6 @@ import {
   Stack,
   Text,
   TextInput,
-  Title,
 } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
@@ -34,6 +32,7 @@ import { createExpense, deleteExpense, getAttachmentUrl, updateExpense, uploadAt
 import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
 import type { Attachment, CreateExpense, Expense, Trip } from '../../../types/trips.ts';
 
@@ -650,26 +649,26 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
         size="lg"
         fullScreen={isMobile}
       >
-        <Stack gap="md">
-          <TextInput
-            label={t('name', 'Name')}
-            description={t('e_g_meals', 'e.g. Dinner at The French Laundry')}
-            value={name}
-            onChange={(e) => setName(e.currentTarget.value)}
-            required
-          />
-          <Select
-            label={t('category', 'Category')}
-            description={t('select_category', 'Select a category')}
-            value={category}
-            onChange={setCategory}
-            data={EXPENSE_CATEGORIES.map((cat) => ({
-              value: cat,
-              label: EXPENSE_CATEGORY_DATA[cat].label,
-            }))}
-            clearable
-          />
-          <Group>
+        <Grid>
+          <Grid.Col span={12}>
+            <TextInput
+              label={t('name', 'Name')}
+              description={t('e_g_meals', 'e.g. Dinner at The French Laundry')}
+              value={name}
+              onChange={(e) => setName(e.currentTarget.value)}
+              required
+            />
+          </Grid.Col>
+
+          <Grid.Col span={{ base: 12, md: 6 }}>
+            <DateInput
+              label={t('date', 'Date')}
+              value={occurredOn}
+              description={t('date_of_expense', 'Date for the expense record')}
+              onChange={setOccurredOn}
+            />
+          </Grid.Col>
+          <Grid.Col span={{ base: 12, md: 6 }}>
             <CurrencyInput
               costKey="expense-amount"
               costProps={{
@@ -690,88 +689,50 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
               label={t('amount', 'Amount')}
               description="Value"
             />
-            <DateInput
-              label={t('date', 'Date')}
-              value={occurredOn}
-              description={t('date_of_expense', 'Date for the expense record')}
-              onChange={setOccurredOn}
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <Select
+              label={t('category', 'Category')}
+              description={t('select_category', 'Select a category')}
+              value={category}
+              onChange={setCategory}
+              data={EXPENSE_CATEGORIES.map((cat) => ({
+                value: cat,
+                label: EXPENSE_CATEGORY_DATA[cat].label,
+              }))}
+              clearable
             />
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <TextInput
+              label={t('notes', 'Notes')}
+              description={t('optional', 'Optional')}
+              value={notes}
+              onChange={(e) => setNotes(e.currentTarget.value)}
+            />
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <AttachmentsUploadField files={files} setFiles={setFiles} />
+          </Grid.Col>
+        </Grid>
+
+        <Group justify="space-between" mt="md">
+          {selectedExpense ? (
+            <Button color="red" variant="outline" leftSection={<IconTrash size={16} />} onClick={handleDelete}>
+              {t('delete', 'Delete')}
+            </Button>
+          ) : (
+            <div />
+          )}
+          <Group>
+            <Button variant="default" onClick={closeModal}>
+              {t('cancel', 'Cancel')}
+            </Button>
+            <Button onClick={onSave} loading={saving} disabled={!name || !amount || !currency}>
+              {t('save', 'Save')}
+            </Button>
           </Group>
-          <TextInput
-            label={t('notes', 'Notes')}
-            description={t('optional', 'Optional')}
-            value={notes}
-            onChange={(e) => setNotes(e.currentTarget.value)}
-          />
-
-          <Stack gap="xs">
-            <Title size="md">{t('attachments', 'Attachments')}</Title>
-            <Text size="xs" c="dimmed">
-              {t('expense_attachments_desc', 'Upload receipts, invoices or other related documents')}
-            </Text>
-
-            {files.length > 0 && (
-              <Stack gap="xs">
-                {files.map((file, index) => (
-                  <Text key={index} size="sm">
-                    {file.name}
-                  </Text>
-                ))}
-              </Stack>
-            )}
-
-            <Group>
-              <FileButton
-                onChange={setFiles}
-                accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
-                multiple
-              >
-                {(props) => {
-                  if (selectedExpense) {
-                    return (
-                      <Stack gap={4}>
-                        {existingAttachments.length > 0 && (
-                          <Text size="xs" c="dimmed">
-                            {t('existing_files_count', '{{count}} existing file(s)', {
-                              count: existingAttachments.length,
-                            })}
-                          </Text>
-                        )}
-                        <Button {...props} variant="default" size="sm">
-                          {t('upload_more', 'Upload More')}
-                        </Button>
-                      </Stack>
-                    );
-                  } else {
-                    return (
-                      <Button {...props} variant="primary" size="sm">
-                        {t('upload', 'Upload')}
-                      </Button>
-                    );
-                  }
-                }}
-              </FileButton>
-            </Group>
-          </Stack>
-
-          <Group justify="space-between" mt="md">
-            {selectedExpense ? (
-              <Button color="red" variant="outline" leftSection={<IconTrash size={16} />} onClick={handleDelete}>
-                {t('delete', 'Delete')}
-              </Button>
-            ) : (
-              <div />
-            )}
-            <Group>
-              <Button variant="default" onClick={closeModal}>
-                {t('cancel', 'Cancel')}
-              </Button>
-              <Button onClick={onSave} loading={saving} disabled={!name || !amount || !currency}>
-                {t('save', 'Save')}
-              </Button>
-            </Group>
-          </Group>
-        </Stack>
+        </Group>
       </Modal>
     </>
   );

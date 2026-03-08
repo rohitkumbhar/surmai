@@ -14,13 +14,62 @@ import { getAttachmentUrl, uploadTripCoverImage } from '../../lib/api';
 
 import type { Trip } from '../../types/trips.ts';
 
-export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
-  const navigateFunction = useNavigate();
+export const TripCoverImage = ({ trip, onSave }: { trip: Trip; onSave: () => void }) => {
   const { hovered, ref } = useHover();
-  const { id, name, coverImage, destinations } = trip;
   const { t } = useTranslation();
   const { isMobile } = useSurmaiContext();
+  const { coverImage } = trip;
+
   const [tripCoverImage, setTripCoverImage] = useState<string | undefined>(coverImage);
+
+  return (
+    <AspectRatio ratio={1920 / 800} pos="relative" ref={ref}>
+      {tripCoverImage && (
+        <Image src={getAttachmentUrl(trip, tripCoverImage, { thumb: '300x125' })} alt={'Cover Image'} fit={'cover'} />
+      )}
+      {!tripCoverImage && (
+        <ActionIcon variant={'light'} aria-label={'Trip Details'} style={{ height: '100%' }}>
+          <IconPhoto stroke={1.5} />
+        </ActionIcon>
+      )}
+      {hovered && (
+        <Overlay color="#000" backgroundOpacity={0.05}>
+          <ActionIcon
+            variant={'filled'}
+            title={t('edit_cover_image', 'Edit Cover Image')}
+            style={{ height: '100%' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              openContextModal({
+                modal: 'uploadImageForm',
+                title: t('trip_add_cover_image', 'Add Cover Image'),
+                radius: 'md',
+                withCloseButton: false,
+                size: 'auto',
+                fullScreen: isMobile,
+                innerProps: {
+                  aspectRatio: 1920 / 800,
+                  saveUploadedImage: (uploadedImage: File | Blob) => {
+                    uploadTripCoverImage(trip.id, uploadedImage).then((result) => {
+                      setTripCoverImage(result.coverImage);
+                      onSave();
+                    });
+                  },
+                },
+              });
+            }}
+          >
+            <IconPencil stroke={1} />
+          </ActionIcon>
+        </Overlay>
+      )}
+    </AspectRatio>
+  );
+};
+
+export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
+  const navigateFunction = useNavigate();
+  const { id, name, destinations } = trip;
 
   const destinationBadge = destinations?.map((destination) => (
     <Badge variant="light" key={destination.id || nanoid()}>
@@ -40,51 +89,7 @@ export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
       }}
     >
       <Card.Section>
-        <AspectRatio ratio={1920 / 800} pos="relative" ref={ref}>
-          {tripCoverImage && (
-            <Image
-              src={getAttachmentUrl(trip, tripCoverImage, { thumb: '300x125' })}
-              alt={'Cover Image'}
-              fit={'cover'}
-            />
-          )}
-          {!tripCoverImage && (
-            <ActionIcon variant={'light'} aria-label={'Trip Details'} style={{ height: '100%' }}>
-              <IconPhoto stroke={1.5} />
-            </ActionIcon>
-          )}
-          {hovered && (
-            <Overlay color="#000" backgroundOpacity={0.05}>
-              <ActionIcon
-                variant={'filled'}
-                title={t('edit_cover_image', 'Edit Cover Image')}
-                style={{ height: '100%' }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  openContextModal({
-                    modal: 'uploadImageForm',
-                    title: t('trip_add_cover_image', 'Add Cover Image'),
-                    radius: 'md',
-                    withCloseButton: false,
-                    size: 'auto',
-                    fullScreen: isMobile,
-                    innerProps: {
-                      aspectRatio: 1920 / 800,
-                      saveUploadedImage: (uploadedImage: File | Blob) => {
-                        uploadTripCoverImage(trip.id, uploadedImage).then((result) => {
-                          setTripCoverImage(result.coverImage);
-                          onSave();
-                        });
-                      },
-                    },
-                  });
-                }}
-              >
-                <IconPencil stroke={1} />
-              </ActionIcon>
-            </Overlay>
-          )}
-        </AspectRatio>
+        <TripCoverImage trip={trip} onSave={onSave} />
       </Card.Section>
 
       <Card.Section className={classes.section} mt="md">

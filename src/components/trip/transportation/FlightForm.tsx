@@ -1,4 +1,4 @@
-import { Button, Grid, Group, rem, Stack, TextInput } from '@mantine/core';
+import { Button, Grid, Group, Stack, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDebouncedCallback } from '@mantine/hooks';
@@ -19,7 +19,6 @@ import {
   uploadAttachments,
 } from '../../../lib/api';
 import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
-import i18n from '../../../lib/i18n.ts';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
@@ -239,19 +238,17 @@ export const FlightForm = ({
             <AirportSelect
               form={form as unknown as UseFormReturnType<unknown>}
               propName={'origin'}
-              label={i18n.t('transportation_from', 'From')}
-              description={i18n.t('airport_from_desc', 'Departure Airport')}
+              label={t('transportation_from', 'From')}
+              description={t('airport_from_desc', 'Departure Airport')}
               currentValue={origin}
             />
           </Grid.Col>
 
           <Grid.Col span={{ base: 12, md: 6 }}>
             <DateTimePicker
-              highlightToday
               valueFormat="lll"
               name={'departureTime'}
               description={t('departure_time_desc', 'Departure date and time')}
-              miw={rem('280px')}
               label={t('transportation_departure_time', 'Departure')}
               clearable
               required
@@ -270,8 +267,8 @@ export const FlightForm = ({
             <AirportSelect
               form={form as unknown as UseFormReturnType<unknown>}
               propName={'destination'}
-              label={i18n.t('transportation_to', 'To')}
-              description={i18n.t('airport_to_desc', 'Arrival Airport')}
+              label={t('transportation_to', 'To')}
+              description={t('airport_to_desc', 'Arrival Airport')}
               currentValue={destination}
             />
           </Grid.Col>
@@ -282,7 +279,6 @@ export const FlightForm = ({
               label={t('transportation_arrival_time', 'Arrival')}
               description={t('arrival_time_desc', 'Arrival date and time')}
               required
-              miw={rem('280px')}
               minDate={trip.startDate}
               maxDate={dayjs(trip.endDate).endOf('day').toDate()}
               clearable

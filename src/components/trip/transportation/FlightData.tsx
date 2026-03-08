@@ -3,14 +3,15 @@ import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { IconInfoCircle, IconPlaneInflight } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+
 import { FlightForm } from './FlightForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { DataLine } from '../DataLine.tsx';
 import { formatDateTime } from '../../../lib/time.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
+import { Attachments } from '../attachments/Attachments.tsx';
+import { DataLine } from '../DataLine.tsx';
 
 import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
 
@@ -73,7 +74,7 @@ export const FlightData = ({
     >
       <Modal
         opened={flightFormOpened}
-        size="auto"
+        size="xl"
         fullScreen={isMobile}
         title={t('transportation_edit_flight', 'Edit Flight')}
         onClose={closeFlightForm}

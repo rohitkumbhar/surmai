@@ -1,4 +1,4 @@
-import { ActionIcon, Avatar, Card, Group, Text } from '@mantine/core';
+import { ActionIcon, Avatar, Card, Group, rem, Stack, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
 import { IconTrash } from '@tabler/icons-react';
 import { forwardRef } from 'react';
@@ -22,18 +22,17 @@ export const CollaboratorButton = forwardRef<
   const { name, avatar } = user;
   return (
     <div ref={ref}>
-      <Card withBorder radius="xs" p={'xs'}>
-        <Group>
-          <Avatar
-            size={'sm'}
-            key={name}
-            name={name}
-            src={avatar ? getAttachmentUrl(user, avatar) : null}
-            color="initials"
-          />
-          <div>
-            <Text size={'sm'}>{name}</Text>
-          </div>
+      <Card withBorder radius="md" padding={'sm'} style={{ width: rem(300), cursor: 'pointer' }}>
+        <Group wrap="nowrap">
+          <Avatar key={name} name={name} src={avatar ? getAttachmentUrl(user, avatar) : null} color="initials" />
+          <Stack gap={0} style={{ flex: 1 }}>
+            <Text size="sm" fw={500}>
+              {user.name}
+            </Text>
+            <Text size="xs" c="dimmed">
+              {user.email}
+            </Text>
+          </Stack>
           <ActionIcon
             size={'xs'}
             variant="subtle"
