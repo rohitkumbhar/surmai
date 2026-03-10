@@ -2,9 +2,9 @@ package _import
 
 import (
 	"archive/zip"
-	ji "backend/trips/import/json"
 	zi "backend/trips/import/zip"
 	"bytes"
+	"errors"
 	"github.com/pocketbase/pocketbase/core"
 	"mime/multipart"
 )
@@ -31,7 +31,7 @@ func Import(e core.App, file multipart.File, ownerId string) (string, error) {
 	fileContents := buff.Bytes()
 	reader, zipErr := openZipFile(fileContents)
 	if zipErr != nil {
-		return ji.ImportJsonFile(e, fileContents, ownerId)
+		return "", errors.New("invalid trip archive")
 	} else {
 		return zi.ImportZip(e, reader, ownerId)
 	}
