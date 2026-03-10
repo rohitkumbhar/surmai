@@ -160,7 +160,11 @@ func importLodgings(app core.App, mapping map[string]string, expenseMapping map[
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, l.AttachmentReferences))
 			record.Set("expenseId", getOrLinkExpense(app, l.ExpenseId, expenseMapping, tripData, tripId, mapping))
-			_ = app.Save(record)
+			err := app.Save(record)
+
+			if err != nil {
+				app.Logger().Error("Cannot create Lodging entry %v", err)
+			}
 		}
 	}
 }

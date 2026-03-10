@@ -112,12 +112,12 @@ type Trip struct {
 }
 
 type TravellerProfile struct {
-	Id               string         `json:"id"`
-	Email            string         `json:"email"`
-	LegalName        string         `json:"legalName"`
-	PassportId       string         `json:"passportId"`
-	AdditionalFields map[string]any `json:"additionalFields"`
-	Attachments      []string       `json:"attachments"`
+	Id               string           `json:"id"`
+	Email            string           `json:"email"`
+	LegalName        string           `json:"legalName"`
+	PassportId       string           `json:"passportId"`
+	AdditionalFields []map[string]any `json:"additionalFields"`
+	Attachments      []string         `json:"attachments"`
 }
 
 type ExportedTrip struct {

@@ -127,6 +127,7 @@ func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 			Description:          l.GetString("description"),
 			Address:              l.GetString("address"),
 			StartDate:            l.GetDateTime("startDate"),
+			EndDate:              l.GetDateTime("endDate"),
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 			Link:                 l.GetString("link"),
 			ExpenseId:            l.GetString("expenseId"),
@@ -159,6 +160,7 @@ func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 			Link:                 l.GetString("link"),
 			ExpenseId:            l.GetString("expenseId"),
+			Type:                 l.GetString("type"),
 		}
 
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
