@@ -51,6 +51,7 @@ type Transportation struct {
 	AttachmentReferences []string        `json:"attachmentReferences"`
 	Metadata             map[string]any  `json:"metadata"`
 	Link                 string          `json:"link"`
+	ExpenseId            string          `json:"expenseId"`
 }
 
 type Lodging struct {
@@ -65,7 +66,8 @@ type Lodging struct {
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
 	Metadata             map[string]any  `json:"metadata"`
-	Link				 string			 `json:"link"`
+	Link                 string          `json:"link"`
+	ExpenseId            string          `json:"expenseId"`
 }
 
 type Activity struct {
@@ -80,7 +82,8 @@ type Activity struct {
 	Attachments          []*UploadedFile `json:"attachments"`
 	AttachmentReferences []string        `json:"attachmentReferences"`
 	Metadata             map[string]any  `json:"metadata"`
-	Link				 string			 `json:"link"`
+	Link                 string          `json:"link"`
+	ExpenseId            string          `json:"expenseId"`
 }
 
 type Expense struct {
@@ -105,15 +108,26 @@ type Trip struct {
 	CoverImageFileName string         `json:"coverImageFileName"`
 	Notes              string         `json:"notes"`
 	Budget             *Cost          `json:"budget"`
+	Travellers         []string       `json:"travellers"`
+}
+
+type TravellerProfile struct {
+	Id               string           `json:"id"`
+	Email            string           `json:"email"`
+	LegalName        string           `json:"legalName"`
+	PassportId       string           `json:"passportId"`
+	AdditionalFields []map[string]any `json:"additionalFields"`
+	Attachments      []string         `json:"attachments"`
 }
 
 type ExportedTrip struct {
-	Trip            *Trip             `json:"trip"`
-	Transportations []*Transportation `json:"transportations"`
-	Lodgings        []*Lodging        `json:"lodgings"`
-	Activities      []*Activity       `json:"activities"`
-	Expenses        []*Expense        `json:"expenses"`
-	Attachments     []*Attachment     `json:"attachments"`
+	Trip              *Trip               `json:"trip"`
+	Transportations   []*Transportation   `json:"transportations"`
+	Lodgings          []*Lodging          `json:"lodgings"`
+	Activities        []*Activity         `json:"activities"`
+	Expenses          []*Expense          `json:"expenses"`
+	Attachments       []*Attachment       `json:"attachments"`
+	TravellerProfiles []*TravellerProfile `json:"travellerProfiles"`
 }
 
 type Airport struct {

@@ -77,7 +77,7 @@ export const GenericLodgingData = ({
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={t('lodging_edit_' + lodging.type, 'Edit Lodging')}
         onClose={() => {
           closeForm();

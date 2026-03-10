@@ -4,9 +4,10 @@ import (
 	"backend/trips"
 	"encoding/base64"
 	"fmt"
-	"github.com/pocketbase/pocketbase/core"
 	"net/http"
 	"os"
+
+	"github.com/pocketbase/pocketbase/core"
 )
 
 func ExportTrip(e *core.RequestEvent) error {
@@ -18,7 +19,8 @@ func ExportTrip(e *core.RequestEvent) error {
 	}
 	defer tripExport.Close()
 
-	err = trips.ExportTripArchive(e.App, trip, tripExport)
+	authRecord, _ := e.RequestInfo()
+	err = trips.ExportTripArchive(e.App, trip, tripExport, authRecord)
 	if err != nil {
 		return err
 	}

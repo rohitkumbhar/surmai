@@ -13,7 +13,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
-func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File) error {
+func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File, currentUser *core.RequestInfo) error {
 
 	zipWriter := zip.NewWriter(tripExport)
 
@@ -23,14 +23,16 @@ func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File) err
 	activities := exportActivities(app, trip)
 	expenses := exportExpenses(app, trip)
 	attachments, _ := writeAttachmentsWithMapping(app, trip, zipWriter)
+	travellerProfiles := exportTravellerProfiles(app, trip, zipWriter, currentUser)
 
 	exportedTrip := bt.ExportedTrip{
-		Trip:            &t,
-		Transportations: transportations,
-		Lodgings:        lodgings,
-		Activities:      activities,
-		Expenses:        expenses,
-		Attachments:     attachments,
+		Trip:              &t,
+		Transportations:   transportations,
+		Lodgings:          lodgings,
+		Activities:        activities,
+		Expenses:          expenses,
+		Attachments:       attachments,
+		TravellerProfiles: travellerProfiles,
 	}
 
 	exportedTripEntities, err := json.MarshalIndent(exportedTrip, "", " ")
@@ -54,6 +56,7 @@ func exportTrip(app core.App, trip *core.Record, zipWriter *zip.Writer) bt.Trip 
 		Notes:              trip.GetString("notes"),
 		Destinations:       getDestinations(trip),
 		Participants:       getParticipants(trip),
+		Travellers:         trip.GetStringSlice("travellers"),
 	}
 	_ = trip.UnmarshalJSONField("budget", &t.Budget)
 
@@ -124,9 +127,10 @@ func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 			Description:          l.GetString("description"),
 			Address:              l.GetString("address"),
 			StartDate:            l.GetDateTime("startDate"),
-			ConfirmationCode:     l.GetString("confirmationCode"),
+			EndDate:              l.GetDateTime("endDate"),
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 			Link:                 l.GetString("link"),
+			ExpenseId:            l.GetString("expenseId"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -153,9 +157,10 @@ func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 			StartDate:            l.GetDateTime("startDate"),
 			EndDate:              l.GetDateTime("endDate"),
 			ConfirmationCode:     l.GetString("confirmationCode"),
-			Type:                 l.GetString("type"),
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 			Link:                 l.GetString("link"),
+			ExpenseId:            l.GetString("expenseId"),
+			Type:                 l.GetString("type"),
 		}
 
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
@@ -186,6 +191,7 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 			Arrival:              tr.GetDateTime("arrivalTime"),
 			AttachmentReferences: tr.GetStringSlice("attachmentReferences"),
 			Link:                 tr.GetString("link"),
+			ExpenseId:            tr.GetString("expenseId"),
 		}
 		_ = tr.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = tr.UnmarshalJSONField("cost", &ct.Cost)
@@ -214,6 +220,48 @@ func exportExpenses(e core.App, trip *core.Record) []*bt.Expense {
 		_ = exp.UnmarshalJSONField("cost", &ct.Cost)
 		payload = append(payload, &ct)
 		e.Logger().Debug("Exported Expense data", "id", exp.Id)
+	}
+
+	return payload
+}
+
+func exportTravellerProfiles(app core.App, trip *core.Record, zipWriter *zip.Writer, requestInfo *core.RequestInfo) []*bt.TravellerProfile {
+	travellerIds := trip.GetStringSlice("travellers")
+	if len(travellerIds) == 0 {
+		return nil
+	}
+
+	var payload []*bt.TravellerProfile
+	for _, id := range travellerIds {
+		profile, err := app.FindRecordById("traveller_profiles", id)
+		if err != nil {
+			app.Logger().Error("Error fetching traveller profile during export", "id", id, "error", err)
+			continue
+		}
+
+		// Check access: the current user should be an owner or manager of the profile.
+		canAccess, _ := app.CanAccessRecord(profile, requestInfo, profile.Collection().ViewRule)
+
+		if !canAccess {
+			app.Logger().Debug("Skipping traveller profile export due to lack of access", "id", id, "user", requestInfo.Auth.Id)
+			continue
+		}
+
+		tp := bt.TravellerProfile{
+			Id:          profile.Id,
+			Email:       profile.GetString("email"),
+			LegalName:   profile.GetString("legalName"),
+			PassportId:  profile.GetString("passportId"),
+			Attachments: profile.GetStringSlice("attachments"),
+		}
+		_ = profile.UnmarshalJSONField("additionalFields", &tp.AdditionalFields)
+
+		for _, fileName := range tp.Attachments {
+			_ = writeFileToArchive(app, profile, zipWriter, fileName)
+		}
+
+		payload = append(payload, &tp)
+		app.Logger().Debug("Exported Traveller Profile data", "id", profile.Id)
 	}
 
 	return payload

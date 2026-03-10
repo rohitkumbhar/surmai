@@ -1,4 +1,4 @@
-import { Button, Grid, Group, rem, TextInput } from '@mantine/core';
+import { Button, Grid, Group, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
@@ -200,7 +200,6 @@ export const GenericLodgingForm = ({
             maxDate={trip.endDate}
             key={form.key('startDate')}
             {...form.getInputProps('startDate')}
-            miw={rem(260)}
             data-testid={'lodging-start-date'}
             submitButtonProps={{
               'aria-label': 'Submit Date',
@@ -214,7 +213,6 @@ export const GenericLodgingForm = ({
             label={t('lodging_end_date', 'Check-Out')}
             description={t('lodging_end_date_desc', 'Check-Out date & time')}
             required
-            miw={rem(260)}
             clearable
             defaultDate={trip.startDate}
             minDate={trip.startDate}

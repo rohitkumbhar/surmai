@@ -71,7 +71,7 @@ export const GenericActivityData = ({
       <Modal
         opened={formOpened}
         fullScreen={isMobile}
-        size="auto"
+        size="xl"
         title={t('activity_edit', 'Edit Activity')}
         onClose={() => {
           closeForm();

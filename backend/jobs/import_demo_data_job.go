@@ -18,9 +18,30 @@ type ImportDemoDataJob struct {
 
 func (job *ImportDemoDataJob) Execute() {
 	job.deleteAllTrips()
+	job.deleteAllTravellerProfiles()
 	job.deleteAllUsersExceptAdmin()
 	job.createDemoUser()
 	job.importDemoTrip()
+}
+
+func (job *ImportDemoDataJob) deleteAllTravellerProfiles() {
+	pbApp := job.Pb.App
+	logger := pbApp.Logger()
+
+	records, err := pbApp.FindAllRecords("traveller_profiles")
+	if err != nil {
+		logger.Error("ImportDemoDataJob.Execute (traveller_profiles) FindAllRecords error", "error", err)
+		return
+	}
+
+	for _, profile := range records {
+		logger.Debug("Deleting traveller profile with id: %s", profile.Id)
+
+		err := pbApp.Delete(profile)
+		if err != nil {
+			logger.Error("Could not delete traveller profile with id: %s => %v", profile.Id, err)
+		}
+	}
 }
 
 func (job *ImportDemoDataJob) deleteAllTrips() {
