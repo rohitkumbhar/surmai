@@ -5,21 +5,15 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import {
-  createActivityEntry,
-  createExpense,
-  deleteExpense,
-  updateActivityEntry,
-  updateExpense,
-  uploadAttachments,
-} from '../../../lib/api';
+import { saveActivity } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
-import type { Activity, ActivityFormSchema, Attachment, CreateActivity, Expense, Trip } from '../../../types/trips.ts';
+import type { SaveEntityPayload } from '../../../lib/api';
+import type { Activity, ActivityFormSchema, Attachment, Expense, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericActivityForm = ({
@@ -64,81 +58,38 @@ export const GenericActivityForm = ({
     setSaving(true);
 
     try {
-      // Upload attachments first
-      const attachments = await uploadAttachments(trip.id, files);
-
-      // Handle expense creation/update/deletion based on cost value
-      let expenseId = activity?.expenseId;
-
-      // Check if expenseId exists in expenseMap, set to null if not found
-      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
-        expenseId = undefined;
+      let existingExpenseId = activity?.expenseId;
+      if (existingExpenseId && expenseMap && !expenseMap.has(existingExpenseId)) {
+        existingExpenseId = undefined;
       }
 
       const hasCost = values.cost && values.cost > 0;
 
-      if (hasCost) {
-        if (expenseId) {
-          // Update existing expense - only update cost
-          await updateExpense(expenseId, {
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-          });
-        } else {
-          // Create new expense with all fields
-          const expenseData = {
-            name: `Activity: ${values.name}`,
-            trip: trip.id,
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-            occurredOn: fakeAsUtcString(values.startDate),
-            category: 'activities',
-          };
-          const newExpense = await createExpense(expenseData);
-          expenseId = newExpense.id;
-        }
-      } else if (expenseId) {
-        // Delete expense if cost is removed
-        await deleteExpense(expenseId);
-        expenseId = undefined;
-      }
-
-      // Prepare activity data
-      const data = {
-        name: values.name,
-        description: values.description,
-        address: values.address,
-        startDate: fakeAsUtcString(values.startDate),
-        endDate: fakeAsUtcString(values.endDate),
-        trip: trip.id,
-        link: values.link,
-        cost: {
-          value: values.cost,
-          currency: values.currencyCode,
+      const payload: SaveEntityPayload = {
+        entityId: activity?.id,
+        existingExpenseId: existingExpenseId || '',
+        existingAttachmentIds: (exitingAttachments || []).map((a: Attachment) => a.id),
+        expense: hasCost
+          ? {
+              name: `Activity: ${values.name}`,
+              cost: { value: values.cost as number, currency: values.currencyCode as string },
+              occurredOn: fakeAsUtcString(values.startDate),
+              category: 'activities',
+            }
+          : undefined,
+        entityData: {
+          name: values.name,
+          description: values.description,
+          address: values.address,
+          startDate: fakeAsUtcString(values.startDate),
+          endDate: fakeAsUtcString(values.endDate),
+          link: values.link,
+          cost: { value: values.cost, currency: values.currencyCode },
+          metadata: { place: values.place },
         },
-        attachmentReferences: activity?.attachmentReferences || [],
-        metadata: {
-          place: values.place,
-        },
-        expenseId: expenseId,
       };
 
-      // Update or create activity
-      if (activity?.id) {
-        data.attachmentReferences = [
-          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-          ...attachments.map((attachment: Attachment) => attachment.id),
-        ];
-        await updateActivityEntry(activity.id, data as unknown as CreateActivity);
-      } else {
-        data.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        await createActivityEntry(data as unknown as CreateActivity);
-      }
-
+      await saveActivity(trip.id, payload, files);
       onSuccess();
     } catch (error) {
       console.error('Error saving activity:', error);

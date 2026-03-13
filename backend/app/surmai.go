@@ -58,6 +58,9 @@ func (surmai *SurmaiApp) BindRoutes() {
 		tripRoutes.GET("/collaborators", R.GetTripCollaborators)
 		tripRoutes.POST("/export", R.ExportTrip)
 		tripRoutes.POST("/calendar", R.GenerateIcsData)
+		tripRoutes.POST("/save-transportation", R.SaveTransportation)
+		tripRoutes.POST("/save-lodging", R.SaveLodging)
+		tripRoutes.POST("/save-activity", R.SaveActivity)
 
 		// General Utility Routes
 		se.Router.GET("/api/surmai/flight-route/{flightNumber}",

@@ -6,28 +6,15 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import {
-  createExpense,
-  createTransportationEntry,
-  deleteExpense,
-  updateExpense,
-  uploadAttachments,
-} from '../../../lib/api';
-import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
+import { saveTransportation } from '../../../lib/api';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
-import type {
-  Attachment,
-  CarRentalFormSchema,
-  CreateTransportation,
-  Expense,
-  Transportation,
-  Trip,
-} from '../../../types/trips.ts';
+import type { SaveEntityPayload } from '../../../lib/api';
+import type { Attachment, CarRentalFormSchema, Expense, Transportation, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const CarRentalForm = ({
@@ -75,83 +62,42 @@ export const CarRentalForm = ({
     setSaving(true);
 
     try {
-      // Upload attachments first
-      const attachments = await uploadAttachments(trip.id, files);
-
-      // Handle expense creation/update/deletion based on cost value
-      let expenseId = carRental?.expenseId;
-
-      // Check if expenseId exists in expenseMap, set to null if not found
-      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
-        expenseId = undefined;
+      let existingExpenseId = carRental?.expenseId;
+      if (existingExpenseId && expenseMap && !expenseMap.has(existingExpenseId)) {
+        existingExpenseId = undefined;
       }
 
       const hasCost = values.cost && values.cost > 0;
 
-      if (hasCost) {
-        if (expenseId) {
-          // Update existing expense - only update cost
-          await updateExpense(expenseId, {
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-          });
-        } else {
-          // Create new expense with all fields
-          const expenseData = {
-            name: `Car Rental: ${values.rentalCompany}`,
-            trip: trip.id,
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-            occurredOn: fakeAsUtcString(values.pickupTime),
-            category: 'transportation',
-          };
-          const newExpense = await createExpense(expenseData);
-          expenseId = newExpense.id;
-        }
-      } else if (expenseId) {
-        // Delete expense if cost is removed
-        await deleteExpense(expenseId);
-        expenseId = undefined;
-      }
-
-      // Prepare transportation data
-      const carRentalData: CreateTransportation = {
-        type: 'rental_car',
-        trip: trip.id,
-        origin: values.pickupLocation,
-        destination: values.dropOffLocation,
-        link: values.link,
-        cost: {
-          value: values.cost,
-          currency: values.currencyCode,
-        },
-        departureTime: fakeAsUtcString(values.pickupTime),
-        arrivalTime: fakeAsUtcString(values.dropOffTime),
-        metadata: {
-          confirmationCode: values.confirmationCode,
-          rentalCompany: values.rentalCompany,
-          place: values.place,
+      const payload: SaveEntityPayload = {
+        entityId: carRental?.id,
+        existingExpenseId: existingExpenseId || '',
+        existingAttachmentIds: (exitingAttachments || []).map((a: Attachment) => a.id),
+        expense: hasCost
+          ? {
+              name: `Car Rental: ${values.rentalCompany}`,
+              cost: { value: values.cost as number, currency: values.currencyCode as string },
+              occurredOn: fakeAsUtcString(values.pickupTime),
+              category: 'transportation',
+            }
+          : undefined,
+        entityData: {
+          type: 'rental_car',
+          origin: values.pickupLocation,
+          destination: values.dropOffLocation,
+          link: values.link,
+          cost: { value: values.cost, currency: values.currencyCode },
+          departureTime: fakeAsUtcString(values.pickupTime),
+          arrivalTime: fakeAsUtcString(values.dropOffTime),
+          metadata: {
+            confirmationCode: values.confirmationCode,
+            rentalCompany: values.rentalCompany,
+            place: values.place,
+          },
         },
       };
 
-      // Update or create transportation
-      if (carRental?.id) {
-        carRentalData.attachmentReferences = [
-          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-          ...attachments.map((attachment: Attachment) => attachment.id),
-        ];
-        carRentalData.expenseId = expenseId;
-        await updateTransportation(carRental.id, carRentalData);
-      } else {
-        carRentalData.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        carRentalData.expenseId = expenseId;
-        await createTransportationEntry(carRentalData);
-      }
-
+      await saveTransportation(trip.id, payload, files);
       onSuccess();
     } catch (error) {
       console.error('Error saving car rental:', error);
