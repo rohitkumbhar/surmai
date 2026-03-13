@@ -6,32 +6,30 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { saveLodging } from '../../../lib/api';
-import i18n from '../../../lib/i18n.ts';
+import { saveTransportation } from '../../../lib/api';
+import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, Expense, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, ParkingFormSchema, Transportation, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
-export const GenericLodgingForm = ({
+export const ParkingForm = ({
   trip,
-  type,
-  lodging,
+  parking,
   onSuccess,
   onCancel,
   exitingAttachments,
   expenseMap,
 }: {
   trip: Trip;
-  lodging?: Lodging;
-  type: string;
+  parking?: Transportation;
   onSuccess: () => void;
   onCancel: () => void;
-  exitingAttachments?: Attachment[] | undefined;
+  exitingAttachments?: Attachment[];
   expenseMap?: Map<string, Expense>;
 }) => {
   const { t } = useTranslation();
@@ -39,30 +37,32 @@ export const GenericLodgingForm = ({
   const { user } = useCurrentUser();
   const [saving, setSaving] = useState<boolean>(false);
 
-  // Get expense from map if lodging has an expenseId
-  const expense = lodging?.expenseId && expenseMap ? expenseMap.get(lodging.expenseId) : undefined;
+  // Get expense from map if parking has an expenseId
+  const expense = parking?.expenseId && expenseMap ? expenseMap.get(parking.expenseId) : undefined;
 
-  const form = useForm<LodgingFormSchema>({
+  const form = useForm<ParkingFormSchema>({
     mode: 'uncontrolled',
     initialValues: {
-      type: type,
-      name: lodging?.name,
-      address: lodging?.address,
+      provider: parking?.metadata?.provider,
+      address: parking?.origin,
+      startDate: parking?.departureTime,
+      endDate: parking?.arrivalTime,
+      link: parking?.link,
+      confirmationCode: parking?.metadata?.confirmationCode,
+      spotNumber: parking?.metadata?.spotNumber,
       cost: expense?.cost?.value,
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
-      startDate: lodging?.startDate,
-      endDate: lodging?.endDate,
-      link: lodging?.link,
-      confirmationCode: lodging?.confirmationCode,
-      place: lodging?.metadata?.place?.name || '',
+      place: parking?.metadata?.place,
     },
+    validate: {},
   });
 
-  const handleFormSubmit = async (values: LodgingFormSchema) => {
+  // @ts-expect-error it ok
+  const handleFormSubmit = async (values) => {
     setSaving(true);
 
     try {
-      let existingExpenseId = lodging?.expenseId;
+      let existingExpenseId = parking?.expenseId;
       if (existingExpenseId && expenseMap && !expenseMap.has(existingExpenseId)) {
         existingExpenseId = undefined;
       }
@@ -70,34 +70,43 @@ export const GenericLodgingForm = ({
       const hasCost = values.cost && values.cost > 0;
 
       const payload: SaveEntityPayload = {
-        entityId: lodging?.id,
+        entityId: parking?.id,
         existingExpenseId: existingExpenseId || '',
         existingAttachmentIds: (exitingAttachments || []).map((a: Attachment) => a.id),
         expense: hasCost
           ? {
-              name: `Lodging: ${values.name}`,
+              name: `Parking: ${values.provider || values.address}`,
               cost: { value: values.cost as number, currency: values.currencyCode as string },
               occurredOn: fakeAsUtcString(values.startDate),
-              category: 'lodging',
+              category: 'transportation',
             }
           : undefined,
         entityData: {
-          type: type,
-          name: values.name,
-          address: values.address,
-          startDate: fakeAsUtcString(values.startDate),
-          endDate: fakeAsUtcString(values.endDate),
-          confirmationCode: values.confirmationCode,
+          type: 'parking',
+          origin: values.address,
+          destination: values.address,
           link: values.link,
           cost: { value: values.cost, currency: values.currencyCode },
-          metadata: { place: values.place },
+          departureTime: fakeAsUtcString(values.startDate),
+          arrivalTime: fakeAsUtcString(values.endDate),
+          metadata: {
+            confirmationCode: values.confirmationCode,
+            provider: values.provider,
+            spotNumber: values.spotNumber,
+            place: values.place,
+          },
         },
       };
 
-      await saveLodging(trip.id, payload, files);
+      await saveTransportation(trip.id, payload, files);
       onSuccess();
     } catch (error) {
-      console.error('Error saving lodging:', error);
+      console.error('Error saving parking:', error);
+      showErrorNotification({
+        error,
+        title: t('parking_creation_failed', 'Unable to create Parking Entry'),
+        message: 'Please try again later.',
+      });
     } finally {
       setSaving(false);
     }
@@ -106,94 +115,104 @@ export const GenericLodgingForm = ({
   return (
     <form onSubmit={form.onSubmit((values) => handleFormSubmit(values))}>
       <Grid>
-        <Grid.Col span={12}>
-          <TextInput
-            name={'name'}
-            label={t('lodging_name', 'Name')}
-            description={t('lodging_name_desc', 'Name of the hotel, residence etc')}
-            required
-            key={form.key('name')}
-            {...form.getInputProps('name')}
-          />
-        </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <PlaceSelect
             form={form as UseFormReturnType<unknown>}
             propName={'place'}
             presetDestinations={trip.destinations || []}
-            label={i18n.t('lodging_place', 'Destination')}
-            description={i18n.t('lodging_place_desc', 'Associated destination')}
+            label={t('associated_destination', 'Destination')}
+            description={t('associated_destination_desc', 'Associated Destination')}
             key={form.key('place')}
             {...form.getInputProps('place')}
+          />
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TextInput
+            name={'provider'}
+            label={t('parking_provider', 'Provider')}
+            description={t('parking_provider_desc', 'Name of the parking provider')}
+            key={form.key('provider')}
+            {...form.getInputProps('provider')}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <TextInput
             name={'address'}
-            label={t('lodging_address', 'Address')}
-            description={t('lodging_address_desc', 'Address of the hotel, residence etc')}
+            label={t('parking_address', 'Address')}
+            description={t('parking_address_desc', 'Address of the parking location')}
             required
             key={form.key('address')}
             {...form.getInputProps('address')}
           />
         </Grid.Col>
-
         <Grid.Col span={{ base: 12, md: 6 }}>
-          <DateTimePicker
-            valueFormat="lll"
-            name={'startDate'}
-            label={t('lodging_start_date', 'Check-In')}
-            description={t('lodging_start_date_desc', 'Check-In date & time')}
-            clearable
-            required
-            defaultDate={trip.startDate}
-            minDate={trip.startDate}
-            maxDate={trip.endDate}
-            key={form.key('startDate')}
-            {...form.getInputProps('startDate')}
-            data-testid={'lodging-start-date'}
-            submitButtonProps={{
-              'aria-label': 'Submit Date',
-            }}
+          <TextInput
+            name={'spotNumber'}
+            label={t('parking_spot_number', 'Spot Number')}
+            description={t('parking_spot_number_desc', 'Parking spot number or identifier')}
+            key={form.key('spotNumber')}
+            {...form.getInputProps('spotNumber')}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
-            valueFormat="lll"
-            name={'endDate'}
-            label={t('lodging_end_date', 'Check-Out')}
-            description={t('lodging_end_date_desc', 'Check-Out date & time')}
-            required
+            valueFormat="DD MMM YYYY hh:mm A"
+            name={'startDate'}
+            label={t('parking_start_date', 'Start Date')}
+            description={t('parking_start_date_desc', 'Date and time for parking start')}
             clearable
+            required
+            key={form.key('startDate')}
+            {...form.getInputProps('startDate')}
             defaultDate={trip.startDate}
             minDate={trip.startDate}
             maxDate={dayjs(trip.endDate).endOf('day').toDate()}
-            key={form.key('endDate')}
-            {...form.getInputProps('endDate')}
-            data-testid={'lodging-end-date'}
+            data-testid={'parking-start-date'}
             submitButtonProps={{
               'aria-label': 'Submit Date',
             }}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
+          <DateTimePicker
+            valueFormat="DD MMM YYYY hh:mm A"
+            name={'endDate'}
+            label={t('parking_end_date', 'End Date')}
+            description={t('parking_end_date_desc', 'Date and time for parking end')}
+            clearable
+            required
+            key={form.key('endDate')}
+            {...form.getInputProps('endDate')}
+            defaultDate={trip.startDate}
+            minDate={trip.startDate}
+            maxDate={dayjs(trip.endDate).endOf('day').toDate()}
+            data-testid={'parking-end-date'}
+            submitButtonProps={{
+              'aria-label': 'Submit Date',
+            }}
+          />
+        </Grid.Col>
+
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          {' '}
           <TextInput
             name={'confirmationCode'}
-            label={t('lodging_confirmation_code', 'Confirmation Code')}
-            description={t('lodging_confirmation_code_desc', 'Booking Id, Reservation code etc')}
+            label={t('transportation_confirmation_code', 'Confirmation Code')}
+            description={t('transportation_confirmation_code_desc', 'Reservation Id, Booking code etc')}
             key={form.key('confirmationCode')}
             {...form.getInputProps('confirmationCode')}
           />
         </Grid.Col>
+
         <Grid.Col span={{ base: 12, md: 6 }}>
           <CurrencyInput
             costKey={form.key('cost')}
             costProps={form.getInputProps('cost')}
             currencyCodeKey={form.key('currencyCode')}
             currencyCodeProps={form.getInputProps('currencyCode')}
-            label={t('lodging_cost', 'Cost')}
-            maxWidth={260}
-            description={t('lodging_cost_desc', 'Charges for this accommodation')}
+            label={t('parking_cost', 'Cost')}
+            description={t('parking_cost_desc', 'Charges for this parking')}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
@@ -205,7 +224,6 @@ export const GenericLodgingForm = ({
             {...form.getInputProps('link')}
           />
         </Grid.Col>
-
         <Grid.Col span={12}>
           <AttachmentsUploadField files={files} setFiles={setFiles} />
         </Grid.Col>

@@ -108,6 +108,14 @@ export {
 export { getFlightRoute, type FlightRoute } from './pocketbase/flights.ts';
 
 export {
+  saveTransportation,
+  saveLodging,
+  saveActivity,
+  type SaveEntityPayload,
+  type SaveEntityExpense,
+} from './pocketbase/save_entity.ts';
+
+export {
   createTravellerProfile,
   getTravellerProfile,
   getMyTravellerProfile,

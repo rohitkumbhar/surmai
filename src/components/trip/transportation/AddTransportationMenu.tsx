@@ -1,5 +1,14 @@
 import { Button, Menu, rem } from '@mantine/core';
-import { IconBike, IconBus, IconCar, IconChevronDown, IconPlane, IconShip, IconTrain } from '@tabler/icons-react';
+import {
+  IconBike,
+  IconBus,
+  IconCar,
+  IconChevronDown,
+  IconParking,
+  IconPlane,
+  IconShip,
+  IconTrain,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: string) => void }) => {
@@ -76,6 +85,14 @@ export const AddTransportationMenu = ({ onClick }: { onClick: (selectedType: str
           leftSection={<IconCar style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
           {t('transportation_rental_car', 'Car Rental')}
+        </Menu.Item>
+        <Menu.Item
+          onClick={() => {
+            onClick('parking');
+          }}
+          leftSection={<IconParking style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
+        >
+          {t('transportation_parking', 'Parking')}
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>

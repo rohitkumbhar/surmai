@@ -10,25 +10,17 @@ import { useTranslation } from 'react-i18next';
 import { AirlineSelect } from './AirlineSelect.tsx';
 import { AirportSelect } from './AirportSelect.tsx';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import {
-  createExpense,
-  createTransportationEntry,
-  deleteExpense,
-  getFlightRoute,
-  updateExpense,
-  uploadAttachments,
-} from '../../../lib/api';
-import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
+import { getFlightRoute, saveTransportation } from '../../../lib/api';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
+import type { SaveEntityPayload } from '../../../lib/api';
 import type {
   Airline,
   Airport,
   Attachment,
-  CreateTransportation,
   Expense,
   FlightFormSchema,
   Transportation,
@@ -117,82 +109,45 @@ export const FlightForm = ({
     setSaving(true);
 
     try {
-      // Upload attachments first
-      const attachments = await uploadAttachments(trip.id, files);
-
-      // Handle expense creation/update/deletion based on cost value
-      let expenseId = transportation?.expenseId;
-
-      // Check if expenseId exists in expenseMap, set to null if not found
-      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
-        expenseId = undefined;
+      let existingExpenseId = transportation?.expenseId;
+      if (existingExpenseId && expenseMap && !expenseMap.has(existingExpenseId)) {
+        existingExpenseId = undefined;
       }
 
       const hasCost = values.cost && values.cost > 0;
-      if (hasCost) {
-        if (expenseId) {
-          // Update existing expense - only update cost
-          await updateExpense(expenseId, {
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-          });
-        } else {
-          // Create new expense with all fields
-          const expenseData = {
-            name: `Flight: ${values.origin.iataCode || values.origin} to ${values.destination.iataCode || values.destination}`,
-            trip: trip.id,
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-            occurredOn: fakeAsUtcString(values.departureTime),
-            category: 'transportation',
-          };
-          const newExpense = await createExpense(expenseData);
-          expenseId = newExpense.id;
-        }
-      } else if (expenseId) {
-        // Delete expense if cost is removed
-        await deleteExpense(expenseId);
-        expenseId = undefined;
-      }
 
-      const payload: CreateTransportation = {
-        type: 'flight',
-        origin: values.origin.iataCode || values.origin,
-        destination: values.destination.iataCode || values.destination,
-        cost: {
-          value: values.cost,
-          currency: values.currencyCode,
-        },
-        departureTime: fakeAsUtcString(values.departureTime),
-        arrivalTime: fakeAsUtcString(values.arrivalTime),
-        trip: trip.id,
-        link: values.link,
-        metadata: {
-          provider: values.provider,
-          reservation: values.reservation,
-          origin: values.origin,
-          destination: values.destination,
-          flightNumber: values.flightNumber,
-          seats: values.seats,
+      const payload: SaveEntityPayload = {
+        entityId: transportation?.id,
+        existingExpenseId: existingExpenseId || '',
+        existingAttachmentIds: (exitingAttachments || []).map((a: Attachment) => a.id),
+        expense: hasCost
+          ? {
+              name: `Flight: ${values.origin.iataCode || values.origin} to ${values.destination.iataCode || values.destination}`,
+              cost: { value: values.cost as number, currency: values.currencyCode as string },
+              occurredOn: fakeAsUtcString(values.departureTime),
+              category: 'transportation',
+            }
+          : undefined,
+        entityData: {
+          type: 'flight',
+          origin: values.origin.iataCode || values.origin,
+          destination: values.destination.iataCode || values.destination,
+          cost: { value: values.cost, currency: values.currencyCode },
+          departureTime: fakeAsUtcString(values.departureTime),
+          arrivalTime: fakeAsUtcString(values.arrivalTime),
+          link: values.link,
+          metadata: {
+            provider: values.provider,
+            reservation: values.reservation,
+            origin: values.origin,
+            destination: values.destination,
+            flightNumber: values.flightNumber,
+            seats: values.seats,
+          },
         },
       };
 
-      if (transportation?.id) {
-        payload.attachmentReferences = [
-          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-          ...attachments.map((attachment: Attachment) => attachment.id),
-        ];
-        payload.expenseId = expenseId;
-        await updateTransportation(transportation.id, payload);
-      } else {
-        payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        payload.expenseId = expenseId;
-        await createTransportationEntry(payload);
-      }
+      await saveTransportation(trip.id, payload, files);
       onSuccess();
     } catch (error) {
       showErrorNotification({

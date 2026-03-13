@@ -146,6 +146,19 @@ export type BikeFormSchema = TransportationFormSchema & {
   distance?: string;
 };
 
+export type ParkingFormSchema = {
+  provider?: string;
+  address?: string;
+  startDate?: string;
+  endDate?: string;
+  confirmationCode?: string;
+  cost?: number;
+  currencyCode?: string;
+  spotNumber?: string;
+  link?: string;
+  place?: Place;
+};
+
 export type CroppedImage = {
   height: number;
   width: number;

@@ -6,27 +6,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import {
-  createExpense,
-  createTransportationEntry,
-  deleteExpense,
-  updateExpense,
-  uploadAttachments,
-} from '../../../lib/api';
-import { updateTransportation } from '../../../lib/api/pocketbase/transportations.ts';
+import { saveTransportation } from '../../../lib/api';
 import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 
-import type {
-  Attachment,
-  CreateTransportation,
-  Expense,
-  Transportation,
-  TransportationFormSchema,
-  Trip,
-} from '../../../types/trips.ts';
+import type { SaveEntityPayload } from '../../../lib/api';
+import type { Attachment, Expense, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericTransportationModeForm = ({
@@ -77,88 +64,47 @@ export const GenericTransportationModeForm = ({
     setSaving(true);
 
     try {
-      // Upload attachments first
-      const attachments = await uploadAttachments(trip.id, files);
-
-      // Handle expense creation/update/deletion based on cost value
-      let expenseId = transportation?.expenseId;
-
-      // Check if expenseId exists in expenseMap, set to null if not found
-      if (expenseId && expenseMap && !expenseMap.has(expenseId)) {
-        expenseId = undefined;
+      let existingExpenseId = transportation?.expenseId;
+      if (existingExpenseId && expenseMap && !expenseMap.has(existingExpenseId)) {
+        existingExpenseId = undefined;
       }
 
       const hasCost = values.cost && values.cost > 0;
+      const originName = values.origin.name || values.origin;
+      const destinationName = values.destination.name || values.destination;
 
-      if (hasCost) {
-        if (expenseId) {
-          // Update existing expense - only update cost
-          await updateExpense(expenseId, {
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-          });
-        } else {
-          // Create new expense with all fields
-          const originName = values.origin.name || values.origin;
-          const destinationName = values.destination.name || values.destination;
-          const expenseData = {
-            name: `Transportation: ${originName} -> ${destinationName}`,
-            trip: trip.id,
-            cost: {
-              value: values.cost as number,
-              currency: values.currencyCode as string,
-            },
-            occurredOn: fakeAsUtcString(values.departureTime),
-            category: 'transportation',
-          };
-          const newExpense = await createExpense(expenseData);
-          expenseId = newExpense.id;
-        }
-      } else if (expenseId) {
-        // Delete expense if cost is removed
-        await deleteExpense(expenseId);
-        expenseId = undefined;
-      }
-
-      // Prepare transportation data
-      const payload: CreateTransportation = {
-        type: transportationType,
-        origin: values.origin.name || values.origin,
-        destination: values.destination.name || values.destination,
-        cost: {
-          value: values.cost,
-          currency: values.currencyCode,
-        },
-        departureTime: fakeAsUtcString(values.departureTime),
-        arrivalTime: fakeAsUtcString(values.arrivalTime),
-        trip: trip.id,
-        link: values.link,
-        metadata: {
-          provider: values.provider,
-          reservation: values.reservation,
-          origin: values.origin,
-          destination: values.destination,
-          originAddress: values.originAddress,
-          destinationAddress: values.destinationAddress,
+      const payload: SaveEntityPayload = {
+        entityId: transportation?.id,
+        existingExpenseId: existingExpenseId || '',
+        existingAttachmentIds: (exitingAttachments || []).map((a: Attachment) => a.id),
+        expense: hasCost
+          ? {
+              name: `Transportation: ${originName} -> ${destinationName}`,
+              cost: { value: values.cost as number, currency: values.currencyCode as string },
+              occurredOn: fakeAsUtcString(values.departureTime),
+              category: 'transportation',
+            }
+          : undefined,
+        entityData: {
+          type: transportationType,
+          origin: originName,
+          destination: destinationName,
+          cost: { value: values.cost, currency: values.currencyCode },
+          departureTime: fakeAsUtcString(values.departureTime),
+          arrivalTime: fakeAsUtcString(values.arrivalTime),
+          link: values.link,
+          metadata: {
+            provider: values.provider,
+            reservation: values.reservation,
+            origin: values.origin,
+            destination: values.destination,
+            originAddress: values.originAddress,
+            destinationAddress: values.destinationAddress,
+          },
         },
       };
 
-      // Update or create transportation
-      if (transportation?.id) {
-        payload.attachmentReferences = [
-          ...(exitingAttachments || []).map((attachment: Attachment) => attachment.id),
-          ...attachments.map((attachment: Attachment) => attachment.id),
-        ];
-        payload.expenseId = expenseId;
-        await updateTransportation(transportation.id, payload);
-      } else {
-        payload.attachmentReferences = attachments.map((attachment: Attachment) => attachment.id);
-        payload.expenseId = expenseId;
-        await createTransportationEntry(payload);
-      }
-
+      await saveTransportation(trip.id, payload, files);
       onSuccess();
     } catch (error) {
       console.error('Error saving transportation:', error);

@@ -13,6 +13,8 @@ import { FlightData } from './FlightData.tsx';
 import { FlightForm } from './FlightForm.tsx';
 import { GenericTransportationData } from './GenericTransportationData.tsx';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
+import { ParkingData } from './ParkingData.tsx';
+import { ParkingForm } from './ParkingForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listTransportations } from '../../../lib/api';
 
@@ -34,6 +36,7 @@ export const TransportationPanel = ({
   const [carRentalFormOpened, { open: openRentalForm, close: closeRentalForm }] = useDisclosure(false);
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
   const [bikeFormOpened, { open: openBikeForm, close: closeBikeForm }] = useDisclosure(false);
+  const [parkingFormOpened, { open: openParkingForm, close: closeParkingForm }] = useDisclosure(false);
 
   const [newTransportationType, setNewTransportationType] = useState<string>('flight');
   const { isMobile } = useSurmaiContext();
@@ -52,7 +55,8 @@ export const TransportationPanel = ({
   }
 
   const rentalAgreements = (data || []).filter((t) => t.type === 'rental_car');
-  const tickets = (data || []).filter((t) => t.type !== 'rental_car');
+  const parkingEntries = (data || []).filter((t) => t.type === 'parking');
+  const tickets = (data || []).filter((t) => t.type !== 'rental_car' && t.type !== 'parking');
 
   const refetchData = async () => {
     await refetch();
@@ -98,7 +102,6 @@ export const TransportationPanel = ({
           onSuccess={() => {
             refetchData().then(() => closeFlightForm());
           }}
-
           onCancel={() => {
             closeFlightForm();
           }}
@@ -150,6 +153,27 @@ export const TransportationPanel = ({
         />
       </Modal>
 
+      <Modal
+        opened={parkingFormOpened}
+        size="xl"
+        fullScreen={isMobile}
+        title={t('transportation_add_parking', 'Add Parking')}
+        onClose={() => {
+          closeParkingForm();
+        }}
+      >
+        <ParkingForm
+          trip={trip}
+          expenseMap={expenseMap}
+          onSuccess={() => {
+            refetchData().then(() => closeParkingForm());
+          }}
+          onCancel={() => {
+            closeParkingForm();
+          }}
+        />
+      </Modal>
+
       <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
         <AddTransportationMenu
           onClick={(type) => {
@@ -159,6 +183,8 @@ export const TransportationPanel = ({
               openFlightForm();
             } else if (type === 'bike') {
               openBikeForm();
+            } else if (type === 'parking') {
+              openParkingForm();
             } else {
               setNewTransportationType(type);
               openForm();
@@ -258,6 +284,28 @@ export const TransportationPanel = ({
                 refetch={refetchData}
                 trip={trip}
                 rental={t}
+                tripAttachments={tripAttachments}
+                expenseMap={expenseMap}
+              />
+            </Fragment>
+          );
+        })}
+      </Stack>
+
+      <Stack mt={'sm'}>
+        <Title order={5}>{t('transportation_parking', 'Parking')}</Title>
+        {parkingEntries.length === 0 && (
+          <Card withBorder>
+            <Text c={'dimmed'}>{t('transportation_no_parking', 'No Parking')}</Text>
+          </Card>
+        )}
+        {parkingEntries.map((t: Transportation) => {
+          return (
+            <Fragment key={t.id}>
+              <ParkingData
+                refetch={refetchData}
+                trip={trip}
+                parking={t}
                 tripAttachments={tripAttachments}
                 expenseMap={expenseMap}
               />
