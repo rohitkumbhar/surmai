@@ -39,6 +39,7 @@ export const ParkingData = ({
 
   return (
     <DataLine
+      trip={trip}
       link={parking.link}
       onEdit={() => {
         open();

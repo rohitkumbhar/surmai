@@ -33,6 +33,7 @@ export type Trip = Entity & {
   collaborators?: User[];
   budget?: Cost;
   travellers?: string[];
+  canUpdate?: boolean;
 };
 
 export type NewTrip = Omit<Trip, 'id'>;

@@ -88,9 +88,6 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                     </Text>
                   </Progress.Label>
                 </Progress.Section>
-                {/*<Progress.Label>
-                  <Text size={'sm'}>{`${budgetPercentage.toFixed(2)} %`}</Text>
-                </Progress.Label>*/}
               </Progress.Root>
 
               <Group>

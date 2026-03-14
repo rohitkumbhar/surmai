@@ -117,9 +117,11 @@ export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttac
           clearable
           style={{ maxWidth: 300 }}
         />
-        <Button leftSection={<IconPlus size={16} />} onClick={openModalForAdd}>
-          {t('add_expense', 'Add Expense')}
-        </Button>
+        {trip.canUpdate && (
+          <Button leftSection={<IconPlus size={16} />} onClick={openModalForAdd}>
+            {t('add_expense', 'Add Expense')}
+          </Button>
+        )}
       </Group>
 
       {!isLoading && sortedExpenses.length > 0 && (

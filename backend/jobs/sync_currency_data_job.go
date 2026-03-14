@@ -102,9 +102,6 @@ func (job *SyncCurrencyDataJob) fetchCurrencyDataForUsd() (*ExchangeApiResponse,
 		return nil, err
 	}
 
-	fmt.Printf("client: got response!\n")
-	fmt.Printf("client: status code: %d\n", res.StatusCode)
-
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		fmt.Printf("client: could not read response body: %s\n", err)

@@ -4,12 +4,16 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import type { Trip } from '../../types/trips.ts';
+
 export const DataLine = ({
   children,
   onEdit,
   onDelete,
+  trip,
   link = undefined,
 }: {
+  trip: Trip;
   link: string | undefined;
   children: React.ReactNode;
   onEdit?: () => void;
@@ -29,7 +33,7 @@ export const DataLine = ({
           </Menu.Target>
           <Menu.Dropdown>
             {link && (
-              <Link to={link} style={{textDecoration: 'none'}} target='_blank'>
+              <Link to={link} style={{ textDecoration: 'none' }} target="_blank">
                 <Menu.Item leftSection={<IconLink style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}>
                   {t('view_link', 'View Link')}
                 </Menu.Item>
@@ -38,6 +42,7 @@ export const DataLine = ({
             {onEdit && (
               <Menu.Item
                 onClick={onEdit}
+                disabled={!trip.canUpdate}
                 leftSection={<IconPencil style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
               >
                 {t('edit', 'Edit')}
@@ -47,6 +52,7 @@ export const DataLine = ({
             {onDelete && (
               <Menu.Item
                 onClick={onDelete}
+                disabled={!trip.canUpdate}
                 leftSection={<IconTrash style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
               >
                 {t('delete', 'Delete')}

@@ -49,6 +49,7 @@ export const GenericTransportationData = ({
 
   return (
     <DataLine
+      trip={trip}
       link={transportation.link}
       onEdit={() => {
         if (transportation.type === 'flight') {

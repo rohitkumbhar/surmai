@@ -174,24 +174,26 @@ export const TransportationPanel = ({
         />
       </Modal>
 
-      <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
-        <AddTransportationMenu
-          onClick={(type) => {
-            if (type === 'car_rental') {
-              openRentalForm();
-            } else if (type === 'flight') {
-              openFlightForm();
-            } else if (type === 'bike') {
-              openBikeForm();
-            } else if (type === 'parking') {
-              openParkingForm();
-            } else {
-              setNewTransportationType(type);
-              openForm();
-            }
-          }}
-        />
-      </Flex>
+      {trip.canUpdate && (
+        <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
+          <AddTransportationMenu
+            onClick={(type) => {
+              if (type === 'car_rental') {
+                openRentalForm();
+              } else if (type === 'flight') {
+                openFlightForm();
+              } else if (type === 'bike') {
+                openBikeForm();
+              } else if (type === 'parking') {
+                openParkingForm();
+              } else {
+                setNewTransportationType(type);
+                openForm();
+              }
+            }}
+          />
+        </Flex>
+      )}
       <Stack mt={'sm'}>
         <Title order={5}>{t('transportation_travel_timeline', 'Travel Timeline')}</Title>
         {tickets.length === 0 && (

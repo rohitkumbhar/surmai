@@ -109,6 +109,8 @@ func (surmai *SurmaiApp) BindEventHooks() {
 		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
 	})
 
+	surmai.Pb.OnRecordEnrich("trips").BindFunc(hooks.AddTripAccessAttribute)
+
 	surmai.Pb.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateTripCollaborationInvitation)
 	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
 
