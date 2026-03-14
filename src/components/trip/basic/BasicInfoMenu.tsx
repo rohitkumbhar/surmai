@@ -48,6 +48,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
       </Menu.Target>
       <Menu.Dropdown>
         <Menu.Item
+          disabled={!trip.canUpdate}
           onClick={() => {
             openContextModal({
               modal: 'editBasicInfoForm',
@@ -69,6 +70,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           {t('edit', 'Edit')}
         </Menu.Item>
         <Menu.Item
+          disabled={!trip.canUpdate}
           onClick={() => {
             openContextModal({
               modal: 'uploadImageForm',
@@ -92,6 +94,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
           {t('trip_cover_image', 'Cover Image')}
         </Menu.Item>
         <Menu.Item
+          disabled={!trip.canUpdate}
           onClick={() => {
             openContextModal({
               modal: 'collaboratorsForm',
@@ -205,6 +208,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         <Menu.Divider />
         <Menu.Item
           c={'red'}
+          disabled={!trip.canUpdate}
           onClick={() => {
             openConfirmModal({
               title: t('delete_trip', 'Delete Trip'),

@@ -33,31 +33,33 @@ export const CollaboratorButton = forwardRef<
               {user.email}
             </Text>
           </Stack>
-          <ActionIcon
-            size={'xs'}
-            variant="subtle"
-            aria-label={t('delete_collaborator', 'Delete Collaborator')}
-            c={'red'}
-            onClick={() => {
-              openConfirmModal({
-                title: t('delete_collaborator', 'Delete Collaborator'),
-                confirmProps: { color: 'red' },
-                children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
-                labels: {
-                  confirm: t('delete', 'Delete'),
-                  cancel: t('cancel', 'Cancel'),
-                },
-                onCancel: () => {},
-                onConfirm: () => {
-                  deleteCollaborator(trip.id, user.id).then(() => {
-                    onSave();
-                  });
-                },
-              });
-            }}
-          >
-            <IconTrash stroke={1.5} />
-          </ActionIcon>
+          {trip.canUpdate && (
+            <ActionIcon
+              size={'xs'}
+              variant="subtle"
+              aria-label={t('delete_collaborator', 'Delete Collaborator')}
+              c={'red'}
+              onClick={() => {
+                openConfirmModal({
+                  title: t('delete_collaborator', 'Delete Collaborator'),
+                  confirmProps: { color: 'red' },
+                  children: <Text size="sm">{t('deletion_confirmation', 'This action cannot be undone.')}</Text>,
+                  labels: {
+                    confirm: t('delete', 'Delete'),
+                    cancel: t('cancel', 'Cancel'),
+                  },
+                  onCancel: () => {},
+                  onConfirm: () => {
+                    deleteCollaborator(trip.id, user.id).then(() => {
+                      onSave();
+                    });
+                  },
+                });
+              }}
+            >
+              <IconTrash stroke={1.5} />
+            </ActionIcon>
+          )}
         </Group>
       </Card>
     </div>

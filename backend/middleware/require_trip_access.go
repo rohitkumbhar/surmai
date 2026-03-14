@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"strings"
+
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/hook"
 )
@@ -24,7 +26,15 @@ func requireTripAccess() func(*core.RequestEvent) error {
 			return err
 		}
 
-		canAccess, err := app.CanAccessRecord(trip, requestInfo, trip.Collection().ViewRule)
+		rule := trip.Collection().ViewRule
+		requestMethod := strings.ToUpper(requestInfo.Method)
+		if requestMethod == "POST" || requestMethod == "PUT" {
+			rule = trip.Collection().UpdateRule
+
+			// DELETE has its own rule
+		}
+
+		canAccess, err := app.CanAccessRecord(trip, requestInfo, rule)
 		if err != nil {
 			app.Logger().Error("User cannot access trip", "id", tripId)
 			return err

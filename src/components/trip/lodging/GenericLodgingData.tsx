@@ -48,6 +48,7 @@ export const GenericLodgingData = ({
 
   return (
     <DataLine
+      trip={trip}
       link={lodging.link}
       onEdit={() => {
         openForm();

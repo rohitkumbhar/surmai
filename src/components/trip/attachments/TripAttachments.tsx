@@ -70,37 +70,39 @@ export const TripAttachments = ({
 
   return (
     <>
-      <Group justify={'space-between'} align={'center'} mt='sm'>
+      <Group justify={'space-between'} align={'center'} mt="sm">
         <Text size={'sm'} c={'dimmed'}>
           {t('all_attachments_desc', 'All attachments from Transportations, Lodgings, Activities and Expenses')}
         </Text>
-        <FileButton
-          onChange={(files: File[]) => {
-            uploadAttachments(trip.id, files)
-              .then(() => {
-                refetchTrip();
-              })
-              .catch((err) => {
-                showErrorNotification({
-                  error: err,
-                  title: t('attachment_upload_failed', 'Failed to upload attachments'),
-                  message: t('attachment_upload_failed_desc', 'Try again with fewer files or smaller files'),
+        {trip.canUpdate && (
+          <FileButton
+            onChange={(files: File[]) => {
+              uploadAttachments(trip.id, files)
+                .then(() => {
+                  refetchTrip();
+                })
+                .catch((err) => {
+                  showErrorNotification({
+                    error: err,
+                    title: t('attachment_upload_failed', 'Failed to upload attachments'),
+                    message: t('attachment_upload_failed_desc', 'Try again with fewer files or smaller files'),
+                  });
                 });
-              });
-          }}
-          accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
-          form={'files'}
-          name={'files'}
-          multiple
-        >
-          {(props) => {
-            return (
-              <Button {...props} leftSection={<IconUpload height={20} />}>
-                {t('upload', 'Upload')}
-              </Button>
-            );
-          }}
-        </FileButton>
+            }}
+            accept="application/pdf,image/png,image/jpeg,image/gif,image/webp,text/html"
+            form={'files'}
+            name={'files'}
+            multiple
+          >
+            {(props) => {
+              return (
+                <Button {...props} leftSection={<IconUpload height={20} />}>
+                  {t('upload', 'Upload')}
+                </Button>
+              );
+            }}
+          </FileButton>
+        )}
       </Group>
       {(!tripAttachments || tripAttachments.length === 0) && (
         <Card withBorder padding="lg" radius="md" mt={'sm'}>
@@ -125,15 +127,17 @@ export const TripAttachments = ({
                     {attachment.name}
                   </Text>
                 </Stack>
-                <ActionIcon
-                  variant="default"
-                  color="red"
-                  aria-label={t('delete_attachment', 'Delete Attachment')}
-                  onClick={(event) => handleDelete(attachment, event)}
-                  title={t('delete_attachment', 'Delete Attachment')}
-                >
-                  <IconTrash size={18} />
-                </ActionIcon>
+                {trip.canUpdate && (
+                  <ActionIcon
+                    variant="default"
+                    color="red"
+                    aria-label={t('delete_attachment', 'Delete Attachment')}
+                    onClick={(event) => handleDelete(attachment, event)}
+                    title={t('delete_attachment', 'Delete Attachment')}
+                  >
+                    <IconTrash size={18} />
+                  </ActionIcon>
+                )}
               </Group>
             </Card>
           </Grid.Col>

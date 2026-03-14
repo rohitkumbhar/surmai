@@ -28,17 +28,19 @@ export const TripNotes = ({ trip, refetch }: { trip: Trip; refetch: () => void }
               )}
             </Text>
           )}
-          <Group justify={'flex-end'} mt={'md'}>
-            <Button
-              aria-label={t('start_notes', 'Add Notes')}
-              leftSection={<IconPencil height={20} />}
-              onClick={() => {
-                setEditing(true);
-              }}
-            >
-              {trip.notes ? t('edit', 'Edit') : t('start_notes', 'Add Notes')}
-            </Button>
-          </Group>
+          {trip.canUpdate && (
+            <Group justify={'flex-end'} mt={'md'}>
+              <Button
+                aria-label={t('start_notes', 'Add Notes')}
+                leftSection={<IconPencil height={20} />}
+                onClick={() => {
+                  setEditing(true);
+                }}
+              >
+                {trip.notes ? t('edit', 'Edit') : t('start_notes', 'Add Notes')}
+              </Button>
+            </Group>
+          )}
         </Box>
       )}
       {editing && (

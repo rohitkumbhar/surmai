@@ -264,6 +264,7 @@ export const ExpenseFormModal = ({
         <Group justify="space-between" mt="md">
           {expense ? (
             <Button
+              disabled={!trip.canUpdate}
               color="red"
               variant="outline"
               leftSection={<IconTrash size={16} />}
@@ -279,7 +280,7 @@ export const ExpenseFormModal = ({
             <Button variant="default" onClick={onClose} type="button">
               {t('cancel', 'Cancel')}
             </Button>
-            <Button type="submit" loading={saving}>
+            <Button type="submit" loading={saving} disabled={!trip.canUpdate}>
               {t('save', 'Save')}
             </Button>
           </Group>

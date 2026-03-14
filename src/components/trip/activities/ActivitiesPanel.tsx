@@ -69,13 +69,15 @@ export const ActivitiesPanel = ({
         />
       </Modal>
 
-      <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
-        <AddActivitiesMenu
-          onClick={() => {
-            openForm();
-          }}
-        />
-      </Flex>
+      {trip.canUpdate && (
+        <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
+          <AddActivitiesMenu
+            onClick={() => {
+              openForm();
+            }}
+          />
+        </Flex>
+      )}
       {
         <Stack mt={'sm'}>
           <Title order={5}>{t('activities', 'Activities')}</Title>

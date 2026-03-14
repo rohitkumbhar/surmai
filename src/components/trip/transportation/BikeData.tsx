@@ -44,6 +44,7 @@ export const BikeData = ({
 
   return (
     <DataLine
+      trip={trip}
       link={transportation.link}
       onEdit={() => {
         open();

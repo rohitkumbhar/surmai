@@ -71,14 +71,16 @@ export const LodgingPanel = ({
         />
       </Modal>
 
-      <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
-        <AddLodgingMenu
-          onClick={(type) => {
-            setNewLodgingType(type);
-            openForm();
-          }}
-        />
-      </Flex>
+      {trip.canUpdate && (
+        <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
+          <AddLodgingMenu
+            onClick={(type) => {
+              setNewLodgingType(type);
+              openForm();
+            }}
+          />
+        </Flex>
+      )}
       <Stack mt={'sm'}>
         <Title order={5}>{t('lodging_section_name', 'Lodging')}</Title>
         {!data ||
