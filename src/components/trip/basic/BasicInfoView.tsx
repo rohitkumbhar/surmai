@@ -36,7 +36,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
   }, 0);
 
   const budgetPercentage =
-    trip.budget?.value && trip.budget?.value > 0 ? Math.min((totalExpenses / trip.budget?.value) * 100, 100) : 0;
+    trip.budget?.value && trip.budget?.value > 0 ? (totalExpenses / trip.budget?.value) * 100 : 0;
 
   return (
     <>
@@ -78,12 +78,20 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
 
           {trip.budget?.value && (
             <Card withBorder radius="sm" p={'md'} mt={'md'}>
-
-              <Progress value={budgetPercentage} size={42}>
-                <Progress.Label>
+              <Progress.Root size={42}>
+                <Progress.Section value={budgetPercentage}>
+                  <Progress.Label>
+                    <Text size={'sm'}>
+                      {t('budget_percent_spent', '{{ percentage }}% spent', {
+                        percentage: budgetPercentage.toFixed(2),
+                      })}
+                    </Text>
+                  </Progress.Label>
+                </Progress.Section>
+                {/*<Progress.Label>
                   <Text size={'sm'}>{`${budgetPercentage.toFixed(2)} %`}</Text>
-                </Progress.Label>
-              </Progress>
+                </Progress.Label>*/}
+              </Progress.Root>
 
               <Group>
                 <Box mt={'sm'}>
@@ -92,7 +100,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                   </Text>
 
                   <Group gap={0}>
-                    <Text fw={700}>{trip.budget.value}</Text>
+                    <Text fw={700}>{trip.budget.value.toFixed(2)}</Text>
                     <Text fw={700}>&nbsp;</Text>
                     <Text fw={700} size="sm">
                       {` ${trip.budget.currency}`}
@@ -106,7 +114,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                   </Text>
 
                   <Group gap={0}>
-                    <Text fw={700}>{totalExpenses}</Text>
+                    <Text fw={700}>{totalExpenses?.toFixed(2)}</Text>
                     <Text fw={700}>&nbsp;</Text>
                     <Text fw={700} size="sm">
                       {` ${trip.budget.currency}`}

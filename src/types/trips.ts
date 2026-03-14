@@ -60,6 +60,11 @@ export type Attachment = {
   file: string;
 };
 
+export type ExpenseSplit = {
+  travellerId: string;
+  amount: number;
+};
+
 export type Expense = Entity & {
   name: string;
   trip: string;
@@ -68,6 +73,7 @@ export type Expense = Entity & {
   notes?: string;
   category?: string;
   attachmentReferences?: string[];
+  splits?: ExpenseSplit[];
 };
 
 export type ConvertedExpense = Expense & {
@@ -75,6 +81,17 @@ export type ConvertedExpense = Expense & {
 };
 
 export type CreateExpense = Omit<Expense, 'id'>;
+
+export type ExpenseFormSchema = {
+  name: string;
+  amount: number | '';
+  currency: string;
+  occurredOn: string | null;
+  notes: string;
+  category: string | null;
+  splitEnabled: boolean;
+  splits: ExpenseSplit[];
+};
 
 export type Transportation = Entity & {
   type: string;
