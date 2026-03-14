@@ -1,4 +1,5 @@
-import { Group, NumberInput, Stack, Switch, Text } from '@mantine/core';
+import { Grid, NumberInput, Switch, Text } from '@mantine/core';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { ExpenseFormSchema, ExpenseSplit, TravellerProfile } from '../../../types/trips.ts';
@@ -52,23 +53,27 @@ export const ExpenseSplitSection = ({
       />
 
       {splitEnabled && (
-        <Stack gap="xs" mt={'sm'}>
+        <Grid mt={'sm'}>
           {splits.map((split: ExpenseSplit) => {
             const profile = tripTravellers.find((tp) => tp.id === split.travellerId);
             return (
-              <Group key={split.travellerId} gap="sm" align="flex-end">
-                <Text size="sm" style={{ minWidth: 120 }}>
-                  {profile?.legalName || split.travellerId}
-                </Text>
-                <NumberInput
-                  value={split.amount}
-                  onChange={(val) => updateSplitAmount(split.travellerId, typeof val === 'number' ? val : 0)}
-                  min={0}
-                  decimalScale={2}
-                  style={{ flex: 1 }}
-                  size="sm"
-                />
-              </Group>
+              <Fragment key={split.travellerId}>
+                <Grid.Col span={{ base: 12, md: 6 }}>
+                  <Text size="sm" style={{ minWidth: 120 }}>
+                    {profile?.legalName || split.travellerId}
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 6 }}>
+                  <NumberInput
+                    value={split.amount}
+                    onChange={(val) => updateSplitAmount(split.travellerId, typeof val === 'number' ? val : 0)}
+                    min={0}
+                    decimalScale={2}
+                    style={{ flex: 1 }}
+                    size="sm"
+                  />
+                </Grid.Col>
+              </Fragment>
             );
           })}
           <Text size="xs" c="dimmed">
@@ -80,7 +85,7 @@ export const ExpenseSplitSection = ({
               {form.errors.splits}
             </Text>
           )}
-        </Stack>
+        </Grid>
       )}
     </>
   );
