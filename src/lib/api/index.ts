@@ -30,16 +30,19 @@ export {
   importTripData,
   listUpcomingTrips,
   listPastTrips,
+  listAllTrips,
+  listTripsByYear,
   saveTripNotes,
   exportCalendar,
 } from './pocketbase/trips.ts';
 
 export {
   listActivities,
+  listActivitiesByYear,
   createActivityEntry,
-  saveActivityAttachments,
   updateActivityEntry,
   deleteActivity,
+  saveActivityAttachments,
   deleteActivityAttachments,
 } from './pocketbase/activities.ts';
 
@@ -80,6 +83,7 @@ export { sendCollaborationInvitation, listInvitations, invitationAction } from '
 export { pocketBaseUrl as apiUrl } from './pocketbase/pocketbase.ts';
 export {
   listTransportations,
+  listTransportationsByYear,
   createTransportationEntry,
   saveTransportationAttachments,
   deleteTransportation,
@@ -92,6 +96,7 @@ export {
   createLodgingEntry,
   saveLodgingAttachments,
   listLodgings,
+  listLodgingsByYear,
   deleteLodgingAttachments,
 } from './pocketbase/lodgings.ts';
 
@@ -99,6 +104,7 @@ export { getTripAttachments, deleteAttachment, uploadAttachments, getHtmlFile } 
 
 export {
   listExpenses,
+  listExpensesByYear,
   createExpense,
   updateExpense,
   deleteExpense,

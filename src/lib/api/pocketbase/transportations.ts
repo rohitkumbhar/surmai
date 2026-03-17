@@ -6,9 +6,26 @@ import type { CreateTransportation, Transportation } from '../../../types/trips.
 
 const transportations = pb.collection('transportations');
 
-export const listTransportations = async (tripId: string): Promise<Transportation[]> => {
-  const results = await transportations.getList(1, 150, {
-    filter: `trip="${tripId}"`,
+export const listTransportations = async (tripId?: string): Promise<Transportation[]> => {
+  const filter = tripId ? `trip="${tripId}"` : undefined;
+  const results = await transportations.getList(1, 1000, {
+    filter,
+    sort: 'departureTime',
+  });
+
+  return results.items.map((entry) => {
+    return {
+      ...entry,
+      departureTime: convertSavedToBrowserDate(entry.departureTime),
+      arrivalTime: convertSavedToBrowserDate(entry.arrivalTime),
+    } as unknown as Transportation;
+  });
+};
+
+export const listTransportationsByYear = async (year: string): Promise<Transportation[]> => {
+  const filter = `trip.startDate >= "${year}-01-01 00:00:00" && trip.startDate <= "${year}-12-31 23:59:59"`;
+  const results = await transportations.getList(1, 1000, {
+    filter,
     sort: 'departureTime',
   });
 

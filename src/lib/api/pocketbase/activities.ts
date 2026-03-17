@@ -5,9 +5,27 @@ import { convertSavedToBrowserDate } from '../../time.ts';
 import type { Activity, CreateActivity } from '../../../types/trips.ts';
 
 const activities = pb.collection('activities');
-export const listActivities = async (tripId: string): Promise<Activity[]> => {
-  const results = await activities.getList(1, 150, {
-    filter: `trip="${tripId}"`,
+export const listActivities = async (tripId?: string): Promise<Activity[]> => {
+  const filter = tripId ? `trip="${tripId}"` : undefined;
+  const results = await activities.getList(1, 1000, {
+    filter,
+    sort: 'startDate',
+  });
+
+  // @ts-expect-error type is correct
+  return results.items.map((entry) => {
+    return {
+      ...entry,
+      startDate: convertSavedToBrowserDate(entry.startDate),
+      endDate: convertSavedToBrowserDate(entry.endDate),
+    };
+  });
+};
+
+export const listActivitiesByYear = async (year: string): Promise<Activity[]> => {
+  const filter = `trip.startDate >= "${year}-01-01 00:00:00" && trip.startDate <= "${year}-12-31 23:59:59"`;
+  const results = await activities.getList(1, 1000, {
+    filter,
     sort: 'startDate',
   });
 
