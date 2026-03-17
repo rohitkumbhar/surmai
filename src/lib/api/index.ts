@@ -121,6 +121,7 @@ export {
   getMyTravellerProfile,
   upsertMyTravellerProfile,
   listTravellerProfiles,
+  listTripTravellerProfiles,
   listOtherTravellerProfiles,
   updateTravellerProfile,
   deleteTravellerProfile,

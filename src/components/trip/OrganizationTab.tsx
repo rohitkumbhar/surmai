@@ -7,17 +7,19 @@ import { BasicInfo } from './basic/BasicInfo';
 import { LodgingPanel } from './lodging/LodgingPanel';
 import { TransportationPanel } from './transportation/TransportationPanel';
 
-import type { Attachment, Expense, Trip } from '../../types/trips';
+import type { Attachment, Expense, TravellerProfile, Trip } from '../../types/trips';
 
 export const OrganizationTab = ({
   trip,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
   refetchTrip: () => void;
 }) => {
   return (
@@ -77,6 +79,7 @@ export const OrganizationTab = ({
             trip={trip}
             tripAttachments={tripAttachments}
             expenseMap={expenseMap}
+            tripTravellers={tripTravellers}
             refetchTrip={refetchTrip}
           />
         </Accordion.Panel>
@@ -108,6 +111,7 @@ export const OrganizationTab = ({
             trip={trip}
             tripAttachments={tripAttachments}
             expenseMap={expenseMap}
+            tripTravellers={tripTravellers}
             refetchTrip={refetchTrip}
           />
         </Accordion.Panel>
@@ -139,6 +143,7 @@ export const OrganizationTab = ({
             trip={trip}
             tripAttachments={tripAttachments}
             expenseMap={expenseMap}
+            tripTravellers={tripTravellers}
             refetchTrip={refetchTrip}
           />
         </Accordion.Panel>

@@ -78,7 +78,14 @@ func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip
 	activityEvent.SetCreatedTime(time.Now())
 	activityEvent.SetDtStampTime(time.Now())
 	activityEvent.SetSummary(activity.Name)
-	activityEvent.SetDescription(activity.Description)
+	description := activity.Description
+	if names := getTravellerNames(e.App, activity.Travellers); len(names) > 0 {
+		if description != "" {
+			description += "\n"
+		}
+		description += "Travellers: " + strings.Join(names, ", ")
+	}
+	activityEvent.SetDescription(description)
 	activityEvent.SetLocation(activity.Address)
 
 	if activity.Link != "" {
@@ -124,11 +131,20 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 		timezoneAvailable = false
 	}
 
+	travellerNames := getTravellerNames(e.App, lodging.Travellers)
+	lodgingDescription := ""
+	if len(travellerNames) > 0 {
+		lodgingDescription = "Travellers: " + strings.Join(travellerNames, ", ")
+	}
+
 	checkInTime := applyActualTimezone(lodging.StartDate.Time(), placeTz)
 	checkInEvent.SetStartAt(checkInTime)
 	checkInEvent.SetEndAt(checkInTime.Add(30 * time.Minute))
 	checkInEvent.SetSummary(fmt.Sprintf("Check-in: %s", lodging.Name))
 	checkInEvent.SetLocation(lodging.Address)
+	if lodgingDescription != "" {
+		checkInEvent.SetDescription(lodgingDescription)
+	}
 
 	// Stay event (full day)
 	stayEvent := cal.AddEvent(fmt.Sprintf("lodging-stay-%s@surmai.app", lodging.Id))
@@ -139,6 +155,9 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	stayEvent.SetSummary(fmt.Sprintf("Stay: %s", lodging.Name))
 	stayEvent.SetLocation(lodging.Address)
 	stayEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
+	if lodgingDescription != "" {
+		stayEvent.SetDescription(lodgingDescription)
+	}
 
 	if lodging.Link != "" {
 		stayEvent.SetURL(lodging.Link)
@@ -157,6 +176,9 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	checkOutEvent.SetSummary(fmt.Sprintf("Check-out: %s", lodging.Name))
 	checkOutEvent.SetLocation(lodging.Address)
 	checkOutEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
+	if lodgingDescription != "" {
+		checkOutEvent.SetDescription(lodgingDescription)
+	}
 
 	return timezoneAvailable
 
@@ -247,6 +269,10 @@ func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation
 		}
 	}
 
+	if names := getTravellerNames(e.App, transportation.Travellers); len(names) > 0 {
+		eventDescription = append(eventDescription, "Travellers: "+strings.Join(names, ", "))
+	}
+
 	transportEvent.SetDescription(strings.Join(eventDescription[:], "\n"))
 
 	return timezoneAvailable
@@ -289,6 +315,7 @@ func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 			StartDate:        l.GetDateTime("startDate"),
 			ConfirmationCode: l.GetString("confirmationCode"),
 			Link:             l.GetString("link"),
+			Travellers:       l.GetStringSlice("travellers"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -313,6 +340,7 @@ func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 			ConfirmationCode: l.GetString("confirmationCode"),
 			Type:             l.GetString("type"),
 			Link:             l.GetString("link"),
+			Travellers:       l.GetStringSlice("travellers"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -336,6 +364,7 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 			Departure:   l.GetDateTime("departureTime"),
 			Arrival:     l.GetDateTime("arrivalTime"),
 			Link:        l.GetString("link"),
+			Travellers:  l.GetStringSlice("travellers"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -343,6 +372,24 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 	}
 
 	return payload
+}
+
+func getTravellerNames(app core.App, travellerIds []string) []string {
+	if len(travellerIds) == 0 {
+		return nil
+	}
+	var names []string
+	for _, id := range travellerIds {
+		record, err := app.FindRecordById("traveller_profiles", id)
+		if err != nil {
+			continue
+		}
+		name := record.GetString("legalName")
+		if name != "" {
+			names = append(names, name)
+		}
+	}
+	return names
 }
 
 func applyActualTimezone(t time.Time, timeZone string) time.Time {

@@ -5,7 +5,7 @@ import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import { compareItineraryLine } from './helper.ts';
 
-import type { Activity, Lodging, Transportation, Trip, ItineraryLine } from '../../../types/trips.ts';
+import type { Activity, Lodging, Transportation, Trip, ItineraryLine, TravellerProfile } from '../../../types/trips.ts';
 import type { TDocumentDefinitions, Content } from 'pdfmake/interfaces';
 
 // @ts-expect-error pdfmake fonts
@@ -19,6 +19,14 @@ const TRANSPORTATION_COLOR = '#1971c2'; // Mantine Blue 9
 const LODGING_COLOR = '#2f9e44'; // Mantine Green 9
 const ACTIVITY_COLOR = '#e67700'; // Mantine Orange 9
 
+const getTravellerNames = (ids: string[] | undefined, tripTravellers: TravellerProfile[]): string => {
+  if (!ids || ids.length === 0) return '';
+  return tripTravellers
+    .filter((t) => ids.includes(t.id))
+    .map((t) => t.legalName)
+    .join(', ');
+};
+
 const getName = (obj: any): string => {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
@@ -26,7 +34,7 @@ const getName = (obj: any): string => {
   return String(obj);
 };
 
-const formatTransportation = (transportation: Transportation): Content => {
+const formatTransportation = (transportation: Transportation, tripTravellers: TravellerProfile[]): Content => {
   const metadata = transportation.metadata || {};
   const isRental = transportation.type === 'rental_car';
 
@@ -91,6 +99,14 @@ const formatTransportation = (transportation: Transportation): Content => {
                       text: `${i18n.t('cost', 'Cost')}: ${transportation.cost.value} ${transportation.cost.currency}`,
                       fontSize: 9,
                       color: TEXT_COLOR,
+                    }
+                  : '',
+                getTravellerNames(transportation.travellers, tripTravellers)
+                  ? {
+                      text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(transportation.travellers, tripTravellers)}`,
+                      fontSize: 9,
+                      color: TEXT_COLOR,
+                      margin: [0, 2, 0, 0],
                     }
                   : '',
               ],
@@ -172,6 +188,14 @@ const formatTransportation = (transportation: Transportation): Content => {
                     : '',
                 ],
               },
+              getTravellerNames(transportation.travellers, tripTravellers)
+                ? {
+                    text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(transportation.travellers, tripTravellers)}`,
+                    fontSize: 9,
+                    color: TEXT_COLOR,
+                    margin: [0, 2, 0, 0],
+                  }
+                : '',
             ],
             margin: [10, 8, 10, 8],
           },
@@ -188,7 +212,7 @@ const formatTransportation = (transportation: Transportation): Content => {
   };
 };
 
-const formatLodging = (l: Lodging): Content => {
+const formatLodging = (l: Lodging, tripTravellers: TravellerProfile[]): Content => {
   return {
     table: {
       widths: ['*'],
@@ -246,6 +270,14 @@ const formatLodging = (l: Lodging): Content => {
                     : '',
                 ],
               },
+              getTravellerNames(l.travellers, tripTravellers)
+                ? {
+                    text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(l.travellers, tripTravellers)}`,
+                    fontSize: 9,
+                    color: TEXT_COLOR,
+                    margin: [0, 2, 0, 0],
+                  }
+                : '',
             ],
             margin: [10, 8, 10, 8],
           },
@@ -262,7 +294,7 @@ const formatLodging = (l: Lodging): Content => {
   };
 };
 
-const formatActivity = (a: Activity): Content => {
+const formatActivity = (a: Activity, tripTravellers: TravellerProfile[]): Content => {
   return {
     table: {
       widths: ['*'],
@@ -301,6 +333,14 @@ const formatActivity = (a: Activity): Content => {
                     : '',
                 ],
               },
+              getTravellerNames(a.travellers, tripTravellers)
+                ? {
+                    text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(a.travellers, tripTravellers)}`,
+                    fontSize: 9,
+                    color: TEXT_COLOR,
+                    margin: [0, 2, 0, 0],
+                  }
+                : '',
             ],
             margin: [10, 8, 10, 8],
           },
@@ -317,14 +357,14 @@ const formatActivity = (a: Activity): Content => {
   };
 };
 
-const formatItineraryLine = (line: ItineraryLine): Content => {
+const formatItineraryLine = (line: ItineraryLine, tripTravellers: TravellerProfile[]): Content => {
   switch (line.itineraryType) {
     case 'transportation':
-      return formatTransportation(line as Transportation);
+      return formatTransportation(line as Transportation, tripTravellers);
     case 'lodging':
-      return formatLodging(line as Lodging);
+      return formatLodging(line as Lodging, tripTravellers);
     case 'activity':
-      return formatActivity(line as Activity);
+      return formatActivity(line as Activity, tripTravellers);
     default:
       return '';
   }
@@ -444,7 +484,8 @@ export const downloadFullItinerary = (
   trip: Trip,
   transportations: Transportation[],
   lodgings: Lodging[],
-  activities: Activity[]
+  activities: Activity[],
+  tripTravellers: TravellerProfile[] = []
 ) => {
   dayjs.locale(i18n.language);
   const allEvents: ItineraryLine[] = [
@@ -480,7 +521,7 @@ export const downloadFullItinerary = (
   content.push({ text: i18n.t('itinerary_full', 'Full Itinerary'), style: 'sectionHeader' });
 
   allEvents.forEach((event) => {
-    content.push(formatItineraryLine(event));
+    content.push(formatItineraryLine(event, tripTravellers));
   });
 
   if (trip.notes) {
@@ -509,7 +550,8 @@ export const downloadDailyItinerary = (
   trip: Trip,
   transportations: Transportation[],
   lodgings: Lodging[],
-  activities: Activity[]
+  activities: Activity[],
+  tripTravellers: TravellerProfile[] = []
 ) => {
   dayjs.locale(i18n.language);
   const tripStart = dayjs(trip.startDate).startOf('day');
@@ -583,7 +625,7 @@ export const downloadDailyItinerary = (
       });
 
       dailyEvents.forEach((event) => {
-        content.push(formatItineraryLine(event));
+        content.push(formatItineraryLine(event, tripTravellers));
       });
     }
   }

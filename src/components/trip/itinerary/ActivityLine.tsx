@@ -5,11 +5,20 @@ import dayjs from 'dayjs';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsLink } from '../../../lib/places.ts';
 import { formatTime } from '../../../lib/time.ts';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 
-import type { Activity } from '../../../types/trips.ts';
+import type { Activity, TravellerProfile } from '../../../types/trips.ts';
 import type { Dayjs } from 'dayjs';
 
-export const ActivityLine = ({ activity, day }: { activity: Activity; day: Dayjs }) => {
+export const ActivityLine = ({
+  activity,
+  day,
+  tripTravellers = [],
+}: {
+  activity: Activity;
+  day: Dayjs;
+  tripTravellers?: TravellerProfile[];
+}) => {
   const showStartTime = dayjs(activity.startDate).startOf('day').isSame(day);
   const showEndTime = activity.endDate ? dayjs(activity.endDate).startOf('day').isSame(day) : false;
   const { user } = useCurrentUser();
@@ -43,6 +52,7 @@ export const ActivityLine = ({ activity, day }: { activity: Activity; day: Dayjs
           </Anchor>
         </Group>
       )}
+      <TravellerBadges travellerIds={activity.travellers} tripTravellers={tripTravellers} />
     </Stack>
   );
 };

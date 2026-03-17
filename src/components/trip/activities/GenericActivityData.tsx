@@ -9,10 +9,11 @@ import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 
-import type { Activity, Attachment, Expense, Trip } from '../../../types/trips.ts';
+import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const GenericActivityData = ({
   trip,
@@ -20,12 +21,14 @@ export const GenericActivityData = ({
   refetch,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   activity: Activity;
   refetch: () => void;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
@@ -83,6 +86,7 @@ export const GenericActivityData = ({
           trip={trip}
           exitingAttachments={attachments}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetch();
             closeForm();
@@ -148,6 +152,7 @@ export const GenericActivityData = ({
           <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
+      <TravellerBadges travellerIds={activity.travellers} tripTravellers={tripTravellers} />
       {attachments && (
         <Attachments
           attachments={attachments}

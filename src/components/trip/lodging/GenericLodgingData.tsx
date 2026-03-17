@@ -12,10 +12,11 @@ import { getMapsLink } from '../../../lib/places.ts';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
 
-import type { Attachment, Expense, Lodging, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const GenericLodgingData = ({
   trip,
@@ -23,12 +24,14 @@ export const GenericLodgingData = ({
   refetch,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   lodging: Lodging;
   refetch: () => void;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t, i18n } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
@@ -89,6 +92,7 @@ export const GenericLodgingData = ({
           lodging={lodging}
           exitingAttachments={attachments}
           trip={trip}
+          tripTravellers={tripTravellers}
           expenseMap={expenseMap}
           onSuccess={() => {
             refetch();
@@ -168,6 +172,7 @@ export const GenericLodgingData = ({
           <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
+      <TravellerBadges travellerIds={lodging.travellers} tripTravellers={tripTravellers} />
       {attachments && (
         <Attachments
           attachments={attachments}

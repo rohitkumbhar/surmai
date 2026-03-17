@@ -52,6 +52,7 @@ type Transportation struct {
 	Metadata             map[string]any  `json:"metadata"`
 	Link                 string          `json:"link"`
 	ExpenseId            string          `json:"expenseId"`
+	Travellers           []string        `json:"travellers"`
 }
 
 type Lodging struct {
@@ -68,6 +69,7 @@ type Lodging struct {
 	Metadata             map[string]any  `json:"metadata"`
 	Link                 string          `json:"link"`
 	ExpenseId            string          `json:"expenseId"`
+	Travellers           []string        `json:"travellers"`
 }
 
 type Activity struct {
@@ -84,6 +86,7 @@ type Activity struct {
 	Metadata             map[string]any  `json:"metadata"`
 	Link                 string          `json:"link"`
 	ExpenseId            string          `json:"expenseId"`
+	Travellers           []string        `json:"travellers"`
 }
 
 type Expense struct {

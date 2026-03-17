@@ -10,17 +10,19 @@ import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listLodgings } from '../../../lib/api';
 
-import type { Attachment, Expense, Lodging, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const LodgingPanel = ({
   trip,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
@@ -61,6 +63,7 @@ export const LodgingPanel = ({
           type={newLodgingType}
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData();
             closeForm();
@@ -98,6 +101,7 @@ export const LodgingPanel = ({
                 lodging={t}
                 tripAttachments={tripAttachments}
                 expenseMap={expenseMap}
+                tripTravellers={tripTravellers}
               />
             </Fragment>
           );

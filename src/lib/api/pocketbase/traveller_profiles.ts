@@ -69,6 +69,13 @@ export const listTravellerProfiles = async (): Promise<TravellerProfile[]> => {
   return raw.map(normalizeManagers);
 };
 
+export const listTripTravellerProfiles = async (travellerIds: string[]): Promise<TravellerProfile[]> => {
+  if (travellerIds.length === 0) return [];
+  const filter = travellerIds.map((id) => `id = "${id}"`).join(' || ');
+  const raw = await collection.getFullList<any>({ filter, expand: 'managers' });
+  return raw.map(normalizeManagers);
+};
+
 export const listOtherTravellerProfiles = async (excludeEmail: string): Promise<TravellerProfile[]> => {
   return (
     await collection.getFullList<TravellerProfile>({

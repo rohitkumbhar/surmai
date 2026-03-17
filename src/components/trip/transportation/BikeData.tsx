@@ -11,9 +11,10 @@ import { formatDateTime } from '../../../lib/time.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 import { BikeForm } from './BikeForm.tsx';
 
-import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const BikeData = ({
   trip,
@@ -21,12 +22,14 @@ export const BikeData = ({
   refetch,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   transportation: Transportation;
   refetch: () => void;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const { isMobile } = useSurmaiContext();
@@ -91,6 +94,7 @@ export const BikeData = ({
           exitingAttachments={transportationAttachments}
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetch();
             close();
@@ -201,6 +205,7 @@ export const BikeData = ({
           <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
+      <TravellerBadges travellerIds={transportation.travellers} tripTravellers={tripTravellers} />
       {transportationAttachments && (
         <Attachments
           onDelete={(attachmentId) =>
