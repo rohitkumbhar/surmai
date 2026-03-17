@@ -13,11 +13,11 @@ import { ExpensesPanel } from '../../components/trip/expenses/ExpensesPanel.tsx'
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 import { OrganizationTab } from '../../components/trip/OrganizationTab.tsx';
-import { getTrip, getTripAttachments, listExpenses } from '../../lib/api';
+import { getTrip, getTripAttachments, listExpenses, listTripTravellerProfiles } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { formatDate } from '../../lib/time.ts';
 
-import type { Attachment, Expense, Trip } from '../../types/trips.ts';
+import type { Attachment, Expense, TravellerProfile, Trip } from '../../types/trips.ts';
 
 import { TabsList } from '../../components/util/TabsList.tsx';
 import './ViewTrip.module.css';
@@ -65,6 +65,12 @@ export const ViewTrip = () => {
     });
     return map;
   }, [expenses]);
+
+  const { data: tripTravellers = [] } = useQuery<TravellerProfile[]>({
+    queryKey: ['listTripTravellerProfiles', tripId],
+    queryFn: () => listTripTravellerProfiles(trip?.travellers || []),
+    enabled: !!trip,
+  });
 
   const [showAlert, { close: closeAlert }] = useDisclosure(true);
   const [offlineCacheTimestamp] = useLocalStorage<string | null>({
@@ -178,6 +184,7 @@ export const ViewTrip = () => {
             trip={trip}
             tripAttachments={tripAttachments || []}
             expenseMap={expenseMap}
+            tripTravellers={tripTravellers}
             refetchTrip={async () => {
               await refetchTrip();
               await refetchAttachments();
@@ -186,7 +193,7 @@ export const ViewTrip = () => {
           />
         </Tabs.Panel>
         <Tabs.Panel value="itinerary">
-          <ItineraryView trip={trip} />
+          <ItineraryView trip={trip} tripTravellers={tripTravellers} />
         </Tabs.Panel>
         <Tabs.Panel value="attachments">
           <TripAttachments
@@ -200,7 +207,7 @@ export const ViewTrip = () => {
           />
         </Tabs.Panel>
         <Tabs.Panel value="expenses">
-          <ExpensesPanel trip={trip} tripAttachments={tripAttachments} />
+          <ExpensesPanel trip={trip} tripAttachments={tripAttachments} tripTravellers={tripTravellers} />
         </Tabs.Panel>
         <Tabs.Panel value="notes">
           <TripNotes refetch={refetchTrip} trip={trip} />

@@ -12,9 +12,17 @@ import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
+import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, Expense, ParkingFormSchema, Transportation, Trip } from '../../../types/trips.ts';
+import type {
+  Attachment,
+  Expense,
+  ParkingFormSchema,
+  Transportation,
+  TravellerProfile,
+  Trip,
+} from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const ParkingForm = ({
@@ -24,6 +32,7 @@ export const ParkingForm = ({
   onCancel,
   exitingAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   parking?: Transportation;
@@ -31,6 +40,7 @@ export const ParkingForm = ({
   onCancel: () => void;
   exitingAttachments?: Attachment[];
   expenseMap?: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -53,6 +63,7 @@ export const ParkingForm = ({
       cost: expense?.cost?.value,
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       place: parking?.metadata?.place,
+      travellers: parking?.travellers || [],
     },
     validate: {},
   });
@@ -86,6 +97,7 @@ export const ParkingForm = ({
           origin: values.address,
           destination: values.address,
           link: values.link,
+          travellers: values.travellers || [],
           cost: { value: values.cost, currency: values.currencyCode },
           departureTime: fakeAsUtcString(values.startDate),
           arrivalTime: fakeAsUtcString(values.endDate),
@@ -222,6 +234,14 @@ export const ParkingForm = ({
             key={form.key('link')}
             description={t('link_desc', 'Related link')}
             {...form.getInputProps('link')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TravellerMultiSelect
+            tripTravellers={tripTravellers}
+            value={form.getValues().travellers}
+            onChange={(value) => form.setFieldValue('travellers', value)}
+            formKey={form.key('travellers')}
           />
         </Grid.Col>
         <Grid.Col span={12}>

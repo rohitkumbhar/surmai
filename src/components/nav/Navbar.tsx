@@ -39,7 +39,7 @@ export function Navbar({ close }: NavbarProps) {
   const { t } = useTranslation();
   const mainNav = [
     { icon: IconHome2, label: t('home', 'Home'), route: '/' },
-    { icon: IconEPassport, label: t('traveller_profiles', 'Traveller Profiles'), route: '/travellers' },
+    { icon: IconEPassport, label: t('traveller_profiles', 'Traveler Profiles'), route: '/travellers' },
     { icon: IconPinInvoke, label: t('invitations', 'Invitations'), route: '/invitations' },
     { icon: IconSettings, label: t('settings', 'Settings'), route: '/settings', isAdmin: true },
   ];

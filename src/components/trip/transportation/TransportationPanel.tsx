@@ -18,17 +18,19 @@ import { ParkingForm } from './ParkingForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listTransportations } from '../../../lib/api';
 
-import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const TransportationPanel = ({
   trip,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
@@ -78,6 +80,7 @@ export const TransportationPanel = ({
           transportationType={newTransportationType}
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData().then(() => closeForm());
           }}
@@ -99,6 +102,7 @@ export const TransportationPanel = ({
         <FlightForm
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData().then(() => closeFlightForm());
           }}
@@ -120,6 +124,7 @@ export const TransportationPanel = ({
         <CarRentalForm
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData().then(() => closeRentalForm());
           }}
@@ -142,6 +147,7 @@ export const TransportationPanel = ({
           transportationType={'bike'}
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData().then(() => {
               closeBikeForm();
@@ -165,6 +171,7 @@ export const TransportationPanel = ({
         <ParkingForm
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData().then(() => closeParkingForm());
           }}
@@ -211,6 +218,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   transportation={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
               {t.type === 'rental_car' && (
@@ -220,6 +228,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   rental={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
               {t.type === 'bus' && (
@@ -229,6 +238,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   transportation={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
               {t.type === 'boat' && (
@@ -238,6 +248,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   transportation={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
               {t.type === 'train' && (
@@ -247,6 +258,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   transportation={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
               {t.type === 'car' && (
@@ -256,6 +268,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   transportation={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
               {t.type === 'bike' && (
@@ -265,6 +278,7 @@ export const TransportationPanel = ({
                   trip={trip}
                   transportation={t}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               )}
             </Fragment>
@@ -288,6 +302,7 @@ export const TransportationPanel = ({
                 rental={t}
                 tripAttachments={tripAttachments}
                 expenseMap={expenseMap}
+                tripTravellers={tripTravellers}
               />
             </Fragment>
           );
@@ -310,6 +325,7 @@ export const TransportationPanel = ({
                 parking={t}
                 tripAttachments={tripAttachments}
                 expenseMap={expenseMap}
+                tripTravellers={tripTravellers}
               />
             </Fragment>
           );

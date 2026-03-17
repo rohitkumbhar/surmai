@@ -51,7 +51,7 @@ export const TravellerProfileForm = ({
     { value: 'passport_expiry_date', label: t('passport_expiry_date', 'Passport Expiry Date') },
     { value: 'tsa_precheck', label: t('tsa_precheck', 'TSA PreCheck ID') },
     { value: 'clear_id', label: t('clear_id', 'CLEAR ID') },
-    { value: 'known_traveller_number', label: t('known_traveller_number', 'Known Traveller Number (KTN)') },
+    { value: 'known_traveller_number', label: t('known_traveller_number', 'Known Traveler Number (KTN)') },
     { value: 'global_entry', label: t('global_entry', 'Global Entry ID') },
     { value: 'nexus', label: t('nexus', 'NEXUS ID') },
     { value: 'sentri', label: t('sentri', 'SENTRI ID') },

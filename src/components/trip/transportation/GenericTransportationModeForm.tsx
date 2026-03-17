@@ -11,9 +11,10 @@ import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
+import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, Expense, Transportation, TransportationFormSchema, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, TransportationFormSchema, TravellerProfile, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericTransportationModeForm = ({
@@ -24,6 +25,7 @@ export const GenericTransportationModeForm = ({
   onCancel,
   exitingAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   transportationType: string;
   trip: Trip;
@@ -32,6 +34,7 @@ export const GenericTransportationModeForm = ({
   onCancel: () => void;
   exitingAttachments?: Attachment[];
   expenseMap?: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -55,6 +58,7 @@ export const GenericTransportationModeForm = ({
       originAddress: transportation?.metadata?.originAddress || '',
       destinationAddress: transportation?.metadata?.destinationAddress || '',
       link: transportation?.link,
+      travellers: transportation?.travellers || [],
     },
     validate: {},
   });
@@ -93,6 +97,7 @@ export const GenericTransportationModeForm = ({
           departureTime: fakeAsUtcString(values.departureTime),
           arrivalTime: fakeAsUtcString(values.arrivalTime),
           link: values.link,
+          travellers: values.travellers || [],
           metadata: {
             provider: values.provider,
             reservation: values.reservation,
@@ -240,6 +245,14 @@ export const GenericTransportationModeForm = ({
             currencyCodeProps={form.getInputProps('currencyCode')}
             label={t('transportation_cost', 'Cost')}
             description={t('transportation_cost_desc', 'Charges for this transportation')}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <TravellerMultiSelect
+            tripTravellers={tripTravellers}
+            value={form.getValues().travellers}
+            onChange={(value) => form.setFieldValue('travellers', value)}
+            formKey={form.key('travellers')}
           />
         </Grid.Col>
         <Grid.Col span={12}>

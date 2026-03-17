@@ -6,12 +6,21 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsLink } from '../../../lib/places.ts';
 import { formatTime } from '../../../lib/time.ts';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 import { typeIcons } from '../lodging/typeIcons.ts';
 
-import type { Lodging } from '../../../types/trips.ts';
+import type { Lodging, TravellerProfile } from '../../../types/trips.ts';
 import type { Dayjs } from 'dayjs';
 
-export const LodgingLine = ({ lodging, day }: { lodging: Lodging; day: Dayjs }) => {
+export const LodgingLine = ({
+  lodging,
+  day,
+  tripTravellers = [],
+}: {
+  lodging: Lodging;
+  day: Dayjs;
+  tripTravellers?: TravellerProfile[];
+}) => {
   // @ts-expect-error Icon type
   const TypeIcon = typeIcons[lodging.type] || IconCar;
 
@@ -50,6 +59,7 @@ export const LodgingLine = ({ lodging, day }: { lodging: Lodging; day: Dayjs }) 
           </Anchor>
         </Group>
       )}
+      <TravellerBadges travellerIds={lodging.travellers} tripTravellers={tripTravellers} />
     </Stack>
   );
 };

@@ -141,7 +141,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               <Text>
                 {t(
                   'no_travellers_no_access',
-                  'No travellers assigned to this trip or you do not have access to the assigned travellers.'
+                  'No travelers assigned to this trip or you do not have access to the assigned travelers.'
                 )}
               </Text>
             </Card>

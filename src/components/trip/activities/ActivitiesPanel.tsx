@@ -10,17 +10,19 @@ import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { listActivities } from '../../../lib/api';
 
-import type { Activity, Attachment, Expense, Trip } from '../../../types/trips.ts';
+import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const ActivitiesPanel = ({
   trip,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
   refetchTrip,
 }: {
   trip: Trip;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
   refetchTrip: () => void;
 }) => {
   const { t } = useTranslation();
@@ -59,6 +61,7 @@ export const ActivitiesPanel = ({
         <GenericActivityForm
           trip={trip}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetchData();
             closeForm();
@@ -95,6 +98,7 @@ export const ActivitiesPanel = ({
                   activity={t}
                   tripAttachments={tripAttachments}
                   expenseMap={expenseMap}
+                  tripTravellers={tripTravellers}
                 />
               </Fragment>
             );

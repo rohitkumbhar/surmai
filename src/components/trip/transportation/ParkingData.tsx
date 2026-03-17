@@ -7,10 +7,11 @@ import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 import { ParkingForm } from './ParkingForm.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 
-import type { Attachment, Expense, Transportation, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const ParkingData = ({
   trip,
@@ -18,12 +19,14 @@ export const ParkingData = ({
   refetch,
   tripAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   parking: Transportation;
   refetch: () => void;
   tripAttachments?: Attachment[];
   expenseMap: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t, i18n } = useTranslation();
   const { isMobile } = useSurmaiContext();
@@ -64,6 +67,7 @@ export const ParkingData = ({
           trip={trip}
           exitingAttachments={transportationAttachments}
           expenseMap={expenseMap}
+          tripTravellers={tripTravellers}
           onSuccess={() => {
             refetch();
             close();
@@ -141,6 +145,7 @@ export const ParkingData = ({
           <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
+      <TravellerBadges travellerIds={parking.travellers} tripTravellers={tripTravellers} />
       {transportationAttachments && (
         <Attachments
           attachments={transportationAttachments}

@@ -12,9 +12,10 @@ import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
+import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, Expense, Lodging, LodgingFormSchema, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, LodgingFormSchema, TravellerProfile, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericLodgingForm = ({
@@ -25,6 +26,7 @@ export const GenericLodgingForm = ({
   onCancel,
   exitingAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   lodging?: Lodging;
@@ -33,6 +35,7 @@ export const GenericLodgingForm = ({
   onCancel: () => void;
   exitingAttachments?: Attachment[] | undefined;
   expenseMap?: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -54,7 +57,8 @@ export const GenericLodgingForm = ({
       endDate: lodging?.endDate,
       link: lodging?.link,
       confirmationCode: lodging?.confirmationCode,
-      place: lodging?.metadata?.place?.name || '',
+      place: lodging?.metadata?.place || '',
+      travellers: lodging?.travellers || [],
     },
   });
 
@@ -89,6 +93,7 @@ export const GenericLodgingForm = ({
           endDate: fakeAsUtcString(values.endDate),
           confirmationCode: values.confirmationCode,
           link: values.link,
+          travellers: values.travellers || [],
           cost: { value: values.cost, currency: values.currencyCode },
           metadata: { place: values.place },
         },
@@ -206,6 +211,14 @@ export const GenericLodgingForm = ({
           />
         </Grid.Col>
 
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TravellerMultiSelect
+            tripTravellers={tripTravellers}
+            value={form.getValues().travellers}
+            onChange={(value) => form.setFieldValue('travellers', value)}
+            formKey={form.key('travellers')}
+          />
+        </Grid.Col>
         <Grid.Col span={12}>
           <AttachmentsUploadField files={files} setFiles={setFiles} />
         </Grid.Col>

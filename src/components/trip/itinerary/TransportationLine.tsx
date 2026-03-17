@@ -6,12 +6,21 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsLink } from '../../../lib/places.ts';
 import { formatTime } from '../../../lib/time.ts';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 import { typeIcons } from '../transportation/typeIcons.ts';
 
-import type { Transportation } from '../../../types/trips.ts';
+import type { Transportation, TravellerProfile } from '../../../types/trips.ts';
 import type { Dayjs } from 'dayjs';
 
-export const TransportationLine = ({ transportation, day }: { transportation: Transportation; day: Dayjs }) => {
+export const TransportationLine = ({
+  transportation,
+  day,
+  tripTravellers = [],
+}: {
+  transportation: Transportation;
+  day: Dayjs;
+  tripTravellers?: TravellerProfile[];
+}) => {
   const type = transportation.type;
 
   // @ts-expect-error Icon type
@@ -23,7 +32,7 @@ export const TransportationLine = ({ transportation, day }: { transportation: Tr
   return (
     <>
       {type === 'rental_car' && (
-        <CarRentalLine rental={transportation} showStartTime={showStartTime} showEndTime={showEndTime} />
+        <CarRentalLine rental={transportation} showStartTime={showStartTime} showEndTime={showEndTime} tripTravellers={tripTravellers} />
       )}
       {type !== 'rental_car' && (
         <Stack bd={'1px solid var(--mantine-primary-color-light)'} gap={0}>
@@ -100,6 +109,7 @@ export const TransportationLine = ({ transportation, day }: { transportation: Tr
               </Anchor>
             </Group>
           )}
+          <TravellerBadges travellerIds={transportation.travellers} tripTravellers={tripTravellers} />
         </Stack>
       )}
     </>
@@ -110,10 +120,12 @@ const CarRentalLine = ({
   showStartTime,
   showEndTime,
   rental,
+  tripTravellers = [],
 }: {
   showStartTime: boolean;
   showEndTime: boolean;
   rental: Transportation;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const { user } = useCurrentUser();
@@ -178,6 +190,7 @@ const CarRentalLine = ({
           </Anchor>
         </Group>
       )}
+      <TravellerBadges travellerIds={rental.travellers} tripTravellers={tripTravellers} />
     </Stack>
   );
 };

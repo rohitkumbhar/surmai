@@ -9,7 +9,7 @@ import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 export const ManageTravellerProfiles = () => {
   const { t } = useTranslation();
   const { user: currentUser } = useCurrentUser();
-  usePageTitle(t('manage_traveller_profiles', 'Traveller Profiles'));
+  usePageTitle(t('manage_traveller_profiles', 'Traveler Profiles'));
 
   return (
     <Container size={'xl'} px={0} py={'sm'}>

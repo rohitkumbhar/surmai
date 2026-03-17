@@ -66,8 +66,8 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
       />
 
       <MultiSelect
-        label={t('traveller_profiles', 'Traveller Profiles')}
-        description={t('trip_traveller_profiles_description', 'Select traveller profiles to assign to this trip')}
+        label={t('select_travellers', 'Travelers')}
+        description={t('trip_traveller_profiles_description', 'Select traveler profiles to assign to this trip')}
         data={travellerOptions}
         searchable
         key={form.key('travellers')}

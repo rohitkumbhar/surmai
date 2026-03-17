@@ -1,6 +1,5 @@
 import { Button, Card, Grid, Group, Loader, Select, Text } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
-import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -9,24 +8,24 @@ import { ExpenseFormModal } from './ExpenseFormModal.tsx';
 import { ExpenseStatCards } from './ExpenseStatCards.tsx';
 import { useTripExpenses } from './useTripExpenses.ts';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { listTravellerProfiles } from '../../../lib/api';
 
 import type { Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
 
-export const ExpensesPanel = ({ trip, tripAttachments }: { trip: Trip; tripAttachments?: Attachment[] }) => {
+export const ExpensesPanel = ({
+  trip,
+  tripAttachments,
+  tripTravellers = [],
+}: {
+  trip: Trip;
+  tripAttachments?: Attachment[];
+  tripTravellers?: TravellerProfile[];
+}) => {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [sortBy, setSortBy] = useState<'date' | 'category' | 'amount' | null>(null);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const { isMobile } = useSurmaiContext();
-
-  const { data: allProfiles } = useQuery({
-    queryKey: ['traveller_profiles'],
-    queryFn: listTravellerProfiles,
-  });
-
-  const tripTravellers: TravellerProfile[] = (allProfiles || []).filter((p) => (trip.travellers || []).includes(p.id));
 
   const EXPENSE_CATEGORY_DATA: Record<string, { label: string; color: string }> = {
     lodging: { label: t('expense_category_lodging', 'Lodging'), color: 'blue' },

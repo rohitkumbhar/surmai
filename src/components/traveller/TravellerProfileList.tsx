@@ -55,7 +55,7 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
       queryClient.invalidateQueries({ queryKey: ['traveller_profiles'] }).then(() => {
         notifications.show({
           title: t('success', 'Success'),
-          message: t('profile_created', 'Traveller profile created successfully'),
+          message: t('profile_created', 'Traveler profile created successfully'),
           color: 'green',
         });
         close();
@@ -81,7 +81,7 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
       queryClient.invalidateQueries({ queryKey: ['traveller_profiles'] });
       notifications.show({
         title: t('success', 'Success'),
-        message: t('profile_updated', 'Traveller profile updated successfully'),
+        message: t('profile_updated', 'Traveler profile updated successfully'),
         color: 'green',
       });
       close();
@@ -101,7 +101,7 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
       queryClient.invalidateQueries({ queryKey: ['traveller_profiles'] });
       notifications.show({
         title: t('success', 'Success'),
-        message: t('profile_deleted', 'Traveller profile deleted successfully'),
+        message: t('profile_deleted', 'Traveler profile deleted successfully'),
         color: 'green',
       });
     },
@@ -181,7 +181,7 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
       <Stack>
         <Group justify="space-between">
           <Text fw={500} size="lg">
-            {t('traveller_profiles', 'Traveller Profiles')}
+            {t('traveller_profiles', 'Traveler Profiles')}
           </Text>
           <Button leftSection={<IconPlus size={14} />} onClick={handleAdd}>
             {t('add_profile', 'Add Profile')}
@@ -204,7 +204,7 @@ export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string }
                 <Table.Tr>
                   <Table.Td colSpan={5}>
                     <Text ta="center" c="dimmed" py="xl">
-                      {t('no_profiles_found', 'No traveller profiles found')}
+                      {t('no_profiles_found', 'No traveler profiles found')}
                     </Text>
                   </Table.Td>
                 </Table.Tr>

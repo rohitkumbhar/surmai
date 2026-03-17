@@ -33,7 +33,7 @@ export const TravellerProfileModal = ({ profile, opened, onClose, onEdit }: Prop
     <Modal
       opened={opened}
       onClose={onClose}
-      title={t('traveller_profile', 'Traveller Profile')}
+      title={t('traveller_profile', 'Traveler Profile')}
       size="md"
       fullScreen={isMobile}
     >

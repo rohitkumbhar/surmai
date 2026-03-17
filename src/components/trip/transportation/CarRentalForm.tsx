@@ -12,9 +12,17 @@ import { fakeAsUtcString } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
+import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, CarRentalFormSchema, Expense, Transportation, Trip } from '../../../types/trips.ts';
+import type {
+  Attachment,
+  CarRentalFormSchema,
+  Expense,
+  Transportation,
+  TravellerProfile,
+  Trip,
+} from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const CarRentalForm = ({
@@ -24,6 +32,7 @@ export const CarRentalForm = ({
   onCancel,
   exitingAttachments,
   expenseMap,
+  tripTravellers = [],
 }: {
   trip: Trip;
   carRental?: Transportation;
@@ -31,6 +40,7 @@ export const CarRentalForm = ({
   onCancel: () => void;
   exitingAttachments?: Attachment[];
   expenseMap?: Map<string, Expense>;
+  tripTravellers?: TravellerProfile[];
 }) => {
   const { t } = useTranslation();
   const [files, setFiles] = useState<File[]>([]);
@@ -53,6 +63,7 @@ export const CarRentalForm = ({
       cost: expense?.cost?.value,
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       place: carRental?.metadata?.place,
+      travellers: carRental?.travellers || [],
     },
     validate: {},
   });
@@ -86,6 +97,7 @@ export const CarRentalForm = ({
           origin: values.pickupLocation,
           destination: values.dropOffLocation,
           link: values.link,
+          travellers: values.travellers || [],
           cost: { value: values.cost, currency: values.currencyCode },
           departureTime: fakeAsUtcString(values.pickupTime),
           arrivalTime: fakeAsUtcString(values.dropOffTime),
@@ -223,6 +235,14 @@ export const CarRentalForm = ({
             key={form.key('link')}
             description={t('link_desc', 'Related link')}
             {...form.getInputProps('link')}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <TravellerMultiSelect
+            tripTravellers={tripTravellers}
+            value={form.getValues().travellers}
+            onChange={(value) => form.setFieldValue('travellers', value)}
+            formKey={form.key('travellers')}
           />
         </Grid.Col>
         <Grid.Col span={12}>

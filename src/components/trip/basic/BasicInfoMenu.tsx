@@ -22,6 +22,7 @@ import {
   listActivities,
   listLodgings,
   listTransportations,
+  listTripTravellerProfiles,
   loadEverything,
   uploadTripCoverImage,
 } from '../../../lib/api';
@@ -181,12 +182,13 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         <Menu.Divider />
         <Menu.Item
           onClick={async () => {
-            const [transportations, lodgings, activities] = await Promise.all([
+            const [transportations, lodgings, activities, tripTravellers] = await Promise.all([
               listTransportations(trip.id),
               listLodgings(trip.id),
               listActivities(trip.id),
+              listTripTravellerProfiles(trip.travellers || []),
             ]);
-            downloadDailyItinerary(trip, transportations, lodgings, activities);
+            downloadDailyItinerary(trip, transportations, lodgings, activities, tripTravellers);
           }}
           leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
@@ -194,12 +196,13 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
         </Menu.Item>
         <Menu.Item
           onClick={async () => {
-            const [transportations, lodgings, activities] = await Promise.all([
+            const [transportations, lodgings, activities, tripTravellers] = await Promise.all([
               listTransportations(trip.id),
               listLodgings(trip.id),
               listActivities(trip.id),
+              listTripTravellerProfiles(trip.travellers || []),
             ]);
-            downloadFullItinerary(trip, transportations, lodgings, activities);
+            downloadFullItinerary(trip, transportations, lodgings, activities, tripTravellers);
           }}
           leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >

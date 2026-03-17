@@ -106,6 +106,7 @@ export type Transportation = Entity & {
   attachments?: string[];
   attachmentReferences?: string[];
   expenseId?: string;
+  travellers?: string[];
 };
 
 export type CreateTransportation = {
@@ -134,6 +135,7 @@ export type CarRentalFormSchema = {
   currencyCode?: string;
   link?: string;
   place?: Place;
+  travellers?: string[];
 };
 
 export type TransportationFormSchema = {
@@ -150,6 +152,7 @@ export type TransportationFormSchema = {
   flightNumber?: string;
   assignedSeats?: string;
   link?: string;
+  travellers?: string[];
 };
 
 export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' | 'destination'> & {
@@ -175,6 +178,7 @@ export type ParkingFormSchema = {
   spotNumber?: string;
   link?: string;
   place?: Place;
+  travellers?: string[];
 };
 
 export type CroppedImage = {
@@ -205,6 +209,7 @@ export type Lodging = {
   attachmentReferences?: string[];
   expenseId?: string;
   link?: string;
+  travellers?: string[];
 };
 
 export type CreateLodging = Omit<Lodging, 'id'>;
@@ -220,6 +225,7 @@ export type LodgingFormSchema = {
   confirmationCode?: string;
   place?: Place;
   link?: string;
+  travellers?: string[];
 };
 
 export const enum LodgingType {
@@ -241,6 +247,7 @@ export interface Activity extends RecordModel {
   attachments?: string[];
   attachmentReferences?: string[];
   expenseId?: string;
+  travellers?: string[];
 }
 
 export type CreateActivity = Omit<Activity, 'id'>;
@@ -255,6 +262,7 @@ export type ActivityFormSchema = {
   endDate?: string;
   place?: Place;
   link?: string;
+  travellers?: string[];
 };
 
 export interface Airport extends Omit<RecordModel, 'collectionName,collectionId'> {
