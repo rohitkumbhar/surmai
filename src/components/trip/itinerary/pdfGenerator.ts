@@ -103,7 +103,7 @@ const formatTransportation = (transportation: Transportation, tripTravellers: Tr
                   : '',
                 getTravellerNames(transportation.travellers, tripTravellers)
                   ? {
-                      text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(transportation.travellers, tripTravellers)}`,
+                      text: `${i18n.t('travellers', 'Travelers')}: ${getTravellerNames(transportation.travellers, tripTravellers)}`,
                       fontSize: 9,
                       color: TEXT_COLOR,
                       margin: [0, 2, 0, 0],
@@ -190,7 +190,7 @@ const formatTransportation = (transportation: Transportation, tripTravellers: Tr
               },
               getTravellerNames(transportation.travellers, tripTravellers)
                 ? {
-                    text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(transportation.travellers, tripTravellers)}`,
+                    text: `${i18n.t('travellers', 'Travelers')}: ${getTravellerNames(transportation.travellers, tripTravellers)}`,
                     fontSize: 9,
                     color: TEXT_COLOR,
                     margin: [0, 2, 0, 0],
@@ -272,7 +272,7 @@ const formatLodging = (l: Lodging, tripTravellers: TravellerProfile[]): Content 
               },
               getTravellerNames(l.travellers, tripTravellers)
                 ? {
-                    text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(l.travellers, tripTravellers)}`,
+                    text: `${i18n.t('travellers', 'Travelers')}: ${getTravellerNames(l.travellers, tripTravellers)}`,
                     fontSize: 9,
                     color: TEXT_COLOR,
                     margin: [0, 2, 0, 0],
@@ -335,7 +335,7 @@ const formatActivity = (a: Activity, tripTravellers: TravellerProfile[]): Conten
               },
               getTravellerNames(a.travellers, tripTravellers)
                 ? {
-                    text: `${i18n.t('travellers', 'Travellers')}: ${getTravellerNames(a.travellers, tripTravellers)}`,
+                    text: `${i18n.t('travellers', 'Travelers')}: ${getTravellerNames(a.travellers, tripTravellers)}`,
                     fontSize: 9,
                     color: TEXT_COLOR,
                     margin: [0, 2, 0, 0],

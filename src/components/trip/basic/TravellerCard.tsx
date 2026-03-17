@@ -25,9 +25,7 @@ export const TravellerCard = ({ profile }: { profile: TravellerProfile }) => {
   const queryClient = useQueryClient();
   const { user: currentUser } = useCurrentUser();
 
-  const canEdit =
-    profile.ownerId === currentUser?.id ||
-    profile.managers?.some((m) => m.id === currentUser?.id);
+  const canEdit = profile.ownerId === currentUser?.id || profile.managers?.some((m) => m.id === currentUser?.id);
 
   const updateMutation = useMutation({
     mutationFn: async ({ data, files }: { data: Partial<NewTravellerProfile>; files: File[] }) => {
@@ -40,7 +38,7 @@ export const TravellerCard = ({ profile }: { profile: TravellerProfile }) => {
       queryClient.invalidateQueries({ queryKey: ['traveller_profiles'] });
       notifications.show({
         title: t('success', 'Success'),
-        message: t('profile_updated', 'Traveller profile updated successfully'),
+        message: t('profile_updated', 'Traveler profile updated successfully'),
         color: 'green',
       });
       closeEdit();
@@ -56,13 +54,7 @@ export const TravellerCard = ({ profile }: { profile: TravellerProfile }) => {
 
   return (
     <>
-      <Card
-        withBorder
-        padding="sm"
-        radius="md"
-        style={{ width: rem(300), cursor: 'pointer' }}
-        onClick={openView}
-      >
+      <Card withBorder padding="sm" radius="md" style={{ width: rem(300), cursor: 'pointer' }} onClick={openView}>
         <Group wrap="nowrap">
           <Avatar color="blue" radius="xl">
             {getInitials(profile.legalName)}
@@ -82,14 +74,17 @@ export const TravellerCard = ({ profile }: { profile: TravellerProfile }) => {
         profile={profile}
         opened={viewOpened}
         onClose={closeView}
-        onEdit={canEdit ? () => { closeView(); openEdit(); } : undefined}
+        onEdit={
+          canEdit
+            ? () => {
+                closeView();
+                openEdit();
+              }
+            : undefined
+        }
       />
 
-      <Modal
-        opened={editOpened}
-        onClose={closeEdit}
-        title={t('edit_profile', 'Edit Profile')}
-      >
+      <Modal opened={editOpened} onClose={closeEdit} title={t('edit_profile', 'Edit Profile')}>
         <TravellerProfileForm
           initialValues={profile}
           onSubmit={(data, files) => updateMutation.mutate({ data, files })}

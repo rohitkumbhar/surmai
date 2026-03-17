@@ -25,8 +25,8 @@ export const TravellerMultiSelect = ({
 
   return (
     <MultiSelect
-      label={t('travellers', 'Travellers')}
-      description={t('assign_travellers_description', 'Optionally assign traveller profiles')}
+      label={t('travellers', 'Travelers')}
+      description={t('assign_travellers_description', 'Optionally assign travelers')}
       data={travellerOptions}
       searchable
       clearable

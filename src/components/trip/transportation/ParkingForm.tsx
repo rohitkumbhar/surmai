@@ -15,7 +15,14 @@ import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.ts
 import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, Expense, ParkingFormSchema, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type {
+  Attachment,
+  Expense,
+  ParkingFormSchema,
+  Transportation,
+  TravellerProfile,
+  Trip,
+} from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const ParkingForm = ({
@@ -229,7 +236,7 @@ export const ParkingForm = ({
             {...form.getInputProps('link')}
           />
         </Grid.Col>
-        <Grid.Col span={12}>
+        <Grid.Col span={{ base: 12, md: 6 }}>
           <TravellerMultiSelect
             tripTravellers={tripTravellers}
             value={form.getValues().travellers}
