@@ -3,19 +3,18 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from '../App.tsx';
 import { SecureRoute } from '../auth/SecureRoute.tsx';
-import { Invitations } from '../pages/Invitations/Invitations.tsx';
 import { SignIn } from '../pages/SignIn/SignIn.tsx';
 import { SignUp } from '../pages/SignUp/SignUp.tsx';
 import { CreateNewTrip } from '../pages/trips/CreateNewTrip.tsx';
 import { MyTrips } from '../pages/trips/MyTrips.tsx';
-// import { Settings } from '../pages/Settings/Settings.tsx';
 import { TripsContainer } from '../pages/trips/TripsContainer.tsx';
 import { ViewTrip } from '../pages/trips/ViewTrip.tsx';
 import { UserProfile } from '../pages/UserProfile/UserProfile.tsx';
-import { ManageTravellerProfiles } from '../pages/TravellerProfiles/ManageTravellerProfiles.tsx';
-import TravelBoard from '../pages/TravelBoard/TravelBoard.tsx';
 
 const Settings = lazy(() => import('../pages/Settings/Settings.tsx'));
+const ManageTravellerProfiles = lazy(() => import('../pages/TravellerProfiles/ManageTravellerProfiles.tsx'));
+const TravelBoard = lazy(() => import('../pages/TravelBoard/TravelBoard.tsx'));
+const Invitations = lazy(() => import('../pages/Invitations/Invitations.tsx'));
 
 export const buildRouter = () => {
   return createBrowserRouter([

@@ -10,7 +10,7 @@ import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
 import type { Invitation } from '../../types/invitations.ts';
 
-export const Invitations = () => {
+const Invitations = () => {
   const { data: invitations, refetch: refetchInvitations } = useQuery<Invitation[]>({
     queryKey: ['listInvitations'],
     queryFn: () => listInvitations(),
@@ -59,3 +59,5 @@ export const Invitations = () => {
     </Container>
   );
 };
+
+export default Invitations;
