@@ -115,7 +115,7 @@ export const GenericTransportationData = ({
       </Modal>
       <Modal
         opened={flightFormOpened}
-        size="auto"
+        size={'xl'}
         fullScreen={isMobile}
         title={t('transportation_edit_flight', 'Edit Flight')}
         onClose={closeFlightForm}

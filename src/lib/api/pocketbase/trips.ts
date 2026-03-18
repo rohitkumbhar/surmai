@@ -44,6 +44,20 @@ export const listPastTrips = async (): Promise<Trip[]> => {
   });
 };
 
+export const listAllTrips = async (): Promise<Trip[]> => {
+  return trips.getFullList<Trip>({
+    sort: '-startDate',
+  });
+};
+
+export const listTripsByYear = async (year: string): Promise<Trip[]> => {
+  const filter = `startDate >= "${year}-01-01 00:00:00" && startDate <= "${year}-12-31 23:59:59"`;
+  return trips.getFullList<Trip>({
+    sort: '-startDate',
+    filter,
+  });
+};
+
 export const listCollaborators = ({ tripId }: { tripId: string }): Promise<User[]> => {
   return pb.send(`/api/surmai/trip/${tripId}/collaborators`, {
     method: 'GET',

@@ -6,9 +6,26 @@ import type { CreateLodging, Lodging } from '../../../types/trips.ts';
 
 const lodgings = pb.collection('lodgings');
 
-export const listLodgings = async (tripId: string): Promise<Lodging[]> => {
-  const results = await lodgings.getList(1, 150, {
-    filter: `trip="${tripId}"`,
+export const listLodgings = async (tripId?: string): Promise<Lodging[]> => {
+  const filter = tripId ? `trip="${tripId}"` : undefined;
+  const results = await lodgings.getList(1, 1000, {
+    filter,
+    sort: 'startDate',
+  });
+
+  return results.items.map((entry) => {
+    return {
+      ...entry,
+      startDate: convertSavedToBrowserDate(entry.startDate),
+      endDate: convertSavedToBrowserDate(entry.endDate),
+    } as unknown as Lodging;
+  });
+};
+
+export const listLodgingsByYear = async (year: string): Promise<Lodging[]> => {
+  const filter = `trip.startDate >= "${year}-01-01 00:00:00" && trip.startDate <= "${year}-12-31 23:59:59"`;
+  const results = await lodgings.getList(1, 1000, {
+    filter,
     sort: 'startDate',
   });
 
