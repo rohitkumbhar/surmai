@@ -43,7 +43,25 @@ const DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-export default function TravelBoard() {
+const StatsCard = ({ title, value, note }: { title: string; value: string | number; note?: string }) => (
+  <Card withBorder radius="md" p="md">
+    <Stack gap={0}>
+      <Text size="xs" c="dimmed" fw={700} tt="uppercase">
+        {title}
+      </Text>
+      <Text size="xl" fw={700}>
+        {value}
+      </Text>
+      {note && (
+        <Text size="xs" c="orange" mt={4}>
+          {note}
+        </Text>
+      )}
+    </Stack>
+  </Card>
+);
+
+const TravelBoard = () => {
   const { t } = useTranslation();
   usePageTitle(t('travel_board', 'Travel Board'));
   const [searchParams, setSearchParams] = useSearchParams();
@@ -65,8 +83,7 @@ export default function TravelBoard() {
   const years = useMemo(() => {
     if (!allTrips) return [currentYear];
     const tripYears = allTrips.map((trip) => dayjs(trip.startDate).year().toString());
-    const uniqueYears = Array.from(new Set([currentYear, ...tripYears])).sort((a, b) => b.localeCompare(a));
-    return uniqueYears;
+    return Array.from(new Set([currentYear, ...tripYears])).sort((a, b) => b.localeCompare(a));
   }, [allTrips, currentYear]);
 
   const { stats: filteredData, isLoading } = useTravelBoardStatistics(selectedYear);
@@ -83,7 +100,7 @@ export default function TravelBoard() {
   return (
     <Container py="sm" size="xl">
       <Header>
-        <Group justify="space-between" mt="md" w="100%">
+        <Group justify="space-between" mt="md">
           <Text size="md">{t('travel_board', 'Travel Board')}</Text>
           <Group gap="xs">
             {years.map((year) => (
@@ -277,24 +294,5 @@ export default function TravelBoard() {
       </Box>
     </Container>
   );
-}
-
-function StatsCard({ title, value, note }: { title: string; value: string | number; note?: string }) {
-  return (
-    <Card withBorder radius="md" p="md">
-      <Stack gap={0}>
-        <Text size="xs" c="dimmed" fw={700} tt="uppercase">
-          {title}
-        </Text>
-        <Text size="xl" fw={700}>
-          {value}
-        </Text>
-        {note && (
-          <Text size="xs" c="orange" mt={4}>
-            {note}
-          </Text>
-        )}
-      </Stack>
-    </Card>
-  );
-}
+};
+export default TravelBoard;

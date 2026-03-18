@@ -6,7 +6,7 @@ import { Header } from '../../components/nav/Header.tsx';
 import { TravellerProfileList } from '../../components/traveller/TravellerProfileList.tsx';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 
-export const ManageTravellerProfiles = () => {
+const ManageTravellerProfiles = () => {
   const { t } = useTranslation();
   const { user: currentUser } = useCurrentUser();
   usePageTitle(t('manage_traveller_profiles', 'Traveler Profiles'));
@@ -22,3 +22,5 @@ export const ManageTravellerProfiles = () => {
     </Container>
   );
 };
+
+export default ManageTravellerProfiles;
