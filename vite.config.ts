@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 
 import react from '@vitejs/plugin-react';
+import analyzer from 'vite-bundle-analyzer';
 import { VitePWA } from 'vite-plugin-pwa';
 import { configDefaults, defineConfig } from 'vitest/config';
 
@@ -17,6 +18,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       react(),
+      analyzer(),
       VitePWA({
         registerType: 'autoUpdate',
         minify: false,
