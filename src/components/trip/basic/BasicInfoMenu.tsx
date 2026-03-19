@@ -27,7 +27,8 @@ import {
   uploadTripCoverImage,
 } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
-import { downloadDailyItinerary, downloadFullItinerary } from '../itinerary/pdfGenerator.ts';
+
+const loadPdfGenerator = () => import('../itinerary/pdfGenerator.ts');
 
 import type { Trip } from '../../../types/trips.ts';
 
@@ -188,6 +189,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               listActivities(trip.id),
               listTripTravellerProfiles(trip.travellers || []),
             ]);
+            const { downloadDailyItinerary } = await loadPdfGenerator();
             downloadDailyItinerary(trip, transportations, lodgings, activities, tripTravellers);
           }}
           leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
@@ -202,6 +204,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               listActivities(trip.id),
               listTripTravellerProfiles(trip.travellers || []),
             ]);
+            const { downloadFullItinerary } = await loadPdfGenerator();
             downloadFullItinerary(trip, transportations, lodgings, activities, tripTravellers);
           }}
           leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
