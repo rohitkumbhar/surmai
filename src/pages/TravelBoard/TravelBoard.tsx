@@ -147,7 +147,7 @@ const TravelBoard = () => {
                   {Object.entries(filteredData.transCounts).map(([type, count]) => (
                     <Group key={type} justify="space-between">
                       <Text size="sm" tt="capitalize">
-                        {t(`transport_${type}`, type.replace('_', ' '))}
+                        {t(`transportation_${type}`, type.replace('_', ' '))}
                       </Text>
                       <Group gap="xl">
                         <Text size="sm" fw={500}>
@@ -173,8 +173,8 @@ const TravelBoard = () => {
                 </Stack>
                 <Divider my="sm" />
                 <Group justify="space-between">
-                  <Text fw={600}>{t('total_travel_time', 'Total Travel Time')}</Text>
-                  <Text fw={600}>{formatDuration(filteredData.totalTransTimeMinutes)}</Text>
+                  <Text size="sm">{t('total_travel_time', 'Total Travel Time')}</Text>
+                  <Text size="sm">{formatDuration(filteredData.totalTransTimeMinutes)}</Text>
                 </Group>
               </Card>
 
@@ -184,18 +184,32 @@ const TravelBoard = () => {
                 </Title>
                 <Divider mb="sm" />
                 {filteredData.totalLodgings > 0 ? (
-                  <Stack gap="sm">
-                    <Group justify="space-between">
-                      <Text size="sm">{t('total_lodgings', 'Total Lodgings')}</Text>
-                      <Text fw={500}>{filteredData.totalLodgings}</Text>
-                    </Group>
+                  <Stack gap="xs">
+                    {Object.entries(filteredData.lodgingCountsByType)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([type, count]) => {
+                        const nights = filteredData.lodgingNightsByType[type] || 0;
+                        const avgNights = count > 0 ? (nights / count).toFixed(1) : '0';
+                        return (
+                          <Group key={type} justify="space-between">
+                            <Text size="sm" tt="capitalize">
+                              {t(`lodging_${type}`, type.replace('_', ' '))}
+                            </Text>
+                            <Group gap="md">
+                              <Text size="sm" fw={500}>
+                                {count} {t('stays', 'stays')}
+                              </Text>
+                              <Text size="xs" c="dimmed">
+                                {t('avg', 'Avg.')}: {avgNights} {t('nights', 'nights')}
+                              </Text>
+                            </Group>
+                          </Group>
+                        );
+                      })}
+                    <Divider />
                     <Group justify="space-between">
                       <Text size="sm">{t('total_nights', 'Total Nights')}</Text>
                       <Text fw={500}>{filteredData.totalNights}</Text>
-                    </Group>
-                    <Group justify="space-between">
-                      <Text size="sm">{t('avg_nights_per_lodging', 'Avg. Nights per Lodging')}</Text>
-                      <Text fw={500}>{(filteredData.totalNights / filteredData.totalLodgings).toFixed(1)}</Text>
                     </Group>
                   </Stack>
                 ) : (
