@@ -92,6 +92,8 @@ export const useTravelBoardStatistics = (year: string | null) => {
         transTimeByMode: {},
         totalLodgings: 0,
         totalNights: 0,
+        lodgingCountsByType: {},
+        lodgingNightsByType: {},
         totalActivities: 0,
         avgActivitiesPerTrip: 0,
         numCurrencies: 0,
@@ -115,9 +117,20 @@ export const useTravelBoardStatistics = (year: string | null) => {
 
     const totalLodgings = lodgings?.length || 0;
     let totalNights = 0;
+    const lodgingCountsByType: Record<string, number> = {};
+    const lodgingNightsByType: Record<string, number> = {};
+
     lodgings?.forEach((l) => {
+      const type = l.type || 'other';
+      lodgingCountsByType[type] = (lodgingCountsByType[type] || 0) + 1;
       const nights = dayjs(l.endDate).diff(dayjs(l.startDate), 'day');
-      if (nights > 0) totalNights += nights;
+      if (nights > 0) {
+        totalNights += nights;
+        lodgingNightsByType[type] = (lodgingNightsByType[type] || 0) + nights;
+      } else if (dayjs(l.endDate).date() !== dayjs(l.startDate).date()) {
+        totalNights += 1;
+        lodgingNightsByType[type] = (lodgingNightsByType[type] || 0) + 1;
+      }
     });
 
     const userCurrency = user?.currencyCode || 'USD';
@@ -170,6 +183,8 @@ export const useTravelBoardStatistics = (year: string | null) => {
       transTimeByMode,
       totalLodgings,
       totalNights,
+      lodgingCountsByType,
+      lodgingNightsByType,
       totalActivities: activities?.length || 0,
       avgActivitiesPerTrip: totalTrips > 0 ? (activities?.length || 0) / totalTrips : 0,
       numCurrencies: usedCurrencies.size,
