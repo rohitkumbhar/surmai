@@ -123,13 +123,10 @@ export const useTravelBoardStatistics = (year: string | null) => {
     lodgings?.forEach((l) => {
       const type = l.type || 'other';
       lodgingCountsByType[type] = (lodgingCountsByType[type] || 0) + 1;
-      const nights = dayjs(l.endDate).diff(dayjs(l.startDate), 'day');
+      const nights = Math.ceil(dayjs(l.endDate).diff(dayjs(l.startDate), 'day', true));
       if (nights > 0) {
         totalNights += nights;
         lodgingNightsByType[type] = (lodgingNightsByType[type] || 0) + nights;
-      } else if (dayjs(l.endDate).date() !== dayjs(l.startDate).date()) {
-        totalNights += 1;
-        lodgingNightsByType[type] = (lodgingNightsByType[type] || 0) + 1;
       }
     });
 
