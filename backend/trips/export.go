@@ -131,6 +131,7 @@ func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
 			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
 			Link:                 l.GetString("link"),
 			ExpenseId:            l.GetString("expenseId"),
+			Travellers:           l.GetStringSlice("travellers"),
 		}
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = l.UnmarshalJSONField("cost", &ct.Cost)
@@ -161,6 +162,7 @@ func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
 			Link:                 l.GetString("link"),
 			ExpenseId:            l.GetString("expenseId"),
 			Type:                 l.GetString("type"),
+			Travellers:           l.GetStringSlice("travellers"),
 		}
 
 		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
@@ -192,6 +194,7 @@ func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
 			AttachmentReferences: tr.GetStringSlice("attachmentReferences"),
 			Link:                 tr.GetString("link"),
 			ExpenseId:            tr.GetString("expenseId"),
+			Travellers:           tr.GetStringSlice("travellers"),
 		}
 		_ = tr.UnmarshalJSONField("metadata", &ct.Metadata)
 		_ = tr.UnmarshalJSONField("cost", &ct.Cost)

@@ -35,7 +35,7 @@ func ImportZip(e core.App, zipReader *zip.Reader, ownerId string) (string, error
 	}
 
 	// import traveller profiles
-	importTravellerProfiles(e, data, ownerId, zipReader, tripId)
+	travellerIdMappings := importTravellerProfiles(e, data, ownerId, zipReader, tripId)
 
 	// upload all attachments and return the old id - new id mapping
 	attachmentReferenceMapping := importAttachments(e, zipReader, data, tripId)
@@ -44,18 +44,18 @@ func ImportZip(e core.App, zipReader *zip.Reader, ownerId string) (string, error
 	expenseMapping := importExpenses(e, attachmentReferenceMapping, data, tripId)
 
 	// create transportations
-	importTransportations(e, attachmentReferenceMapping, expenseMapping, data, tripId)
+	importTransportations(e, attachmentReferenceMapping, expenseMapping, data, tripId, travellerIdMappings)
 
 	// create lodgings
-	importLodgings(e, attachmentReferenceMapping, expenseMapping, data, tripId)
+	importLodgings(e, attachmentReferenceMapping, expenseMapping, data, tripId, travellerIdMappings)
 
 	// create activities
-	importActivities(e, attachmentReferenceMapping, expenseMapping, data, tripId)
+	importActivities(e, attachmentReferenceMapping, expenseMapping, data, tripId, travellerIdMappings)
 
 	return tripId, nil
 }
 
-func importActivities(app core.App, mapping map[string]string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string) {
+func importActivities(app core.App, mapping map[string]string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string, travellerMapping map[string]string) {
 
 	collection, _ := app.FindCollectionByNameOrId("activities")
 	if tripData.Activities != nil {
@@ -73,6 +73,15 @@ func importActivities(app core.App, mapping map[string]string, expenseMapping ma
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, a.AttachmentReferences))
 			record.Set("expenseId", getOrLinkExpense(app, a.ExpenseId, expenseMapping, tripData, tripId, mapping))
+
+			if a.Travellers != nil {
+				updatedTravellers := make([]string, len(a.Travellers))
+				for _, traveller := range a.Travellers {
+					updatedTravellers = append(updatedTravellers, travellerMapping[traveller])
+				}
+				record.Set("travellers", updatedTravellers)
+			}
+
 			_ = app.Save(record)
 		}
 	}
@@ -141,7 +150,7 @@ func getOrLinkExpense(app core.App, oldExpenseId string, expenseMapping map[stri
 	return ""
 }
 
-func importLodgings(app core.App, mapping map[string]string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string) {
+func importLodgings(app core.App, mapping map[string]string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string, travellerMapping map[string]string) {
 	collection, _ := app.FindCollectionByNameOrId("lodgings")
 
 	if tripData.Lodgings != nil {
@@ -160,6 +169,15 @@ func importLodgings(app core.App, mapping map[string]string, expenseMapping map[
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, l.AttachmentReferences))
 			record.Set("expenseId", getOrLinkExpense(app, l.ExpenseId, expenseMapping, tripData, tripId, mapping))
+
+			if l.Travellers != nil {
+				updatedTravellers := make([]string, len(l.Travellers))
+				for _, traveller := range l.Travellers {
+					updatedTravellers = append(updatedTravellers, travellerMapping[traveller])
+				}
+				record.Set("travellers", updatedTravellers)
+			}
+
 			err := app.Save(record)
 
 			if err != nil {
@@ -182,7 +200,7 @@ func getMappedAttachments(attachmentReferenceMapping map[string]string, existing
 	return result
 }
 
-func importTransportations(e core.App, attachmentReferenceMapping map[string]string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string) {
+func importTransportations(e core.App, attachmentReferenceMapping map[string]string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string, travellerMapping map[string]string) {
 
 	collection, _ := e.FindCollectionByNameOrId("transportations")
 	if tripData.Transportations != nil {
@@ -199,6 +217,15 @@ func importTransportations(e core.App, attachmentReferenceMapping map[string]str
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(attachmentReferenceMapping, tr.AttachmentReferences))
 			record.Set("expenseId", getOrLinkExpense(e, tr.ExpenseId, expenseMapping, tripData, tripId, attachmentReferenceMapping))
+
+			if tr.Travellers != nil {
+				updatedTravellers := make([]string, len(tr.Travellers))
+				for _, traveller := range tr.Travellers {
+					updatedTravellers = append(updatedTravellers, travellerMapping[traveller])
+				}
+				record.Set("travellers", updatedTravellers)
+			}
+
 			_ = e.Save(record)
 
 		}
@@ -227,21 +254,24 @@ func importAttachments(e core.App, zipReader *zip.Reader, data bt.ExportedTrip, 
 	return attachmentReferenceMapping
 }
 
-func importTravellerProfiles(app core.App, data bt.ExportedTrip, ownerId string, zipReader *zip.Reader, tripId string) {
+func importTravellerProfiles(app core.App, data bt.ExportedTrip, ownerId string, zipReader *zip.Reader, tripId string) map[string]string {
 	collection, err := app.FindCollectionByNameOrId("traveller_profiles")
 	if err != nil {
-		return
+		return nil
 	}
 
 	if data.TravellerProfiles == nil {
-		return
+		return nil
 	}
 
+	var mappedIds = make(map[string]string)
 	var tripTravellerIds []string
 	for _, tp := range data.TravellerProfiles {
+
 		existing, err := app.FindFirstRecordByData("traveller_profiles", "email", tp.Email)
 		if err == nil && existing != nil {
 			tripTravellerIds = append(tripTravellerIds, existing.Id)
+			mappedIds[tp.Id] = existing.Id
 			continue
 		}
 
@@ -269,6 +299,7 @@ func importTravellerProfiles(app core.App, data bt.ExportedTrip, ownerId string,
 		err = app.Save(record)
 		if err == nil {
 			tripTravellerIds = append(tripTravellerIds, record.Id)
+			mappedIds[tp.Id] = record.Id
 		}
 	}
 
@@ -279,6 +310,9 @@ func importTravellerProfiles(app core.App, data bt.ExportedTrip, ownerId string,
 			_ = app.Save(tripRecord)
 		}
 	}
+
+	return mappedIds
+
 }
 
 func importBasicTripInfo(app core.App, trip *bt.Trip, ownerId string, zipReader *zip.Reader) (string, error) {
