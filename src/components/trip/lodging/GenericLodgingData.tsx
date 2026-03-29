@@ -173,6 +173,14 @@ export const GenericLodgingData = ({
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={lodging.travellers} tripTravellers={tripTravellers} />
+      {lodging.metadata?.notes && lodging.metadata.notes != '' && (
+        <>
+          <Divider />
+          <Text size="sm" p="sm">
+            {lodging.metadata.notes}
+          </Text>
+        </>
+      )}
       {attachments && (
         <Attachments
           attachments={attachments}

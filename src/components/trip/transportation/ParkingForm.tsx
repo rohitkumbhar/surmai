@@ -1,4 +1,4 @@
-import { Button, Grid, Group, TextInput } from '@mantine/core';
+import { Button, Grid, Group, Textarea, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
@@ -64,6 +64,7 @@ export const ParkingForm = ({
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       place: parking?.metadata?.place,
       travellers: parking?.travellers || [],
+      notes: parking?.metadata?.notes || '',
     },
     validate: {},
   });
@@ -106,6 +107,7 @@ export const ParkingForm = ({
             provider: values.provider,
             spotNumber: values.spotNumber,
             place: values.place,
+            notes: values.notes,
           },
         },
       };
@@ -242,6 +244,15 @@ export const ParkingForm = ({
             value={form.getValues().travellers}
             onChange={(value) => form.setFieldValue('travellers', value)}
             formKey={form.key('travellers')}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea
+            name={'notes'}
+            label={t('notes', 'Notes')}
+            description={t('general_notes', 'General notes about this entry')}
+            key={form.key('notes')}
+            {...form.getInputProps('notes')}
           />
         </Grid.Col>
         <Grid.Col span={12}>

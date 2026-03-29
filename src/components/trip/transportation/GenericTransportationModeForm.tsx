@@ -1,4 +1,4 @@
-import { Button, Grid, Group, rem, TextInput } from '@mantine/core';
+import { Button, Grid, Group, rem, Textarea, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
@@ -14,7 +14,14 @@ import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.ts
 import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
 
 import type { SaveEntityPayload } from '../../../lib/api';
-import type { Attachment, Expense, Transportation, TransportationFormSchema, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type {
+  Attachment,
+  Expense,
+  Transportation,
+  TransportationFormSchema,
+  TravellerProfile,
+  Trip,
+} from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
 
 export const GenericTransportationModeForm = ({
@@ -59,6 +66,7 @@ export const GenericTransportationModeForm = ({
       destinationAddress: transportation?.metadata?.destinationAddress || '',
       link: transportation?.link,
       travellers: transportation?.travellers || [],
+      notes: transportation?.metadata.notes || '',
     },
     validate: {},
   });
@@ -105,6 +113,7 @@ export const GenericTransportationModeForm = ({
             destination: values.destination,
             originAddress: values.originAddress,
             destinationAddress: values.destinationAddress,
+            notes: values.notes,
           },
         },
       };
@@ -253,6 +262,15 @@ export const GenericTransportationModeForm = ({
             value={form.getValues().travellers}
             onChange={(value) => form.setFieldValue('travellers', value)}
             formKey={form.key('travellers')}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea
+            name={'notes'}
+            label={t('notes', 'Notes')}
+            description={t('general_notes', 'General notes about this entry')}
+            key={form.key('notes')}
+            {...form.getInputProps('notes')}
           />
         </Grid.Col>
         <Grid.Col span={12}>

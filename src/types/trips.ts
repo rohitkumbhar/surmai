@@ -136,6 +136,7 @@ export type CarRentalFormSchema = {
   link?: string;
   place?: Place;
   travellers?: string[];
+  notes?: string;
 };
 
 export type TransportationFormSchema = {
@@ -153,6 +154,7 @@ export type TransportationFormSchema = {
   assignedSeats?: string;
   link?: string;
   travellers?: string[];
+  notes?: string;
 };
 
 export type FlightFormSchema = Omit<TransportationFormSchema, 'origin' | 'destination'> & {
@@ -179,6 +181,7 @@ export type ParkingFormSchema = {
   link?: string;
   place?: Place;
   travellers?: string[];
+  notes?: string;
 };
 
 export type CroppedImage = {
@@ -226,6 +229,7 @@ export type LodgingFormSchema = {
   place?: Place;
   link?: string;
   travellers?: string[];
+  notes?: string;
 };
 
 export const enum LodgingType {

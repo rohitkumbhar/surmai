@@ -138,6 +138,14 @@ export const CarRentalData = ({
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={rental.travellers} tripTravellers={tripTravellers} />
+      {rental.metadata.notes && rental.metadata.notes != '' && (
+        <>
+          <Divider />
+          <Text size="sm" p="sm">
+            {rental.metadata.notes}
+          </Text>
+        </>
+      )}
       {transportationAttachments && (
         <Attachments
           attachments={transportationAttachments}

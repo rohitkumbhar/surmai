@@ -146,6 +146,14 @@ export const ParkingData = ({
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={parking.travellers} tripTravellers={tripTravellers} />
+      {parking.metadata.notes && parking.metadata.notes != '' && (
+        <>
+          <Divider />
+          <Text size="sm" p="sm">
+            {parking.metadata.notes}
+          </Text>
+        </>
+      )}
       {transportationAttachments && (
         <Attachments
           attachments={transportationAttachments}

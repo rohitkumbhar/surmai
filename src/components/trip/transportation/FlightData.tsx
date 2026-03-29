@@ -209,6 +209,14 @@ export const FlightData = ({
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={transportation.travellers} tripTravellers={tripTravellers} />
+      {transportation.metadata.notes && transportation.metadata.notes != '' && (
+        <>
+          <Divider />
+          <Text size="sm" p="sm">
+            {transportation.metadata.notes}
+          </Text>
+        </>
+      )}
       {transportationAttachments && (
         <Attachments
           onDelete={(attachmentId) =>
