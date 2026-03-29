@@ -29,17 +29,17 @@ export const Attachments = ({
   const getFileTypeIcon = (name: string) => {
     const fileName = name.toLowerCase();
     if (fileName.endsWith('.pdf')) {
-      return <IconFileTypePdf size={11} />;
+      return <IconFileTypePdf size={15} />;
     } else if (fileName.endsWith('.png')) {
-      return <IconFileTypePng />;
+      return <IconFileTypePng size={15} />;
     } else if (fileName.endsWith('.bmp')) {
-      return <IconFileTypeBmp />;
+      return <IconFileTypeBmp size={15} />;
     } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
       return <IconFileTypeJpg size={15} />;
     } else if (fileName.endsWith('.html')) {
-      return <IconFileTypeHtml />;
+      return <IconFileTypeHtml size={15} />;
     }
-    return <IconFile />;
+    return <IconFile size={15} />;
   };
 
   return (
