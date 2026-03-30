@@ -205,6 +205,14 @@ export const BikeData = ({
           <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
         </Grid.Col>
       </Grid>
+      {transportation.metadata.notes && transportation.metadata.notes != '' && (
+        <>
+          <Divider />
+          <Text size="sm" p="sm">
+            {transportation.metadata.notes}
+          </Text>
+        </>
+      )}
       <TravellerBadges travellerIds={transportation.travellers} tripTravellers={tripTravellers} />
       {transportationAttachments && (
         <Attachments

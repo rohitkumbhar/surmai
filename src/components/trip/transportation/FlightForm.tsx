@@ -1,4 +1,4 @@
-import { Button, Grid, Group, Stack, TextInput } from '@mantine/core';
+import { Button, Grid, Group, Stack, Textarea, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { useDebouncedCallback } from '@mantine/hooks';
@@ -103,6 +103,7 @@ export const FlightForm = ({
       cost: expense?.cost?.value,
       currencyCode: expense?.cost?.currency || user?.currencyCode || 'USD',
       flightNumber: transportation?.metadata?.flightNumber || '',
+      notes: transportation?.metadata?.notes || '',
       seats: transportation?.metadata?.seats || '',
       travellers: transportation?.travellers || [],
     },
@@ -149,6 +150,7 @@ export const FlightForm = ({
             destination: values.destination,
             flightNumber: values.flightNumber,
             seats: values.seats,
+            notes: values.notes,
           },
         },
       };
@@ -302,6 +304,15 @@ export const FlightForm = ({
               value={form.getValues().travellers}
               onChange={(value) => form.setFieldValue('travellers', value)}
               formKey={form.key('travellers')}
+            />
+          </Grid.Col>
+          <Grid.Col span={12}>
+            <Textarea
+              name={'notes'}
+              label={t('notes', 'Notes')}
+              description={t('general_notes', 'General notes about this entry')}
+              key={form.key('notes')}
+              {...form.getInputProps('notes')}
             />
           </Grid.Col>
           <Grid.Col span={12}>

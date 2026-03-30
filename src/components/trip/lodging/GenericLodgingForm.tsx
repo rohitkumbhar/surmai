@@ -1,4 +1,4 @@
-import { Button, Grid, Group, TextInput } from '@mantine/core';
+import { Button, Grid, Group, Textarea, TextInput } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import dayjs from 'dayjs';
@@ -59,6 +59,7 @@ export const GenericLodgingForm = ({
       confirmationCode: lodging?.confirmationCode,
       place: lodging?.metadata?.place || '',
       travellers: lodging?.travellers || [],
+      notes: lodging?.metadata?.notes || '',
     },
   });
 
@@ -95,7 +96,7 @@ export const GenericLodgingForm = ({
           link: values.link,
           travellers: values.travellers || [],
           cost: { value: values.cost, currency: values.currencyCode },
-          metadata: { place: values.place },
+          metadata: { place: values.place, notes: values.notes },
         },
       };
 
@@ -217,6 +218,15 @@ export const GenericLodgingForm = ({
             value={form.getValues().travellers}
             onChange={(value) => form.setFieldValue('travellers', value)}
             formKey={form.key('travellers')}
+          />
+        </Grid.Col>
+        <Grid.Col span={12}>
+          <Textarea
+            name={'notes'}
+            label={t('notes', 'Notes')}
+            description={t('general_notes', 'General notes about this entry')}
+            key={form.key('notes')}
+            {...form.getInputProps('notes')}
           />
         </Grid.Col>
         <Grid.Col span={12}>

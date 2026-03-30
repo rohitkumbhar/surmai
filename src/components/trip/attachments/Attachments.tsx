@@ -29,35 +29,35 @@ export const Attachments = ({
   const getFileTypeIcon = (name: string) => {
     const fileName = name.toLowerCase();
     if (fileName.endsWith('.pdf')) {
-      return <IconFileTypePdf />;
+      return <IconFileTypePdf size={15} />;
     } else if (fileName.endsWith('.png')) {
-      return <IconFileTypePng />;
+      return <IconFileTypePng size={15} />;
     } else if (fileName.endsWith('.bmp')) {
-      return <IconFileTypeBmp />;
+      return <IconFileTypeBmp size={15} />;
     } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
-      return <IconFileTypeJpg />;
+      return <IconFileTypeJpg size={15} />;
     } else if (fileName.endsWith('.html')) {
-      return <IconFileTypeHtml />;
+      return <IconFileTypeHtml size={15} />;
     }
-    return <IconFile />;
+    return <IconFile size={15} />;
   };
 
   return (
     <>
       <Divider />
       {attachments && attachments.length > 0 && (
-        <Group p={'sm'}>
+        <Group py={'sm'}>
           {(attachments || []).map((entry: Attachment) => {
             return (
               <Badge
                 key={entry.id}
                 variant={'transparent'}
-                size={'md'}
                 tt={'none'}
                 radius={0}
                 leftSection={getFileTypeIcon(entry.name)}
                 rightSection={
                   <CloseButton
+                    size={20}
                     title={t('delete_attachment', 'Delete Attachment')}
                     onClick={(event) => {
                       event.preventDefault();
@@ -96,6 +96,7 @@ export const Attachments = ({
                 <Anchor
                   href={'#'}
                   target={'_blank'}
+                  size={'sm'}
                   onClick={(event) => {
                     event.preventDefault();
                     const url = getAttachmentUrl(entry, entry.file);

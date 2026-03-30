@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsLink } from '../../../lib/places.ts';
 import { formatTime } from '../../../lib/time.ts';
-import { TravellerBadges } from '../TravellerBadges.tsx';
 import { typeIcons } from '../lodging/typeIcons.ts';
+import { TravellerBadges } from '../TravellerBadges.tsx';
 
 import type { Lodging, TravellerProfile } from '../../../types/trips.ts';
 import type { Dayjs } from 'dayjs';
