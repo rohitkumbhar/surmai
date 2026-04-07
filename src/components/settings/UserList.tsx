@@ -11,7 +11,6 @@ import {
   ScrollArea,
   Table,
   Text,
-  Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal, openContextModal } from '@mantine/modals';
@@ -132,12 +131,30 @@ export const UserList = () => {
 
   return (
     <Card withBorder radius="md" p="xl" mt={'md'}>
-      <Title order={3} fw={500}>
-        {t('users_section', 'Users')}
-      </Title>
-      <Text fz="xs" c="dimmed" mt={3} mb="xl">
-        {t('users_section_description', 'Manage Users')}
-      </Text>
+      <Group justify={'space-between'}>
+        <Text size={'xl'}>
+          {t('users_section', 'Users')}
+
+          <Text fz="xs" c="dimmed" mt={3} mb="xl">
+            {t('users_section_description', 'Manage Users')}
+          </Text>
+        </Text>
+        <Button
+          onClick={() => {
+            openContextModal({
+              modal: 'inviteUsersFormModal',
+              title: t('invite_new_user', 'Invite New User'),
+              radius: 'md',
+              withCloseButton: false,
+              size: 'auto',
+              fullScreen: isMobile,
+              innerProps: {},
+            });
+          }}
+        >
+          Invite User
+        </Button>
+      </Group>
 
       <div style={{ width: '100%' }}>
         <Modal
@@ -163,26 +180,13 @@ export const UserList = () => {
           overlayProps={{ radius: 'sm', blur: 2 }}
           loaderProps={{ type: 'bars' }}
         />
-        <Group justify={'flex-end'} gap={'xl'}>
+
+        <Group>
           {result && result.totalPages > 1 && (
             <Pagination value={activePage} onChange={setPage} total={result.totalPages} />
           )}
-          <Button
-            onClick={() => {
-              openContextModal({
-                modal: 'inviteUsersFormModal',
-                title: t('invite_new_user', 'Invite New User'),
-                radius: 'md',
-                withCloseButton: false,
-                size: 'auto',
-                fullScreen: isMobile,
-                innerProps: {},
-              });
-            }}
-          >
-            Invite User
-          </Button>
         </Group>
+
         <ScrollArea mt={'md'}>
           <Table miw={800} verticalSpacing="sm" striped>
             <Table.Thead>
