@@ -130,12 +130,7 @@ export const getSettingsForKey = <T>(key: string): Promise<T> => {
 };
 
 export const setSettingsForKey = (key: string, value: any) => {
-  return pbAdmin
-    .collection('surmai_settings')
-    .update(key, {
-      value,
-    })
-    .catch(() => {
-      return Promise.resolve();
-    });
+  return pbAdmin.collection('surmai_settings').update(key, {
+    value,
+  });
 };
