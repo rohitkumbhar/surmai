@@ -1,12 +1,13 @@
 import {
   Alert,
   Button,
+  Card,
   Code,
   Collapse,
+  Grid,
   Group,
   PasswordInput,
   Select,
-  Stack,
   Switch,
   Text,
   TextInput,
@@ -78,8 +79,7 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
   };
 
   return (
-    <div style={{ width: '100%' }}>
-      <Text mb={'md'}>{t('oauth2_settings_form', 'OAuth2 Settings')}</Text>
+    <Card w={'100%'}>
       <form onSubmit={form.onSubmit(handleSubmission)}>
         <Group justify="space-between">
           <div>
@@ -103,88 +103,100 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
             {t('callback_url_desc', 'The callback url for your setup is: ')}
             <Code>{`${apiUrl}/api/oauth2-redirect`}</Code>
           </Alert>
-          <Group mt={'sm'}>
-            <Select
-              label={t('oauth_provider_label', 'OAuth2 Provider')}
-              description={t('oauth_provider_description', 'Select OAuth2 Provider')}
-              data={oauthProviders}
-              key={form.key('name')}
-              miw={'200px'}
-              required
-              {...form.getInputProps('name')}
-            />
 
-            <TextInput
-              name={'displayName'}
-              label={t('oauth_display_name', 'Display Name')}
-              description={t('oauth_display_name_desc', 'Name displayed on the Login screen')}
-              required
-              miw={'300px'}
-              key={form.key('displayName')}
-              {...form.getInputProps('displayName')}
-            />
-          </Group>
-          <Group mt={'sm'}>
-            <TextInput
-              name={'clientId'}
-              label={t('oauth_client_id', 'Client Id')}
-              description={t('oauth_client_id_desc', 'Client Id given by the provider')}
-              required
-              miw={'400px'}
-              key={form.key('clientId')}
-              {...form.getInputProps('clientId')}
-            />
-
-            <PasswordInput
-              name={'clientSecret'}
-              label={t('oauth_client_secret', 'Client Secret')}
-              miw={'400px'}
-              required={form.getValues().enabled}
-              description={t('oauth_client_secret_desc', 'Client Secret given by the provider')}
-              key={form.key('clientSecret')}
-              {...form.getInputProps('clientSecret')}
-            />
-          </Group>
-          <Stack mt={'sm'}>
-            <TextInput
-              name={'authURL'}
-              label={t('oauth_auth_url', 'Auth URL')}
-              type={'url'}
-              required={form.getValues().name === 'oidc'}
-              description={t('oauth_url_description', 'Authorization Endpoint')}
-              key={form.key('authURL')}
-              {...form.getInputProps('authURL')}
-            />
-
-            <TextInput
-              name={'tokenURL'}
-              label={t('oauth_token_url', 'Token URL')}
-              type={'url'}
-              required={form.getValues().name === 'oidc'}
-              description={t('token_url_description', 'Token Endpoint')}
-              key={form.key('tokenURL')}
-              {...form.getInputProps('tokenURL')}
-            />
-
-            <TextInput
-              name={'userInfoURL'}
-              label={t('oauth_info_url', 'User Info URL')}
-              type={'url'}
-              description={t('oauth_info_url_description', 'User Info Endpoint')}
-              key={form.key('userInfoURL')}
-              {...form.getInputProps('userInfoURL')}
-            />
-          </Stack>
+          <Grid>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <Select
+                label={t('oauth_provider_label', 'OAuth2 Provider')}
+                description={t('oauth_provider_description', 'Select OAuth2 Provider')}
+                data={oauthProviders}
+                key={form.key('name')}
+                miw={'200px'}
+                required
+                {...form.getInputProps('name')}
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <TextInput
+                name={'displayName'}
+                label={t('oauth_display_name', 'Display Name')}
+                description={t('oauth_display_name_desc', 'Name displayed on the Login screen')}
+                required
+                miw={'300px'}
+                key={form.key('displayName')}
+                {...form.getInputProps('displayName')}
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <TextInput
+                name={'clientId'}
+                label={t('oauth_client_id', 'Client Id')}
+                description={t('oauth_client_id_desc', 'Client Id given by the provider')}
+                required
+                miw={'400px'}
+                key={form.key('clientId')}
+                {...form.getInputProps('clientId')}
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 6 }}>
+              <PasswordInput
+                name={'clientSecret'}
+                label={t('oauth_client_secret', 'Client Secret')}
+                miw={'400px'}
+                required={form.getValues().enabled}
+                description={t('oauth_client_secret_desc', 'Client Secret given by the provider')}
+                key={form.key('clientSecret')}
+                {...form.getInputProps('clientSecret')}
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <TextInput
+                name={'authURL'}
+                label={t('oauth_auth_url', 'Auth URL')}
+                type={'url'}
+                required={form.getValues().name === 'oidc'}
+                description={t('oauth_url_description', 'Authorization Endpoint')}
+                key={form.key('authURL')}
+                {...form.getInputProps('authURL')}
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <TextInput
+                name={'tokenURL'}
+                label={t('oauth_token_url', 'Token URL')}
+                type={'url'}
+                required={form.getValues().name === 'oidc'}
+                description={t('token_url_description', 'Token Endpoint')}
+                key={form.key('tokenURL')}
+                {...form.getInputProps('tokenURL')}
+              />
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, md: 4 }}>
+              <TextInput
+                name={'userInfoURL'}
+                label={t('oauth_info_url', 'User Info URL')}
+                type={'url'}
+                description={t('oauth_info_url_description', 'User Info Endpoint')}
+                key={form.key('userInfoURL')}
+                {...form.getInputProps('userInfoURL')}
+              />
+            </Grid.Col>
+          </Grid>
         </Collapse>
         <Group mt={'xl'} justify="space-between">
           <div></div>
           <Group>
-            <Button type={'submit'} w={'min-content'} leftSection={<IconDeviceFloppy />} disabled={!form.isDirty()}>
+            <Button
+              type={'submit'}
+              w={'min-content'}
+              leftSection={<IconDeviceFloppy size={14} />}
+              disabled={!form.isDirty()}
+            >
               {t('save', 'Save')}
             </Button>
           </Group>
         </Group>
       </form>
-    </div>
+    </Card>
   );
 };

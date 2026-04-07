@@ -1,5 +1,5 @@
 import { Container, Tabs, Text } from '@mantine/core';
-import { IconAdjustmentsPlus, IconKey, IconMail, IconSettings, IconUsers } from '@tabler/icons-react';
+import { IconAdjustmentsPlus, IconKey, IconSettings, IconUsers } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Header } from '../../components/nav/Header.tsx';
 import { Configuration } from '../../components/settings/Configuration.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
-import { SmtpSettingsForm } from '../../components/settings/SmtpSettingsForm.tsx';
 import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
 import { UserList } from '../../components/settings/UserList.tsx';
 import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
@@ -17,7 +16,7 @@ const Settings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useLocation();
-  const validTabs = ['users', 'smtp', 'security', 'datasets', 'integrations'];
+  const validTabs = ['users', 'configuration', 'datasets', 'integrations'];
   const fragment = hash.slice(1);
   const activeTab = validTabs.includes(fragment) ? fragment : validTabs[0];
   usePageTitle(t('site_settings', 'Site Settings'));
@@ -38,15 +37,16 @@ const Settings = () => {
         </Text>
       </Header>
 
-      <Tabs value={activeTab} onChange={(tab) => navigate({ hash: tab || 'users' }, { replace: true })} keepMounted={false}>
+      <Tabs
+        value={activeTab}
+        onChange={(tab) => navigate({ hash: tab || 'users' }, { replace: true })}
+        keepMounted={false}
+      >
         <Tabs.List>
           <Tabs.Tab value="users" leftSection={<IconUsers size={12} />}>
             {t('users_section', 'Users')}
           </Tabs.Tab>
-          <Tabs.Tab value="smtp" leftSection={<IconMail size={12} />}>
-            {t('smtp_settings', 'SMTP Settings')}
-          </Tabs.Tab>
-          <Tabs.Tab value="security" leftSection={<IconKey size={12} />}>
+          <Tabs.Tab value="configuration" leftSection={<IconKey size={12} />}>
             {t('site_configuration', 'Configuration')}
           </Tabs.Tab>
           <Tabs.Tab value="datasets" leftSection={<IconSettings size={12} />}>
@@ -59,12 +59,10 @@ const Settings = () => {
         <Tabs.Panel value="users">
           <UserList />
         </Tabs.Panel>
-        <Tabs.Panel value="security">
+        <Tabs.Panel value="configuration">
           <Configuration />
         </Tabs.Panel>
-        <Tabs.Panel value="smtp">
-          <SmtpSettingsForm />
-        </Tabs.Panel>
+
         <Tabs.Panel value="datasets">
           <Datasets />
         </Tabs.Panel>

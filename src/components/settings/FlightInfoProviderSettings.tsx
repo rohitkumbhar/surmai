@@ -1,4 +1,4 @@
-import { Button, Collapse, Group, Select, Skeleton, Switch, Text, TextInput } from '@mantine/core';
+import { Button, Card, Collapse, Group, Select, Skeleton, Switch, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceFloppy } from '@tabler/icons-react';
@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getSettingsForKey, setSettingsForKey } from '../../lib/api';
-import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 export type FlightInfoProviderSettings = {
   enabled: boolean;
@@ -43,9 +43,7 @@ export const FlightInfoProviderSettings = () => {
         provider: flightInfo?.provider,
         apiKey: flightInfo?.apiKey,
       });
-      // form.reset();
       openForm();
-      console.log('opened form');
     }
   }, [flightInfo]);
 
@@ -77,7 +75,14 @@ export const FlightInfoProviderSettings = () => {
           message: t('flight_info_provider_success', 'Updated flight information provider configuration'),
         });
       })
-      .then(() => refetch());
+      .then(() => refetch())
+      .catch((error) => {
+        showErrorNotification({
+          title: t('failed', 'Failed'),
+          message: t('flight_info_provider_failed', 'Error occurred while saving flight info provider'),
+          error,
+        });
+      });
   };
 
   if (!flightInfo) {
@@ -85,7 +90,7 @@ export const FlightInfoProviderSettings = () => {
   }
 
   return (
-    <div style={{ width: '100%' }}>
+    <Card w={'100%'}>
       <form onSubmit={form.onSubmit(handleSubmission)}>
         <Group justify="space-between">
           <div>
@@ -134,12 +139,17 @@ export const FlightInfoProviderSettings = () => {
         <Group mt={'xl'} justify="space-between">
           <div></div>
           <Group>
-            <Button type={'submit'} w={'min-content'} leftSection={<IconDeviceFloppy />} disabled={!form.isDirty()}>
+            <Button
+              type={'submit'}
+              w={'min-content'}
+              leftSection={<IconDeviceFloppy size={14} />}
+              disabled={!form.isDirty()}
+            >
               {t('save', 'Save')}
             </Button>
           </Group>
         </Group>
       </form>
-    </div>
+    </Card>
   );
 };
