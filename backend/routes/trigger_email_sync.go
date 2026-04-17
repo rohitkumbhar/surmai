@@ -7,8 +7,8 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
-func TriggerEmailSync(e *core.RequestEvent) error {
-	job := jobs.EmailSyncJob{
+func ImportBookingsNow(e *core.RequestEvent) error {
+	job := jobs.ImportBookingsFromEmailJob{
 		App: e.App,
 	}
 	job.Execute()

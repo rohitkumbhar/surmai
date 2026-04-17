@@ -17,10 +17,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getSettingsForKey, setSettingsForKey, testImapConnectivity, triggerEmailSync } from '../../lib/api';
+import { getSettingsForKey, setSettingsForKey, testImapConnectivity, triggerImportBookingsJob } from '../../lib/api';
 import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
-export type EmailSyncConfiguration = {
+export type ImportBookingsConfiguration = {
   enabled?: boolean;
   imapHost?: string;
   imapPort?: number;
@@ -30,17 +30,17 @@ export type EmailSyncConfiguration = {
 
 const settingsKey = 'email_sync_config';
 
-export const EmailSyncConfiguration = () => {
+export const ImportBookingsConfiguration = () => {
   const { t } = useTranslation();
 
   const { data: emailSyncConfig, refetch } = useQuery({
     queryKey: ['getSettingsForKey', settingsKey],
-    queryFn: () => getSettingsForKey<EmailSyncConfiguration>(settingsKey),
+    queryFn: () => getSettingsForKey<ImportBookingsConfiguration>(settingsKey),
   });
 
   const [opened, { open: openForm, close: closeForm }] = useDisclosure(emailSyncConfig?.enabled);
 
-  const form = useForm<EmailSyncConfiguration>({
+  const form = useForm<ImportBookingsConfiguration>({
     mode: 'uncontrolled',
     initialValues: {
       enabled: !!emailSyncConfig?.enabled,
@@ -72,7 +72,7 @@ export const EmailSyncConfiguration = () => {
     }
   });
 
-  const handleSubmission = async (values: EmailSyncConfiguration) => {
+  const handleSubmission = async (values: ImportBookingsConfiguration) => {
     const payload = {
       enabled: values.enabled,
       imapHost: values.imapHost,
@@ -104,11 +104,11 @@ export const EmailSyncConfiguration = () => {
         <form onSubmit={form.onSubmit(handleSubmission)}>
           <Group justify="space-between">
             <div>
-              <Text>{t('enable_email_sync', 'Enable Email Sync')}</Text>
+              <Text>{t('enable_import_bookings', 'Import Bookings From Email')}</Text>
               <Text size="sm" c="dimmed">
                 {t(
                   'enable_email_sync_description',
-                  'Configure the server and credentials of the monitored email address.'
+                  'Configure the server and credentials of the monitored email address to import bookings.'
                 )}
               </Text>
               <Text size="sm" c="dimmed">
@@ -172,7 +172,7 @@ export const EmailSyncConfiguration = () => {
             <Button
               variant={'outline'}
               onClick={() => {
-                triggerEmailSync()
+                triggerImportBookingsJob()
                   .then(() => {
                     showSaveSuccessNotification({
                       title: t('success', 'Success'),
@@ -188,7 +188,7 @@ export const EmailSyncConfiguration = () => {
                   });
               }}
             >
-              {t('trigger_email_sync', 'Trigger Email Sync')}
+              {t('trigger_import_bookings_job', 'Import Bookings')}
             </Button>
             <Button
               variant={'outline'}
@@ -200,7 +200,7 @@ export const EmailSyncConfiguration = () => {
                       message: t(
                         'connection_successful',
                         `Connection successful. Unread email count: {{ unreadEmailCount }}`,
-                        { unreadEmailCount }
+                        { unreadEmailCount: unreadEmailCount }
                       ),
                     });
                   })

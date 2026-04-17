@@ -40,7 +40,7 @@ func (surmai *SurmaiApp) BindRoutes() {
 		assistantRoutes.Bind(apis.RequireSuperuserAuth())
 		assistantRoutes.POST("/test-prompt", R.TestOpenAiEndpoint)
 		assistantRoutes.POST("/test-imap", R.TestImapConnectivity)
-		assistantRoutes.POST("/email-sync/trigger", R.TriggerEmailSync)
+		assistantRoutes.POST("/import-bookings/trigger", R.ImportBookingsNow)
 
 		// These routes are handled by React Router to load the appropriate component
 		// It's possible that these routes are bookmarked and are loaded directly
@@ -179,11 +179,11 @@ func (surmai *SurmaiApp) startDemoModeSetupJob() {
 }
 
 func (surmai *SurmaiApp) startEmailSyncJob() {
-	job := &jobs.EmailSyncJob{
+	job := &jobs.ImportBookingsFromEmailJob{
 		App: surmai.Pb.App,
 	}
 
-	surmai.Pb.Cron().MustAdd("EmailSyncJob", "0 * * * *", func() {
+	surmai.Pb.Cron().MustAdd("ImportBookingsFromEmailJob", "0 * * * *", func() {
 		job.Execute()
 	})
 }

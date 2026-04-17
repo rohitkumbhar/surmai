@@ -88,7 +88,7 @@ func CountUnreadEmails(app core.App) (int, error) {
 	return len(uids), nil
 }
 
-func FetchUnreadEmails(app core.App, _ bt.EmailSyncConfig) ([]bt.Email, error) {
+func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
 
 	c, err, closeConnection := connectToInbox(app)
 	if err != nil {

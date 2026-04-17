@@ -25,8 +25,8 @@ export const testImapConnectivity = () => {
     });
 };
 
-export const triggerEmailSync = () => {
-  return pbAdmin.send('/api/surmai/assistant/email-sync/trigger', {
+export const triggerImportBookingsJob = () => {
+  return pbAdmin.send('/api/surmai/assistant/import-bookings/trigger', {
     method: 'POST',
     body: {},
   });

@@ -2,7 +2,7 @@ import { Alert, Card, Stack, Text, Title } from '@mantine/core';
 import { IconAi } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { EmailSyncConfiguration } from './EmailSyncConfiguration.tsx';
+import { ImportBookingsConfiguration } from './ImportBookingsConfiguration.tsx';
 import { OpenAIEndpointConfiguration } from './OpenAIEndpointConfiguration.tsx';
 
 export const AssistantConfiguration = () => {
@@ -31,7 +31,7 @@ export const AssistantConfiguration = () => {
         </Alert>
       </Card>
       <OpenAIEndpointConfiguration />
-      <EmailSyncConfiguration />
+      <ImportBookingsConfiguration />
     </Stack>
   );
 };

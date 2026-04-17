@@ -72,14 +72,14 @@ export const OpenAIEndpointConfiguration = () => {
       .then(() => {
         showSaveSuccessNotification({
           title: t('success', 'Success'),
-          message: t('openai_endpoint_config_saved', 'OpenAI Endpoint configuration saved'),
+          message: t('ai_endpoint_config_saved', 'AI Endpoint configuration saved'),
         });
       })
       .then(() => refetch())
       .catch((error) => {
         showErrorNotification({
           title: t('failed', 'Failed'),
-          message: t('openai_endpoint_config_failed', 'Error occurred while saving OpenAI Endpoint settings'),
+          message: t('ai_endpoint_config_failed', 'Error occurred while saving OpenAI Endpoint settings'),
           error,
         });
       });
@@ -102,7 +102,7 @@ export const OpenAIEndpointConfiguration = () => {
           <form onSubmit={form.onSubmit(handleSubmission)}>
             <Group justify="space-between">
               <div>
-                <Text>{t('enable_openai_endpoint', 'Enable OpenAI Endpoint')}</Text>
+                <Text>{t('enable_openai_endpoint', 'OpenAI Compatible Endpoint')}</Text>
                 <Text size="sm" c="dimmed">
                   {t(
                     'enable_openai_endpoint_desc',

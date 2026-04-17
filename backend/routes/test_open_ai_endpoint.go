@@ -1,14 +1,13 @@
 package routes
 
 import (
-	"backend/assistant"
+	"backend/assistant/ai"
 	"net/http"
 
 	"github.com/pocketbase/pocketbase/core"
 )
 
 func TestOpenAiEndpoint(e *core.RequestEvent) error {
-
 	app := e.App
 	info, err := e.RequestInfo()
 	if err != nil {
@@ -17,12 +16,7 @@ func TestOpenAiEndpoint(e *core.RequestEvent) error {
 
 	prompt := info.Body["prompt"].(string)
 
-	aiClient, err := assistant.New(app)
-	if err != nil {
-		return err
-	}
-
-	response, err := aiClient.TestConnection(prompt)
+	response, err := ai.TestConnection(app, prompt)
 	if err != nil {
 		return err
 	}
