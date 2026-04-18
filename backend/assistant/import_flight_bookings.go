@@ -58,7 +58,7 @@ func saveFlightTransportation(txApp core.App, msg *bt.Email, tripId string, flig
 		expenseId = saveFlightExpense(txApp, tripId, flight)
 	}
 
-	metadata := buildFlightMetadata(txApp, flight)
+	metadata := buildFlightMetadata(txApp, msg, flight)
 
 	transportationsCollection, _ := txApp.FindCollectionByNameOrId("transportations")
 	entity := core.NewRecord(transportationsCollection)
@@ -71,6 +71,7 @@ func saveFlightTransportation(txApp core.App, msg *bt.Email, tripId string, flig
 	entity.Set("expenseId", expenseId)
 	entity.Set("attachmentReferences", attachmentIds)
 	entity.Set("metadata", metadata)
+	entity.Set("link", flight.Link)
 
 	return txApp.Save(entity)
 }
@@ -117,7 +118,7 @@ func saveFlightExpense(txApp core.App, tripId string, flight *bt.EmailFlightInfo
 	return expensesRecord.Id
 }
 
-func buildFlightMetadata(app core.App, flight *bt.EmailFlightInfo) map[string]interface{} {
+func buildFlightMetadata(app core.App, msg *bt.Email, flight *bt.EmailFlightInfo) map[string]interface{} {
 	metadata := map[string]interface{}{
 		"flightNumber": flight.FlightNumber,
 		"reservation":  flight.ConfirmationCode,
@@ -144,6 +145,8 @@ func buildFlightMetadata(app core.App, flight *bt.EmailFlightInfo) map[string]in
 	if flight.Seats != "" {
 		metadata["seats"] = flight.Seats
 	}
+
+	metadata["notes"] = fmt.Sprintf("Extracted from: %s", msg.Subject)
 
 	return metadata
 }

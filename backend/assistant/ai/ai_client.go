@@ -65,6 +65,7 @@ func TestConnection(app core.App, prompt string) (string, error) {
 }
 
 func GenerateSchema[T any]() map[string]any {
+
 	reflector := jsonschema.Reflector{
 		AllowAdditionalProperties: false,
 		DoNotReference:            true,
@@ -78,41 +79,48 @@ func GenerateSchema[T any]() map[string]any {
 	return result
 }
 
-func Call[ResponseSchema any](app core.App, instructions string, input string, result *ResponseSchema) error {
-
+func Call[ResponseSchema any](app core.App, instructions string, input string, resultChan chan<- ResponseSchema) {
 	responseSchema := GenerateSchema[ResponseSchema]()
-	config, err := loadAiConfig(app)
 
-	if err != nil {
-		return err
-	}
+	go func() {
+		config, err := loadAiConfig(app)
 
-	ctx := context.Background()
-	client := openai.NewClient(
-		option.WithAPIKey(config.ApiKey),
-		option.WithBaseURL(config.Endpoint),
-	)
-	resp, err := client.Responses.New(ctx, responses.ResponseNewParams{
-		Temperature:  openai.Float(0.1),
-		Instructions: openai.String(instructions),
-		Input:        responses.ResponseNewParamsInputUnion{OfString: openai.String(input)},
-		Model:        config.Model,
-		Text: responses.ResponseTextConfigParam{
-			Format: responses.ResponseFormatTextConfigParamOfJSONSchema(
-				"response",
-				responseSchema,
-			),
-		},
-	})
+		if err != nil {
+			resultChan <- *new(ResponseSchema)
+			return
+		}
 
-	if err != nil {
-		return err
-	}
+		ctx := context.Background()
+		client := openai.NewClient(
+			option.WithAPIKey(config.ApiKey),
+			option.WithBaseURL(config.Endpoint),
+		)
+		resp, err := client.Responses.New(ctx, responses.ResponseNewParams{
+			Temperature:  openai.Float(0.1),
+			Instructions: openai.String(instructions),
+			Input:        responses.ResponseNewParamsInputUnion{OfString: openai.String(input)},
+			Model:        config.Model,
+			Text: responses.ResponseTextConfigParam{
+				Format: responses.ResponseFormatTextConfigParamOfJSONSchema(
+					"response",
+					responseSchema,
+				),
+			},
+		})
 
-	err = json.Unmarshal([]byte(resp.OutputText()), result)
+		if err != nil {
+			resultChan <- *new(ResponseSchema)
+			return
+		}
 
-	if err != nil {
-		return err
-	}
-	return nil
+		var result ResponseSchema
+		err = json.Unmarshal([]byte(resp.OutputText()), &result)
+
+		if err != nil {
+			resultChan <- *new(ResponseSchema)
+			return
+		}
+
+		resultChan <- result
+	}()
 }

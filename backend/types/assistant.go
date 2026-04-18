@@ -49,12 +49,26 @@ type EmailFlightInfo struct {
 	Passengers           []EmailPassenger `json:"passengers"`
 	Cost                 Cost             `json:"cost"`
 	Seats                string           `json:"seats"`
+	Link                 string           `json:"link"`
 	Airline              Airline          `json:"airline"`
+}
+
+type EmailActivityInfo struct {
+	Name             string           `json:"name"`
+	Description      string           `json:"description"`
+	ConfirmationCode string           `json:"confirmation_code"`
+	Address          string           `json:"address"`
+	StartDate        string           `json:"start_date"`
+	EndDate          string           `json:"end_date"`
+	Link             string           `json:"link"`
+	Participants     []EmailPassenger `json:"participants"`
+	Cost             Cost             `json:"cost"`
 }
 
 type EmailCategory string
 
 type EmailScanResult struct {
-	Category EmailCategory      `json:"category" jsonschema:"enum=flight_reservation,enum=train_reservation,enum=car_rental_reservation,enum=hotel_reservation,enum=unknown,enum=expense_receipt,enum=activity_reservation" jsonschema_description:"Classification of the types of reservations or reservations"`
-	Flights  []*EmailFlightInfo `json:"flight_info,omitempty" jsonschema:"omitempty"`
+	Category   EmailCategory        `json:"category" jsonschema:"enum=flight_reservation,enum=train_reservation,enum=car_rental_reservation,enum=hotel_reservation,enum=unknown,enum=expense_receipt,enum=activity_reservation" jsonschema_description:"Classification of the types of reservations or reservations"`
+	Flights    []*EmailFlightInfo   `json:"flights,omitempty" jsonschema:"omitempty" jsonschema_description:"Container for flight bookings information"`
+	Activities []*EmailActivityInfo `json:"activities,omitempty" jsonschema:"omitempty" jsonschema_description:"Container for activity bookings information"`
 }

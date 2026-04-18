@@ -40,7 +40,7 @@ func ImportBookingsFromEmails(app core.App) error {
 		case email.ExpenseReceipt:
 			app.Logger().WithGroup("import_bookings").Debug("Processing expense receipt")
 		case email.ActivityReservation:
-			app.Logger().WithGroup("import_bookings").Debug("Processing activity reservation")
+			ProcessActivities(app, &msg, user, emailInfo.Activities)
 		}
 
 	}

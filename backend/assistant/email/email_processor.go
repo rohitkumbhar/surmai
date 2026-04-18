@@ -15,15 +15,18 @@ hotel reservation, expense receipt or activity reservation. Say unknown if it do
 mentioned earlier. Return the extracted details based on the classification.
 
 Extract passenger names and emails when available.
-
+Extract one single most relevant link from the email body, if available.
 For flights, return the flight number, departure and arrival airport codes, departure and arrival dates and times in the ISO 8601 
 format and cost of the flight including currency code in the 3 letter format. 
+
+For activity reservations, return the activity name, description, date, time, and participant names and emails if available. All timestamps 
+should be in the ISO 8601 format.
+
 
 For any other transportation modes, pick the right type departure and arrival station codes, departure and arrival dates in the ISO 8601 format.
 For car rental reservations, return the car rental company name, pick-up and drop-off dates and locations. All timestamps should be in the ISO 8601 format.
 For hotel or any accommodation reservations, return the hotel name, check-in and check-out dates, and guest names and emails if available. All timestamps should be in the ISO 8601 format.
 For expense receipts, return the total amount, currency, and any relevant details such as travel dates and destinations.
-For activity reservations, return the activity name, date, time, and participant names and emails if available. All timestamps should be in the ISO 8601 format.
 `
 
 const (
@@ -64,11 +67,9 @@ func ExtractEmailInfo(app core.App, msg *bt.Email) (*bt.EmailScanResult, error) 
 	}
 	input := fmt.Sprintf("Subject: %s \n Body: %s", msg.Subject, body)
 
-	result := bt.EmailScanResult{}
-	err = ai.Call(app, EmailClassificationInstruction, input, &result)
-	if err != nil {
-		return nil, err
-	}
+	resultChan := make(chan bt.EmailScanResult)
+	go ai.Call(app, EmailClassificationInstruction, input, resultChan)
+	result := <-resultChan
 
 	return &result, nil
 }
