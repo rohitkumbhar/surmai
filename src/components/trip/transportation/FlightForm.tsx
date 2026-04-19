@@ -181,7 +181,6 @@ export const FlightForm = ({
               description={t('flight_number_desc', 'ICAO Flight Designation')}
               {...form.getInputProps('flightNumber')}
               onBlur={(ev) => {
-                // @ts-expect-error it ok
                 getFlightInfo(form, ev.target.value);
               }}
             />

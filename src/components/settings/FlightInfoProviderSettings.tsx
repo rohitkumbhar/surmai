@@ -109,7 +109,7 @@ export const FlightInfoProviderSettings = () => {
             {...form.getInputProps('enabled', { type: 'checkbox' })}
           />
         </Group>
-        <Collapse in={opened}>
+        <Collapse expanded={opened}>
           <Group mt={'sm'}>
             <Select
               label={t('flight_info_provider', 'Flight Info Provider')}

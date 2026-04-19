@@ -29,8 +29,8 @@ export const FancyPasswordInput = ({
     <PasswordRequirement key={index} label={requirement.label} meets={requirement.re.test(currentPasswordValue)} />
   ));
 
-  form.watch(fieldName, ({ value }: { value: string }) => {
-    setCurrentPasswordValue(value);
+  form.watch(fieldName, ({ value }) => {
+    setCurrentPasswordValue(value as string);
   });
 
   return (

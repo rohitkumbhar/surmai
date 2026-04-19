@@ -1,4 +1,4 @@
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, v8CssVariablesResolver } from '@mantine/core';
 import { DatesProvider } from '@mantine/dates';
 import { useMediaQuery, useNetwork } from '@mantine/hooks';
 import { ModalsProvider } from '@mantine/modals';
@@ -36,7 +36,7 @@ export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
 
   return (
     <SurmaiContext value={value}>
-      <MantineProvider theme={theme} defaultColorScheme={'auto'}>
+      <MantineProvider theme={theme} defaultColorScheme={'auto'} cssVariablesResolver={v8CssVariablesResolver}>
         <DatesProvider settings={{ locale: i18n.language }}>
           <Notifications position={'top-right'} autoClose={5000} />
           <ModalsProvider modals={modals}>

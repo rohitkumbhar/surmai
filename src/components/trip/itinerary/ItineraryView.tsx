@@ -11,7 +11,7 @@ import { LodgingLine } from './LodgingLine.tsx';
 import { TransportationLine } from './TransportationLine.tsx';
 import { listActivities, listLodgings, listTransportations } from '../../../lib/api';
 
-import type { Activity, ItineraryLine, Lodging, Transportation, Trip, TravellerProfile } from '../../../types/trips.ts';
+import type { Activity, ItineraryLine, Lodging, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 const getDailyItinerary = (
   day: string,
@@ -132,13 +132,21 @@ export const ItineraryView = ({ trip, tripTravellers = [] }: { trip: Trip; tripT
                       return (
                         <Fragment key={entry.id}>
                           {entry.itineraryType === 'transportation' && (
-                            <TransportationLine transportation={entry as Transportation} day={entry.day} tripTravellers={tripTravellers} />
+                            <TransportationLine
+                              transportation={entry as Transportation}
+                              day={entry.day}
+                              tripTravellers={tripTravellers}
+                            />
                           )}
                           {entry.itineraryType === 'lodging' && (
                             <LodgingLine lodging={entry as Lodging} day={entry.day} tripTravellers={tripTravellers} />
                           )}
                           {entry.itineraryType === 'activity' && (
-                            <ActivityLine activity={entry as Activity} day={entry.day} tripTravellers={tripTravellers} />
+                            <ActivityLine
+                              activity={entry as Activity}
+                              day={entry.day}
+                              tripTravellers={tripTravellers}
+                            />
                           )}
                         </Fragment>
                       );

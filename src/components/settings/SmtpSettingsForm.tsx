@@ -86,7 +86,6 @@ export const SmtpSettingsForm = () => {
 
   return (
     <Card withBorder>
-
       <form onSubmit={form.onSubmit(handleSubmission)}>
         <Group justify="space-between" gap="xl" key={'smtp_settings'}>
           <div>
@@ -102,7 +101,7 @@ export const SmtpSettingsForm = () => {
             key={form.key('enabled')}
             {...form.getInputProps('enabled', { type: 'checkbox' })}
           />
-          <Collapse in={opened}>
+          <Collapse expanded={opened}>
             <Grid>
               <Grid.Col span={{ base: 12, md: 4 }}>
                 <TextInput
