@@ -10,6 +10,7 @@ export const supportedLanguages = [
   { label: 'French (France)', value: 'fr-FR' },
   { label: 'Japanese (Japan)', value: 'ja-JP' },
   { label: 'German (Germany)', value: 'de-DE' },
+  { label: 'Czech (Czechia)', value: 'cs-CZ' },
 ];
 
 export const configureI18next = async () => {
@@ -70,6 +71,16 @@ export const updateDayJsLanguage = (language: string) => {
         import('dayjs/locale/de')
           .then(() => {
             dayjs.locale('de');
+          })
+          .catch((err) => {
+            console.log('could not load locale', err);
+          });
+        break;
+      case 'cs':
+      case 'cs-CZ':
+        import('dayjs/locale/cs')
+          .then(() => {
+            dayjs.locale('cs');
           })
           .catch((err) => {
             console.log('could not load locale', err);
