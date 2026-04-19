@@ -111,7 +111,7 @@ export const TripAttachments = ({
           </Text>
         </Card>
       )}
-      <Grid gutter="md" mt={'sm'}>
+      <Grid gap="md" mt={'sm'}>
         {(tripAttachments || []).map((attachment: Attachment) => (
           <Grid.Col key={attachment.id} span={{ base: 12, sm: 6, md: 4 }}>
             <Card

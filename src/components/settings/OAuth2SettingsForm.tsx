@@ -98,7 +98,7 @@ export const OAuth2SettingsForm = ({ oauthConfig, refetch }: OAuth2SettingsFormP
             {...form.getInputProps('enabled', { type: 'checkbox' })}
           />
         </Group>
-        <Collapse in={opened}>
+        <Collapse expanded={opened}>
           <Alert title={t('oauth2_callback_url', 'Callback URL')} icon={<IconWebhook />} mb="lg" mt="lg">
             {t('callback_url_desc', 'The callback url for your setup is: ')}
             <Code>{`${apiUrl}/api/oauth2-redirect`}</Code>

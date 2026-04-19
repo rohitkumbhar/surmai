@@ -52,7 +52,7 @@ export function LinksGroup({ icon: Icon, label, initiallyOpened, links }: LinksG
           )}
         </Group>
       </div>
-      {hasLinks ? <Collapse in={opened}>{items}</Collapse> : null}
+      {hasLinks ? <Collapse expanded={opened}>{items}</Collapse> : null}
     </>
   );
 }

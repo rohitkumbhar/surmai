@@ -143,7 +143,7 @@ export const ExpensesPanel = ({
           </Text>
         </Card>
       ) : (
-        <Grid gutter="sm">
+        <Grid gap="sm">
           {sortedExpenses.map((exp) => (
             <Grid.Col key={exp.id} span={{ base: 12, sm: 6, md: 4 }}>
               <ExpenseCard
