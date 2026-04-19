@@ -56,7 +56,7 @@ export const MyTrips = () => {
     throw upcomingTripsError;
   }
 
-  const logError = (error: Error) => {
+  const logError = (error: unknown) => {
     showErrorNotification({
       title: t('error', 'Error'),
       error: error,
