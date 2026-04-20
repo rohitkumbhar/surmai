@@ -79,14 +79,19 @@ func GenerateSchema[T any]() map[string]any {
 	return result
 }
 
-func Call[ResponseSchema any](app core.App, instructions string, input string, resultChan chan<- ResponseSchema) {
+type CallResult[T any] struct {
+	Result T
+	Err    error
+}
+
+func Call[ResponseSchema any](app core.App, instructions string, input string, resultChan chan<- CallResult[ResponseSchema]) {
 	responseSchema := GenerateSchema[ResponseSchema]()
 
 	go func() {
 		config, err := loadAiConfig(app)
 
 		if err != nil {
-			resultChan <- *new(ResponseSchema)
+			resultChan <- CallResult[ResponseSchema]{Err: err}
 			return
 		}
 
@@ -96,7 +101,7 @@ func Call[ResponseSchema any](app core.App, instructions string, input string, r
 			option.WithBaseURL(config.Endpoint),
 		)
 		resp, err := client.Responses.New(ctx, responses.ResponseNewParams{
-			Temperature:  openai.Float(0.1),
+			//Temperature:  openai.Float(0.1),
 			Instructions: openai.String(instructions),
 			Input:        responses.ResponseNewParamsInputUnion{OfString: openai.String(input)},
 			Model:        config.Model,
@@ -109,7 +114,7 @@ func Call[ResponseSchema any](app core.App, instructions string, input string, r
 		})
 
 		if err != nil {
-			resultChan <- *new(ResponseSchema)
+			resultChan <- CallResult[ResponseSchema]{Err: err}
 			return
 		}
 
@@ -117,10 +122,10 @@ func Call[ResponseSchema any](app core.App, instructions string, input string, r
 		err = json.Unmarshal([]byte(resp.OutputText()), &result)
 
 		if err != nil {
-			resultChan <- *new(ResponseSchema)
+			resultChan <- CallResult[ResponseSchema]{Err: err}
 			return
 		}
 
-		resultChan <- result
+		resultChan <- CallResult[ResponseSchema]{Result: result}
 	}()
 }

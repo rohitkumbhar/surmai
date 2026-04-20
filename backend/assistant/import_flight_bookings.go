@@ -2,8 +2,8 @@ package assistant
 
 import (
 	bt "backend/types"
+	"encoding/json"
 	"fmt"
-	"time"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
@@ -23,11 +23,8 @@ func ProcessFlights(app core.App, msg *bt.Email, user *core.Record, flights []*b
 			continue
 		}
 
-		departure, _ := types.ParseDateTime(departureTimestamp)
-		arrival, _ := types.ParseDateTime(arrivalTimestamp)
-
 		txErr := app.RunInTransaction(func(txApp core.App) error {
-			return saveFlightTransportation(txApp, msg, trip.Id, flight, departure, arrival)
+			return saveFlightTransportation(txApp, msg, trip.Id, flight, departureTimestamp, arrivalTimestamp)
 		})
 
 		if txErr != nil {
@@ -36,16 +33,16 @@ func ProcessFlights(app core.App, msg *bt.Email, user *core.Record, flights []*b
 	}
 }
 
-func parseFlightTimestamps(app core.App, departureStr, arrivalStr string) (time.Time, time.Time, error) {
-	departureTimestamp, err := time.Parse("2006-01-02T15:04:05", departureStr)
+func parseFlightTimestamps(app core.App, departureStr, arrivalStr string) (types.DateTime, types.DateTime, error) {
+	departureTimestamp, err := types.ParseDateTime(departureStr)
 	if err != nil {
 		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse departure date: %v", err))
-		return time.Time{}, time.Time{}, err
+		return types.NowDateTime(), types.NowDateTime(), err
 	}
-	arrivalTimestamp, err := time.Parse("2006-01-02T15:04:05", arrivalStr)
+	arrivalTimestamp, err := types.ParseDateTime(arrivalStr)
 	if err != nil {
 		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse arrival date: %v", err))
-		return time.Time{}, time.Time{}, err
+		return types.NowDateTime(), types.NowDateTime(), err
 	}
 	return departureTimestamp, arrivalTimestamp, nil
 }
@@ -151,18 +148,41 @@ func buildFlightMetadata(app core.App, msg *bt.Email, flight *bt.EmailFlightInfo
 	return metadata
 }
 
-func findMatchingTrip(app core.App, user *core.Record, startTimestamp time.Time, endTimestamp time.Time) (*bt.Trip, error) {
+func findMatchingTrip(app core.App, user *core.Record, startTimestamp types.DateTime, endTimestamp types.DateTime) (*bt.Trip, error) {
 	trip := bt.Trip{}
-	err := app.DB().
-		NewQuery("select id, name, description from trips where startDate <= {:startTimestamp} AND endDate >= {:endTimestamp} AND (ownerId = {:userId} or exists (select 1 from json_each(trips.collaborators) where value = {:userId}))").
-		Bind(dbx.Params{
+	//err := app.DB().
+	//	NewQuery("select id, name, description from trips where startDate <= {:startTimestamp} AND endDate >= {:endTimestamp} AND (ownerId = {:userId} or exists (select 1 from json_each(trips.collaborators) where value = {:userId}))").
+	//	Bind(dbx.Params{
+	//		"startTimestamp": startTimestamp,
+	//		"endTimestamp":   endTimestamp,
+	//		"userId":         user.Id,
+	//	}).One(&trip)
+
+	//tripsCollection, _ := app.FindCollectionByNameOrId("trips")
+	result, err := app.FindFirstRecordByFilter("trips", "startDate <= {:startTimestamp} && endDate >= {:endTimestamp} && (ownerId = {:userId} || collaborators.id ?= {:userId})",
+		dbx.Params{
 			"startTimestamp": startTimestamp,
 			"endTimestamp":   endTimestamp,
 			"userId":         user.Id,
-		}).One(&trip)
+		})
+
 	if err != nil {
 		return nil, err
 	}
+
+	trip.Id = result.Id
+	trip.Name = result.GetString("name")
+	trip.Description = result.GetString("description")
+	destinationsStr := result.GetString("destinations")
+
+	var destinations []bt.Destination
+	err = json.Unmarshal([]byte(destinationsStr), &destinations)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal destinations: %w", err)
+	}
+
+	trip.Destinations = destinations
+
 	return &trip, nil
 }
 

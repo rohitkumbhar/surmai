@@ -3,7 +3,6 @@ package assistant
 import (
 	bt "backend/types"
 	"fmt"
-	"time"
 
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/types"
@@ -22,11 +21,8 @@ func ProcessActivities(app core.App, msg *bt.Email, user *core.Record, activitie
 			continue
 		}
 
-		start, _ := types.ParseDateTime(startTimestamp)
-		end, _ := types.ParseDateTime(endTimestamp)
-
 		txErr := app.RunInTransaction(func(txApp core.App) error {
-			return saveActivity(txApp, msg, trip.Id, activity, start, end)
+			return saveActivity(txApp, msg, trip, activity, startTimestamp, endTimestamp)
 		})
 
 		if txErr != nil {
@@ -35,37 +31,35 @@ func ProcessActivities(app core.App, msg *bt.Email, user *core.Record, activitie
 	}
 }
 
-func parseActivityTimestamps(app core.App, startStr, endStr string) (time.Time, time.Time, error) {
-	startTimestamp, err := time.Parse("2006-01-02T15:04:05", startStr)
+func parseActivityTimestamps(app core.App, startStr, endStr string) (types.DateTime, types.DateTime, error) {
+	startTimestamp, err := types.ParseDateTime(startStr)
 	if err != nil {
 		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse activity start date: %v", err))
-		return time.Time{}, time.Time{}, err
+		return types.NowDateTime(), types.NowDateTime(), err
 	}
 
-	endTimestamp := startTimestamp
-	if endStr != "" {
-		endTimestamp, err = time.Parse("2006-01-02T15:04:05", endStr)
-		if err != nil {
-			endTimestamp = startTimestamp
-		}
+	endTimestamp, err := types.ParseDateTime(endStr)
+	if err != nil {
+		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse activity end date: %v", err))
+		return types.NowDateTime(), types.NowDateTime(), err
 	}
 
 	return startTimestamp, endTimestamp, nil
 }
 
-func saveActivity(txApp core.App, msg *bt.Email, tripId string, activity *bt.EmailActivityInfo, start, end types.DateTime) error {
+func saveActivity(txApp core.App, msg *bt.Email, trip *bt.Trip, activity *bt.EmailActivityInfo, start, end types.DateTime) error {
 	expenseId := ""
-	attachmentIds := saveAttachments(txApp, tripId, msg.Attachments)
+	attachmentIds := saveAttachments(txApp, trip.Id, msg.Attachments)
 
 	if activity.Cost.Value != 0 {
-		expenseId = saveActivityExpense(txApp, tripId, activity)
+		expenseId = saveActivityExpense(txApp, trip.Id, activity)
 	}
 
-	metadata := buildActivityMetadata(activity)
+	metadata := buildActivityMetadata(trip, activity)
 
 	activitiesCollection, _ := txApp.FindCollectionByNameOrId("activities")
 	entity := core.NewRecord(activitiesCollection)
-	entity.Set("trip", tripId)
+	entity.Set("trip", trip.Id)
 	entity.Set("name", activity.Name)
 	entity.Set("description", "")
 	entity.Set("address", activity.Address)
@@ -100,8 +94,22 @@ func saveActivityExpense(txApp core.App, tripId string, activity *bt.EmailActivi
 	return expensesRecord.Id
 }
 
-func buildActivityMetadata(activity *bt.EmailActivityInfo) map[string]interface{} {
+func buildActivityMetadata(trip *bt.Trip, activity *bt.EmailActivityInfo) map[string]interface{} {
 	metadata := map[string]interface{}{}
+
+	place := FuzzyMatchDestination(trip.Destinations, activity.Address)
+
+	if place != nil {
+		metadata["place"] = map[string]string{
+			"name":        place.Name,
+			"id":          place.Id,
+			"stateName":   place.StateName,
+			"countryName": place.CountryName,
+			"timezone":    place.TimeZone,
+			"latitude":    place.Latitude,
+			"longitude":   place.Longitude,
+		}
+	}
 
 	if len(activity.Participants) > 0 {
 		participants := make([]map[string]string, 0, len(activity.Participants))
