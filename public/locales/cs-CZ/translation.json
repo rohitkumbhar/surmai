@@ -48,7 +48,7 @@
     "airports_loaded_one": "Počet načtených letišť: {{count}}",
     "airports_loaded_other": "Počet načtených letišť: {{count}}",
     "all_attachments_desc": "Všechny přílohy z dopravy, ubytování, aktivit a výdajů",
-	  "all_trips": "Všechny výlety",
+    "all_trips": "Všechny výlety",
     "amount": "Částka",
     "api_key": "API klíč",
     "api_key_desc": "API klíč pro integrace",
@@ -628,11 +628,6 @@
     "user_preferences": "Předvolby uživatele",
     "view_link": "Zobrazit odkaz",
     "website_appearance": "Vzhled webu",
-    "website_appearance_desc": "Vyberte světlý, tmavý nebo automatický režim podle systému"
+    "website_appearance_desc": "Vyberte světlý, tmavý nebo automatický režim podle systému",
+    "expense_category_activities": "Aktivity"
 }
-
-
-
-
-
-
