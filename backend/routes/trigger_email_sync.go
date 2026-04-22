@@ -11,6 +11,8 @@ func ImportBookingsNow(e *core.RequestEvent) error {
 	job := jobs.ImportBookingsFromEmailJob{
 		App: e.App,
 	}
-	job.Execute()
+
+	go job.Execute()
+
 	return e.JSON(http.StatusOK, map[string]string{})
 }

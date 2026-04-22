@@ -29,21 +29,24 @@ names and emails if available. All timestamps should be in the ISO 8601 format.
 For car rental reservations, return the reservation id, car rental company name, pick-up and drop-off dates and locations. 
 All timestamps should be in the ISO 8601 format.
 
+For any other transportation bookings like a bus ticket, train ticket, ferry or boat ticket, use category transportation_reservation and
+return the transportation type like bike, train, bus etc, confirmation code, and any relevant details such as departure and arrival 
+locations and start and end dates and times in the ISO 8601 format.
+
 For parking reservations, return the confirmation code, parking company name, address of the location, start and end times in ISO 8601 format,
 cost and spot number if available.
 
-For any other transportation modes, pick the right type departure and arrival station codes, departure and arrival dates in the ISO 8601 format.
-For expense receipts, return the total amount, currency, and any relevant details such as travel dates and destinations.
 `
 
 const (
 	Unknown                  bt.EmailCategory = "unknown"
 	FlightReservation        bt.EmailCategory = "flight_reservation"
-	TrainReservation         bt.EmailCategory = "train_reservation"
+	GenericTransportation    bt.EmailCategory = "transportation_reservation"
 	CarRentalReservation     bt.EmailCategory = "car_rental_reservation"
 	AccommodationReservation bt.EmailCategory = "hotel_reservation"
 	ExpenseReceipt           bt.EmailCategory = "expense_receipt"
 	ActivityReservation      bt.EmailCategory = "activity_reservation"
+	ParkingReservation       bt.EmailCategory = "parking_reservation"
 )
 
 func getMessageBody(app core.App, msg *bt.Email) (string, error) {

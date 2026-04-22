@@ -150,15 +150,6 @@ func buildFlightMetadata(app core.App, msg *bt.Email, flight *bt.EmailFlightInfo
 
 func findMatchingTrip(app core.App, user *core.Record, startTimestamp types.DateTime, endTimestamp types.DateTime) (*bt.Trip, error) {
 	trip := bt.Trip{}
-	//err := app.DB().
-	//	NewQuery("select id, name, description from trips where startDate <= {:startTimestamp} AND endDate >= {:endTimestamp} AND (ownerId = {:userId} or exists (select 1 from json_each(trips.collaborators) where value = {:userId}))").
-	//	Bind(dbx.Params{
-	//		"startTimestamp": startTimestamp,
-	//		"endTimestamp":   endTimestamp,
-	//		"userId":         user.Id,
-	//	}).One(&trip)
-
-	//tripsCollection, _ := app.FindCollectionByNameOrId("trips")
 	result, err := app.FindFirstRecordByFilter("trips", "startDate <= {:startTimestamp} && endDate >= {:endTimestamp} && (ownerId = {:userId} || collaborators.id ?= {:userId})",
 		dbx.Params{
 			"startTimestamp": startTimestamp,
