@@ -128,7 +128,7 @@ export const ImportBookingsConfiguration = () => {
               {...form.getInputProps('enabled', { type: 'checkbox' })}
             />
           </Group>
-          <Collapse in={opened}>
+          <Collapse expanded={opened}>
             <Grid mt={'md'}>
               <Grid.Col span={{ base: 12, md: 6 }}>
                 <TextInput

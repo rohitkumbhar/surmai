@@ -119,7 +119,7 @@ export const OpenAIEndpointConfiguration = () => {
                 {...form.getInputProps('enabled', { type: 'checkbox' })}
               />
             </Group>
-            <Collapse in={opened}>
+            <Collapse expanded={opened}>
               <Grid mt={'sm'}>
                 <Grid.Col span={{ base: 12, md: 4 }}>
                   <TextInput
