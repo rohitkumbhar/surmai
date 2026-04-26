@@ -145,7 +145,7 @@ export const GenericLodgingData = ({
             {t('lodging_name', 'Name')}
           </Text>
           <Text size="md">{lodging.name}</Text>
-          <Text size="xs">{lodging.metadata?.place.name}</Text>
+          <Text size="xs">{lodging.metadata?.place?.name}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>

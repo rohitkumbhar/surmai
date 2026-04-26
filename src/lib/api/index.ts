@@ -133,3 +133,6 @@ export {
   deleteTravellerProfile,
   uploadTravellerAttachments,
 } from './pocketbase/traveller_profiles.ts';
+
+
+export * from './pocketbase/assistant.ts'

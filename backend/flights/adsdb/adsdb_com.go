@@ -5,9 +5,10 @@ import (
 	"backend/types"
 	"encoding/json"
 	"fmt"
-	"github.com/ringsaturn/tzf"
 	"io"
 	"net/http"
+
+	"github.com/ringsaturn/tzf"
 )
 
 // AirlineInfo Structs for ADSB API response
@@ -51,7 +52,7 @@ type ADSBResponse struct {
 
 type AdsbDbCom struct{}
 
-func (adsb AdsbDbCom) GetFlightRoute(flightNumber string, config flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
+func (adsb AdsbDbCom) GetFlightRoute(flightNumber string, config *flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 
 	// Create the URL with the flight number parameter
 	url := fmt.Sprintf("https://api.adsbdb.com/v0/callsign/%s", flightNumber)

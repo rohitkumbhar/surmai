@@ -2,15 +2,13 @@ package routes
 
 import (
 	"backend/cache"
-	"backend/flights"
-	"backend/flights/adsdb"
-	"backend/flights/flightaware"
-	"encoding/json"
+	"backend/settings"
 	"fmt"
-	"github.com/pocketbase/pocketbase/core"
-	"github.com/ringsaturn/tzf"
 	"net/http"
 	"time"
+
+	"github.com/pocketbase/pocketbase/core"
+	"github.com/ringsaturn/tzf"
 )
 
 func GetFlightRoute(e *core.RequestEvent, finder tzf.F) error {
@@ -25,30 +23,9 @@ func GetFlightRoute(e *core.RequestEvent, finder tzf.F) error {
 		}
 	}
 
-	configRecord, configError := e.App.FindRecordById("surmai_settings", "flight_info_provider")
-	if configError != nil {
-		return e.JSON(http.StatusNotFound, "")
-	}
-
-	valueJson := configRecord.GetString("value")
-	var config flights.FlightInfoProviderConfig
-	configError = json.Unmarshal([]byte(valueJson), &config)
-	if configError != nil {
-		return e.JSON(http.StatusNotFound, "")
-	}
-
-	if !config.Enabled {
-		return e.JSON(http.StatusNotFound, "")
-	}
-
-	var flightsDataProvider flights.DataProvider
-
-	if config.Provider == "flightaware" {
-		flightsDataProvider = flightaware.FlightAware{}
-	} else if config.Provider == "adsbdb" {
-		flightsDataProvider = adsdb.AdsbDbCom{}
-	} else {
-		return e.JSON(http.StatusNotFound, "")
+	config, flightsDataProvider, err := settings.FetchFlightInfoProvider(e.App)
+	if err != nil {
+		return err
 	}
 
 	route, err := flightsDataProvider.GetFlightRoute(flightNumber, config, finder)

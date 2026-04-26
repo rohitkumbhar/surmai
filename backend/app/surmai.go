@@ -36,6 +36,12 @@ func (surmai *SurmaiApp) BindRoutes() {
 			return R.LoadDataset(e, surmai.TimezoneFinder)
 		})
 
+		assistantRoutes := se.Router.Group("/api/surmai/assistant")
+		assistantRoutes.Bind(apis.RequireSuperuserAuth())
+		assistantRoutes.POST("/test-prompt", R.TestOpenAiEndpoint)
+		assistantRoutes.POST("/test-imap", R.TestImapConnectivity)
+		assistantRoutes.POST("/import-bookings/trigger", R.ImportBookingsNow)
+
 		// These routes are handled by React Router to load the appropriate component
 		// It's possible that these routes are bookmarked and are loaded directly
 		// in the browser. Return the index.html and let the React router take over
@@ -124,6 +130,7 @@ func (surmai *SurmaiApp) StartJobs() {
 	surmai.startInvitationCleanupJob()
 	surmai.startDemoModeSetupJob()
 	surmai.startSyncCurrencyConversionRatesJob()
+	surmai.startEmailSyncJob()
 
 }
 
@@ -169,4 +176,18 @@ func (surmai *SurmaiApp) startDemoModeSetupJob() {
 			job.Execute()
 		})
 	}
+}
+
+func (surmai *SurmaiApp) startEmailSyncJob() {
+	job := &jobs.ImportBookingsFromEmailJob{
+		App: surmai.Pb.App,
+	}
+
+	// check email every 30th minutes
+	// this is assuming:
+	// - a delay of max 15 mins is acceptable
+	// - we will finish processing a batch of emails in 15 minutes
+	surmai.Pb.Cron().MustAdd("ImportBookingsFromEmailJob", "*/15 * * * *", func() {
+		job.Execute()
+	})
 }

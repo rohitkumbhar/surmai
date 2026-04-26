@@ -6,10 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ringsaturn/tzf"
 	"io"
 	"net/http"
 	"time"
+
+	"github.com/ringsaturn/tzf"
 )
 
 // FlightAwareResponse represents the response from the FlightAware AeroApi
@@ -92,7 +93,7 @@ type Airport struct {
 
 type FlightAware struct{}
 
-func (fa FlightAware) GetFlightRoute(flightNumber string, config flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
+func (fa FlightAware) GetFlightRoute(flightNumber string, config *flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 	// Construct the API URL with the flight number
 	url := fmt.Sprintf("https://aeroapi.flightaware.com/aeroapi/flights/%s?ident_type=designator", flightNumber)
 

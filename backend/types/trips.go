@@ -146,4 +146,5 @@ type Airport struct {
 type Airline struct {
 	Id   string `json:"id"`
 	Name string `json:"name"`
+	Code string `json:"code"`
 }

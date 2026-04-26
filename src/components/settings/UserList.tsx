@@ -132,7 +132,7 @@ export const UserList = () => {
   return (
     <Card withBorder radius="md" p="xl" mt={'md'}>
       <Group justify={'space-between'}>
-        <Text size={'xl'}>
+        <Text size={'xl'} component={'div'}>
           {t('users_section', 'Users')}
 
           <Text fz="xs" c="dimmed" mt={3} mb="xl">

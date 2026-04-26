@@ -1,6 +1,7 @@
 import { Alert, Card, Stack, Text, Title } from '@mantine/core';
 import { IconAlien } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+
 import { FlightInfoProviderSettings } from './FlightInfoProviderSettings.tsx';
 
 export const ThirdPartyIntegrations = () => {

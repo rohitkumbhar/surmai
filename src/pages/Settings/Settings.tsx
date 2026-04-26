@@ -11,12 +11,13 @@ import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyInte
 import { UserList } from '../../components/settings/UserList.tsx';
 import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { AssistantConfiguration } from '../../components/settings/AssistantConfiguration.tsx';
 
 const Settings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useLocation();
-  const validTabs = ['users', 'configuration', 'datasets', 'integrations'];
+  const validTabs = ['users', 'configuration', 'datasets', 'integrations', 'assistant'];
   const fragment = hash.slice(1);
   const activeTab = validTabs.includes(fragment) ? fragment : validTabs[0];
   usePageTitle(t('site_settings', 'Site Settings'));
@@ -55,6 +56,9 @@ const Settings = () => {
           <Tabs.Tab value="integrations" leftSection={<IconAdjustmentsPlus size={12} />}>
             {t('integrations_section', 'Integrations')}
           </Tabs.Tab>
+          <Tabs.Tab value="assistant" leftSection={<IconAdjustmentsPlus size={12} />}>
+            {t('assistant', 'Assistant')}
+          </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="users">
           <UserList />
@@ -62,12 +66,14 @@ const Settings = () => {
         <Tabs.Panel value="configuration">
           <Configuration />
         </Tabs.Panel>
-
         <Tabs.Panel value="datasets">
           <Datasets />
         </Tabs.Panel>
         <Tabs.Panel value="integrations">
           <ThirdPartyIntegrations />
+        </Tabs.Panel>
+        <Tabs.Panel value="assistant">
+          <AssistantConfiguration />
         </Tabs.Panel>
       </Tabs>
     </Container>
