@@ -17,7 +17,7 @@ func ProcessParkings(app core.App, msg *bt.Email, user *core.Record, parkings []
 
 		trip, tripErr := findMatchingTrip(app, user, startTimestamp, endTimestamp)
 		if tripErr != nil {
-			app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
+			app.Logger().Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
 			continue
 		}
 
@@ -34,13 +34,13 @@ func ProcessParkings(app core.App, msg *bt.Email, user *core.Record, parkings []
 func parseParkingTimestamps(app core.App, startStr, endStr string) (types.DateTime, types.DateTime, error) {
 	startTimestamp, err := types.ParseDateTime(startStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse parking start date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse parking start date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 
 	endTimestamp, err := types.ParseDateTime(endStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse parking end date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse parking end date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 

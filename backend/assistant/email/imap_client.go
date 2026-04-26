@@ -18,49 +18,49 @@ func connectToInbox(app core.App) (*client.Client, error, func(c *client.Client)
 	config := bt.EmailSyncConfig{}
 	emailSyncConfig, err := app.FindRecordById("surmai_settings", "email_sync_config")
 	if err != nil {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Error getting email_sync_config: %v", err))
+		app.Logger().Error(fmt.Sprintf("Error getting email_sync_config: %v", err))
 		return nil, err, nil
 	}
 
 	err = json.Unmarshal([]byte(emailSyncConfig.GetString("value")), &config)
 	if err != nil {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Error unmarshalling email_sync_config: %v", err))
+		app.Logger().Error(fmt.Sprintf("Error unmarshalling email_sync_config: %v", err))
 
 		return nil, err, nil
 	}
 
 	if !config.Enabled {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Email sync is disabled"))
+		app.Logger().Error(fmt.Sprintf("Email sync is disabled"))
 		return nil, errors.New("email sync is not enabled"), nil
 	}
 
 	imapClient, err := client.DialTLS(fmt.Sprintf("%s:%d", config.ImapHost, config.ImapPort), nil)
 	if err != nil {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Could not connect to IMAP server: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not connect to IMAP server: %v", err))
 		return nil, err, nil
 	}
 
 	closeConnection := func(c *client.Client) {
 		logoutError := c.Logout()
 		if logoutError != nil {
-			app.Logger().WithGroup("imap_client").Warn("Failed to logout from the IMAP server: %v", logoutError)
+			app.Logger().Warn("Failed to logout from the IMAP server: %v", logoutError)
 		}
 
 		closeError := c.Close()
 		if closeError != nil {
-			app.Logger().WithGroup("imap_client").Warn("Failed to close connection to the IMAP server: %v", closeError)
+			app.Logger().Warn("Failed to close connection to the IMAP server: %v", closeError)
 		}
 	}
 
 	// Login
 	if err = imapClient.Login(config.ImapUser, config.ImapPassword); err != nil {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Could not login to IMAP server: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not login to IMAP server: %v", err))
 		return nil, err, nil
 	}
 
 	_, err = imapClient.Select("INBOX", false)
 	if err != nil {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Could not select INBOX folder: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not select INBOX folder: %v", err))
 		return nil, err, nil
 	}
 
@@ -81,7 +81,7 @@ func CountUnreadEmails(app core.App) (int, error) {
 	uids, err := imapClient.Search(criteria)
 
 	if err != nil {
-		app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Could not search for unread emails: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not search for unread emails: %v", err))
 		return -1, err
 	}
 
@@ -158,7 +158,7 @@ func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
 
 		messageReader, mrErr := mail.CreateReader(body)
 		if mrErr != nil {
-			app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Could not create message reader for %s : %v ", msg.Envelope.Subject, mrErr))
+			app.Logger().Error(fmt.Sprintf("Could not create message reader for %s : %v ", msg.Envelope.Subject, mrErr))
 			continue
 		}
 
@@ -169,7 +169,7 @@ func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
 				break
 			}
 			if partErr != nil {
-				app.Logger().WithGroup("imap_client").Error(fmt.Sprintf("Could not message part for %s : %v ", msg.Envelope.Subject, partErr))
+				app.Logger().Error(fmt.Sprintf("Could not message part for %s : %v ", msg.Envelope.Subject, partErr))
 				break
 			}
 

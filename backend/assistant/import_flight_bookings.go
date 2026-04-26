@@ -19,7 +19,7 @@ func ProcessFlights(app core.App, msg *bt.Email, user *core.Record, flights []*b
 
 		trip, tripErr := findMatchingTrip(app, user, departureTimestamp, arrivalTimestamp)
 		if tripErr != nil {
-			app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
+			app.Logger().Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
 			continue
 		}
 
@@ -36,12 +36,12 @@ func ProcessFlights(app core.App, msg *bt.Email, user *core.Record, flights []*b
 func parseFlightTimestamps(app core.App, departureStr, arrivalStr string) (types.DateTime, types.DateTime, error) {
 	departureTimestamp, err := types.ParseDateTime(departureStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse departure date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse departure date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 	arrivalTimestamp, err := types.ParseDateTime(arrivalStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse arrival date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse arrival date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 	return departureTimestamp, arrivalTimestamp, nil

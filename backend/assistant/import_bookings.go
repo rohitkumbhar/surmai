@@ -20,13 +20,13 @@ func ImportBookingsFromEmails(app core.App) error {
 
 		user, usrErr := app.FindAuthRecordByEmail("users", msg.From)
 		if usrErr != nil {
-			app.Logger().WithGroup("import_bookings").Debug(fmt.Sprintf("Cannot lookup user with email %s: %v", msg.From, err))
+			app.Logger().Debug(fmt.Sprintf("Cannot lookup user with email %s: %v", msg.From, err))
 			continue
 		}
 
 		emailInfo, emailErr := email.ExtractEmailInfo(app, &msg)
 		if emailErr != nil {
-			app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not extract info from email: %v", emailErr))
+			app.Logger().Error(fmt.Sprintf("Could not extract info from email: %v", emailErr))
 			continue
 		}
 
@@ -40,7 +40,7 @@ func ImportBookingsFromEmails(app core.App) error {
 		case email.AccommodationReservation:
 			ProcessAccommodations(app, &msg, user, emailInfo.Hotels)
 		case email.ExpenseReceipt:
-			app.Logger().WithGroup("import_bookings").Debug("Processing expense receipt")
+			app.Logger().Debug("Processing expense receipt")
 		case email.ActivityReservation:
 			ProcessActivities(app, &msg, user, emailInfo.Activities)
 		case email.ParkingReservation:

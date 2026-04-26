@@ -17,7 +17,7 @@ func ProcessCarRentals(app core.App, msg *bt.Email, user *core.Record, rentals [
 
 		trip, tripErr := findMatchingTrip(app, user, pickupTimestamp, dropOffTimestamp)
 		if tripErr != nil {
-			app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
+			app.Logger().Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
 			continue
 		}
 
@@ -34,13 +34,13 @@ func ProcessCarRentals(app core.App, msg *bt.Email, user *core.Record, rentals [
 func parseCarRentalTimestamps(app core.App, pickupStr, dropOffStr string) (types.DateTime, types.DateTime, error) {
 	pickupTimestamp, err := types.ParseDateTime(pickupStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse car rental pickup date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse car rental pickup date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 
 	dropOffTimestamp, err := types.ParseDateTime(dropOffStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse car rental dropoff date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse car rental dropoff date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 

@@ -17,7 +17,7 @@ func ProcessAccommodations(app core.App, msg *bt.Email, user *core.Record, accom
 
 		trip, tripErr := findMatchingTrip(app, user, checkInTimestamp, checkOutTimestamp)
 		if tripErr != nil {
-			app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
+			app.Logger().Error(fmt.Sprintf("Could not find matching trip: %v", tripErr))
 			continue
 		}
 
@@ -34,13 +34,13 @@ func ProcessAccommodations(app core.App, msg *bt.Email, user *core.Record, accom
 func parseAccommodationTimestamps(app core.App, checkInStr, checkOutStr string) (types.DateTime, types.DateTime, error) {
 	checkInTimestamp, err := types.ParseDateTime(checkInStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse accommodation check-in date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse accommodation check-in date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 
 	checkOutTimestamp, err := types.ParseDateTime(checkOutStr)
 	if err != nil {
-		app.Logger().WithGroup("import_bookings").Error(fmt.Sprintf("Could not parse accommodation check-out date: %v", err))
+		app.Logger().Error(fmt.Sprintf("Could not parse accommodation check-out date: %v", err))
 		return types.NowDateTime(), types.NowDateTime(), err
 	}
 
