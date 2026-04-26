@@ -3,11 +3,12 @@ package types
 import "time"
 
 type EmailSyncConfig struct {
-	Enabled      bool   `json:"enabled"`
-	ImapHost     string `json:"imapHost"`
-	ImapPort     int    `json:"imapPort"`
-	ImapUser     string `json:"imapUser"`
-	ImapPassword string `json:"imapPassword"`
+	Enabled            bool   `json:"enabled"`
+	ImapHost           string `json:"imapHost"`
+	ImapPort           int    `json:"imapPort"`
+	ImapUser           string `json:"imapUser"`
+	ImapPassword       string `json:"imapPassword"`
+	FilterEmailAddress string `json:"filterEmailAddress"`
 }
 
 type OpenAiEndpointConfig struct {

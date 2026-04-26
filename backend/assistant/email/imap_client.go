@@ -64,6 +64,7 @@ func CountUnreadEmails(app core.App) (int, error) {
 
 	criteria := imap.NewSearchCriteria()
 	criteria.WithoutFlags = []string{imap.SeenFlag}
+
 	uids, err := imapClient.Search(criteria)
 
 	if err != nil {
@@ -75,6 +76,11 @@ func CountUnreadEmails(app core.App) (int, error) {
 }
 
 func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
+
+	config, err := settings.FetchEmailSyncConfig(app)
+	if err != nil {
+		return nil, err
+	}
 
 	c, err, closeConnection := connectToInbox(app)
 	if err != nil {
@@ -122,6 +128,17 @@ func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
 
 		if msg == nil || msg.Envelope == nil {
 			continue
+		}
+
+		if config.FilterEmailAddress != "" {
+
+			foundInTo := checkRecipientEmailMatch(msg.Envelope.To, config)
+			foundInCC := checkRecipientEmailMatch(msg.Envelope.Cc, config)
+			foundInBCC := checkRecipientEmailMatch(msg.Envelope.Bcc, config)
+
+			if !(foundInTo || foundInCC || foundInBCC) {
+				continue
+			}
 		}
 
 		email := bt.Email{
@@ -194,4 +211,16 @@ func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
 	}
 
 	return results, nil
+}
+
+func checkRecipientEmailMatch(addresses []*imap.Address, config *bt.EmailSyncConfig) bool {
+
+	var found = false
+	for _, recipient := range addresses {
+		if recipient.Address() == config.FilterEmailAddress {
+			found = true
+			break
+		}
+	}
+	return found
 }

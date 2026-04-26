@@ -26,6 +26,7 @@ export type ImportBookingsConfiguration = {
   imapPort?: number;
   imapUser?: string;
   imapPassword?: string;
+  filterEmailAddress?: string;
 };
 
 const settingsKey = 'email_sync_config';
@@ -48,6 +49,7 @@ export const ImportBookingsConfiguration = () => {
       imapPort: emailSyncConfig?.imapPort,
       imapUser: emailSyncConfig?.imapUser,
       imapPassword: emailSyncConfig?.imapPassword,
+      filterEmailAddress: emailSyncConfig?.filterEmailAddress,
     },
   });
 
@@ -59,6 +61,7 @@ export const ImportBookingsConfiguration = () => {
         imapPort: emailSyncConfig?.imapPort,
         imapUser: emailSyncConfig?.imapUser,
         imapPassword: emailSyncConfig?.imapPassword,
+        filterEmailAddress: emailSyncConfig?.filterEmailAddress,
       });
       openForm();
     }
@@ -79,6 +82,7 @@ export const ImportBookingsConfiguration = () => {
       imapPort: values.imapPort,
       imapUser: values.imapUser,
       imapPassword: values.imapPassword,
+      filterEmailAddress: values.filterEmailAddress,
     };
 
     setSettingsForKey(settingsKey, payload)
@@ -108,7 +112,7 @@ export const ImportBookingsConfiguration = () => {
               <Text size="sm" c="dimmed">
                 {t(
                   'enable_email_sync_description',
-                  'Configure the server and credentials of the monitored email address to import bookings.'
+                  'Configure the server and credentials of the monitored email address to import bookings. Once configured, Surmai will check unread emails every 15 minutes.'
                 )}
               </Text>
               <Text size="sm" c="dimmed">
@@ -166,6 +170,15 @@ export const ImportBookingsConfiguration = () => {
                   placeholder="••••••••"
                 />
               </Grid.Col>
+              <Grid.Col span={{ base: 12, md: 6 }}>
+                <TextInput
+                  key={form.key('filterEmailAddress')}
+                  {...form.getInputProps('filterEmailAddress')}
+                  label={t('recipient_email_address', 'Recipient Email Address')}
+                  description={t('recipient_email_address_desc', 'Import bookings sent to this email address only.')}
+                  placeholder="user@example.com"
+                />
+              </Grid.Col>
             </Grid>
           </Collapse>
           <Group mt={'xl'} justify="flex-end">
@@ -215,12 +228,7 @@ export const ImportBookingsConfiguration = () => {
             >
               {t('test_imap_connection', 'Test Connection')}
             </Button>
-            <Button
-              type={'submit'}
-              w={'min-content'}
-              leftSection={<IconDeviceFloppy size={14} />}
-              disabled={!form.isDirty()}
-            >
+            <Button type={'submit'} w={'min-content'} leftSection={<IconDeviceFloppy size={14} />}>
               {t('save', 'Save')}
             </Button>
           </Group>

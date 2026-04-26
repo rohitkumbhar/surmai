@@ -1,4 +1,4 @@
-import { Button, Card, Collapse, Grid, Group, Modal, Switch, Text, TextInput } from '@mantine/core';
+import { Button, Card, Collapse, Grid, Group, Modal, PasswordInput, Switch, Text, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceFloppy } from '@tabler/icons-react';
@@ -131,7 +131,7 @@ export const OpenAIEndpointConfiguration = () => {
                   />
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 4 }}>
-                  <TextInput
+                  <PasswordInput
                     key={form.key('apiKey')}
                     {...form.getInputProps('apiKey')}
                     label={t('api_key', 'API Key')}

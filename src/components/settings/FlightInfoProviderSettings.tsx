@@ -1,4 +1,4 @@
-import { Button, Card, Collapse, Group, Select, Skeleton, Switch, Text, TextInput } from '@mantine/core';
+import { Button, Card, Collapse, Group, PasswordInput, Select, Skeleton, Switch, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceFloppy } from '@tabler/icons-react';
@@ -124,7 +124,7 @@ export const FlightInfoProviderSettings = () => {
               {...form.getInputProps('provider')}
             />
 
-            <TextInput
+            <PasswordInput
               name={'apiKey'}
               label={t('api_key', 'API Key')}
               description={t('api_key_desc', 'API Key for the integration')}
