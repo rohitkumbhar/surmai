@@ -7,6 +7,7 @@ import (
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
+	"github.com/pocketbase/pocketbase/tools/filesystem"
 	"github.com/pocketbase/pocketbase/tools/types"
 )
 
@@ -82,10 +83,12 @@ func saveAttachments(txApp core.App, tripId string, attachments []bt.EmailAttach
 	attachmentsCollection, _ := txApp.FindCollectionByNameOrId("trip_attachments")
 
 	for _, emailAttachment := range attachments {
+
+		file, _ := filesystem.NewFileFromBytes(emailAttachment.Content, emailAttachment.Name)
 		attachmentsRecord := core.NewRecord(attachmentsCollection)
 		attachmentsRecord.Set("trip", tripId)
 		attachmentsRecord.Set("name", emailAttachment.Name)
-		attachmentsRecord.Set("file", emailAttachment.Content)
+		attachmentsRecord.Set("file", file)
 
 		if err := txApp.Save(attachmentsRecord); err != nil {
 			continue
