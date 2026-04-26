@@ -46,6 +46,12 @@ func ImportBookingsFromEmails(app core.App) error {
 		case email.ParkingReservation:
 			ProcessParkings(app, &msg, user, emailInfo.Parkings)
 		}
+
+		err = email.MarkEmailAsRead(app, &msg)
+		if err != nil {
+			app.Logger().Error(fmt.Sprintf("Could not mark email as read: %v", err))
+			continue
+		}
 	}
 
 	return nil

@@ -75,6 +75,28 @@ func CountUnreadEmails(app core.App) (int, error) {
 	return len(uids), nil
 }
 
+func MarkEmailAsRead(app core.App, b *bt.Email) error {
+
+	imapClient, err, closeConnection := connectToInbox(app)
+	if err != nil {
+		return err
+	}
+	defer closeConnection(imapClient)
+
+	seqset := new(imap.SeqSet)
+	seqset.AddNum(b.Uid)
+
+	item := imap.FormatFlagsOp(imap.AddFlags, true)
+	flags := []interface{}{imap.SeenFlag}
+
+	err = imapClient.UidStore(seqset, item, flags, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func FetchUnreadEmails(app core.App) ([]bt.Email, error) {
 
 	config, err := settings.FetchEmailSyncConfig(app)
