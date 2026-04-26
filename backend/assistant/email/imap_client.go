@@ -1,8 +1,8 @@
 package email
 
 import (
+	"backend/settings"
 	bt "backend/types"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -15,22 +15,13 @@ import (
 
 func connectToInbox(app core.App) (*client.Client, error, func(c *client.Client)) {
 
-	config := bt.EmailSyncConfig{}
-	emailSyncConfig, err := app.FindRecordById("surmai_settings", "email_sync_config")
-	if err != nil {
-		app.Logger().Error(fmt.Sprintf("Error getting email_sync_config: %v", err))
-		return nil, err, nil
-	}
+	config, err := settings.FetchEmailSyncConfig(app)
 
-	err = json.Unmarshal([]byte(emailSyncConfig.GetString("value")), &config)
 	if err != nil {
-		app.Logger().Error(fmt.Sprintf("Error unmarshalling email_sync_config: %v", err))
-
 		return nil, err, nil
 	}
 
 	if !config.Enabled {
-		app.Logger().Error(fmt.Sprintf("Email sync is disabled"))
 		return nil, errors.New("email sync is not enabled"), nil
 	}
 
@@ -44,11 +35,6 @@ func connectToInbox(app core.App) (*client.Client, error, func(c *client.Client)
 		logoutError := c.Logout()
 		if logoutError != nil {
 			app.Logger().Warn("Failed to logout from the IMAP server: %v", logoutError)
-		}
-
-		closeError := c.Close()
-		if closeError != nil {
-			app.Logger().Warn("Failed to close connection to the IMAP server: %v", closeError)
 		}
 	}
 

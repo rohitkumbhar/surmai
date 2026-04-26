@@ -183,7 +183,11 @@ func (surmai *SurmaiApp) startEmailSyncJob() {
 		App: surmai.Pb.App,
 	}
 
-	surmai.Pb.Cron().MustAdd("ImportBookingsFromEmailJob", "0 * * * *", func() {
+	// check email every 30th minutes
+	// this is assuming:
+	// - a delay of max 15 mins is acceptable
+	// - we will finish processing a batch of emails in 15 minutes
+	surmai.Pb.Cron().MustAdd("ImportBookingsFromEmailJob", "*/15 * * * *", func() {
 		job.Execute()
 	})
 }

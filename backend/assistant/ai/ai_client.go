@@ -1,10 +1,10 @@
 package ai
 
 import (
+	"backend/settings"
 	bt "backend/types"
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/invopop/jsonschema"
 	"github.com/openai/openai-go/v3"
@@ -17,30 +17,9 @@ type Ai struct {
 	Config *bt.OpenAiEndpointConfig
 }
 
-func loadAiConfig(app core.App) (*bt.OpenAiEndpointConfig, error) {
-
-	config := bt.OpenAiEndpointConfig{}
-	openAiEndpointConfig, err := app.FindRecordById("surmai_settings", "openai_endpoint_config")
-
-	if err != nil {
-		return nil, err
-	}
-
-	err = json.Unmarshal([]byte(openAiEndpointConfig.GetString("value")), &config)
-	if err != nil {
-		return nil, err
-	}
-
-	if config.Endpoint == "" {
-		return nil, fmt.Errorf("openai compatible endpoint config not found")
-	}
-
-	return &config, nil
-}
-
 func TestConnection(app core.App, prompt string) (string, error) {
 
-	config, err := loadAiConfig(app)
+	config, err := settings.FetchAiConfig(app)
 
 	if err != nil {
 		return "", err
@@ -88,7 +67,7 @@ func Call[ResponseSchema any](app core.App, instructions string, input string, r
 	responseSchema := GenerateSchema[ResponseSchema]()
 
 	go func() {
-		config, err := loadAiConfig(app)
+		config, err := settings.FetchAiConfig(app)
 
 		if err != nil {
 			resultChan <- CallResult[ResponseSchema]{Err: err}

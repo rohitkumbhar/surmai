@@ -2,8 +2,9 @@ package flights
 
 import (
 	"backend/types"
-	"github.com/ringsaturn/tzf"
 	"time"
+
+	"github.com/ringsaturn/tzf"
 )
 
 type FlightRoute struct {
@@ -15,7 +16,7 @@ type FlightRoute struct {
 }
 
 type DataProvider interface {
-	GetFlightRoute(flightNumber string, config FlightInfoProviderConfig, tzf tzf.F) (*FlightRoute, error)
+	GetFlightRoute(flightNumber string, config *FlightInfoProviderConfig, tzf tzf.F) (*FlightRoute, error)
 }
 
 type FlightInfoProviderConfig struct {
