@@ -22,11 +22,11 @@ import { useSurmaiContext } from './app/useSurmaiContext.ts';
 import { useCurrentUser } from './auth/useCurrentUser.ts';
 import { Error } from './components/error/Error.tsx';
 import { Navbar } from './components/nav/Navbar.tsx';
+import { NotificationIndicator } from './components/notifications/NotificationIndicator.tsx';
 import { UserInfo } from './components/user/UserInfo.tsx';
 import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
 import { updateDayJsLanguage } from './lib/i18n.ts';
-import type {
-  MantineColorScheme} from '@mantine/core';
+import type { MantineColorScheme } from '@mantine/core';
 
 function App() {
   const [opened, { toggle, close }] = useDisclosure();
@@ -87,6 +87,7 @@ function App() {
               <Box component="div" id={'app-header'} />
             </Group>
             <Group gap={'xs'} mt={'sm'} visibleFrom={'xs'}>
+              <NotificationIndicator />
               <UserInfo />
             </Group>
           </Group>

@@ -121,6 +121,9 @@ func (surmai *SurmaiApp) BindEventHooks() {
 	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
 
 	surmai.Pb.OnRecordCreate("users").BindFunc(hooks.AssignTravellerProfileOnUserCreate)
+	surmai.Pb.OnRecordCreate("users").BindFunc(hooks.CreateNotificationsForNewUser)
+
+	surmai.Pb.OnRecordCreate("announcements").BindFunc(hooks.CreateNotificationsForAnnouncement)
 
 	surmai.Pb.OnRecordUpdateRequest("traveller_profiles").BindFunc(hooks.RestrictManagersUpdate)
 	surmai.Pb.OnRecordEnrich("traveller_profiles").BindFunc(hooks.EnrichTravellerProfileManagers)
@@ -131,7 +134,7 @@ func (surmai *SurmaiApp) StartJobs() {
 	surmai.startDemoModeSetupJob()
 	surmai.startSyncCurrencyConversionRatesJob()
 	surmai.startEmailSyncJob()
-
+	surmai.startCleanupExpiredContentJob()
 }
 
 func (surmai *SurmaiApp) startSyncCurrencyConversionRatesJob() {
@@ -188,6 +191,17 @@ func (surmai *SurmaiApp) startEmailSyncJob() {
 	// - a delay of max 15 mins is acceptable
 	// - we will finish processing a batch of emails in 15 minutes
 	surmai.Pb.Cron().MustAdd("ImportBookingsFromEmailJob", "*/15 * * * *", func() {
+		job.Execute()
+	})
+}
+
+func (surmai *SurmaiApp) startCleanupExpiredContentJob() {
+	job := &jobs.CleanupExpiredContentJob{
+		Pb: surmai.Pb,
+	}
+
+	// Run daily at 3am
+	surmai.Pb.Cron().MustAdd("CleanupExpiredContentJob", "0 3 * * *", func() {
 		job.Execute()
 	})
 }
