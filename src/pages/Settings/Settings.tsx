@@ -1,10 +1,11 @@
 import { Container, Tabs, Text } from '@mantine/core';
-import { IconAdjustmentsPlus, IconKey, IconSettings, IconUsers } from '@tabler/icons-react';
+import { IconAdjustmentsPlus, IconBell, IconKey, IconSettings, IconUsers } from '@tabler/icons-react';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Header } from '../../components/nav/Header.tsx';
+import { Announcements } from '../../components/settings/Announcements.tsx';
 import { Configuration } from '../../components/settings/Configuration.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
 import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
@@ -17,7 +18,7 @@ const Settings = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { hash } = useLocation();
-  const validTabs = ['users', 'configuration', 'datasets', 'integrations', 'assistant'];
+  const validTabs = ['users', 'configuration', 'datasets', 'integrations', 'assistant', 'announcements'];
   const fragment = hash.slice(1);
   const activeTab = validTabs.includes(fragment) ? fragment : validTabs[0];
   usePageTitle(t('site_settings', 'Site Settings'));
@@ -59,6 +60,9 @@ const Settings = () => {
           <Tabs.Tab value="assistant" leftSection={<IconAdjustmentsPlus size={12} />}>
             {t('assistant', 'Assistant')}
           </Tabs.Tab>
+          <Tabs.Tab value="announcements" leftSection={<IconBell size={12} />}>
+            {t('announcements', 'Announcements')}
+          </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="users">
           <UserList />
@@ -74,6 +78,9 @@ const Settings = () => {
         </Tabs.Panel>
         <Tabs.Panel value="assistant">
           <AssistantConfiguration />
+        </Tabs.Panel>
+        <Tabs.Panel value="announcements">
+          <Announcements />
         </Tabs.Panel>
       </Tabs>
     </Container>

@@ -1,9 +1,10 @@
 package jobs
 
 import (
+	"time"
+
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
-	"time"
 )
 
 type CleanupInvitationsJob struct {
@@ -11,27 +12,43 @@ type CleanupInvitationsJob struct {
 }
 
 func (job *CleanupInvitationsJob) Execute() {
+	app := job.Pb.App
+	logger := app.Logger().WithGroup("CleanupInvitationsJob")
+	now := time.Now()
 
 	// get all invitations past expiry date
 	// mark them expired if still open
-	app := job.Pb.App
-	expiredInvitations, _ := app.FindAllRecords("invitations",
-		dbx.NewExp("expiresOn < {:currentTime} and status = {:status} ",
-			dbx.Params{"currentTime": time.Now(), "status": "open"}))
+	expiredInvitations, err := app.FindAllRecords("invitations",
+		dbx.NewExp("expiresOn < {:currentTime} and status = {:status}",
+			dbx.Params{"currentTime": now, "status": "open"}))
 
-	for _, invitation := range expiredInvitations {
-		invitation.Set("status", "expired")
-		_ = app.Save(invitation)
+	if err != nil {
+		logger.Error("FindAllRecords error", "error", err)
+	} else {
+		for _, invitation := range expiredInvitations {
+			invitation.Set("status", "expired")
+			if err := app.Save(invitation); err != nil {
+				logger.Error("Save error", "invitationId", invitation.Id, "error", err)
+			}
+		}
+		logger.Info("Marked invitations as expired", "count", len(expiredInvitations))
 	}
 
 	// get all non-open invitations 1 week past the expiry date
 	// delete these records
-	deletionCandidates, _ := app.FindAllRecords("invitations",
+	deletionThreshold := now.Add(-7 * 24 * time.Hour)
+	deletionCandidates, err := app.FindAllRecords("invitations",
 		dbx.NewExp("expiresOn < {:deletionThreshold}",
-			dbx.Params{"deletionThreshold": time.Now().Add(-7 * 24 * time.Hour)}))
+			dbx.Params{"deletionThreshold": deletionThreshold}))
 
-	for _, invitation := range deletionCandidates {
-		_ = app.Delete(invitation)
+	if err != nil {
+		logger.Error("FindAllRecords error", "error", err)
+	} else {
+		for _, invitation := range deletionCandidates {
+			if err := app.Delete(invitation); err != nil {
+				logger.Error("Delete error", "invitationId", invitation.Id, "error", err)
+			}
+		}
+		logger.Info("Deleted expired invitations", "count", len(deletionCandidates))
 	}
-
 }

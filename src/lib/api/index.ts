@@ -134,5 +134,11 @@ export {
   uploadTravellerAttachments,
 } from './pocketbase/traveller_profiles.ts';
 
+export {
+  listNotifications,
+  markNotificationAsRead,
+  createAnnouncement,
+  listAnnouncements,
+} from './pocketbase/notifications.ts';
 
-export * from './pocketbase/assistant.ts'
+export * from './pocketbase/assistant.ts';
