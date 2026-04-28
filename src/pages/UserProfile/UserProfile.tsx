@@ -74,7 +74,7 @@ export const UserProfile = () => {
         <Tabs.Panel value="notifications">
           <Paper withBorder radius="md" p="xl" bg={'var(--mantine-color-body)'} mt={'md'}>
             <Title order={4} mb="md">
-              {t('Notifications', 'Notifications')}
+              {t('notifications', 'Notifications')}
             </Title>
             <UserNotifications />
           </Paper>
