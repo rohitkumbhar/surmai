@@ -1,0 +1,9 @@
+[tools]
+node = "24"
+go = "1.26"
+pnpm = "10"
+
+[shell_alias]
+ll = "ls -lahrt"
+dev = "pnpm dev"
+dc = "docker compose -f docker-compose.dev.yaml"
