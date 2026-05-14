@@ -208,6 +208,7 @@ export const FlightForm = ({
 
           <Grid.Col span={{ base: 12, md: 6 }}>
             <DateTimePicker
+              dropdownType="modal"
               valueFormat="lll"
               name={'departureTime'}
               description={t('departure_time_desc', 'Departure date and time')}
@@ -236,6 +237,7 @@ export const FlightForm = ({
           </Grid.Col>
           <Grid.Col span={{ base: 12, md: 6 }}>
             <DateTimePicker
+              dropdownType="modal"
               valueFormat="lll"
               name={'arrivalTime'}
               label={t('transportation_arrival_time', 'Arrival')}

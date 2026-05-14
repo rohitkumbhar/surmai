@@ -152,6 +152,7 @@ export const CarRentalForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="DD MMM YYYY hh:mm A"
             name={'pickupTime'}
             label={t('transportation_pickup_time', 'Pickup Time')}
@@ -171,6 +172,7 @@ export const CarRentalForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="DD MMM YYYY hh:mm A"
             name={'dropOffTime'}
             label={t('transportation_dropOff_time', 'Drop Off Time')}

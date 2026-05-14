@@ -148,6 +148,7 @@ export const GenericActivityForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="lll"
             name={'startDate'}
             label={t('activity_start_date', 'Start Date')}
@@ -167,6 +168,7 @@ export const GenericActivityForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="lll"
             name={'endDate'}
             label={t('activity_end_date', 'End Date')}
