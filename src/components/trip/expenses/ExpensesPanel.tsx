@@ -45,38 +45,6 @@ export const ExpensesPanel = ({
 
   const { convertedExpenses, totalsByCurrency, isLoading } = useTripExpenses({ trip });
 
-  const quoteCsvString = (value?: string | null) => `"${(value || '').replaceAll('"', '\\"')}"`;
-
-  const downloadExpensesCsv = () => {
-    const headers = [
-      t('name', 'Name'),
-      t('date', 'Date'),
-      t('category', 'Category'),
-      t('amount_value', 'Amount'),
-      t('amount_currency', 'Currency'),
-      t('notes', 'Notes'),
-    ];
-    const rows = (convertedExpenses || []).map((expense) => [
-      quoteCsvString(expense.name),
-      quoteCsvString(expense.occurredOn),
-      quoteCsvString(EXPENSE_CATEGORY_DATA[expense.category || 'other']?.label || expense.category || ''),
-      expense.cost?.value || '',
-      quoteCsvString(expense.cost?.currency || ''),
-      quoteCsvString(expense.notes),
-    ]);
-
-    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-    const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-
-    link.href = downloadUrl;
-    link.download = `trip-${trip.name}-expenses.csv`;
-    link.click();
-
-    window.URL.revokeObjectURL(downloadUrl);
-  };
-
   const openModalForAdd = () => {
     setSelectedExpense(null);
     setIsModalOpen(true);
@@ -112,6 +80,38 @@ export const ExpensesPanel = ({
 
     return sortDirection === 'asc' ? comparison : -comparison;
   });
+
+  const quoteCsvString = (value?: string | null) => `"${(value || '').replaceAll('"', '\\"')}"`;
+
+  const downloadExpensesCsv = () => {
+    const headers = [
+      t('name', 'Name'),
+      t('date', 'Date'),
+      t('category', 'Category'),
+      t('amount_value', 'Amount'),
+      t('amount_currency', 'Currency'),
+      t('notes', 'Notes'),
+    ];
+    const rows = (sortedExpenses || []).map((expense) => [
+      quoteCsvString(expense.name),
+      quoteCsvString(expense.occurredOn),
+      quoteCsvString(EXPENSE_CATEGORY_DATA[expense.category || 'other']?.label || expense.category || ''),
+      expense.cost?.value || '',
+      quoteCsvString(expense.cost?.currency || ''),
+      quoteCsvString(expense.notes),
+    ]);
+
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = downloadUrl;
+    link.download = `trip-${trip.name}-expenses.csv`;
+    link.click();
+
+    window.URL.revokeObjectURL(downloadUrl);
+  };
 
   const expenseAttachmentsMap: Record<string, Attachment[]> = {};
   (convertedExpenses || []).forEach((e: Expense) => {
