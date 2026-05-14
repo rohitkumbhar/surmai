@@ -1,5 +1,5 @@
 import { Button, Card, Grid, Group, Loader, Select, Text } from '@mantine/core';
-import { IconPlus } from '@tabler/icons-react';
+import { IconDownload, IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -81,6 +81,38 @@ export const ExpensesPanel = ({
     return sortDirection === 'asc' ? comparison : -comparison;
   });
 
+  const quoteCsvString = (value?: string | null) => `"${(value || '').replaceAll('"', '\\"')}"`;
+
+  const downloadExpensesCsv = () => {
+    const headers = [
+      t('name', 'Name'),
+      t('date', 'Date'),
+      t('category', 'Category'),
+      t('amount_value', 'Amount'),
+      t('amount_currency', 'Currency'),
+      t('notes', 'Notes'),
+    ];
+    const rows = (sortedExpenses || []).map((expense) => [
+      quoteCsvString(expense.name),
+      quoteCsvString(expense.occurredOn),
+      quoteCsvString(EXPENSE_CATEGORY_DATA[expense.category || 'other']?.label || expense.category || ''),
+      expense.cost?.value || '',
+      quoteCsvString(expense.cost?.currency || ''),
+      quoteCsvString(expense.notes),
+    ]);
+
+    const csv = [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+
+    link.href = downloadUrl;
+    link.download = `trip-${trip.name}-expenses.csv`;
+    link.click();
+
+    window.URL.revokeObjectURL(downloadUrl);
+  };
+
   const expenseAttachmentsMap: Record<string, Attachment[]> = {};
   (convertedExpenses || []).forEach((e: Expense) => {
     expenseAttachmentsMap[e.id] = (tripAttachments || []).filter(
@@ -116,11 +148,21 @@ export const ExpensesPanel = ({
           clearable
           style={{ maxWidth: 300 }}
         />
-        {trip.canUpdate && (
-          <Button leftSection={<IconPlus size={16} />} onClick={openModalForAdd}>
-            {t('add_expense', 'Add Expense')}
+        <Group>
+          {trip.canUpdate && (
+            <Button leftSection={<IconPlus size={16} />} onClick={openModalForAdd}>
+              {t('add_expense', 'Add Expense')}
+            </Button>
+          )}
+          <Button
+            leftSection={<IconDownload size={16} />}
+            variant="outline"
+            onClick={downloadExpensesCsv}
+            disabled={isLoading || !convertedExpenses?.length}
+          >
+            {t('download_csv', 'Download CSV')}
           </Button>
-        )}
+        </Group>
       </Group>
 
       {!isLoading && sortedExpenses.length > 0 && (
