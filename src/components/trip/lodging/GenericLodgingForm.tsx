@@ -146,6 +146,7 @@ export const GenericLodgingForm = ({
 
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="lll"
             name={'startDate'}
             label={t('lodging_start_date', 'Check-In')}
@@ -165,6 +166,7 @@ export const GenericLodgingForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="lll"
             name={'endDate'}
             label={t('lodging_end_date', 'Check-Out')}

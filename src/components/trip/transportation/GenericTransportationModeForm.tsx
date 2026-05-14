@@ -178,6 +178,7 @@ export const GenericTransportationModeForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="lll"
             name={'departureTime'}
             description={t('departure_time_desc', 'Departure date and time')}
@@ -198,6 +199,7 @@ export const GenericTransportationModeForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="lll"
             name={'arrivalTime'}
             label={t('transportation_arrival_time', 'Arrival')}

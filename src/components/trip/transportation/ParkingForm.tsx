@@ -171,6 +171,7 @@ export const ParkingForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="DD MMM YYYY hh:mm A"
             name={'startDate'}
             label={t('parking_start_date', 'Start Date')}
@@ -190,6 +191,7 @@ export const ParkingForm = ({
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
+            dropdownType="modal"
             valueFormat="DD MMM YYYY hh:mm A"
             name={'endDate'}
             label={t('parking_end_date', 'End Date')}
