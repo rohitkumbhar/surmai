@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { User } from '../types/auth.ts';
+import { useCurrentUser } from '../auth/useCurrentUser.ts';
 
 export const calculateTimezoneDifference = (user: User | undefined, timezone: string) => {
   const baseline = dayjs().format('YYYY-MM-DD HH:mm:ss');
@@ -14,11 +15,35 @@ export const formatDate = (_locale: string, input: string) => {
   return dayjs(input).format('ll');
 };
 
-export const formatTime = (input: string) => {
+export const formatTime = (input: string, currentUser?: User | undefined) => {
+  let timeFormat;
+  if (currentUser == null) {
+    const { user } = useCurrentUser();
+    timeFormat = user?.timeFormat;
+  } else {
+    timeFormat = currentUser?.timeFormat;
+  }
+  if (timeFormat === '12') {
+    return dayjs(input).format('h:mm A')
+  } else if (timeFormat === '24') {
+    return dayjs(input).format('HH:mm')
+  }
   return dayjs(input).format('LT');
 };
 
-export const formatDateTime = (input: string) => {
+export const formatDateTime = (input: string, currentUser?: User | undefined) => {
+  let timeFormat;
+  if (currentUser == null) {
+    const { user } = useCurrentUser();
+    timeFormat = user?.timeFormat;
+  } else {
+    timeFormat = currentUser?.timeFormat;
+  }
+  if (timeFormat === '12') {
+    return dayjs(input).format('ll h:mm A')
+  } else if (timeFormat === '24') {
+    return dayjs(input).format('ll HH:mm')
+  }
   return dayjs(input).format('ll LT');
 };
 
