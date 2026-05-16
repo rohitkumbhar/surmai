@@ -113,7 +113,7 @@ export const GenericTransportationModeForm = ({
             destination: values.destination,
             originAddress: values.originAddress,
             destinationAddress: values.destinationAddress,
-            notes: values.notes,
+            notes: values.notes?.trim(),
           },
         },
       };
