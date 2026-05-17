@@ -135,7 +135,7 @@ export const OpenAIEndpointConfiguration = () => {
                     key={form.key('apiKey')}
                     {...form.getInputProps('apiKey')}
                     label={t('api_key', 'API Key')}
-                    description={t('api_key_desc', 'Set your API Key if required')}
+                    description={t('ai_api_key_desc', 'Set your API Key if required')}
                     placeholder="sk_32323..."
                   />
                 </Grid.Col>

@@ -145,9 +145,9 @@ export const UserSettingsForm = () => {
             'Your preferred time format (12/24 hr).'
           )}
           data={[
-            { value: 'locale', label: 'Use locale' },
-            { value: '12', label: '12-hour' },
-            { value: '24', label: '24-hour' }
+            { value: 'locale', label: t('tf_use_locale','Use Locale') },
+            { value: '12', label: t('tf_12_hour','12-hour') },
+            { value: '24', label: t('tf_24_hour','24-hour') }
           ]}
           key={form.key('timeFormat')}
           {...form.getInputProps('timeFormat')}

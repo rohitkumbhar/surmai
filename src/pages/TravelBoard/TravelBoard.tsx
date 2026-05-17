@@ -151,7 +151,7 @@ const TravelBoard = () => {
                       </Text>
                       <Group gap="xl">
                         <Text size="sm" fw={500}>
-                          {count} {t('trips', 'trips')}
+                          {count} {t('trips', 'Trips')}
                         </Text>
                         <Stack align="flex-end" gap={0}>
                           <Text size="sm" c="dimmed">
