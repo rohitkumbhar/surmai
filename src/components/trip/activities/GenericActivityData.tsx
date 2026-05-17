@@ -1,4 +1,4 @@
-import { Box, Grid, Modal, rem, Text } from '@mantine/core';
+import { Box, Grid, Modal, rem, Text, Anchor } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { IconActivity } from '@tabler/icons-react';
@@ -12,6 +12,8 @@ import { DataLine } from '../DataLine.tsx';
 import { TravellerBadges } from '../TravellerBadges.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { getMapsLink } from '../../../lib/places.ts';
 
 import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
 
@@ -33,6 +35,7 @@ export const GenericActivityData = ({
   const { t } = useTranslation();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
   const { isMobile } = useSurmaiContext();
+  const { user } = useCurrentUser();
 
   const attachments = tripAttachments?.filter((attachment) => {
     return activity.attachmentReferences?.includes(attachment.id);
@@ -143,7 +146,11 @@ export const GenericActivityData = ({
           <Text size="xs" c={'dimmed'}>
             {t('lodging_address', 'Address')}
           </Text>
-          <Text size="md">{activity.address}</Text>
+          {activity.address && (
+            <Anchor href={getMapsLink(user, activity.address)} target={'_blank'} c={'var(--mantine-primary-color-6)">'}>
+              <Text size="md">{activity.address} </Text>
+            </Anchor>
+          )}
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
           <Text size="xs" c={'dimmed'}>

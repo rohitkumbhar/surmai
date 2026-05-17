@@ -212,7 +212,7 @@ export const FlightData = ({
       {transportation.metadata.notes && transportation.metadata.notes != '' && (
         <>
           <Divider />
-          <Text size="sm" p="sm">
+          <Text size="sm" p="sm" style={{'white-space': 'pre-wrap'}}>
             {transportation.metadata.notes}
           </Text>
         </>

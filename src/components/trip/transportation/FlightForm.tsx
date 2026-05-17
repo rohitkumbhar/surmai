@@ -150,7 +150,7 @@ export const FlightForm = ({
             destination: values.destination,
             flightNumber: values.flightNumber,
             seats: values.seats,
-            notes: values.notes,
+            notes: values.notes?.trim(),
           },
         },
       };

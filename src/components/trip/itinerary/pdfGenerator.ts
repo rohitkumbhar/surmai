@@ -109,6 +109,13 @@ const formatTransportation = (transportation: Transportation, tripTravellers: Tr
                       margin: [0, 2, 0, 0],
                     }
                   : '',
+                transportation.metadata?.notes
+                  ? {
+                      text: `${i18n.t('notes', 'Notes')}: ${transportation.metadata.notes}`,
+                      fontSize: 9,
+                      color: TEXT_COLOR
+                    }
+                  : '',
               ],
               margin: [10, 8, 10, 8],
             },
@@ -196,6 +203,13 @@ const formatTransportation = (transportation: Transportation, tripTravellers: Tr
                     margin: [0, 2, 0, 0],
                   }
                 : '',
+              transportation.metadata?.notes
+                ? {
+                    text: `${transportation.metadata.notes}`,
+                    fontSize: 9,
+                    color: TEXT_COLOR
+                  }
+                : '',
             ],
             margin: [10, 8, 10, 8],
           },
@@ -276,6 +290,13 @@ const formatLodging = (l: Lodging, tripTravellers: TravellerProfile[]): Content 
                     fontSize: 9,
                     color: TEXT_COLOR,
                     margin: [0, 2, 0, 0],
+                  }
+                : '',
+              l.metadata?.notes
+                ? {
+                    text: `${l.metadata.notes}`,
+                    fontSize: 9,
+                    color: TEXT_COLOR
                   }
                 : '',
             ],

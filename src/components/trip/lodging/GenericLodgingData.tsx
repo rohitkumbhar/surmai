@@ -176,7 +176,7 @@ export const GenericLodgingData = ({
       {lodging.metadata?.notes && lodging.metadata.notes != '' && (
         <>
           <Divider />
-          <Text size="sm" p="sm">
+          <Text size="sm" p="sm" style={{'white-space': 'pre-wrap'}}>
             {lodging.metadata.notes}
           </Text>
         </>

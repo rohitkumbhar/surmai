@@ -96,7 +96,7 @@ export const GenericLodgingForm = ({
           link: values.link,
           travellers: values.travellers || [],
           cost: { value: values.cost, currency: values.currencyCode },
-          metadata: { place: values.place, notes: values.notes },
+          metadata: { place: values.place, notes: values.notes?.trim() },
         },
       };
 
