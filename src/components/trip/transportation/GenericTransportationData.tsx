@@ -17,6 +17,7 @@ import { GenericTransportationModeForm } from './GenericTransportationModeForm.t
 import { typeIcons } from './typeIcons.ts';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const GenericTransportationData = ({
   trip,
@@ -35,6 +36,7 @@ export const GenericTransportationData = ({
 }) => {
   const { t } = useTranslation();
   const { isMobile } = useSurmaiContext();
+  const { user } = useCurrentUser();
   const [opened, { open, close }] = useDisclosure(false);
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
 
@@ -179,7 +181,7 @@ export const GenericTransportationData = ({
               </HoverCard.Dropdown>
             </HoverCard>
           )}
-          <Text size="xs">{formatDateTime(transportation.departureTime)}</Text>
+          <Text size="xs">{formatDateTime(transportation.departureTime, user)}</Text>
           <Text size="xs">{transportation.metadata.originAddress}</Text>
         </Grid.Col>
 
@@ -208,7 +210,7 @@ export const GenericTransportationData = ({
               </HoverCard.Dropdown>
             </HoverCard>
           )}
-          <Text size="xs">{formatDateTime(transportation.arrivalTime)}</Text>
+          <Text size="xs">{formatDateTime(transportation.arrivalTime, user)}</Text>
           <Text size="xs">{transportation.metadata.destinationAddress}</Text>
         </Grid.Col>
 

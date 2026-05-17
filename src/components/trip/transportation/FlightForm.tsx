@@ -12,7 +12,7 @@ import { AirportSelect } from './AirportSelect.tsx';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getFlightRoute, saveTransportation } from '../../../lib/api';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { fakeAsUtcString, getFormatTimeString, getTimePickerFormat } from '../../../lib/time.ts';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
 import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
@@ -209,7 +209,7 @@ export const FlightForm = ({
           <Grid.Col span={{ base: 12, md: 6 }}>
             <DateTimePicker
               dropdownType="modal"
-              valueFormat="lll"
+              valueFormat={"MMM D, YYYY " + getFormatTimeString(user)}
               name={'departureTime'}
               description={t('departure_time_desc', 'Departure date and time')}
               label={t('transportation_departure_time', 'Departure')}
@@ -222,6 +222,9 @@ export const FlightForm = ({
               data-testid={'departure-time'}
               submitButtonProps={{
                 'aria-label': 'Submit Date',
+              }}
+              timePickerProps={{
+                format: getTimePickerFormat(user)
               }}
             />
           </Grid.Col>
@@ -238,7 +241,7 @@ export const FlightForm = ({
           <Grid.Col span={{ base: 12, md: 6 }}>
             <DateTimePicker
               dropdownType="modal"
-              valueFormat="lll"
+              valueFormat={"MMM D, YYYY " + getFormatTimeString(user)}
               name={'arrivalTime'}
               label={t('transportation_arrival_time', 'Arrival')}
               description={t('arrival_time_desc', 'Arrival date and time')}
@@ -251,6 +254,9 @@ export const FlightForm = ({
               data-testid={'arrival-time'}
               submitButtonProps={{
                 'aria-label': 'Submit Date',
+              }}
+              timePickerProps={{
+                format: getTimePickerFormat(user)
               }}
             />
           </Grid.Col>

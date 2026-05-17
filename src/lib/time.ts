@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
 
 import type { User } from '../types/auth.ts';
-import { useCurrentUser } from '../auth/useCurrentUser.ts';
 
 export const calculateTimezoneDifference = (user: User | undefined, timezone: string) => {
   const baseline = dayjs().format('YYYY-MM-DD HH:mm:ss');
@@ -11,40 +10,39 @@ export const calculateTimezoneDifference = (user: User | undefined, timezone: st
   return destinationTimezoneInstant.diff(userTimezoneInstant, 'hours', true);
 };
 
+export const getFormatTimeString = (user: User | undefined) => {
+  if (user?.timeFormat === '12') {
+    return 'h:mm A';
+  } else if (user?.timeFormat === '24') {
+    return 'HH:mm';
+  }
+  return 'LT';
+}
+
+export const getFormatDateTimeString = (user: User | undefined) => {
+  return 'll ' + getFormatTimeString(user);
+}
+
+export const getTimePickerFormat = (user: User | undefined) => {
+  if (user?.timeFormat === '12') {
+    return '12h';
+  } else if (user?.timeFormat === '24') {
+    return '24h';
+  }
+  // dayjs LocaleData does not have 12/24 hr info, so just default to 24
+  return '24h';
+}
+
 export const formatDate = (_locale: string, input: string) => {
   return dayjs(input).format('ll');
 };
 
-export const formatTime = (input: string, currentUser?: User | undefined) => {
-  let timeFormat;
-  if (currentUser == null) {
-    const { user } = useCurrentUser();
-    timeFormat = user?.timeFormat;
-  } else {
-    timeFormat = currentUser?.timeFormat;
-  }
-  if (timeFormat === '12') {
-    return dayjs(input).format('h:mm A')
-  } else if (timeFormat === '24') {
-    return dayjs(input).format('HH:mm')
-  }
-  return dayjs(input).format('LT');
+export const formatTime = (input: string, user?: User | undefined) => {
+  return dayjs(input).format(getFormatTimeString(user));
 };
 
-export const formatDateTime = (input: string, currentUser?: User | undefined) => {
-  let timeFormat;
-  if (currentUser == null) {
-    const { user } = useCurrentUser();
-    timeFormat = user?.timeFormat;
-  } else {
-    timeFormat = currentUser?.timeFormat;
-  }
-  if (timeFormat === '12') {
-    return dayjs(input).format('ll h:mm A')
-  } else if (timeFormat === '24') {
-    return dayjs(input).format('ll HH:mm')
-  }
-  return dayjs(input).format('ll LT');
+export const formatDateTime = (input: string, user?: User | undefined) => {
+  return dayjs(input).format(getFormatDateTimeString(user));
 };
 
 /*

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { saveTransportation } from '../../../lib/api';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { fakeAsUtcString, getFormatDateTimeString, getTimePickerFormat } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
@@ -153,7 +153,7 @@ export const CarRentalForm = ({
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="DD MMM YYYY hh:mm A"
+            valueFormat={getFormatDateTimeString(user)}
             name={'pickupTime'}
             label={t('transportation_pickup_time', 'Pickup Time')}
             description={t('transportation_pickup_time_desc', 'Date and time for pickup')}
@@ -168,12 +168,15 @@ export const CarRentalForm = ({
             submitButtonProps={{
               'aria-label': 'Submit Date',
             }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
+            }}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="DD MMM YYYY hh:mm A"
+            valueFormat={getFormatDateTimeString(user)}
             name={'dropOffTime'}
             label={t('transportation_dropOff_time', 'Drop Off Time')}
             description={t('transportation_dropoff_time_desc', 'Date and time for drop-off')}
@@ -187,6 +190,9 @@ export const CarRentalForm = ({
             data-testid={'drop-off-time'}
             submitButtonProps={{
               'aria-label': 'Submit Date',
+            }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
             }}
           />
         </Grid.Col>

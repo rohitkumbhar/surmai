@@ -12,6 +12,7 @@ import { ParkingForm } from './ParkingForm.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const ParkingData = ({
   trip,
@@ -30,6 +31,7 @@ export const ParkingData = ({
 }) => {
   const { t, i18n } = useTranslation();
   const { isMobile } = useSurmaiContext();
+  const { user } = useCurrentUser();
   const [opened, { open, close }] = useDisclosure(false);
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     parking.attachmentReferences?.includes(attachment.id)
@@ -111,7 +113,7 @@ export const ParkingData = ({
             {t('parking_start_date', 'Start Date')}
           </Text>
           <Text size="sm">
-            {`${formatDate(i18n.language, parking.departureTime)} ${formatTime(parking.departureTime)}`}
+            {`${formatDate(i18n.language, parking.departureTime)} ${formatTime(parking.departureTime, user)}`}
           </Text>
         </Grid.Col>
 
@@ -119,7 +121,7 @@ export const ParkingData = ({
           <Text size="xs" c={'dimmed'}>
             {t('parking_end_date', 'End Date')}
           </Text>
-          <Text size="sm">{`${formatDate(i18n.language, parking.arrivalTime)} ${formatTime(parking.arrivalTime)}`}</Text>
+          <Text size="sm">{`${formatDate(i18n.language, parking.arrivalTime)} ${formatTime(parking.arrivalTime, user)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>

@@ -15,11 +15,12 @@ import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 import { OrganizationTab } from '../../components/trip/OrganizationTab.tsx';
 import { getTrip, getTripAttachments, listExpenses, listTripTravellerProfiles } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
-import { formatDate } from '../../lib/time.ts';
+import { formatDate, formatDateTime } from '../../lib/time.ts';
 
 import type { Attachment, Expense, TravellerProfile, Trip } from '../../types/trips.ts';
 
 import { TabsList } from '../../components/util/TabsList.tsx';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import './ViewTrip.module.css';
 
 export const ViewTrip = () => {
@@ -27,6 +28,7 @@ export const ViewTrip = () => {
   usePageTitle(docTitle);
 
   const { offline } = useSurmaiContext();
+  const { user } = useCurrentUser();
   const { tripId } = useParams();
   const { t, i18n } = useTranslation();
   const {
@@ -142,7 +144,7 @@ export const ViewTrip = () => {
           closeButtonLabel={t('dismiss', 'Dismiss')}
         >
           {t('offline_sync_status', 'Trip data was synced to this device at {{offlineCacheTimestamp}}', {
-            offlineCacheTimestamp: offlineCacheTimestamp,
+            offlineCacheTimestamp: formatDateTime(offlineCacheTimestamp, user),
           })}
         </Alert>
       )}

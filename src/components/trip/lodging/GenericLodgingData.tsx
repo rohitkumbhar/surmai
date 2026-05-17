@@ -129,7 +129,7 @@ export const GenericLodgingData = ({
             {t('lodging_check_in', 'Check-In')}
           </Text>
           <Text size="md">{`${formatDate(i18n.language, lodging.startDate)}`}</Text>
-          <Text size="md">{`${formatTime(lodging.startDate)}`}</Text>
+          <Text size="md">{`${formatTime(lodging.startDate, user)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 1.5 }}>
@@ -137,7 +137,7 @@ export const GenericLodgingData = ({
             {t('lodging_check_out', 'Check-Out')}
           </Text>
           <Text size="md">{`${formatDate(i18n.language, lodging.endDate)}`}</Text>
-          <Text size="md">{`${formatTime(lodging.endDate)}`}</Text>
+          <Text size="md">{`${formatTime(lodging.endDate, user)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>
