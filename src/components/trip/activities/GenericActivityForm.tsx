@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { saveActivity } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { fakeAsUtcString, getFormatDateTimeString, getTimePickerFormat } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
@@ -149,7 +149,7 @@ export const GenericActivityForm = ({
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="lll"
+            valueFormat={getFormatDateTimeString(user)}
             name={'startDate'}
             label={t('activity_start_date', 'Start Date')}
             description={t('activity_start_date_desc', 'Activity start date and time')}
@@ -164,12 +164,15 @@ export const GenericActivityForm = ({
             submitButtonProps={{
               'aria-label': 'Submit Date',
             }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
+            }}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="lll"
+            valueFormat={getFormatDateTimeString(user)}
             name={'endDate'}
             label={t('activity_end_date', 'End Date')}
             description={t('activity_end_date_desc', 'Activity end date and time')}
@@ -182,6 +185,9 @@ export const GenericActivityForm = ({
             data-testid={'activity-end-date'}
             submitButtonProps={{
               'aria-label': 'Submit Date',
+            }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
             }}
           />
         </Grid.Col>

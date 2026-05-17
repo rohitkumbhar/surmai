@@ -28,6 +28,7 @@ export const UserSettingsForm = () => {
     timezone: user?.timezone || ((dayjs as any).tz?.guess?.() ?? 'UTC'),
     mapsProvider: user?.mapsProvider || 'openstreetmap',
     websiteAppearance: user?.websiteAppearance || 'auto',
+    timeFormat: user?.timeFormat || 'locale',
     preferredLanguage: user?.preferredLanguage || i18n.language,
   };
 
@@ -45,6 +46,7 @@ export const UserSettingsForm = () => {
         timezone: values.timezone,
         mapsProvider: values.mapsProvider,
         websiteAppearance: values.websiteAppearance,
+        timeFormat: values.timeFormat,
         preferredLanguage: values.preferredLanguage,
       })
         .then(async () => {
@@ -131,6 +133,24 @@ export const UserSettingsForm = () => {
           key={form.key('preferredLanguage')}
           {...form.getInputProps('preferredLanguage')}
           searchable
+          withCheckIcon={false}
+        ></Select>
+
+        <Select
+          mt={'sm'}
+          name={'timeFormat'}
+          label={t('time_format', 'Time Format')}
+          description={t(
+            'time_format_desc',
+            'Your preferred time format (12/24 hr).'
+          )}
+          data={[
+            { value: 'locale', label: 'Use locale' },
+            { value: '12', label: '12-hour' },
+            { value: '24', label: '24-hour' }
+          ]}
+          key={form.key('timeFormat')}
+          {...form.getInputProps('timeFormat')}
           withCheckIcon={false}
         ></Select>
 

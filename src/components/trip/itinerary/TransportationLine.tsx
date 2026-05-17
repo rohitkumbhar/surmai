@@ -48,14 +48,14 @@ export const TransportationLine = ({
               />
             </Box>
 
-            {showStartTime && <Badge radius={'xs'}>{formatTime(transportation.departureTime)}</Badge>}
+            {showStartTime && <Badge radius={'xs'}>{formatTime(transportation.departureTime, user)}</Badge>}
             <Text>
               {t('transportation_from_to', '{{ origin }} to {{ destination }}', {
                 origin: transportation.origin,
                 destination: transportation.destination,
               })}
             </Text>
-            {showEndTime && <Badge radius={'xs'}>{formatTime(transportation.arrivalTime)}</Badge>}
+            {showEndTime && <Badge radius={'xs'}>{formatTime(transportation.arrivalTime, user)}</Badge>}
           </Group>
           <Group p={'sm'}>
             {transportation.metadata?.flightNumber && (
@@ -147,8 +147,8 @@ const CarRentalLine = ({
             }}
           />
         </Box>
-        {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime)}</Badge>}
-        {showEndTime && <Badge radius={'xs'}>{formatTime(rental.arrivalTime)}</Badge>}
+        {showStartTime && <Badge radius={'xs'}>{formatTime(rental.departureTime, user)}</Badge>}
+        {showEndTime && <Badge radius={'xs'}>{formatTime(rental.arrivalTime, user)}</Badge>}
         {showStartTime && (
           <Text>
             {t('pickup_rental_car', 'Pickup rental car from {{ origin }}', {

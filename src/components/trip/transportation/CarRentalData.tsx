@@ -12,6 +12,7 @@ import { CarRentalForm } from './CarRentalForm.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const CarRentalData = ({
   trip,
@@ -30,6 +31,7 @@ export const CarRentalData = ({
 }) => {
   const { t, i18n } = useTranslation();
   const { isMobile } = useSurmaiContext();
+  const { user } = useCurrentUser();
   const [opened, { open, close }] = useDisclosure(false);
   const transportationAttachments = tripAttachments?.filter((attachment) =>
     rental.attachmentReferences?.includes(attachment.id)
@@ -105,7 +107,7 @@ export const CarRentalData = ({
           </Text>
           <Text size="sm">{rental.origin}</Text>
           <Text size="sm">
-            {`${formatDate(i18n.language, rental.departureTime)} ${formatTime(rental.departureTime)}`}
+            {`${formatDate(i18n.language, rental.departureTime)} ${formatTime(rental.departureTime, user)}`}
           </Text>
         </Grid.Col>
 
@@ -114,7 +116,7 @@ export const CarRentalData = ({
             {t('transportation_drop_off', 'Drop Off')}
           </Text>
           <Text size="sm">{rental.destination}</Text>
-          <Text size="sm">{`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(rental.arrivalTime)}`}</Text>
+          <Text size="sm">{`${formatDate(i18n.language, rental.arrivalTime)} ${formatTime(rental.arrivalTime, user)}`}</Text>
         </Grid.Col>
 
         <Grid.Col span={{ base: 12, sm: 6, md: 2, lg: 2 }}>

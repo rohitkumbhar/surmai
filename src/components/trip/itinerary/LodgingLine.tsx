@@ -42,8 +42,8 @@ export const LodgingLine = ({
             }}
           />
         </Box>
-        {showStartTime && <Badge radius={'xs'}>{formatTime(lodging.startDate)}</Badge>}
-        {showEndTime && <Badge radius={'xs'}>{formatTime(lodging.endDate)}</Badge>}
+        {showStartTime && <Badge radius={'xs'}>{formatTime(lodging.startDate, user)}</Badge>}
+        {showEndTime && <Badge radius={'xs'}>{formatTime(lodging.endDate, user)}</Badge>}
         {showStartTime && <Text>{t('check_in_at', 'Check-In at {{ name }}', { name: lodging.name })}</Text>}
         {showEndTime && <Text>{t('check_out_from', 'Check-Out from {{name }}', { name: lodging.name })}</Text>}
         {!(showStartTime || showEndTime) && <Text>{t('stay_at', 'Stay at {{ name }}', { name: lodging.name })}</Text>}

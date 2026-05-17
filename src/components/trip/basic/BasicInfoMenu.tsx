@@ -27,6 +27,8 @@ import {
   uploadTripCoverImage,
 } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+
 
 const loadPdfGenerator = () => import('../itinerary/pdfGenerator.ts');
 
@@ -36,6 +38,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isMobile } = useSurmaiContext();
+  const { user } = useCurrentUser();
 
   const [, setOfflineCacheTimestamp] = useLocalStorage<string | null>({
     key: `offline-cache-timestamp-${trip.id}`,
@@ -190,7 +193,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               listTripTravellerProfiles(trip.travellers || []),
             ]);
             const { downloadDailyItinerary } = await loadPdfGenerator();
-            downloadDailyItinerary(trip, transportations, lodgings, activities, tripTravellers);
+            downloadDailyItinerary(trip, transportations, lodgings, activities, user, tripTravellers);
           }}
           leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >
@@ -205,7 +208,7 @@ export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               listTripTravellerProfiles(trip.travellers || []),
             ]);
             const { downloadFullItinerary } = await loadPdfGenerator();
-            downloadFullItinerary(trip, transportations, lodgings, activities, tripTravellers);
+            downloadFullItinerary(trip, transportations, lodgings, activities, user, tripTravellers);
           }}
           leftSection={<IconFileTypePdf style={{ width: rem(16), height: rem(16) }} stroke={1.5} />}
         >

@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { saveLodging } from '../../../lib/api';
 import i18n from '../../../lib/i18n.ts';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { fakeAsUtcString, getFormatDateTimeString, getTimePickerFormat } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
@@ -147,7 +147,7 @@ export const GenericLodgingForm = ({
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="lll"
+            valueFormat={getFormatDateTimeString(user)}
             name={'startDate'}
             label={t('lodging_start_date', 'Check-In')}
             description={t('lodging_start_date_desc', 'Check-In date & time')}
@@ -162,12 +162,15 @@ export const GenericLodgingForm = ({
             submitButtonProps={{
               'aria-label': 'Submit Date',
             }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
+            }}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="lll"
+            valueFormat={getFormatDateTimeString(user)}
             name={'endDate'}
             label={t('lodging_end_date', 'Check-Out')}
             description={t('lodging_end_date_desc', 'Check-Out date & time')}
@@ -181,6 +184,9 @@ export const GenericLodgingForm = ({
             data-testid={'lodging-end-date'}
             submitButtonProps={{
               'aria-label': 'Submit Date',
+            }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
             }}
           />
         </Grid.Col>

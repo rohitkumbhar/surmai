@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { saveTransportation } from '../../../lib/api';
-import { fakeAsUtcString } from '../../../lib/time.ts';
+import { fakeAsUtcString, getFormatDateTimeString, getTimePickerFormat } from '../../../lib/time.ts';
 import { PlaceSelect } from '../../places/PlaceSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
 import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
@@ -182,7 +182,7 @@ export const BikeForm = ({
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="lll"
+            valueFormat={getFormatDateTimeString(user)}
             name={'departureTime'}
             description={t('departure_time_desc', 'Departure date and time')}
             miw={rem('200px')}
@@ -198,12 +198,15 @@ export const BikeForm = ({
             submitButtonProps={{
               'aria-label': 'Submit Date',
             }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
+            }}
           />
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 6 }}>
           <DateTimePicker
             dropdownType="modal"
-            valueFormat="lll"
+            valueFormat={getFormatDateTimeString(user)}
             name={'arrivalTime'}
             label={t('transportation_arrival_time', 'Arrival')}
             description={t('arrival_time_desc', 'Arrival date and time')}
@@ -218,6 +221,9 @@ export const BikeForm = ({
             data-testid={'arrival-time'}
             submitButtonProps={{
               'aria-label': 'Submit Date',
+            }}
+            timePickerProps={{
+              format: getTimePickerFormat(user)
             }}
           />
         </Grid.Col>

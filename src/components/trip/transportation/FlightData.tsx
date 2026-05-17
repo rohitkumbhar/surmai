@@ -15,6 +15,7 @@ import { DataLine } from '../DataLine.tsx';
 import { TravellerBadges } from '../TravellerBadges.tsx';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const FlightData = ({
   trip,
@@ -33,6 +34,7 @@ export const FlightData = ({
 }) => {
   const { t } = useTranslation();
   const { isMobile } = useSurmaiContext();
+  const { user } = useCurrentUser();
   const [flightFormOpened, { open: openFlightForm, close: closeFlightForm }] = useDisclosure(false);
 
   const transportationAttachments = tripAttachments?.filter((attachment) =>
@@ -142,7 +144,7 @@ export const FlightData = ({
               </HoverCard.Dropdown>
             </HoverCard>
           )}
-          <Text size="xs">{formatDateTime(transportation.departureTime)}</Text>
+          <Text size="xs">{formatDateTime(transportation.departureTime, user)}</Text>
           <Text size="xs">{transportation.metadata.originAddress}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
@@ -170,7 +172,7 @@ export const FlightData = ({
               </HoverCard.Dropdown>
             </HoverCard>
           )}
-          <Text size="xs">{formatDateTime(transportation.arrivalTime)}</Text>
+          <Text size="xs">{formatDateTime(transportation.arrivalTime, user)}</Text>
           <Text size="xs">{transportation.metadata.destinationAddress}</Text>
         </Grid.Col>
         <Grid.Col span={{ base: 12, sm: 5, md: 2, lg: 1.5 }}>
