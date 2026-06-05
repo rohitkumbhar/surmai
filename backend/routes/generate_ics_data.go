@@ -415,8 +415,8 @@ func getTimezoneValue(metadata map[string]interface{}, key string) string {
 		return ""
 	}
 
-	place := metadata[key].(map[string]interface{})
-	if place == nil || place["timezone"] == nil {
+	place, ok := metadata[key].(map[string]interface{})
+	if place == nil || place["timezone"] == nil || !ok {
 		return ""
 	}
 
