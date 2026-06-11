@@ -37,7 +37,12 @@ export const ActivityLine = ({
           />
         </Box>
         {showStartTime && <Badge radius={'xs'}>{formatTime(activity.startDate, user)}</Badge>}
-        {<Text>{`${activity.name}`}</Text>}
+        <Text>{`${activity.name}`}</Text>
+        {activity.metadata?.isDraft && (
+          <Badge color="orange" size="xs" variant="light">
+            Draft
+          </Badge>
+        )}
         {showEndTime && activity.endDate && <Badge radius={'xs'}>{formatTime(activity.endDate, user)}</Badge>}
       </Group>
 

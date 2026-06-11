@@ -1,9 +1,11 @@
-import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title } from '@mantine/core';
+import { Card, Container, Flex, LoadingOverlay, Modal, Stack, Text, Title, Button, rem } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useQuery } from '@tanstack/react-query';
+import { IconMap2 } from '@tabler/icons-react';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { ActivityExplorerModal } from './ActivityExplorerModal.tsx';
 import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
 import { GenericActivityData } from './GenericActivityData.tsx';
 import { GenericActivityForm } from './GenericActivityForm.tsx';
@@ -34,6 +36,7 @@ export const ActivitiesPanel = ({
 
   const { isMobile } = useSurmaiContext();
   const [formOpened, { open: openForm, close: closeForm }] = useDisclosure(false);
+  const [explorerOpened, { open: openExplorer, close: closeExplorer }] = useDisclosure(false);
 
   const refetchData = () => {
     return refetch().then(() => refetchTrip());
@@ -59,28 +62,44 @@ export const ActivitiesPanel = ({
         }}
       >
         <GenericActivityForm
-          trip={trip}
-          expenseMap={expenseMap}
-          tripTravellers={tripTravellers}
-          onSuccess={() => {
-            refetchData();
-            closeForm();
-          }}
-          onCancel={() => {
-            closeForm();
-          }}
-        />
-      </Modal>
-
-      {trip.canUpdate && (
-        <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
-          <AddActivitiesMenu
-            onClick={() => {
-              openForm();
+            trip={trip}
+            expenseMap={expenseMap}
+            tripTravellers={tripTravellers}
+            onSuccess={() => {
+              refetchData();
+              closeForm();
+            }}
+            onCancel={() => {
+              closeForm();
             }}
           />
-        </Flex>
-      )}
+        </Modal>
+
+        <ActivityExplorerModal
+          trip={trip}
+          opened={explorerOpened}
+          onClose={closeExplorer}
+          onSuccess={() => {
+            refetchData();
+          }}
+        />
+
+        {trip.canUpdate && (
+          <Flex mih={50} gap="md" justify="flex-end" align="center" direction="row" wrap="wrap">
+            <Button
+              variant="light"
+              leftSection={<IconMap2 style={{ width: rem(18), height: rem(18) }} stroke={1.5} />}
+              onClick={openExplorer}
+            >
+              {t('activity_explore', 'Explore')}
+            </Button>
+            <AddActivitiesMenu
+              onClick={() => {
+                openForm();
+              }}
+            />
+          </Flex>
+        )}
       {
         <Stack mt={'sm'}>
           <Title order={5}>{t('activities', 'Activities')}</Title>

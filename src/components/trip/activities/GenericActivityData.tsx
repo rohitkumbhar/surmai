@@ -1,4 +1,4 @@
-import { Box, Grid, Modal, rem, Text, Anchor } from '@mantine/core';
+import { Box, Grid, Modal, rem, Text, Anchor, Badge, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { openConfirmModal } from '@mantine/modals';
 import { IconActivity } from '@tabler/icons-react';
@@ -116,7 +116,14 @@ export const GenericActivityData = ({
           <Text size="xs" c={'dimmed'}>
             {t('lodging_name', 'Name')}
           </Text>
-          <Text size="md">{activity.name}</Text>
+          <Group gap="xs">
+            <Text size="md">{activity.name}</Text>
+            {activity.metadata?.isDraft && (
+              <Badge color="orange" size="xs" variant="light">
+                {t('draft', 'Draft')}
+              </Badge>
+            )}
+          </Group>
           <Text size="sm" c={'dimmed'} lineClamp={1}>
             {activity.description}
           </Text>

@@ -252,6 +252,7 @@ export interface Activity extends RecordModel {
   attachmentReferences?: string[];
   expenseId?: string;
   travellers?: string[];
+  metadata?: { [key: string]: any };
 }
 
 export type CreateActivity = Omit<Activity, 'id'>;

@@ -69,6 +69,8 @@ func (surmai *SurmaiApp) BindRoutes() {
 		tripRoutes.POST("/save-activity", R.SaveActivity)
 
 		// General Utility Routes
+		se.Router.POST("/api/surmai/explore/pois", R.ExplorePOIs).Bind(apis.RequireAuth())
+
 		se.Router.GET("/api/surmai/flight-route/{flightNumber}",
 			func(e *core.RequestEvent) error {
 				return R.GetFlightRoute(e, surmai.TimezoneFinder)

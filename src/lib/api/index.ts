@@ -142,3 +142,5 @@ export {
 } from './pocketbase/notifications.ts';
 
 export * from './pocketbase/assistant.ts';
+
+export { fetchPOIsFromBackend } from './pocketbase/explore.ts';
