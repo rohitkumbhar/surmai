@@ -12,6 +12,7 @@ import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type { Trip } from '../../../types/trips.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();
@@ -97,11 +98,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                   </Text>
 
                   <Group gap={0}>
-                    <Text fw={700}>{trip.budget.value.toFixed(2)}</Text>
-                    <Text fw={700}>&nbsp;</Text>
-                    <Text fw={700} size="sm">
-                      {` ${trip.budget.currency}`}
-                    </Text>
+                    <Text fw={700}>{formatCost({value: trip.budget?.value, currency: trip.budget.currency})}</Text>
                   </Group>
                 </Box>
 
@@ -111,11 +108,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
                   </Text>
 
                   <Group gap={0}>
-                    <Text fw={700}>{totalExpenses?.toFixed(2)}</Text>
-                    <Text fw={700}>&nbsp;</Text>
-                    <Text fw={700} size="sm">
-                      {` ${trip.budget.currency}`}
-                    </Text>
+                    <Text fw={700}>{formatCost({value: totalExpenses, currency: trip.budget.currency})}</Text>
                   </Group>
                 </Box>
               </Group>

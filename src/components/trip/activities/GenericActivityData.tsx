@@ -16,6 +16,7 @@ import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsLink } from '../../../lib/places.ts';
 
 import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 export const GenericActivityData = ({
   trip,
@@ -43,8 +44,6 @@ export const GenericActivityData = ({
 
   // Get expense from map, handle null/undefined cases
   const expense = activity.expenseId ? expenseMap.get(activity.expenseId) : undefined;
-  const costValue = expense?.cost?.value;
-  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -156,7 +155,7 @@ export const GenericActivityData = ({
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
+          <Text size="md">{formatCost(expense?.cost)}</Text>
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={activity.travellers} tripTravellers={tripTravellers} />

@@ -1,7 +1,7 @@
 import { Anchor, Card, Group, RingProgress, SimpleGrid, Stack, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { getRandomColor } from './helper.ts';
+import { formatCost, getRandomColor } from './helper.ts';
 
 import type { ConvertedExpense, Trip } from '../../../types/trips.ts';
 
@@ -72,7 +72,7 @@ export const ExpenseStatCards = ({
                       {t('used', 'Used')}:
                     </Text>
                     <Text size="sm" fw={600}>
-                      {totalExpenses.toFixed(2)} {budgetCurrency}
+                      {formatCost({value: totalExpenses, currency: budgetCurrency})}
                     </Text>
                   </Group>
                   <Group justify="space-between">
@@ -80,7 +80,7 @@ export const ExpenseStatCards = ({
                       {t('budget', 'Budget')}:
                     </Text>
                     <Text size="sm" fw={600}>
-                      {budgetAmount.toFixed(2)} {budgetCurrency}
+                      {formatCost({value: budgetAmount, currency: budgetCurrency})}
                     </Text>
                   </Group>
                   <Group justify="space-between">
@@ -88,7 +88,7 @@ export const ExpenseStatCards = ({
                       {t('remaining', 'Remaining')}:
                     </Text>
                     <Text size="sm" fw={600} c={budgetAmount - totalExpenses < 0 ? 'red' : 'green'}>
-                      {(budgetAmount - totalExpenses).toFixed(2)} {budgetCurrency}
+                      {formatCost({value: budgetAmount - totalExpenses, currency: budgetCurrency})}
                     </Text>
                   </Group>
                 </Stack>
@@ -125,7 +125,7 @@ export const ExpenseStatCards = ({
                   return {
                     value: percentage,
                     color: color,
-                    tooltip: `${categoryData[category]?.label}: ${amount.toFixed(2)} ${budgetCurrency}`,
+                    tooltip: `${formatCost({value: amount, currency: budgetCurrency})}`
                   };
                 })}
                 label={
@@ -168,7 +168,7 @@ export const ExpenseStatCards = ({
                           {percentage.toFixed(1)}%
                         </Text>
                         <Text size="sm" fw={600}>
-                          {amount.toFixed(2)} {budgetCurrency}
+                          {formatCost({value: amount, currency: budgetCurrency})}
                         </Text>
                       </Group>
                     </Group>
@@ -202,7 +202,7 @@ export const ExpenseStatCards = ({
                   return {
                     value: percentage,
                     color: color,
-                    tooltip: `${amount.total.toFixed(2)} ${currencyCode}`,
+                    tooltip: `${formatCost({value: amount.total, currency: currencyCode})}`
                   };
                 })}
                 label={
@@ -234,7 +234,7 @@ export const ExpenseStatCards = ({
                           }}
                         />
                         <Text size="sm" fw={500}>
-                          {`${currencyCode} ${amount.total.toFixed(2)} `}
+                          {formatCost({value: amount.total, currency: currencyCode})}
                         </Text>
                       </Group>
                       <Group gap="xs" wrap="nowrap">

@@ -16,6 +16,7 @@ import { TravellerBadges } from '../TravellerBadges.tsx';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 export const FlightData = ({
   trip,
@@ -43,8 +44,6 @@ export const FlightData = ({
 
   // Get expense from map, handle null/undefined cases
   const expense = transportation.expenseId ? expenseMap.get(transportation.expenseId) : undefined;
-  const costValue = expense?.cost?.value;
-  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -207,7 +206,7 @@ export const FlightData = ({
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
+          <Text size="md">{formatCost(expense?.cost)}</Text>
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={transportation.travellers} tripTravellers={tripTravellers} />

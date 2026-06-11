@@ -30,6 +30,7 @@ import { listAllTrips } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle';
 
 import type { Trip } from '../../types/trips';
+import { formatCost } from '../../components/trip/expenses/helper';
 
 // Fix for default marker icons in Leaflet with Webpack/Vite
 
@@ -128,7 +129,7 @@ const TravelBoard = () => {
               <StatsCard title={t('days', 'Days')} value={filteredData.totalDays} />
               <StatsCard
                 title={t('cost', 'Cost')}
-                value={`${filteredData.totalExpenseAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} ${filteredData.userCurrency}`}
+                value={`${formatCost({value: filteredData.totalExpenseAmount, currency: filteredData.userCurrency})}`}
                 note={
                   filteredData.isDefaultCurrency
                     ? t('default_currency_note', 'Showing in USD (default) because no currency is set in your profile.')
@@ -260,11 +261,7 @@ const TravelBoard = () => {
                         <Group key={currency} justify="space-between">
                           <Text size="sm">{currency}</Text>
                           <Text size="sm" fw={500}>
-                            {amount.toLocaleString(undefined, {
-                              minimumFractionDigits: 2,
-                              maximumFractionDigits: 2,
-                            })}{' '}
-                            {currency}
+                            {formatCost({value: Number(amount), currency: currency})}
                           </Text>
                         </Group>
                       ))}
