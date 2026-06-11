@@ -17,6 +17,7 @@ import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
 
 import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '../../../types/trips.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 export const GenericLodgingData = ({
   trip,
@@ -46,8 +47,6 @@ export const GenericLodgingData = ({
 
   // Get expense from map, handle null/undefined cases
   const expense = lodging.expenseId ? expenseMap.get(lodging.expenseId) : undefined;
-  const costValue = expense?.cost?.value;
-  const costCurrency = expense?.cost?.currency;
 
   return (
     <DataLine
@@ -169,7 +168,7 @@ export const GenericLodgingData = ({
           <Text size="xs" c={'dimmed'}>
             {t('cost', 'Cost')}
           </Text>
-          <Text size="md">{costValue ? `${costValue} ${costCurrency || ''}` : ''}</Text>
+          <Text size="md">{formatCost(expense?.cost)}</Text>
         </Grid.Col>
       </Grid>
       <TravellerBadges travellerIds={lodging.travellers} tripTravellers={tripTravellers} />

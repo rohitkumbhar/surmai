@@ -1,6 +1,6 @@
 import { type User } from '../../../types/auth';
 import { type ConversionRate } from '../../../types/expenses';
-import { type ConvertedExpense, type Expense, type Trip } from '../../../types/trips';
+import { type ConvertedExpense, type Expense, type Trip, type Cost } from '../../../types/trips';
 
 export const convertExpenses = (
   user: User | undefined,
@@ -80,3 +80,7 @@ export const getRandomColor = (code: string) => {
 
   return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 };
+
+export const formatCost = (cost: Cost | undefined) => {
+  return cost ? cost.value.toLocaleString(undefined, { style: "currency", currency: cost.currency }) : "";
+}

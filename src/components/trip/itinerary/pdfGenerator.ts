@@ -9,6 +9,7 @@ import type { Activity, Lodging, Transportation, Trip, ItineraryLine, TravellerP
 import { formatDateTime } from '../../../lib/time.ts';
 import type { TDocumentDefinitions, Content } from 'pdfmake/interfaces';
 import { User } from '../../../types/auth.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 // @ts-expect-error pdfmake fonts
 pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : (pdfFonts as any).vfs;
@@ -98,7 +99,7 @@ const formatTransportation = (transportation: Transportation, tripTravellers: Tr
                   : '',
                 transportation.cost?.value
                   ? {
-                      text: `${i18n.t('cost', 'Cost')}: ${transportation.cost.value} ${transportation.cost.currency}`,
+                      text: `${i18n.t('cost', 'Cost')}: ${formatCost(transportation.cost)}`,
                       fontSize: 9,
                       color: TEXT_COLOR,
                     }
@@ -190,7 +191,7 @@ const formatTransportation = (transportation: Transportation, tripTravellers: Tr
                     : '',
                   transportation.cost?.value
                     ? {
-                        text: `${i18n.t('cost', 'Cost')}: ${transportation.cost.value} ${transportation.cost.currency}`,
+                        text: `${i18n.t('cost', 'Cost')}: ${formatCost(transportation.cost)}`,
                         fontSize: 9,
                         color: TEXT_COLOR,
                       }
@@ -279,7 +280,7 @@ const formatLodging = (l: Lodging, tripTravellers: TravellerProfile[], user: Use
                     : '',
                   l.cost?.value
                     ? {
-                        text: `${i18n.t('cost', 'Cost')}: ${l.cost.value} ${l.cost.currency}`,
+                        text: `${i18n.t('cost', 'Cost')}: ${formatCost(l.cost)}`,
                         fontSize: 9,
                         color: TEXT_COLOR,
                       }
@@ -350,7 +351,7 @@ const formatActivity = (a: Activity, tripTravellers: TravellerProfile[], user: U
                   { text: `${i18n.t('time', 'Time')}: ${formatDateTime(a.startDate, user)}`, fontSize: 10 },
                   a.cost?.value
                     ? {
-                        text: `${i18n.t('cost', 'Cost')}: ${a.cost.value} ${a.cost.currency}`,
+                        text: `${i18n.t('cost', 'Cost')}: ${formatCost(a.cost)}`,
                         fontSize: 10,
                       }
                     : '',

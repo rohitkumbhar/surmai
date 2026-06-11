@@ -8,6 +8,7 @@ import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { getAttachmentUrl } from '../../../lib/api';
 
 import type { Attachment, ConvertedExpense } from '../../../types/trips.ts';
+import { formatCost } from './helper.ts';
 
 export const ExpenseCard = ({
   expense,
@@ -85,7 +86,7 @@ export const ExpenseCard = ({
                 {t('amount', 'Amount')}:
               </Text>
               <Text size="sm" fw={600} c="blue">
-                {expense.convertedCost.value} {expense.convertedCost.currency}
+                {formatCost(expense.convertedCost)}
               </Text>
             </Group>
           )}
