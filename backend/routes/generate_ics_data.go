@@ -29,6 +29,8 @@ func GenerateIcsData(e *core.RequestEvent) error {
 		Destinations: getDestinations(tripRecord),
 	}
 
+	sequence := tripRecord.GetInt("icsExportCount")
+
 	// Get transportations, lodgings, and activities
 	transportations := exportTransportations(e.App, tripRecord)
 	lodgings := exportLodgings(e.App, tripRecord)
@@ -59,24 +61,24 @@ func GenerateIcsData(e *core.RequestEvent) error {
 	}
 
 	// Add a trip as a full-day event, not busy
-	addFullDatTripEvent(e, cal, &trip)
+	addFullDatTripEvent(e, cal, &trip, sequence)
 
 	// Add transportation events
 	for _, transportation := range transportations {
-		timezoneOk := addTransportationEvent(cal, transportation, &trip, e)
+		timezoneOk := addTransportationEvent(cal, transportation, &trip, e, sequence)
 		allTimezonesAvailable = allTimezonesAvailable && timezoneOk
 	}
 
 	// Add lodging events
 	for _, lodging := range lodgings {
-		timezoneOk := createLodgingEvent(cal, lodging, &trip, e)
+		timezoneOk := createLodgingEvent(cal, lodging, &trip, e, sequence)
 		allTimezonesAvailable = allTimezonesAvailable && timezoneOk
 
 	}
 
 	// Add activity events (1 hr with end date)
 	for _, activity := range activities {
-		timezoneOk := createActivityEvent(cal, activity, &trip, e)
+		timezoneOk := createActivityEvent(cal, activity, &trip, e, sequence)
 		allTimezonesAvailable = allTimezonesAvailable && timezoneOk
 
 	}
@@ -88,7 +90,7 @@ func GenerateIcsData(e *core.RequestEvent) error {
 	})
 }
 
-func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip, e *core.RequestEvent) bool {
+func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip, e *core.RequestEvent, sequence int) bool {
 
 	timezoneAvailable := true
 
@@ -128,11 +130,12 @@ func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip
 		endDate := applyActualTimezone(activity.EndDate.Time(), placeTz)
 		activityEvent.SetEndAt(endDate, ics.WithTZID(placeTz))
 	}
+	activityEvent.SetSequence(sequence)
 
 	return timezoneAvailable
 }
 
-func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e *core.RequestEvent) bool {
+func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e *core.RequestEvent, sequence int) bool {
 
 	timezoneAvailable := true
 
@@ -163,6 +166,7 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	if lodgingDescription != "" {
 		checkInEvent.SetDescription(lodgingDescription)
 	}
+	checkInEvent.SetSequence(sequence)
 
 	// Stay event (full day)
 	stayEvent := cal.AddEvent(fmt.Sprintf("lodging-stay-%s@surmai.app", lodging.Id))
@@ -176,6 +180,7 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	if lodgingDescription != "" {
 		stayEvent.SetDescription(lodgingDescription)
 	}
+	stayEvent.SetSequence(sequence)
 
 	if lodging.Link != "" {
 		stayEvent.SetURL(lodging.Link)
@@ -197,12 +202,13 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	if lodgingDescription != "" {
 		checkOutEvent.SetDescription(lodgingDescription)
 	}
+	checkOutEvent.SetSequence(sequence)
 
 	return timezoneAvailable
 
 }
 
-func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation, trip *bt.Trip, e *core.RequestEvent) bool {
+func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation, trip *bt.Trip, e *core.RequestEvent, sequence int) bool {
 
 	timezoneAvailable := true
 
@@ -292,12 +298,13 @@ func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation
 	}
 
 	transportEvent.SetDescription(strings.Join(eventDescription[:], "\n"))
+	transportEvent.SetSequence(sequence)
 
 	return timezoneAvailable
 
 }
 
-func addFullDatTripEvent(e *core.RequestEvent, cal *ics.Calendar, trip *bt.Trip) {
+func addFullDatTripEvent(e *core.RequestEvent, cal *ics.Calendar, trip *bt.Trip, sequence int) {
 	tripEvent := cal.AddEvent(fmt.Sprintf("trip-%s@surmai.app", trip.Id))
 	tripEvent.SetCreatedTime(time.Now())
 	tripEvent.SetDtStampTime(time.Now())
@@ -309,6 +316,7 @@ func addFullDatTripEvent(e *core.RequestEvent, cal *ics.Calendar, trip *bt.Trip)
 
 	tripEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
 	tripEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
+	tripEvent.SetSequence(sequence)
 }
 
 // Helper functions to extract data from trip record
