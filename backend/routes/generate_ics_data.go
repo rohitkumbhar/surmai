@@ -36,9 +36,27 @@ func GenerateIcsData(e *core.RequestEvent) error {
 
 	allTimezonesAvailable := true
 
+	// Get all unique timezones
+	timezones := make(map[string]bool)
+	for _, l := range activities {
+		placeTz := getTimezoneValue(l.Metadata, "place")
+		_, ok := timezones[placeTz]
+		if !ok {
+			timezones[placeTz] = true
+		}
+	}
+
 	// Create calendar
 	cal := ics.NewCalendar()
 	cal.SetMethod(ics.MethodPublish)
+
+	// Add VTimezones
+	for tz := range timezones {
+		vtimezone := getVTimezone(tz)
+		if vtimezone != nil {
+			cal.AddVTimezone(vtimezone)
+		}
+	}
 
 	// Add a trip as a full-day event, not busy
 	addFullDatTripEvent(e, cal, &trip)
@@ -97,18 +115,18 @@ func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip
 	metadata := activity.Metadata
 	placeTz := getTimezoneValue(metadata, "place")
 
-	if placeTz != "" {
+	if placeTz == "" {
 		timezoneAvailable = false
 	}
 
 	startDate := applyActualTimezone(activity.StartDate.Time(), placeTz)
-	activityEvent.SetStartAt(startDate)
+	activityEvent.SetStartAt(startDate, ics.WithTZID(placeTz))
 
 	if activity.EndDate.IsZero() {
-		activityEvent.SetEndAt(startDate.Add(1 * time.Hour))
+		activityEvent.SetEndAt(startDate.Add(1 * time.Hour), ics.WithTZID(placeTz))
 	} else {
 		endDate := applyActualTimezone(activity.EndDate.Time(), placeTz)
-		activityEvent.SetEndAt(endDate)
+		activityEvent.SetEndAt(endDate, ics.WithTZID(placeTz))
 	}
 
 	return timezoneAvailable
@@ -138,8 +156,8 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	}
 
 	checkInTime := applyActualTimezone(lodging.StartDate.Time(), placeTz)
-	checkInEvent.SetStartAt(checkInTime)
-	checkInEvent.SetEndAt(checkInTime.Add(30 * time.Minute))
+	checkInEvent.SetStartAt(checkInTime, ics.WithTZID(placeTz))
+	checkInEvent.SetEndAt(checkInTime.Add(30 * time.Minute), ics.WithTZID(placeTz))
 	checkInEvent.SetSummary(fmt.Sprintf("Check-in: %s", lodging.Name))
 	checkInEvent.SetLocation(lodging.Address)
 	if lodgingDescription != "" {
@@ -171,8 +189,8 @@ func createLodgingEvent(cal *ics.Calendar, lodging *bt.Lodging, trip *bt.Trip, e
 	checkOutEvent.SetDtStampTime(time.Now())
 
 	checkOutTime := applyActualTimezone(lodging.EndDate.Time(), placeTz)
-	checkOutEvent.SetStartAt(checkOutTime)
-	checkOutEvent.SetEndAt(checkOutTime.Add(30 * time.Minute))
+	checkOutEvent.SetStartAt(checkOutTime, ics.WithTZID(placeTz))
+	checkOutEvent.SetEndAt(checkOutTime.Add(30 * time.Minute), ics.WithTZID(placeTz))
 	checkOutEvent.SetSummary(fmt.Sprintf("Check-out: %s", lodging.Name))
 	checkOutEvent.SetLocation(lodging.Address)
 	checkOutEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
@@ -210,14 +228,14 @@ func addTransportationEvent(cal *ics.Calendar, transportation *bt.Transportation
 	}
 
 	departureTime := applyActualTimezone(transportation.Departure.Time(), departureTz)
-	transportEvent.SetStartAt(departureTime)
+	transportEvent.SetStartAt(departureTime, ics.WithTZID(departureTz))
 
 	arrivalTz := getTimezoneValue(metadata, "destination")
 	if arrivalTz == "" {
 		timezoneAvailable = false
 	}
 	arrivalTime := applyActualTimezone(transportation.Arrival.Time(), arrivalTz)
-	transportEvent.SetEndAt(arrivalTime)
+	transportEvent.SetEndAt(arrivalTime, ics.WithTZID(arrivalTz))
 
 	eventDescription := make([]string, 0)
 
@@ -404,10 +422,7 @@ func applyActualTimezone(t time.Time, timeZone string) time.Time {
 		return t
 	}
 
-	locTime := t.In(loc)
-	_, zoneOffset := locTime.Zone()
-	inZoneTime := locTime.Add(-time.Duration(zoneOffset) * time.Second)
-	return inZoneTime
+	return t.In(loc)
 }
 
 func getTimezoneValue(metadata map[string]interface{}, key string) string {
@@ -422,4 +437,12 @@ func getTimezoneValue(metadata map[string]interface{}, key string) string {
 	}
 
 	return place["timezone"].(string)
+}
+
+func getVTimezone(tz string) *ics.VTimezone {
+	cal, err := ics.ParseCalendarFromUrl("https://www.tzurl.org/zoneinfo/" + tz + ".ics")
+	if err == nil {
+		return cal.Timezones()[0]
+	}
+	return nil
 }
