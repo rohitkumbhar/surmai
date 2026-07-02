@@ -34,6 +34,7 @@ export type Trip = Entity & {
   budget?: Cost;
   travellers?: string[];
   canUpdate?: boolean;
+  icsExportCount?: number;
 };
 
 export type NewTrip = Omit<Trip, 'id'>;

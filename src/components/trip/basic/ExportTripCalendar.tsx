@@ -3,7 +3,8 @@ import { IconClockExclamation } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { exportCalendar } from '../../../lib/api';
+import { pb } from '../../../lib/api/pocketbase/pocketbase.ts';
+import { exportCalendar, getTrip } from '../../../lib/api';
 import { showErrorNotification } from '../../../lib/notifications.tsx';
 
 import type { Trip } from '../../../types/trips.ts';
@@ -14,6 +15,7 @@ export const ExportTripCalendarModal = ({
 }: ContextModalProps<{
   trip: Trip;
 }>) => {
+  const trips = pb.collection('trips');
   const { trip } = innerProps;
   const { t } = useTranslation();
   const [_preparing, setPreparing] = useState<boolean>(false);
@@ -22,20 +24,27 @@ export const ExportTripCalendarModal = ({
 
   const prepareICSData = () => {
     setPreparing(true);
-    exportCalendar({ tripId: trip.id })
-      .then((response) => {
-        const data = Uint8Array.from(atob(response.data), (c) => c.charCodeAt(0));
-        setAllTimezonesAvailable(response.allTimezonesAvailable);
-        prepareDownload(data);
+    getTrip(trip.id).then((trip) => {
+      let icsExportCount = trip.icsExportCount || 0;
+      trips.update(trip.id, {
+        'icsExportCount': icsExportCount + 1
       })
-      .catch((error) => {
-        showErrorNotification({
-          error: error,
-          title: t('ics_error_title', 'ICS Export'),
-          message: t('ics_error_desc', 'An error occurred while generating the ICS file for this trip.'),
-        });
-      })
-      .finally(() => setPreparing(false));
+    }).then(() => {
+      exportCalendar({ tripId: trip.id })
+        .then((response) => {
+          const data = Uint8Array.from(atob(response.data), (c) => c.charCodeAt(0));
+          setAllTimezonesAvailable(response.allTimezonesAvailable);
+          prepareDownload(data);
+        })
+        .catch((error) => {
+          showErrorNotification({
+            error: error,
+            title: t('ics_error_title', 'ICS Export'),
+            message: t('ics_error_desc', 'An error occurred while generating the ICS file for this trip.'),
+          });
+        })
+        .finally(() => setPreparing(false));
+    })
   };
 
   const prepareDownload = (tripData: any) => {

@@ -39,6 +39,7 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
   const budgetPercentage =
     trip.budget?.value && trip.budget?.value > 0 ? (totalExpenses / trip.budget?.value) * 100 : 0;
 
+  const singleDay = dayjs(trip.endDate).startOf('day').isSame(trip.startDate)
   return (
     <>
       <Group justify="flex-end" align="center" wrap="wrap">
@@ -53,7 +54,10 @@ export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => vo
               </Card.Section>
 
               <Card.Section p={'sm'}>
-                <Text size={'sm'}>{`${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}</Text>
+                <Text size={'sm'}>
+                  {singleDay ? `${dayjs(trip.startDate).format('ll')}`
+                    : `${dayjs(trip.startDate).format('ll')} - ${dayjs(trip.endDate).format('ll')}`}
+                </Text>
               </Card.Section>
 
               <Card.Section p={'sm'}>
