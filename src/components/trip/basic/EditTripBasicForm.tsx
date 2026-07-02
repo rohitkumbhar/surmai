@@ -53,6 +53,7 @@ export const EditTripBasicForm = ({ form }: EditTripBasicFormProps) => {
 
       <DatePickerInput
         type="range"
+        allowSingleDateInRange
         valueFormat={'LL'}
         required
         label={t('trip_dates', 'Trip Dates')}
