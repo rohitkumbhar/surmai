@@ -77,6 +77,8 @@ export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
     </Badge>
   ));
 
+  const singleDay = dayjs(trip.endDate).startOf('day').isSame(trip.startDate)
+
   return (
     <Card
       withBorder
@@ -99,9 +101,10 @@ export function TripCard({ trip, onSave }: { trip: Trip; onSave: () => void }) {
           </Text>
         </Group>
         <Text c="dimmed" size="xs" tt="uppercase" fw={700}>
-          {`${dayjs(trip.startDate).format('LL')} - ${dayjs(trip.endDate).format('LL')}`}
+          {singleDay ? `${dayjs(trip.startDate).format('LL')}`
+            : `${dayjs(trip.startDate).format('LL')} - ${dayjs(trip.endDate).format('LL')}`}
         </Text>
-      </Card.Section>
+        </Card.Section>
 
       <Card.Section className={classes.section}>
         <Group gap={7} mt={'md'}>

@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { Header } from '../../components/nav/Header.tsx';
@@ -122,13 +123,17 @@ export const ViewTrip = () => {
   if (isError) {
     throw error;
   }
+
+  const singleDay = dayjs(trip.endDate).startOf('day').isSame(trip.startDate)
+
   return (
     <Container py={'sm'} size="xl" px={0}>
       <Header>
         <Group mt={'md'}>
           <Text size={'md'}>{trip?.name}</Text>
           <Text size={'sm'} visibleFrom={'sm'} c={'dimmed'}>
-            {formatDate(i18n.language, trip.startDate)} - {formatDate(i18n.language, trip.endDate)}
+            {singleDay ? `${formatDate(i18n.language, trip.startDate)}`
+              : `${formatDate(i18n.language, trip.startDate)} - ${formatDate(i18n.language, trip.endDate)}`}
           </Text>
         </Group>
       </Header>
