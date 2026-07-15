@@ -687,5 +687,14 @@
     "test_prompt": "Testanforderung",
     "test_prompt_desc": "Geben Sie eine kurze Anforderung ein, um Ihre LLM-Verbindung zu testen",
     "trigger_import_bookings_job": "Buchungen importieren",
-    "triggered_email_sync_job": "E-Mail-Synchronisierungsanfrage gestartet"
+    "triggered_email_sync_job": "E-Mail-Synchronisierungsanfrage gestartet",
+    "ai_api_key_desc": "Legen Sie Ihren API-Schlüssel fest, falls erforderlich",
+    "amount_currency": "Währung",
+    "amount_value": "Betrag",
+    "download_csv": "CSV herunterladen",
+    "tf_12_hour": "12 Stunden",
+    "tf_24_hour": "24 Stunden",
+    "tf_use_locale": "Benutze Lokales",
+    "time_format": "Zeitformat",
+    "time_format_desc": "Ihr bevorzugtes Zeitformat (12/24-Stunden-Format)."
 }
