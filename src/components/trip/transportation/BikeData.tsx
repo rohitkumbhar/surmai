@@ -112,7 +112,7 @@ export const BikeData = ({
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_${transportation.type}`, `${transportation.type}`)}>
               <TypeIcon
-                size={'xs'}
+                size={'var(--mantine-font-size-xs)'}
                 stroke={0.5}
                 style={{
                   color: 'var(--mantine-primary-color-6)',
