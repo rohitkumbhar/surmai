@@ -1,12 +1,14 @@
 import L from 'leaflet';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 
 import { fetchPOIsFromBackend, listLodgings, listTransportations, saveActivity } from '../../../../lib/api';
-import { CATEGORIES } from './constants';
+import { CATEGORIES, getCategoryForPOI } from './constants';
 import type { POI } from './types';
 import type { Trip } from '../../../../types/trips';
+
+const ALL_CATEGORY_VALUES = CATEGORIES.map((c) => c.value);
 
 const buildOverpassQuery = (lat: number, lon: number, cats: string[], bounds?: L.LatLngBounds): string => {
   let area = `(around:5000, ${lat}, ${lon})`;
@@ -47,7 +49,7 @@ const buildSearchQuery = (lat: number, lon: number, searchTerm: string, cats: st
 
   const nameFilter = `["name"~"${searchTerm}",i]`;
   const parts: string[] = [];
-  const activeCats = cats.length > 0 ? cats : CATEGORIES.map((c) => c.value);
+  const activeCats = cats.length > 0 ? cats : ALL_CATEGORY_VALUES;
 
   for (const cat of activeCats) {
     if (cat === 'food_drink') {
@@ -71,6 +73,62 @@ const buildSearchQuery = (lat: number, lon: number, searchTerm: string, cats: st
 
   if (parts.length === 0) return '';
   return `[out:json];(${parts.join(';')};);out center;`;
+};
+
+type POIIndex = Record<string, POI[]>;
+
+const indexPOIsByCategory = (pois: POI[]): POIIndex => {
+  const index: POIIndex = {};
+  for (const cat of ALL_CATEGORY_VALUES) {
+    index[cat] = [];
+  }
+  for (const poi of pois) {
+    const cat = getCategoryForPOI(poi);
+    if (index[cat]) {
+      index[cat].push(poi);
+    }
+  }
+  return index;
+};
+
+const usePOIData = (
+  selectedDestination: Trip['destinations'] extends (infer D)[] ? D : never | null,
+  opened: boolean
+) => {
+  const fetchAllPOIs = async (lat: number, lon: number): Promise<POI[]> => {
+    const query = buildOverpassQuery(lat, lon, ALL_CATEGORY_VALUES);
+    if (!query) return [];
+    const data = await fetchPOIsFromBackend(query);
+    return data.elements;
+  };
+
+  const {
+    data: allPOIs,
+    isLoading,
+  } = useQuery({
+    queryKey: [
+      'pois-all',
+      selectedDestination?.latitude,
+      selectedDestination?.longitude,
+    ],
+    queryFn: () =>
+      fetchAllPOIs(
+        parseFloat(selectedDestination!.latitude!),
+        parseFloat(selectedDestination!.longitude!)
+      ),
+    enabled:
+      !!selectedDestination?.latitude &&
+      !!selectedDestination?.longitude &&
+      opened,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const poiIndex = useMemo<POIIndex>(() => {
+    if (!allPOIs) return {};
+    return indexPOIsByCategory(allPOIs);
+  }, [allPOIs]);
+
+  return { allPOIs: allPOIs || [], poiIndex, isLoading };
 };
 
 export const useExplorerState = (trip: Trip, opened: boolean, onSuccess: () => void) => {
@@ -107,28 +165,32 @@ export const useExplorerState = (trip: Trip, opened: boolean, onSuccess: () => v
     enabled: opened,
   });
 
-  const fetchPOIs = async (lat: number, lon: number, cats: string[], bounds?: L.LatLngBounds): Promise<POI[]> => {
-    const query = buildOverpassQuery(lat, lon, cats, bounds);
-    if (!query) return [];
-    const data = await fetchPOIsFromBackend(query);
-    return data.elements;
-  };
+  const { poiIndex, isLoading } = usePOIData(selectedDestination, opened);
 
-  const {
-    data: pois,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ['pois', selectedDestination?.latitude, selectedDestination?.longitude, categories.join(','), mapBounds?.toBBoxString()],
-    queryFn: () =>
-      fetchPOIs(
-        parseFloat(selectedDestination!.latitude!),
-        parseFloat(selectedDestination!.longitude!),
-        categories,
-        mapBounds || undefined
-      ),
-    enabled: !!selectedDestination?.latitude && !!selectedDestination?.longitude && opened && hasSearched && categories.length > 0,
-  });
+  // Mark as searched once POI data is available
+  useEffect(() => {
+    if (Object.keys(poiIndex).length > 0 && !hasSearched) {
+      setHasSearched(true);
+    }
+  }, [poiIndex, hasSearched]);
+
+  // Filter POIs from the index by selected categories and current map bounds
+  const pois = useMemo(() => {
+    if (Object.keys(poiIndex).length === 0) return [];
+    const filtered: POI[] = [];
+    for (const cat of categories) {
+      const catPois = poiIndex[cat];
+      if (catPois) {
+        filtered.push(...catPois);
+      }
+    }
+    if (!mapBounds) return filtered;
+    return filtered.filter((poi) => {
+      const lat = poi.center ? poi.center.lat : poi.lat;
+      const lon = poi.center ? poi.center.lon : poi.lon;
+      return mapBounds.contains([lat, lon]);
+    });
+  }, [poiIndex, categories, mapBounds]);
 
   const handleMapMove = useCallback((map: L.Map) => {
     setMapBounds(map.getBounds());
@@ -139,7 +201,6 @@ export const useExplorerState = (trip: Trip, opened: boolean, onSuccess: () => v
     setHasSearched(true);
     setShowSearchButton(false);
     setSearchResults(null);
-    refetch();
   };
 
   const handleCategoryToggle = (val: string) => {
