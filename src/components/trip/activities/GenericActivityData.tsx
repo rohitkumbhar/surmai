@@ -102,7 +102,7 @@ export const GenericActivityData = ({
         <Grid.Col span={{ base: 12, sm: 12, md: 1, lg: 1 }} p={'md'}>
           <Box component="div" visibleFrom={'md'}>
             <IconActivity
-              size={'xs'}
+              size={'var(--mantine-font-size-xs)'}
               stroke={0.5}
               style={{
                 color: 'var(--mantine-primary-color-6)',

@@ -40,3 +40,12 @@
     }
   }
 }
+
+.close {
+  height: rem(30px);
+  position: absolute;
+
+  @media (max-width: $mantine-breakpoint-sm) {
+    padding-right: rem(10px);
+  }
+}

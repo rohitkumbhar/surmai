@@ -1,6 +1,15 @@
 import { Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
-import { IconChartBar, IconEPassport, IconHome2, IconLogout, IconPinInvoke, IconSettings, IconUser } from '@tabler/icons-react';
+import {
+  IconChartBar,
+  IconEPassport,
+  IconHome2,
+  IconLogout,
+  IconPinInvoke,
+  IconSettings,
+  IconUser,
+  IconX,
+} from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -63,6 +72,9 @@ export function Navbar({ close }: NavbarProps) {
 
   return (
     <nav className={classes.navbar} ref={ref}>
+      <UnstyledButton onClick={close} className={`${classes.link} ${classes.close}`} hiddenFrom={'sm'}>
+        <IconX style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
+      </UnstyledButton>
       <Center>
         <Anchor href={'https://surmai.app'} target={'_blank'}>
           <FishOne size={30} />

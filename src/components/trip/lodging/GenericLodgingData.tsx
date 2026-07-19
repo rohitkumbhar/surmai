@@ -107,7 +107,7 @@ export const GenericLodgingData = ({
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`lodging_${lodging.type}`, lodging.type)}>
               <TypeIcon
-                size={'xs'}
+                size={'var(--mantine-font-size-xs)'}
                 stroke={0.5}
                 style={{
                   color: 'var(--mantine-primary-color-6)',
@@ -175,7 +175,7 @@ export const GenericLodgingData = ({
       {lodging.metadata?.notes && lodging.metadata.notes != '' && (
         <>
           <Divider />
-          <Text size="sm" p="sm" style={{'white-space': 'pre-wrap'}}>
+          <Text size="sm" p="sm" style={{ 'white-space': 'pre-wrap' }}>
             {lodging.metadata.notes}
           </Text>
         </>

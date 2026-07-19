@@ -85,7 +85,7 @@ export const ParkingData = ({
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_parking`, 'Parking')}>
               <IconParking
-                size={'sm'}
+                size={'var(--mantine-font-size-sm)'}
                 stroke={0.5}
                 style={{
                   color: 'var(--mantine-primary-color-6)',

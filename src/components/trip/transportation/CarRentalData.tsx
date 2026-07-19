@@ -85,7 +85,7 @@ export const CarRentalData = ({
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_car_rental`, 'Car Rental')}>
               <IconArticle
-                size={'sm'}
+                size={'var(--mantine-font-size-sm)'}
                 stroke={0.5}
                 style={{
                   color: 'var(--mantine-primary-color-6)',

@@ -104,7 +104,7 @@ export const FlightData = ({
           <Box component="div" visibleFrom={'md'}>
             <Tooltip label={t(`transportation_flight`, 'Flight')}>
               <IconPlaneInflight
-                size={'xs'}
+                size={'var(--mantine-font-size-xs)'}
                 stroke={0.5}
                 style={{
                   color: 'var(--mantine-primary-color-6)',
