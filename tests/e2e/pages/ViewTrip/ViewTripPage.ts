@@ -28,7 +28,7 @@ export class ViewTripPage {
   /**
    * Switch to a specific tab
    */
-  async switchToTab(tabName: 'Organization' | 'Itinerary' | 'Attachments' | 'Notes') {
+  async switchToTab(tabName: 'Organization' | 'Itinerary' | 'Attachments' | 'Notes' | 'Packing List') {
     await this.page.getByRole('tab', { name: tabName }).click();
   }
 
@@ -269,6 +269,23 @@ export class ViewTripPage {
 
     // Save the note
     await this.page.getByTestId('save-notes-btn').click();
+  }
+
+  /**
+   * Add a packing list to the trip
+   */
+  async addPackingList(listText: string) {
+    // Switch to the Packing List tab
+    await this.switchToTab('Packing List');
+
+    // Click the Add List button
+    await this.page.getByLabel('Add List').click();
+
+    // Fill in the list text
+    await this.page.locator('[class="tiptap ProseMirror"]').fill(listText);
+
+    // Save the list
+    await this.page.getByTestId('save-list-btn').click();
   }
 
   /**

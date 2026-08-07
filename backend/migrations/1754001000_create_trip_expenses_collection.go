@@ -48,6 +48,10 @@ func init() {
 				Name:     "notes",
 				Required: false,
 			},
+			&core.TextField{
+				Name:     "list",
+				Required: false,
+			},
 			&core.RelationField{
 				Name:          "attachmentReferences",
 				CollectionId:  attachments.Id,

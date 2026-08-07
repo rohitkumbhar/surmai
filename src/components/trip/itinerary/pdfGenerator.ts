@@ -554,6 +554,11 @@ export const downloadFullItinerary = (
     content.push(...htmlToPdfMake(trip.notes));
   }
 
+  if (trip.list) {
+    content.push({ text: i18n.t('list', 'Packing List'), style: 'sectionHeader', pageBreak: 'before' });
+    content.push(...htmlToPdfMake(trip.list));
+  }
+
   const docDefinition: TDocumentDefinitions = {
     content,
     styles: {
@@ -659,6 +664,11 @@ export const downloadDailyItinerary = (
   if (trip.notes) {
     content.push({ text: i18n.t('trip_notes', 'Notes'), style: 'sectionHeader', pageBreak: 'before' });
     content.push(...htmlToPdfMake(trip.notes));
+  }
+
+  if (trip.list) {
+    content.push({ text: i18n.t('list', 'Packing List'), style: 'sectionHeader', pageBreak: 'before' });
+    content.push(...htmlToPdfMake(trip.list));
   }
 
   const docDefinition: TDocumentDefinitions = {

@@ -110,6 +110,7 @@ type Trip struct {
 	CoverImage         *UploadedFile  `json:"coverImage"`
 	CoverImageFileName string         `json:"coverImageFileName"`
 	Notes              string         `json:"notes"`
+	PackingList        string         `json:"list"`
 	Budget             *Cost          `json:"budget"`
 	Travellers         []string       `json:"travellers"`
 }

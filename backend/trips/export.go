@@ -54,6 +54,7 @@ func exportTrip(app core.App, trip *core.Record, zipWriter *zip.Writer) bt.Trip 
 		EndDate:            trip.GetDateTime("endDate"),
 		CoverImageFileName: trip.GetString("coverImage"),
 		Notes:              trip.GetString("notes"),
+		Packing List:       trip.GetString("list"),
 		Destinations:       getDestinations(trip),
 		Participants:       getParticipants(trip),
 		Travellers:         trip.GetStringSlice("travellers"),

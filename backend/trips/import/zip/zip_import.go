@@ -328,6 +328,7 @@ func importBasicTripInfo(app core.App, trip *bt.Trip, ownerId string, zipReader 
 	record.Set("participants", trip.Participants)
 	record.Set("ownerId", ownerId)
 	record.Set("notes", trip.Notes)
+	record.Set("list", trip.PackingList)
 	record.Set("budget", trip.Budget)
 
 	if trip.CoverImageFileName != "" {

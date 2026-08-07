@@ -33,6 +33,7 @@ export {
   listAllTrips,
   listTripsByYear,
   saveTripNotes,
+  savePackingList,
   exportCalendar,
 } from './pocketbase/trips.ts';
 

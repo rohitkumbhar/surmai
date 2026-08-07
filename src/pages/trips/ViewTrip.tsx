@@ -13,6 +13,7 @@ import { TripAttachments } from '../../components/trip/attachments/TripAttachmen
 import { ExpensesPanel } from '../../components/trip/expenses/ExpensesPanel.tsx';
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
+import { PackingList } from '../../components/trip/list/PackingList.tsx';
 import { OrganizationTab } from '../../components/trip/OrganizationTab.tsx';
 import { getTrip, getTripAttachments, listExpenses, listTripTravellerProfiles } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
@@ -101,6 +102,10 @@ export const ViewTrip = () => {
     {
       key: 'notes',
       value: t('notes', 'Notes'),
+    },
+    {
+      key: 'list',
+      value: t('list', 'Packing List'),
     },
   ];
 
@@ -219,6 +224,9 @@ export const ViewTrip = () => {
         </Tabs.Panel>
         <Tabs.Panel value="notes">
           <TripNotes refetch={refetchTrip} trip={trip} />
+        </Tabs.Panel>
+        <Tabs.Panel value="list">
+          <PackingList refetch={refetchTrip} trip={trip} />
         </Tabs.Panel>
       </Tabs>
     </Container>

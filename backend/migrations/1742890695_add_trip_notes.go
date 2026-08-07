@@ -21,6 +21,15 @@ func init() {
 				})
 		}
 
+		list := trips.Fields.GetByName("list")
+		if list == nil {
+			trips.Fields.Add(
+				&core.EditorField{
+					Name:     "list",
+					Required: false,
+				})
+		}
+
 		return app.Save(trips)
 
 	}, func(app core.App) error {

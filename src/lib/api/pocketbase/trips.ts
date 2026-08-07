@@ -104,6 +104,12 @@ export const saveTripNotes = (tripId: string, notes: string): Promise<Trip> => {
   });
 };
 
+export const savePackingList = (tripId: string, list: string): Promise<Trip> => {
+  return trips.update(tripId, {
+    list: list,
+  });
+};
+
 export const loadEverything = (tripId: string) => {
   return getTrip(tripId)
     .then(() => {

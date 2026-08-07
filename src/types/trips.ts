@@ -25,6 +25,7 @@ export type Trip = Entity & {
   name: string;
   description?: string;
   notes?: string;
+  list?: string;
   startDate: string;
   endDate: string;
   coverImage?: string;
