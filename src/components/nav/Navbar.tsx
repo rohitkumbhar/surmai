@@ -76,7 +76,7 @@ export function Navbar({ close }: NavbarProps) {
         <IconX style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
       </UnstyledButton>
       <Center>
-        <Anchor href={'/'} target={'_blank'}>
+        <Anchor href={'/'} target={'_self'}>
           <NavLogo size={30} />
         </Anchor>
       </Center>
