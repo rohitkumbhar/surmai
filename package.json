@@ -112,7 +112,7 @@
     "vite-plugin-pwa": "^1.2.0",
     "vitest": "^4.1.4"
   },
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@11.20.0",
   "overrides": {
     "workbox-build": "^7.4.0",
     "workbox-window": "^7.4.0",
