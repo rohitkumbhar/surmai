@@ -1,4 +1,4 @@
-import { Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
+import { Image, Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
 import {
   IconChartBar,
@@ -15,7 +15,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import classes from './Navbar.module.css';
 import { isAdmin, logoutCurrentUser } from '../../lib/api';
-import { NavLogo } from '../logo/NavLogo.tsx';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -77,7 +76,13 @@ export function Navbar({ close }: NavbarProps) {
       </UnstyledButton>
       <Center>
         <Anchor href={'/'} target={'_self'}>
-          <NavLogo size={30} />
+          <Image
+            radius={99}
+            h={80}
+            w="auto"
+            fit="contain"
+            src="/icons/logo.svg"
+          />
         </Anchor>
       </Center>
       <div className={classes.navbarMain}>
