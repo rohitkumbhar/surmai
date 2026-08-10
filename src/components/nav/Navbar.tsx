@@ -76,12 +76,14 @@ export function Navbar({ close }: NavbarProps) {
       </UnstyledButton>
       <Center>
         <Anchor href={'/'} target={'_self'}>
-          <Image
-            h="auto"
-            w="100%"
-            fit="contain"
-            src="/icons/logo.svg"
-          />
+          <Center>
+            <Image
+              h="50px"
+              w="auto"
+              fit="contain"
+              src="/icons/logo.svg"
+            />
+          </Center>
         </Anchor>
       </Center>
       <div className={classes.navbarMain}>
