@@ -7,10 +7,11 @@ import {
   Divider,
   Group,
   LoadingOverlay,
+  Scroller,
   SimpleGrid,
   Stack,
   Text,
-  Title,
+  Title
 } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
@@ -24,13 +25,13 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import 'leaflet/dist/leaflet.css';
-import { useTravelBoardStatistics } from './useTravelBoardStatistics';
 import { Header } from '../../components/nav/Header';
 import { listAllTrips } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle';
+import { useTravelBoardStatistics } from './useTravelBoardStatistics';
 
-import type { Trip } from '../../types/trips';
 import { formatCost } from '../../components/trip/expenses/helper';
+import type { Trip } from '../../types/trips';
 
 // Fix for default marker icons in Leaflet with Webpack/Vite
 
@@ -103,7 +104,14 @@ const TravelBoard = () => {
       <Header>
         <Group justify="space-between" mt="md">
           <Text size="md">{t('travel_board', 'Travel Board')}</Text>
-          <Group gap="xs">
+        </Group>
+      </Header>
+
+      <Box pos="relative">
+        <LoadingOverlay visible={isLoading} overlayProps={{ radius: 'sm', blur: 2 }} />
+
+        <Card>
+          <Scroller draggable>
             {years.map((year) => (
               <Button
                 key={year}
@@ -114,12 +122,10 @@ const TravelBoard = () => {
                 {year}
               </Button>
             ))}
-          </Group>
-        </Group>
-      </Header>
+          </Scroller>
+        </Card>
 
-      <Box pos="relative">
-        <LoadingOverlay visible={isLoading} overlayProps={{ radius: 'sm', blur: 2 }} />
+        <br />
 
         {filteredData && (
           <Stack gap="xl">
@@ -129,7 +135,7 @@ const TravelBoard = () => {
               <StatsCard title={t('days', 'Days')} value={filteredData.totalDays} />
               <StatsCard
                 title={t('cost', 'Cost')}
-                value={`${formatCost({value: filteredData.totalExpenseAmount, currency: filteredData.userCurrency})}`}
+                value={`${formatCost({ value: filteredData.totalExpenseAmount, currency: filteredData.userCurrency })}`}
                 note={
                   filteredData.isDefaultCurrency
                     ? t('default_currency_note', 'Showing in USD (default) because no currency is set in your profile.')
@@ -261,7 +267,7 @@ const TravelBoard = () => {
                         <Group key={currency} justify="space-between">
                           <Text size="sm">{currency}</Text>
                           <Text size="sm" fw={500}>
-                            {formatCost({value: Number(amount), currency: currency})}
+                            {formatCost({ value: Number(amount), currency: currency })}
                           </Text>
                         </Group>
                       ))}

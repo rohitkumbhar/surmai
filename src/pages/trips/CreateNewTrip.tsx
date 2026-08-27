@@ -36,7 +36,7 @@ export const CreateNewTrip = () => {
   });
 
   return (
-    <Container py="xl">
+    <Container py="xl" px="xs">
       <Header>
         <Text size="md" p={'sm'}>
           {t('trip_new', 'Start A New Trip')}
