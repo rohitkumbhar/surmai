@@ -2,6 +2,7 @@ import { LoadingOverlay, Stack } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
 import { NewUserSignups } from './NewUserSignups.tsx';
+import { PasswordAuthLogin } from './PasswordAuthLogin.tsx';
 import { OAuth2SettingsForm } from './OAuth2SettingsForm.tsx';
 import { SmtpSettingsForm } from './SmtpSettingsForm.tsx';
 import { getUsersMetadata } from '../../lib/api';
@@ -27,6 +28,7 @@ export const Configuration = () => {
         />
       </div>
       <NewUserSignups userModel={userModel} refetch={refetch} />
+      <PasswordAuthLogin userModel={userModel} refetch={refetch} />
       {userModel && <OAuth2SettingsForm oauthConfig={userModel?.oauth2} refetch={refetch} />}
       <SmtpSettingsForm />
     </Stack>

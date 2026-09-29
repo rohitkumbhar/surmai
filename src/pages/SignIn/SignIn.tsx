@@ -33,13 +33,13 @@ const oauthIcons: { [key: string]: React.ReactNode } = {
 
 export const SignIn = () => {
   useDefaultPageTitle();
-  const { signupsEnabled, demoMode } = useSurmaiContext();
+  const { signupsEnabled, isMobile, demoMode } = useSurmaiContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [apiError, setApiError] = useState<string>();
-  const { isMobile } = useSurmaiContext();
   const [resetEmailAddress, setResetEmailAddress] = useState<string | undefined>();
   const [oauthInfo, setOAuthInfo] = useState<Array<{ name: string; displayName: string }> | undefined>();
+  const [passwordLoginEnabled, setPasswordLoginEnabled] = useState<boolean>();
   const [forgotPasswordFormOpened, { open: openForgotPasswordForm, close: closeForgotPasswordForm }] =
     useDisclosure(false);
 
@@ -59,6 +59,7 @@ export const SignIn = () => {
 
   useEffect(() => {
     listAuthMethods().then((result) => {
+      setPasswordLoginEnabled(result.password.enabled);
       if (result.oauth2.enabled && result.oauth2.providers.length > 0) {
         setOAuthInfo(result.oauth2.providers);
       }
@@ -157,67 +158,68 @@ export const SignIn = () => {
             {/*
               <Text>{t('or_use_email_login', 'Or continue with email')}</Text>
 */}
-            <form onSubmit={form.onSubmit((values) => signInWithEmailAndPassword(values))}>
-              <TextInput
-                name={'email'}
-                label={t('email_address', 'Email Address')}
-                data-testid={'email'}
-                placeholder="you@domain.com"
-                mt={'md'}
-                required
-                key={form.key('email')}
-                {...form.getInputProps('email')}
-              />
+            {passwordLoginEnabled && (
+              <form onSubmit={form.onSubmit((values) => signInWithEmailAndPassword(values))}>
+                <TextInput
+                  name={'email'}
+                  label={t('email_address', 'Email Address')}
+                  data-testid={'email'}
+                  placeholder="you@domain.com"
+                  mt={'md'}
+                  required
+                  key={form.key('email')}
+                  {...form.getInputProps('email')}
+                />
 
-              <PasswordInput
-                name={'password'}
-                label={t('password', 'Password')}
-                required
-                mt="md"
-                key={form.key('password')}
-                {...form.getInputProps('password')}
-              />
-              <Anchor
-                size="sm"
-                component="button"
-                type="button"
-                onClick={() => {
-                  openForgotPasswordForm();
-                }}
-              >
-                <Text>{t('forgot_password', 'Forgot Password')}</Text>
-              </Anchor>
+                <PasswordInput
+                  name={'password'}
+                  label={t('password', 'Password')}
+                  required
+                  mt="md"
+                  key={form.key('password')}
+                  {...form.getInputProps('password')}
+                />
+                <Anchor
+                  size="sm"
+                  component="button"
+                  type="button"
+                  onClick={() => {
+                    openForgotPasswordForm();
+                  }}
+                >
+                  <Text>{t('forgot_password', 'Forgot Password')}</Text>
+                </Anchor>
 
-              <Button fullWidth mt="xl" type={'submit'} name={'loginBtn'}>
-                {t('sign_in', 'Sign In')}
-              </Button>
+                <Button fullWidth mt="xl" type={'submit'} name={'loginBtn'}>
+                  {t('sign_in', 'Sign In')}
+                </Button>
 
-              {signupsEnabled && (
-                <Text c="dimmed" size="sm" ta="center" mt={25}>
-                  {t('no_account', 'Do not have an account yet?')}{' '}
-                  <Anchor
-                    size="sm"
-                    component="button"
-                    type="button"
-                    onClick={() => {
-                      navigate('/register');
-                    }}
-                  >
-                    <Text>{t('create_account', 'Create An Account')}</Text>
-                  </Anchor>
-                </Text>
-              )}
+                {signupsEnabled && (
+                  <Text c="dimmed" size="sm" ta="center" mt={25}>
+                    {t('no_account', 'Do not have an account yet?')}{' '}
+                    <Anchor
+                      size="sm"
+                      component="button"
+                      type="button"
+                      onClick={() => {
+                        navigate('/register');
+                      }}
+                    >
+                      <Text>{t('create_account', 'Create An Account')}</Text>
+                    </Anchor>
+                  </Text>
+                )}
 
-              {demoMode && (
-                <Stack mt={'md'} gap={0}>
-                  <Alert>
-                    <Text size={'sm'}>Demo User: demo@surmai.app</Text>
-                    <Text size={'sm'}>Demo Password: vi#c8Euuf16idhbG</Text>
-                  </Alert>
-                </Stack>
-              )}
-            </form>
-
+                {demoMode && (
+                  <Stack mt={'md'} gap={0}>
+                    <Alert>
+                      <Text size={'sm'}>Demo User: demo@surmai.app</Text>
+                      <Text size={'sm'}>Demo Password: vi#c8Euuf16idhbG</Text>
+                    </Alert>
+                  </Stack>
+                )}
+              </form>
+            )}
             {oauthInfo && (
               <Divider
                 size={'sm'}
@@ -226,7 +228,6 @@ export const SignIn = () => {
                 mt={'md'}
               />
             )}
-
             {oauthInfo &&
               oauthInfo.map((oa) => {
                 return (

@@ -72,6 +72,8 @@ export {
   areSignupsEnabled,
   disableUserSignups,
   enableUserSignups,
+  disablePasswordAuth,
+  enablePasswordAuth,
   disableOAuth2Provider,
   sendUserAccountInvitation,
   getSettingsForKey,
