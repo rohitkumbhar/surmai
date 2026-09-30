@@ -6,6 +6,7 @@ import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
 import classes from '../../pages/Settings/Settings.module.css';
 
 import type { UserModel } from '../../types/auth.ts';
+import { openConfirmModal } from '@mantine/modals';
 
 export const PasswordAuthLogin = ({ userModel, refetch }: { userModel?: UserModel; refetch: () => void }) => {
   const { t } = useTranslation();
@@ -38,14 +39,33 @@ export const PasswordAuthLogin = ({ userModel, refetch }: { userModel?: UserMode
                   });
                 });
             } else {
-              disablePasswordAuth()
-                .then(() => refetch())
-                .then(() => {
-                  showSaveSuccessNotification({
-                    title: t('settings', 'Settings'),
-                    message: t('password_auth_disabled', 'Password authentication disabled'),
-                  });
-                });
+              openConfirmModal({
+                title: t('password_auth_disable_confirm_title', 'Disable Password Login'),
+                confirmProps: { color: 'red' },
+                children: (
+                  <Text size="sm">
+                    {t(
+                      'disable_password_auth_confirmation',
+                      'Disabling password login will prevent superusers from logging in. Turn this setting back on in the PocketBase admin console.'
+                    )}
+                  </Text>
+                ),
+                labels: {
+                  confirm: t('confirm', 'Confirm'),
+                  cancel: t('cancel', 'Cancel'),
+                },
+                onCancel: () => {},
+                onConfirm: () => {
+                  disablePasswordAuth()
+                    .then(() => refetch())
+                    .then(() => {
+                      showSaveSuccessNotification({
+                        title: t('settings', 'Settings'),
+                        message: t('password_auth_disabled', 'Password authentication disabled'),
+                      });
+                    });
+                },
+              });
             }
           }}
         />
