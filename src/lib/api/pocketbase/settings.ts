@@ -75,6 +75,18 @@ export const enableUserSignups = () => {
   });
 };
 
+export const disablePasswordAuth = () => {
+  return pbAdmin.collections.update('users', {
+    passwordAuth: { enabled: false },
+  });
+};
+
+export const enablePasswordAuth = () => {
+  return pbAdmin.collections.update('users', {
+    passwordAuth: { enabled: true },
+  });
+};
+
 export const disableOAuth2Provider = () => {
   return pbAdmin.collections.update('users', {
     oauth2: {

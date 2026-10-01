@@ -57,7 +57,12 @@ export interface OAuthSettingsFormType {
   userInfoURL?: string;
 }
 
+export interface PasswordAuthSettings {
+  enabled: boolean;
+}
+
 export type UserModel = {
   createRule?: string;
   oauth2?: OAuthSettings;
+  passwordAuth?: PasswordAuthSettings;
 };
