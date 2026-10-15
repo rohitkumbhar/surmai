@@ -1,4 +1,4 @@
-import { Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
+import { Image, Anchor, Center, Group, rem, Stack, Text, Tooltip, UnstyledButton } from '@mantine/core';
 import { useClickOutside } from '@mantine/hooks';
 import {
   IconChartBar,
@@ -15,7 +15,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import classes from './Navbar.module.css';
 import { isAdmin, logoutCurrentUser } from '../../lib/api';
-import { FishOne } from '../logo/FishOne.tsx';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;
@@ -76,8 +75,15 @@ export function Navbar({ close }: NavbarProps) {
         <IconX style={{ width: rem(20), height: rem(20) }} stroke={1.5} />
       </UnstyledButton>
       <Center>
-        <Anchor href={'https://surmai.app'} target={'_blank'}>
-          <FishOne size={30} />
+        <Anchor href={'/'} target={'_self'}>
+          <Center>
+            <Image
+              h="50px"
+              w="auto"
+              fit="contain"
+              src="/icons/logo.svg"
+            />
+          </Center>
         </Anchor>
       </Center>
       <div className={classes.navbarMain}>
