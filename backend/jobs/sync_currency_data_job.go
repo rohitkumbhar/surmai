@@ -5,12 +5,23 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
+
+const defaultBaseUrl = "https://open.er-api.com"
+
+func baseUrl() string {
+	if fromEnv := os.Getenv("SURMAI_CURRENCY_API_BASE_URL"); fromEnv != "" {
+		return strings.TrimSuffix(fromEnv, "/")
+	}
+	return defaultBaseUrl
+}
 
 type SyncCurrencyDataJob struct {
 	Pb *pocketbase.PocketBase
@@ -88,9 +99,10 @@ func (job *SyncCurrencyDataJob) fetchCurrencyDataForUsd() (*ExchangeApiResponse,
 
 	// Fetch the currency conversion data from exchangerate-api.com open/free api endpoint
 	// The data uses USD as a base currency and saves all conversions rates wrt USD
-	// https://open.er-api.com/v6/latest/USD
+	// https://open.er-api.com/v6/latest/USD (base URL can be overridden with SURMAI_CURRENCY_API_BASE_URL)
+	url := fmt.Sprintf("%s/v6/latest/USD", baseUrl())
 
-	req, err := http.NewRequest(http.MethodGet, "https://open.er-api.com/v6/latest/USD", nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		fmt.Printf("client: could not create request: %s\n", err)
 		return nil, err

@@ -7,9 +7,20 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/ringsaturn/tzf"
 )
+
+const defaultBaseUrl = "https://api.adsbdb.com"
+
+func baseUrl() string {
+	if fromEnv := os.Getenv("SURMAI_ADSBDB_API_BASE_URL"); fromEnv != "" {
+		return strings.TrimSuffix(fromEnv, "/")
+	}
+	return defaultBaseUrl
+}
 
 // AirlineInfo Structs for ADSB API response
 type AirlineInfo struct {
@@ -55,7 +66,7 @@ type AdsbDbCom struct{}
 func (adsb AdsbDbCom) GetFlightRoute(flightNumber string, config *flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 
 	// Create the URL with the flight number parameter
-	url := fmt.Sprintf("https://api.adsbdb.com/v0/callsign/%s", flightNumber)
+	url := fmt.Sprintf("%s/v0/callsign/%s", baseUrl(), flightNumber)
 
 	// Create a new HTTP client and make the request
 	client := &http.Client{}

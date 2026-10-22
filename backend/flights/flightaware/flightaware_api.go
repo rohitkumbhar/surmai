@@ -8,10 +8,21 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/ringsaturn/tzf"
 )
+
+const defaultBaseUrl = "https://aeroapi.flightaware.com"
+
+func baseUrl() string {
+	if fromEnv := os.Getenv("SURMAI_FLIGHTAWARE_API_BASE_URL"); fromEnv != "" {
+		return strings.TrimSuffix(fromEnv, "/")
+	}
+	return defaultBaseUrl
+}
 
 // FlightAwareResponse represents the response from the FlightAware AeroApi
 type FlightAwareResponse struct {
@@ -95,7 +106,7 @@ type FlightAware struct{}
 
 func (fa FlightAware) GetFlightRoute(flightNumber string, config *flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 	// Construct the API URL with the flight number
-	url := fmt.Sprintf("https://aeroapi.flightaware.com/aeroapi/flights/%s?ident_type=designator", flightNumber)
+	url := fmt.Sprintf("%s/aeroapi/flights/%s?ident_type=designator", baseUrl(), flightNumber)
 
 	// Create a new HTTP client and make the request
 	client := &http.Client{}
