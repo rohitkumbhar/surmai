@@ -43,7 +43,7 @@ export const ExpensesPanel = ({
     other: { label: t('expense_category_other', 'Other'), color: 'indigo' },
   };
 
-  const { convertedExpenses, totalsByCurrency, isLoading } = useTripExpenses({ trip });
+  const { convertedExpenses, totalsByCurrency, targetCurrency, isLoading } = useTripExpenses({ trip });
 
   const openModalForAdd = () => {
     setSelectedExpense(null);
@@ -171,6 +171,7 @@ export const ExpensesPanel = ({
           expenses={sortedExpenses}
           totalsByCurrency={totalsByCurrency}
           categoryData={EXPENSE_CATEGORY_DATA}
+          currency={targetCurrency}
         />
       )}
 
