@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { convertExpenses, getExpenseTotalsByCurrency } from './helper';
+import { convertExpenses, getExpenseTotalsByCurrency, getTargetCurrency } from './helper';
 import { useCurrentUser } from '../../../auth/useCurrentUser';
 import { getCurrencyConversionRates, listExpenses } from '../../../lib/api';
 
@@ -27,6 +27,7 @@ export const useTripExpenses = ({ trip }: { trip: Trip }) => {
 
   const expenses = convertExpenses(user, trip, rawExpenses || [], rates || []);
   const totalsByCurrency = getExpenseTotalsByCurrency(user, trip, expenses || []);
+  const targetCurrency = getTargetCurrency(user, trip);
 
   return {
     expenseRecords: rawExpenses,
@@ -34,6 +35,7 @@ export const useTripExpenses = ({ trip }: { trip: Trip }) => {
     conversionRates: rates,
     convertedExpenses: expenses,
     totalsByCurrency,
+    targetCurrency,
     isLoading: conversionRatesLoading || expenseRecordsLoading,
   };
 };
