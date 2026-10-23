@@ -21,3 +21,8 @@ services:
 #     SURMAI_DB_BKP_BUCKET_URL: s3://bucket.endpoint.url/folder
 #     SURMAI_DB_BKP_ACCESS_KEY_ID: s3_access_key_id
 #     SURMAI_DB_BKP_ACCESS_KEY_SECRET: s3_access_key_secret
+
+#     Optional overrides for external API base URLs (defaults shown)
+#     SURMAI_CURRENCY_API_BASE_URL: https://open.er-api.com
+#     SURMAI_FLIGHTAWARE_API_BASE_URL: https://aeroapi.flightaware.com
+#     SURMAI_ADSBDB_API_BASE_URL: https://api.adsbdb.com
