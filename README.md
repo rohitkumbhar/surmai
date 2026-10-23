@@ -6,6 +6,7 @@
 * [Screenshots / Screencasts](#screenshots--screencasts)
 * [Demo](#demo)
 * [Installation](#installation)
+* [One-Click Deploy](#one-click-deploy)
 * [Credits](#credits)
   * [PocketBase](#pocketbase)
   * [Mantine](#mantine)
@@ -78,6 +79,10 @@ NOTE: The demo site is cleaned up every hour.
 
 Installation guide with Docker and a potential backup solution can be found in the documentation
 http://surmai.app/documentation/installation
+
+# One-Click Deploy
+
+[![Deploy on RepoCloud](https://d16t0pc4846x52.cloudfront.net/deploylobe.svg)](https://repocloud.io/details/Surmai/)
 
 # Credits
 
