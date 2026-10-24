@@ -15,17 +15,18 @@ export const ExpenseStatCards = ({
   expenses,
   totalsByCurrency,
   categoryData,
+  currency,
 }: {
   trip: Trip;
   expenses: ConvertedExpense[];
   totalsByCurrency: Record<string, CurrencyTotal>;
   categoryData: Record<string, { label: string; color: string }>;
+  currency: string;
 }) => {
   const { t } = useTranslation();
 
   const totalExpenses = expenses.reduce((sum, exp) => sum + (exp.convertedCost?.value || 0), 0);
   const budgetAmount = trip.budget?.value || 0;
-  const budgetCurrency = trip.budget?.currency || 'USD';
   const budgetPercentage = budgetAmount > 0 ? Math.min((totalExpenses / budgetAmount) * 100, 100) : 0;
 
   const categoryTotals = expenses.reduce(
@@ -72,7 +73,7 @@ export const ExpenseStatCards = ({
                       {t('used', 'Used')}:
                     </Text>
                     <Text size="sm" fw={600}>
-                      {formatCost({value: totalExpenses, currency: budgetCurrency})}
+                      {formatCost({value: totalExpenses, currency: currency})}
                     </Text>
                   </Group>
                   <Group justify="space-between">
@@ -80,7 +81,7 @@ export const ExpenseStatCards = ({
                       {t('budget', 'Budget')}:
                     </Text>
                     <Text size="sm" fw={600}>
-                      {formatCost({value: budgetAmount, currency: budgetCurrency})}
+                      {formatCost({value: budgetAmount, currency: currency})}
                     </Text>
                   </Group>
                   <Group justify="space-between">
@@ -88,7 +89,7 @@ export const ExpenseStatCards = ({
                       {t('remaining', 'Remaining')}:
                     </Text>
                     <Text size="sm" fw={600} c={budgetAmount - totalExpenses < 0 ? 'red' : 'green'}>
-                      {formatCost({value: budgetAmount - totalExpenses, currency: budgetCurrency})}
+                      {formatCost({value: budgetAmount - totalExpenses, currency: currency})}
                     </Text>
                   </Group>
                 </Stack>
@@ -125,7 +126,7 @@ export const ExpenseStatCards = ({
                   return {
                     value: percentage,
                     color: color,
-                    tooltip: `${formatCost({value: amount, currency: budgetCurrency})}`
+                    tooltip: `${formatCost({value: amount, currency: currency})}`
                   };
                 })}
                 label={
@@ -137,7 +138,7 @@ export const ExpenseStatCards = ({
                       {totalExpenses.toFixed(0)}
                     </Text>
                     <Text size="xs" c="dimmed" ta="center">
-                      {budgetCurrency}
+                      {currency}
                     </Text>
                   </Stack>
                 }
@@ -168,7 +169,7 @@ export const ExpenseStatCards = ({
                           {percentage.toFixed(1)}%
                         </Text>
                         <Text size="sm" fw={600}>
-                          {formatCost({value: amount, currency: budgetCurrency})}
+                          {formatCost({value: amount, currency: currency})}
                         </Text>
                       </Group>
                     </Group>

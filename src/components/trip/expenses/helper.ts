@@ -2,13 +2,16 @@ import { type User } from '../../../types/auth';
 import { type ConversionRate } from '../../../types/expenses';
 import { type ConvertedExpense, type Expense, type Trip, type Cost } from '../../../types/trips';
 
+export const getTargetCurrency = (user: User | undefined, trip: Trip) =>
+  trip.budget?.currency || user?.currencyCode || 'USD';
+
 export const convertExpenses = (
   user: User | undefined,
   trip: Trip,
   expenses: Expense[],
   rates: ConversionRate[]
 ): ConvertedExpense[] => {
-  const budgetCurrencyCode = trip.budget?.currency || user?.currencyCode || 'USD';
+  const budgetCurrencyCode = getTargetCurrency(user, trip);
   const budgetCurrencyConversionRate = rates.find((r) => r.currencyCode === budgetCurrencyCode);
 
   return expenses.map((e) => {
