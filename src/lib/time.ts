@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 
 import type { User } from '../types/auth.ts';
+import type { Dayjs } from 'dayjs';
 
 export const calculateTimezoneDifference = (user: User | undefined, timezone: string) => {
   const baseline = dayjs().format('YYYY-MM-DD HH:mm:ss');
@@ -56,6 +57,14 @@ export const travelMinutes = (
     return dayjs.tz(arrivalTime, destinationTimezone).diff(dayjs.tz(departureTime, originTimezone), 'minute');
   }
   return dayjs(arrivalTime).diff(dayjs(departureTime), 'minute');
+};
+
+// Trip dates are saved in UTC from the browser's midnight, so the year has to start and
+// end at the browser's midnight too, or 1 January falls into the previous year east of UTC.
+export const startDateInYearFilter = (field: string, year: string) => {
+  const start = dayjs(`${year}-01-01T00:00:00`);
+  const format = (date: Dayjs) => date.toISOString().replace('T', ' ');
+  return `${field} >= "${format(start)}" && ${field} < "${format(start.add(1, 'year'))}"`;
 };
 
 export const formatDate = (_locale: string, input: string) => {
