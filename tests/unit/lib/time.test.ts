@@ -1,6 +1,12 @@
+import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { describe, expect, it } from 'vitest';
 
-import { countNights } from '../../../src/lib/time';
+import { countNights, travelMinutes } from '../../../src/lib/time';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 describe('countNights', () => {
   it('counts calendar days when check-out is later in the day than check-in', () => {
@@ -17,5 +23,15 @@ describe('countNights', () => {
 
   it('returns 0 when the end is not after the start', () => {
     expect(countNights('2026-11-15T10:00:00', '2026-11-15T10:00:00')).toBe(0);
+  });
+});
+
+describe('travelMinutes', () => {
+  it('takes the time zone change out of a flight between two zones', () => {
+    expect(travelMinutes('2026-11-12T10:00:00', '2026-11-12T22:00:00', 'America/New_York', 'Europe/London')).toBe(420);
+  });
+
+  it('uses the local times when a timezone is missing', () => {
+    expect(travelMinutes('2026-11-12T10:00:00', '2026-11-12T22:00:00', 'America/New_York')).toBe(720);
   });
 });

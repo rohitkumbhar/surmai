@@ -44,6 +44,20 @@ export const countNights = (startDate: string, endDate: string) => {
   return Math.max(end.startOf('day').diff(start.startOf('day'), 'day'), 1);
 };
 
+// Departure and arrival are saved as local times at each end, so the time zone change
+// has to come out of the difference when both timezones are known.
+export const travelMinutes = (
+  departureTime: string,
+  arrivalTime: string,
+  originTimezone?: string,
+  destinationTimezone?: string
+) => {
+  if (originTimezone && destinationTimezone) {
+    return dayjs.tz(arrivalTime, destinationTimezone).diff(dayjs.tz(departureTime, originTimezone), 'minute');
+  }
+  return dayjs(arrivalTime).diff(dayjs(departureTime), 'minute');
+};
+
 export const formatDate = (_locale: string, input: string) => {
   return dayjs(input).format('ll');
 };
