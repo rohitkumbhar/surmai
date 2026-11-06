@@ -1,6 +1,6 @@
 import { deleteAttachment } from './attachments.ts';
 import { pb } from './pocketbase.ts';
-import { convertSavedToBrowserDate } from '../../time.ts';
+import { convertSavedToBrowserDate, startDateInYearFilter } from '../../time.ts';
 
 import type { CreateTransportation, Transportation } from '../../../types/trips.ts';
 
@@ -23,7 +23,7 @@ export const listTransportations = async (tripId?: string): Promise<Transportati
 };
 
 export const listTransportationsByYear = async (year: string): Promise<Transportation[]> => {
-  const filter = `trip.startDate >= "${year}-01-01 00:00:00" && trip.startDate <= "${year}-12-31 23:59:59"`;
+  const filter = startDateInYearFilter('trip.startDate', year);
   const results = await transportations.getList(1, 1000, {
     filter,
     sort: 'departureTime',

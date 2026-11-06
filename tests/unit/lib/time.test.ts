@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { countNights } from '../../../src/lib/time';
+import { countNights, startDateInYearFilter } from '../../../src/lib/time';
 
 describe('countNights', () => {
   it('counts calendar days when check-out is later in the day than check-in', () => {
@@ -17,5 +17,18 @@ describe('countNights', () => {
 
   it('returns 0 when the end is not after the start', () => {
     expect(countNights('2026-11-15T10:00:00', '2026-11-15T10:00:00')).toBe(0);
+  });
+});
+
+describe('startDateInYearFilter', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('starts and ends the year at midnight in the browser timezone', () => {
+    vi.stubEnv('TZ', 'Asia/Dhaka');
+    expect(startDateInYearFilter('startDate', '2027')).toBe(
+      'startDate >= "2026-12-31 18:00:00.000Z" && startDate < "2027-12-31 18:00:00.000Z"'
+    );
   });
 });

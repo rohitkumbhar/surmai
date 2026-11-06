@@ -5,6 +5,7 @@ import { getTripAttachments } from './attachments.ts';
 import { listLodgings } from './lodgings.ts';
 import { pb } from './pocketbase.ts';
 import { listTransportations } from './transportations.ts';
+import { startDateInYearFilter } from '../../time.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type {
@@ -51,7 +52,7 @@ export const listAllTrips = async (): Promise<Trip[]> => {
 };
 
 export const listTripsByYear = async (year: string): Promise<Trip[]> => {
-  const filter = `startDate >= "${year}-01-01 00:00:00" && startDate <= "${year}-12-31 23:59:59"`;
+  const filter = startDateInYearFilter('startDate', year);
   return trips.getFullList<Trip>({
     sort: '-startDate',
     filter,
