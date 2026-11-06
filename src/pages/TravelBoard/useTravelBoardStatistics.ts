@@ -12,6 +12,7 @@ import {
   listActivitiesByYear,
   getCurrencyConversionRates,
 } from '../../lib/api';
+import { countNights } from '../../lib/time';
 
 import type { ConversionRate } from '../../types/expenses';
 import type { Trip, Transportation, Lodging, Expense, Activity, Place } from '../../types/trips';
@@ -123,7 +124,7 @@ export const useTravelBoardStatistics = (year: string | null) => {
     lodgings?.forEach((l) => {
       const type = l.type || 'other';
       lodgingCountsByType[type] = (lodgingCountsByType[type] || 0) + 1;
-      const nights = Math.ceil(dayjs(l.endDate).diff(dayjs(l.startDate), 'day', true));
+      const nights = countNights(l.startDate, l.endDate);
       if (nights > 0) {
         totalNights += nights;
         lodgingNightsByType[type] = (lodgingNightsByType[type] || 0) + nights;

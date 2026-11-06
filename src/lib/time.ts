@@ -33,6 +33,17 @@ export const getTimePickerFormat = (user: User | undefined) => {
   return '24h';
 }
 
+// Nights are the calendar days crossed, so check-in and check-out times don't add one.
+// A stay within a single day still counts as a night.
+export const countNights = (startDate: string, endDate: string) => {
+  const start = dayjs(startDate);
+  const end = dayjs(endDate);
+  if (!end.isAfter(start)) {
+    return 0;
+  }
+  return Math.max(end.startOf('day').diff(start.startOf('day'), 'day'), 1);
+};
+
 export const formatDate = (_locale: string, input: string) => {
   return dayjs(input).format('ll');
 };
