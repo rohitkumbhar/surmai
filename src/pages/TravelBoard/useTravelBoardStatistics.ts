@@ -12,7 +12,7 @@ import {
   listActivitiesByYear,
   getCurrencyConversionRates,
 } from '../../lib/api';
-import { countNights } from '../../lib/time';
+import { countNights, travelMinutes } from '../../lib/time';
 
 import type { ConversionRate } from '../../types/expenses';
 import type { Trip, Transportation, Lodging, Expense, Activity, Place } from '../../types/trips';
@@ -109,7 +109,12 @@ export const useTravelBoardStatistics = (year: string | null) => {
 
     transportations?.forEach((tr) => {
       transCounts[tr.type] = (transCounts[tr.type] || 0) + 1;
-      const duration = dayjs(tr.arrivalTime).diff(dayjs(tr.departureTime), 'minute');
+      const duration = travelMinutes(
+        tr.departureTime,
+        tr.arrivalTime,
+        tr.metadata?.origin?.timezone,
+        tr.metadata?.destination?.timezone
+      );
       if (duration > 0) {
         totalTransTimeMinutes += duration;
         transTimeByMode[tr.type] = (transTimeByMode[tr.type] || 0) + duration;
