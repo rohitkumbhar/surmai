@@ -117,6 +117,20 @@ export default defineConfig(({ mode }) => {
       exclude: [...configDefaults.exclude, 'tests/e2e/**'],
       include: ['tests/unit/**/*.{test,spec}.{ts,tsx}'],
       setupFiles: 'vitest.setup.ts',
+      coverage: {
+        provider: 'v8',
+        include: ['src/**/*.{ts,tsx}'],
+        exclude: ['src/**/*.d.ts', 'src/types/**', 'src/main.tsx'],
+        reporter: ['text-summary', 'html', 'lcov', 'json-summary'],
+        reportsDirectory: 'coverage',
+        // Minimum coverage. Raise these as coverage improves, never lower them.
+        thresholds: {
+          statements: 3,
+          branches: 2,
+          functions: 2,
+          lines: 3,
+        },
+      },
     },
   };
 });
