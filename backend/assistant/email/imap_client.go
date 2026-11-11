@@ -34,7 +34,7 @@ func connectToInbox(app core.App) (*client.Client, error, func(c *client.Client)
 	closeConnection := func(c *client.Client) {
 		logoutError := c.Logout()
 		if logoutError != nil {
-			app.Logger().Warn("Failed to logout from the IMAP server: %v", logoutError)
+			app.Logger().Warn("Failed to logout from the IMAP server", "error", logoutError)
 		}
 	}
 

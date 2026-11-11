@@ -181,7 +181,7 @@ func importLodgings(app core.App, mapping map[string]string, expenseMapping map[
 			err := app.Save(record)
 
 			if err != nil {
-				app.Logger().Error("Cannot create Lodging entry %v", err)
+				app.Logger().Error("Cannot create Lodging entry", "error", err)
 			}
 		}
 	}

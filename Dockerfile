@@ -1,9 +1,9 @@
-FROM --platform=$BUILDPLATFORM node:24 AS frontend
+FROM --platform=$BUILDPLATFORM node:26 AS frontend
 ARG TARGETOS
 ARG TARGETARCH
 
 WORKDIR /surmai
-RUN corepack enable
+RUN npm install -g corepack && corepack enable
 
 COPY package.json .
 COPY pnpm-lock.yaml .
@@ -21,7 +21,7 @@ COPY tsconfig.node.json .
 COPY vite.config.ts .
 RUN pnpm run build
 
-FROM --platform=$BUILDPLATFORM golang:1.26.2-alpine3.23 AS backend
+FROM --platform=$BUILDPLATFORM golang:1.27.4-alpine3.23 AS backend
 ARG TARGETOS
 ARG TARGETARCH
 
@@ -35,7 +35,7 @@ RUN go mod download
 COPY backend .
 RUN GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o surmai-backend
 
-FROM --platform=$BUILDPLATFORM golang:1.26.2-alpine3.23 AS litestream
+FROM --platform=$BUILDPLATFORM golang:1.27.4-alpine3.23 AS litestream
 ADD https://github.com/benbjohnson/litestream/releases/download/v0.3.13/litestream-v0.3.13-linux-amd64.tar.gz /tmp/litestream.tar.gz
 RUN tar -C /usr/local/bin -xzf /tmp/litestream.tar.gz
 

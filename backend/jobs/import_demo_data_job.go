@@ -35,7 +35,7 @@ func (job *ImportDemoDataJob) deleteAllTravellerProfiles() {
 	}
 
 	for _, profile := range records {
-		logger.Debug("Deleting traveller profile with id: %s", profile.Id)
+		logger.Debug("Deleting traveller profile", "id", profile.Id)
 
 		err := pbApp.Delete(profile)
 		if err != nil {
@@ -56,7 +56,7 @@ func (job *ImportDemoDataJob) deleteAllTrips() {
 	}
 
 	for _, trip := range records {
-		logger.Debug("Deleting trip with id: %s", trip.Id)
+		logger.Debug("Deleting trip", "id", trip.Id)
 
 		err := pbApp.Delete(trip)
 		if err != nil {
@@ -73,12 +73,12 @@ func (job *ImportDemoDataJob) deleteAllUsersExceptAdmin() {
 		dbx.NewExp("email != {:adminEmail}", dbx.Params{"adminEmail": adminEmail}))
 
 	if err != nil {
-		logger.Error("ImportDemoDataJob.Execute FindAllRecords error:%v", err)
+		logger.Error("ImportDemoDataJob.Execute FindAllRecords error", "error", err)
 		return
 	}
 
 	for _, user := range records {
-		logger.Debug("Deleting user with id: %s", user.Id)
+		logger.Debug("Deleting user", "id", user.Id)
 
 		err := pbApp.Delete(user)
 		if err != nil {
@@ -101,7 +101,7 @@ func (job *ImportDemoDataJob) createDemoUser() {
 	record.Set("password", job.DemoPassword)
 	err := pbApp.Save(record)
 	if err != nil {
-		logger.Error("Could not create Demo User: %v", err)
+		logger.Error("Could not create Demo User", "error", err)
 	}
 }
 
