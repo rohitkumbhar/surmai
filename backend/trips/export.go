@@ -6,10 +6,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"os"
 
 	"github.com/pocketbase/dbx"
+
 	"github.com/pocketbase/pocketbase/core"
 )
 
@@ -18,10 +18,10 @@ func ExportTripArchive(app core.App, trip *core.Record, tripExport *os.File, cur
 	zipWriter := zip.NewWriter(tripExport)
 
 	t := exportTrip(app, trip, zipWriter)
-	transportations := exportTransportations(app, trip)
-	lodgings := exportLodgings(app, trip)
-	activities := exportActivities(app, trip)
-	expenses := exportExpenses(app, trip)
+	transportations := Transportations(app, trip)
+	lodgings := Lodgings(app, trip)
+	activities := Activities(app, trip)
+	expenses := Expenses(app, trip)
 	attachments, _ := writeAttachmentsWithMapping(app, trip, zipWriter)
 	travellerProfiles := exportTravellerProfiles(app, trip, zipWriter, currentUser)
 
@@ -54,8 +54,8 @@ func exportTrip(app core.App, trip *core.Record, zipWriter *zip.Writer) bt.Trip 
 		EndDate:            trip.GetDateTime("endDate"),
 		CoverImageFileName: trip.GetString("coverImage"),
 		Notes:              trip.GetString("notes"),
-		Destinations:       getDestinations(trip),
-		Participants:       getParticipants(trip),
+		Destinations:       Destinations(app, trip),
+		Participants:       Participants(app, trip),
 		Travellers:         trip.GetStringSlice("travellers"),
 	}
 	_ = trip.UnmarshalJSONField("budget", &t.Budget)
@@ -97,7 +97,7 @@ func writeFileToArchive(app core.App, record *core.Record, zipWriter *zip.Writer
 		fsys, _ := app.NewFilesystem()
 		defer fsys.Close()
 
-		serverFile, _ := fsys.GetFile(fileKey)
+		serverFile, _ := fsys.GetReader(fileKey)
 
 		if serverFile != nil {
 			defer serverFile.Close()
@@ -111,121 +111,6 @@ func writeFileToArchive(app core.App, record *core.Record, zipWriter *zip.Writer
 
 	}
 	return nil
-}
-
-func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
-
-	activities, _ := e.FindAllRecords("activities",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Activity
-	for _, l := range activities {
-
-		ct := bt.Activity{
-			Id:                   l.Id,
-			Name:                 l.GetString("name"),
-			Description:          l.GetString("description"),
-			Address:              l.GetString("address"),
-			StartDate:            l.GetDateTime("startDate"),
-			EndDate:              l.GetDateTime("endDate"),
-			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
-			Link:                 l.GetString("link"),
-			ExpenseId:            l.GetString("expenseId"),
-			Travellers:           l.GetStringSlice("travellers"),
-		}
-		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
-		_ = l.UnmarshalJSONField("cost", &ct.Cost)
-		payload = append(payload, &ct)
-		e.Logger().Debug("Exported Activity  data", "id", l.Id)
-	}
-
-	return payload
-
-}
-
-func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
-
-	lodgings, _ := e.FindAllRecords("lodgings",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Lodging
-	for _, l := range lodgings {
-
-		ct := bt.Lodging{
-			Id:                   l.Id,
-			Name:                 l.GetString("name"),
-			Address:              l.GetString("address"),
-			StartDate:            l.GetDateTime("startDate"),
-			EndDate:              l.GetDateTime("endDate"),
-			ConfirmationCode:     l.GetString("confirmationCode"),
-			AttachmentReferences: l.GetStringSlice("attachmentReferences"),
-			Link:                 l.GetString("link"),
-			ExpenseId:            l.GetString("expenseId"),
-			Type:                 l.GetString("type"),
-			Travellers:           l.GetStringSlice("travellers"),
-		}
-
-		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
-		_ = l.UnmarshalJSONField("cost", &ct.Cost)
-
-		payload = append(payload, &ct)
-		e.Logger().Debug("Exported Lodging  data", "id", l.Id)
-
-	}
-
-	return payload
-
-}
-
-func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
-
-	transportations, _ := e.FindAllRecords("transportations",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Transportation
-	for _, tr := range transportations {
-		ct := bt.Transportation{
-			Id:                   tr.Id,
-			Type:                 tr.GetString("type"),
-			Origin:               tr.GetString("origin"),
-			Destination:          tr.GetString("destination"),
-			Departure:            tr.GetDateTime("departureTime"),
-			Arrival:              tr.GetDateTime("arrivalTime"),
-			AttachmentReferences: tr.GetStringSlice("attachmentReferences"),
-			Link:                 tr.GetString("link"),
-			ExpenseId:            tr.GetString("expenseId"),
-			Travellers:           tr.GetStringSlice("travellers"),
-		}
-		_ = tr.UnmarshalJSONField("metadata", &ct.Metadata)
-		_ = tr.UnmarshalJSONField("cost", &ct.Cost)
-		payload = append(payload, &ct)
-		e.Logger().Debug("Exported Transportation  data", "id", tr.Id)
-	}
-
-	return payload
-}
-
-func exportExpenses(e core.App, trip *core.Record) []*bt.Expense {
-
-	expenses, _ := e.FindAllRecords("trip_expenses",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Expense
-	for _, exp := range expenses {
-		ct := bt.Expense{
-			Id:                   exp.Id,
-			Name:                 exp.GetString("name"),
-			OccurredOn:           exp.GetDateTime("occurredOn"),
-			Notes:                exp.GetString("notes"),
-			Category:             exp.GetString("category"),
-			AttachmentReferences: exp.GetStringSlice("attachmentReferences"),
-		}
-		_ = exp.UnmarshalJSONField("cost", &ct.Cost)
-		payload = append(payload, &ct)
-		e.Logger().Debug("Exported Expense data", "id", exp.Id)
-	}
-
-	return payload
 }
 
 func exportTravellerProfiles(app core.App, trip *core.Record, zipWriter *zip.Writer, requestInfo *core.RequestInfo) []*bt.TravellerProfile {
@@ -265,30 +150,6 @@ func exportTravellerProfiles(app core.App, trip *core.Record, zipWriter *zip.Wri
 
 		payload = append(payload, &tp)
 		app.Logger().Debug("Exported Traveller Profile data", "id", profile.Id)
-	}
-
-	return payload
-}
-
-func getDestinations(trip *core.Record) []bt.Destination {
-	destinationsString := trip.GetString("destinations")
-	var payload []bt.Destination
-
-	err := json.Unmarshal([]byte(destinationsString), &payload)
-	if err != nil {
-		log.Fatal("Error during Destinations Unmarshal(): ", err)
-	}
-
-	return payload
-}
-
-func getParticipants(trip *core.Record) []bt.Participant {
-	participantString := trip.GetString("participants")
-	var payload []bt.Participant
-
-	err := json.Unmarshal([]byte(participantString), &payload)
-	if err != nil {
-		log.Fatal("Error during Participants Unmarshal(): ", err)
 	}
 
 	return payload
