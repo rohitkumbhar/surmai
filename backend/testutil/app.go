@@ -25,6 +25,9 @@ const (
 var (
 	finderOnce sync.Once
 	finder     tzf.F
+
+	// a template with only the migrations applied, which every new test app is cloned from
+	migrated = NewTemplate(nil)
 )
 
 // TimezoneFinder returns a timezone finder shared across tests, since building one is slow.
@@ -47,30 +50,22 @@ func NewSurmaiApp() *app.SurmaiApp {
 	}
 }
 
-// NewApp creates a fresh PocketBase test app in an empty temp directory, runs all
-// Surmai migrations and registers Surmai routes and hooks. It is cleaned up when the test ends.
+// NewApp returns a fresh PocketBase test app with all Surmai migrations applied
+// and Surmai routes and hooks registered. It is cleaned up when the test ends.
 func NewApp(t testing.TB) *tests.TestApp {
 	t.Helper()
-
-	testApp, err := newApp(t.TempDir())
-	if err != nil {
-		t.Fatalf("failed to create test app: %v", err)
-	}
-	t.Cleanup(testApp.Cleanup)
-
-	return testApp
+	return migrated.App(t)
 }
 
 // AppFactory returns a TestAppFactory for tests.ApiScenario. The seed function
 // runs against the new app before the request, so each scenario gets isolated data.
+//
+// Seeding many scenarios this way is slow. Prefer a Template when scenarios share seed data.
 func AppFactory(seed func(t testing.TB, app *tests.TestApp)) func(t testing.TB) *tests.TestApp {
 	return func(t testing.TB) *tests.TestApp {
 		t.Helper()
 
-		testApp, err := newApp(t.TempDir())
-		if err != nil {
-			t.Fatalf("failed to create test app: %v", err)
-		}
+		testApp := migrated.clone(t)
 		if seed != nil {
 			seed(t, testApp)
 		}
