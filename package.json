@@ -1,7 +1,7 @@
 {
   "name": "surmai",
   "private": true,
-  "version": "0.5.6",
+  "version": "0.6.0",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -113,5 +113,4 @@
     "vitest": "^4.1.12"
   },
   "packageManager": "pnpm@12.19.0"
-
 }
