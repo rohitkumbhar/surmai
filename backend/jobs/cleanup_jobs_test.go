@@ -12,14 +12,6 @@ import (
 
 func TestMain(m *testing.M) { testutil.Main(m) }
 
-func ago(d time.Duration) string {
-	return time.Now().Add(-d).UTC().Format("2006-01-02 15:04:05.000Z")
-}
-
-func ahead(d time.Duration) string {
-	return time.Now().Add(d).UTC().Format("2006-01-02 15:04:05.000Z")
-}
-
 func ids(records []*core.Record) []string {
 	out := make([]string, 0, len(records))
 	for _, r := range records {
@@ -60,10 +52,10 @@ func TestCleanupInvitationsMarksExpiredOnes(t *testing.T) {
 		})
 	}
 
-	stillOpen := newInvitation("invopen00000001", "open", ahead(24*time.Hour))
-	justExpired := newInvitation("invexpired00001", "open", ago(time.Hour))
-	longGone := newInvitation("involdopen00001", "open", ago(10*24*time.Hour))
-	accepted := newInvitation("invaccepted0001", "accepted", ago(10*24*time.Hour))
+	stillOpen := newInvitation("invopen00000001", "open", testutil.Ahead(24*time.Hour))
+	justExpired := newInvitation("invexpired00001", "open", testutil.Ago(time.Hour))
+	longGone := newInvitation("involdopen00001", "open", testutil.Ago(10*24*time.Hour))
+	accepted := newInvitation("invaccepted0001", "accepted", testutil.Ago(10*24*time.Hour))
 
 	job := &jobs.CleanupInvitationsJob{App: app}
 	job.Execute()
@@ -107,16 +99,16 @@ func TestCleanupExpiredContent(t *testing.T) {
 	user := testutil.CreateUser(t, app, "user@example.com")
 
 	expiredAnnouncement := testutil.CreateRecord(t, app, "announcements", map[string]any{
-		"subject": "Old news", "expiry": ago(time.Hour),
+		"subject": "Old news", "expiry": testutil.Ago(time.Hour),
 	})
 	futureAnnouncement := testutil.CreateRecord(t, app, "announcements", map[string]any{
-		"subject": "Upcoming", "expiry": ahead(24 * time.Hour),
+		"subject": "Upcoming", "expiry": testutil.Ahead(24 * time.Hour),
 	})
 	expiredNotification := testutil.CreateRecord(t, app, "notifications", map[string]any{
-		"userId": user.Id, "subject": "Old", "expiry": ago(time.Hour),
+		"userId": user.Id, "subject": "Old", "expiry": testutil.Ago(time.Hour),
 	})
 	futureNotification := testutil.CreateRecord(t, app, "notifications", map[string]any{
-		"userId": user.Id, "subject": "Current", "expiry": ahead(24 * time.Hour),
+		"userId": user.Id, "subject": "Current", "expiry": testutil.Ahead(24 * time.Hour),
 	})
 
 	job := &jobs.CleanupExpiredContentJob{App: app}

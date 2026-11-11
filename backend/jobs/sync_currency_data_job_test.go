@@ -82,7 +82,7 @@ func TestSyncCurrencyDataUpdatesExistingRates(t *testing.T) {
 		"currencyCode": "EUR", "conversionRate": 0.5,
 	})
 	if _, err := app.DB().NewQuery("UPDATE currency_conversions SET updated = {:old} WHERE id = {:id}").
-		Bind(dbx.Params{"old": ago(48 * time.Hour), "id": existing.Id}).Execute(); err != nil {
+		Bind(dbx.Params{"old": testutil.Ago(48 * time.Hour), "id": existing.Id}).Execute(); err != nil {
 		t.Fatal(err)
 	}
 

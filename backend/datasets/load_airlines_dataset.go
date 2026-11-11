@@ -3,6 +3,7 @@ package datasets
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 
@@ -22,16 +23,16 @@ func LoadAirlinesDataset(app core.App) (int, error) {
 		return -1, errors.New("collection `airlines` does not exists")
 	}
 
-	content, err := os.ReadFile("./datasets/airlines.json")
+	content, err := os.ReadFile(datasetPath("airlines.json"))
 	if err != nil {
-		log.Fatal("Error when opening file: ", err)
+		return 0, fmt.Errorf("could not read the airlines dataset: %w", err)
 	}
 
 	// Now let's unmarshall the data into `payload`
 	var payload []AirlineDatasetEntry
 	err = json.Unmarshal(content, &payload)
 	if err != nil {
-		log.Fatal("Error during Unmarshal(): ", err)
+		return 0, fmt.Errorf("could not read the airlines dataset: %w", err)
 	}
 
 	recordCount, err := app.CountRecords("airlines")

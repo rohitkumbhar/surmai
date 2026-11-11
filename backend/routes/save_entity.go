@@ -18,11 +18,11 @@ type saveEntityExpense struct {
 }
 
 type saveEntityRequest struct {
-	EntityId             string         `json:"entityId"`
-	Expense              *saveEntityExpense `json:"expense"`
-	ExistingExpenseId    string         `json:"existingExpenseId"`
-	ExistingAttachmentIds []string      `json:"existingAttachmentIds"`
-	EntityData           map[string]any `json:"entityData"`
+	EntityId              string             `json:"entityId"`
+	Expense               *saveEntityExpense `json:"expense"`
+	ExistingExpenseId     string             `json:"existingExpenseId"`
+	ExistingAttachmentIds []string           `json:"existingAttachmentIds"`
+	EntityData            map[string]any     `json:"entityData"`
 }
 
 func SaveTransportation(e *core.RequestEvent) error {
@@ -35,6 +35,26 @@ func SaveLodging(e *core.RequestEvent) error {
 
 func SaveActivity(e *core.RequestEvent) error {
 	return saveEntity(e, "activities")
+}
+
+// recordInTrip loads a record and refuses it when it belongs to another trip.
+//
+// entityId, existingExpenseId and existingAttachmentIds all come from the
+// request body, and these routes save with the app rather than through the
+// collection API rules, so the trip has to be checked here. Without it a user
+// could pass the id of a record in a trip they have no access to and have it
+// moved into their own.
+func recordInTrip(txApp core.App, collectionName, recordId, tripId string) (*core.Record, error) {
+	record, err := txApp.FindRecordById(collectionName, recordId)
+	if err != nil {
+		return nil, err
+	}
+
+	if record.GetString("trip") != tripId {
+		return nil, fmt.Errorf("%s %s does not belong to this trip", collectionName, recordId)
+	}
+
+	return record, nil
 }
 
 func saveEntity(e *core.RequestEvent, collectionName string) error {
@@ -104,6 +124,11 @@ func saveEntity(e *core.RequestEvent, collectionName string) error {
 		}
 
 		// Combine existing + new attachment IDs
+		for _, attachmentId := range req.ExistingAttachmentIds {
+			if _, err := recordInTrip(txApp, "trip_attachments", attachmentId, tripId); err != nil {
+				return fmt.Errorf("failed to reuse attachment: %w", err)
+			}
+		}
 		allAttachmentIds := append(req.ExistingAttachmentIds, newAttachmentIds...)
 
 		// Step 2: Handle expense create/update/delete
@@ -125,7 +150,12 @@ func saveEntity(e *core.RequestEvent, collectionName string) error {
 			if expenseId != "" {
 				// Update existing expense
 				expenseRecord, err := txApp.FindRecordById("trip_expenses", expenseId)
-				if err != nil {
+				if err == nil {
+					// An expense belonging to another trip must not be reused
+					if expenseRecord.GetString("trip") != tripId {
+						return fmt.Errorf("expense %s does not belong to this trip", expenseId)
+					}
+				} else {
 					// Expense not found, create new one
 					expenseRecord = core.NewRecord(expensesCollection)
 					expenseRecord.Set("name", req.Expense.Name)
@@ -153,7 +183,7 @@ func saveEntity(e *core.RequestEvent, collectionName string) error {
 			}
 		} else if expenseId != "" {
 			// Delete expense if cost is removed
-			expenseRecord, err := txApp.FindRecordById("trip_expenses", expenseId)
+			expenseRecord, err := recordInTrip(txApp, "trip_expenses", expenseId, tripId)
 			if err == nil {
 				if err := txApp.Delete(expenseRecord); err != nil {
 					return fmt.Errorf("failed to delete expense: %w", err)
@@ -170,7 +200,7 @@ func saveEntity(e *core.RequestEvent, collectionName string) error {
 
 		var entityRecord *core.Record
 		if req.EntityId != "" {
-			entityRecord, err = txApp.FindRecordById(collectionName, req.EntityId)
+			entityRecord, err = recordInTrip(txApp, collectionName, req.EntityId, tripId)
 			if err != nil {
 				return fmt.Errorf("failed to find %s record: %w", collectionName, err)
 			}

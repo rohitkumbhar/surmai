@@ -1,10 +1,13 @@
 package testutil
 
 import (
+	"bytes"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"strings"
+	"sync"
 	"testing"
 
 	"github.com/pocketbase/pocketbase/apis"
@@ -22,8 +25,36 @@ type Client struct {
 	mux http.Handler
 }
 
-// NewClient builds the router for the given test app.
+var (
+	clientsMu sync.Mutex
+	clients   = map[*tests.TestApp]*Client{}
+)
+
+// NewClient returns a client for the given test app, building its router on
+// first use. The router can only be built once per app: building it triggers
+// OnServe, and a second build would register every route twice and panic.
 func NewClient(t testing.TB, app *tests.TestApp) *Client {
+	t.Helper()
+
+	clientsMu.Lock()
+	defer clientsMu.Unlock()
+
+	if existing, ok := clients[app]; ok {
+		return existing
+	}
+
+	client := newClient(t, app)
+	clients[app] = client
+	t.Cleanup(func() {
+		clientsMu.Lock()
+		delete(clients, app)
+		clientsMu.Unlock()
+	})
+
+	return client
+}
+
+func newClient(t testing.TB, app *tests.TestApp) *Client {
 	t.Helper()
 
 	router, err := apis.NewRouter(app)
@@ -72,4 +103,55 @@ func Body(t testing.TB, recorder *httptest.ResponseRecorder) string {
 		t.Fatal(err)
 	}
 	return string(content)
+}
+
+// Multipart describes a multipart/form-data body: form values plus files
+// given as a field name mapped to a file name and its content.
+type Multipart struct {
+	Values map[string]string
+	Files  map[string]MultipartFile
+}
+
+// MultipartFile is one uploaded file.
+type MultipartFile struct {
+	Name    string
+	Content []byte
+}
+
+// RequestMultipart sends a multipart/form-data request, as the save-entity
+// routes expect.
+func (c *Client) RequestMultipart(method, url string, form Multipart, auth *core.Record) *httptest.ResponseRecorder {
+	c.t.Helper()
+
+	var body bytes.Buffer
+	writer := multipart.NewWriter(&body)
+
+	for name, value := range form.Values {
+		if err := writer.WriteField(name, value); err != nil {
+			c.t.Fatal(err)
+		}
+	}
+	for field, file := range form.Files {
+		part, err := writer.CreateFormFile(field, file.Name)
+		if err != nil {
+			c.t.Fatal(err)
+		}
+		if _, err := part.Write(file.Content); err != nil {
+			c.t.Fatal(err)
+		}
+	}
+	if err := writer.Close(); err != nil {
+		c.t.Fatal(err)
+	}
+
+	request := httptest.NewRequest(method, url, &body)
+	request.Header.Set("Content-Type", writer.FormDataContentType())
+	if auth != nil {
+		request.Header.Set("Authorization", AuthToken(c.t, auth))
+	}
+
+	recorder := httptest.NewRecorder()
+	c.mux.ServeHTTP(recorder, request)
+
+	return recorder
 }

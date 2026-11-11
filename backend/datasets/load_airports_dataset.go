@@ -3,6 +3,7 @@ package datasets
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/ringsaturn/tzf"
 	"log"
@@ -25,16 +26,16 @@ func LoadAirportsDataset(app core.App, finder tzf.F) (int, error) {
 		return -1, errors.New("collection `airports` does not exists")
 	}
 
-	content, err := os.ReadFile("./datasets/airports.json")
+	content, err := os.ReadFile(datasetPath("airports.json"))
 	if err != nil {
-		log.Fatal("Error when opening file: ", err)
+		return 0, fmt.Errorf("could not read the airports dataset: %w", err)
 	}
 
 	// Now let's unmarshall the data into `payload`
 	var payload []AirportDatasetEntry
 	err = json.Unmarshal(content, &payload)
 	if err != nil {
-		log.Fatal("Error during Unmarshal(): ", err)
+		return 0, fmt.Errorf("could not read the airports dataset: %w", err)
 	}
 
 	recordCount, err := app.CountRecords("airports")

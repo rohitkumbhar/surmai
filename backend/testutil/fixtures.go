@@ -2,6 +2,7 @@ package testutil
 
 import (
 	"testing"
+	"time"
 
 	"github.com/pocketbase/pocketbase/core"
 )
@@ -92,4 +93,17 @@ func Superuser(t testing.TB, app core.App) *core.Record {
 		t.Fatalf("superuser not found: %v", err)
 	}
 	return record
+}
+
+// StoredTimeFormat is how PocketBase writes date fields.
+const StoredTimeFormat = "2006-01-02 15:04:05.000Z"
+
+// Ago returns a stored-format timestamp d before now.
+func Ago(d time.Duration) string {
+	return time.Now().Add(-d).UTC().Format(StoredTimeFormat)
+}
+
+// Ahead returns a stored-format timestamp d after now.
+func Ahead(d time.Duration) string {
+	return time.Now().Add(d).UTC().Format(StoredTimeFormat)
 }

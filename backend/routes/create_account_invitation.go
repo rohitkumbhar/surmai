@@ -107,8 +107,14 @@ func CreateAccountInvitation(e *core.RequestEvent) error {
 	}
 
 	fromId := info.Auth.Id
-	recipientEmail := info.Body["email"].(string)
-	message := info.Body["message"].(string)
+	recipientEmail, err := requiredString(info, "email")
+	if err != nil {
+		return e.BadRequestError("Invalid request", err)
+	}
+	message, err := optionalString(info, "message")
+	if err != nil {
+		return e.BadRequestError("Invalid request", err)
+	}
 
 	existingInvitations, err := e.App.FindAllRecords("account_invitations",
 		dbx.NewExp("fromId = {:fromId} and recipientEmail = {:recipientEmail}",

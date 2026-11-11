@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"errors"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"net/http"
@@ -14,10 +13,22 @@ func CreateInvitedUser(e *core.RequestEvent) error {
 		return err
 	}
 
-	invitationCode := info.Body["invitationCode"].(string)
-	email := info.Body["email"].(string)
-	name := info.Body["name"].(string)
-	password := info.Body["password"].(string)
+	invitationCode, err := requiredString(info, "invitationCode")
+	if err != nil {
+		return e.BadRequestError("Invalid request", err)
+	}
+	email, err := requiredString(info, "email")
+	if err != nil {
+		return e.BadRequestError("Invalid request", err)
+	}
+	password, err := requiredString(info, "password")
+	if err != nil {
+		return e.BadRequestError("Invalid request", err)
+	}
+	name, err := optionalString(info, "name")
+	if err != nil {
+		return e.BadRequestError("Invalid request", err)
+	}
 
 	// validate invitation code
 	existingInvitation, err := e.App.FindAllRecords("account_invitations",
@@ -27,7 +38,7 @@ func CreateInvitedUser(e *core.RequestEvent) error {
 		return err
 	}
 	if len(existingInvitation) == 0 {
-		return errors.New("invitation does not exist or has expired")
+		return e.BadRequestError("Invitation does not exist or has expired", nil)
 	}
 
 	usersCollection, err := e.App.FindCollectionByNameOrId("users")
