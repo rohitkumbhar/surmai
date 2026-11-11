@@ -2,3 +2,5 @@ allowBuilds:
   sharp: false
   unrs-resolver: false
 minimumReleaseAge: 10080
+minimumReleaseAgeExclude:
+  - pdfmake@0.3.14
