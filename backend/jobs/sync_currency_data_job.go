@@ -8,13 +8,20 @@ import (
 	"time"
 
 	"github.com/pocketbase/dbx"
-	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
 
 type SyncCurrencyDataJob struct {
-	Pb *pocketbase.PocketBase
+	App core.App
+
+	// BaseURL overrides the exchange rate API address and Client the HTTP
+	// client. Both are set by tests; empty values call the public API.
+	BaseURL string
+	Client  *http.Client
 }
+
+// DefaultExchangeApiBaseURL is the open, free exchangerate-api.com endpoint.
+const DefaultExchangeApiBaseURL = "https://open.er-api.com"
 
 type ExchangeApiResponse struct {
 	Result              string             `json:"result"`
@@ -25,9 +32,12 @@ type ExchangeApiResponse struct {
 	BaseCode            string             `json:"base_code"`
 }
 
+// defaultCurrencyClient bounds the call so a stalled API cannot hold the job open.
+var defaultCurrencyClient = &http.Client{Timeout: 30 * time.Second}
+
 func (job *SyncCurrencyDataJob) Execute() {
 
-	l := job.Pb.App.Logger().WithGroup("SyncCurrencyDataJob")
+	l := job.App.Logger().WithGroup("SyncCurrencyDataJob")
 
 	if job.synchronizationRequired() {
 		data, err := job.fetchCurrencyDataForUsd()
@@ -48,7 +58,7 @@ func (job *SyncCurrencyDataJob) Execute() {
 
 func (job *SyncCurrencyDataJob) updateDatabase(data *ExchangeApiResponse) {
 
-	app := job.Pb.App
+	app := job.App
 	l := app.Logger().WithGroup("SyncCurrencyDataJob")
 
 	currencyConversions, _ := app.FindCollectionByNameOrId("currency_conversions")
@@ -90,26 +100,40 @@ func (job *SyncCurrencyDataJob) fetchCurrencyDataForUsd() (*ExchangeApiResponse,
 	// The data uses USD as a base currency and saves all conversions rates wrt USD
 	// https://open.er-api.com/v6/latest/USD
 
-	req, err := http.NewRequest(http.MethodGet, "https://open.er-api.com/v6/latest/USD", nil)
-	if err != nil {
-		fmt.Printf("client: could not create request: %s\n", err)
-		return nil, err
+	baseURL := job.BaseURL
+	if baseURL == "" {
+		baseURL = DefaultExchangeApiBaseURL
 	}
 
-	res, err := http.DefaultClient.Do(req)
+	req, err := http.NewRequest(http.MethodGet, baseURL+"/v6/latest/USD", nil)
 	if err != nil {
-		fmt.Printf("client: error making http request: %s\n", err)
-		return nil, err
+		return nil, fmt.Errorf("could not create the request: %w", err)
+	}
+
+	client := job.Client
+	if client == nil {
+		client = defaultCurrencyClient
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		return nil, fmt.Errorf("could not reach the exchange rate API: %w", err)
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("the exchange rate API returned status %d", res.StatusCode)
 	}
 
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
-		fmt.Printf("client: could not read response body: %s\n", err)
-		return nil, err
+		return nil, fmt.Errorf("could not read the response: %w", err)
 	}
 
 	data := ExchangeApiResponse{}
-	json.Unmarshal(resBody, &data)
+	if err := json.Unmarshal(resBody, &data); err != nil {
+		return nil, fmt.Errorf("could not read the exchange rate response: %w", err)
+	}
 
 	return &data, nil
 }
@@ -117,7 +141,7 @@ func (job *SyncCurrencyDataJob) fetchCurrencyDataForUsd() (*ExchangeApiResponse,
 // Force currency conversion updates to happen at max once every 24 hours
 func (job *SyncCurrencyDataJob) synchronizationRequired() bool {
 
-	app := job.Pb.App
+	app := job.App
 	recentlyUpdatedCurrencies, _ := app.FindAllRecords("currency_conversions",
 		dbx.NewExp("updated > {:threshold} ",
 			dbx.Params{"threshold": time.Now().Add(-24 * time.Hour)}))

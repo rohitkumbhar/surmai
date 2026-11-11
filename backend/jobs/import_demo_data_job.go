@@ -5,12 +5,11 @@ import (
 	"os"
 
 	"github.com/pocketbase/dbx"
-	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"
 )
 
 type ImportDemoDataJob struct {
-	Pb           *pocketbase.PocketBase
+	App          core.App
 	AdminEmail   string
 	DemoEmail    string
 	DemoPassword string
@@ -25,7 +24,7 @@ func (job *ImportDemoDataJob) Execute() {
 }
 
 func (job *ImportDemoDataJob) deleteAllTravellerProfiles() {
-	pbApp := job.Pb.App
+	pbApp := job.App
 	logger := pbApp.Logger()
 
 	records, err := pbApp.FindAllRecords("traveller_profiles")
@@ -46,7 +45,7 @@ func (job *ImportDemoDataJob) deleteAllTravellerProfiles() {
 
 func (job *ImportDemoDataJob) deleteAllTrips() {
 
-	pbApp := job.Pb.App
+	pbApp := job.App
 	logger := pbApp.Logger()
 
 	records, err := pbApp.FindAllRecords("trips")
@@ -66,7 +65,7 @@ func (job *ImportDemoDataJob) deleteAllTrips() {
 }
 
 func (job *ImportDemoDataJob) deleteAllUsersExceptAdmin() {
-	pbApp := job.Pb.App
+	pbApp := job.App
 	logger := pbApp.Logger()
 	adminEmail := os.Getenv("SURMAI_ADMIN_EMAIL")
 	records, err := pbApp.FindAllRecords("users",
@@ -88,7 +87,7 @@ func (job *ImportDemoDataJob) deleteAllUsersExceptAdmin() {
 }
 
 func (job *ImportDemoDataJob) createDemoUser() {
-	pbApp := job.Pb.App
+	pbApp := job.App
 	logger := pbApp.Logger()
 
 	collection, _ := pbApp.FindCollectionByNameOrId("users")
@@ -106,7 +105,7 @@ func (job *ImportDemoDataJob) createDemoUser() {
 }
 
 func (job *ImportDemoDataJob) importDemoTrip() {
-	pbApp := job.Pb.App
+	pbApp := job.App
 	demoUser, noDemoUserError := pbApp.FindAuthRecordByEmail("users", job.DemoEmail)
 
 	open, err := os.Open("/datasets/demo_trip.zip")

@@ -50,15 +50,23 @@ type ADSBResponse struct {
 	Response FlightRouteResponse `json:"response"`
 }
 
-type AdsbDbCom struct{}
+// AdsbDbCom reads flight routes from adsbdb.com.
+//
+// The zero value calls the public API. BaseURL and Client are set by tests.
+type AdsbDbCom struct {
+	BaseURL string
+	Client  *http.Client
+}
+
+// DefaultBaseURL is the public adsbdb API.
+const DefaultBaseURL = "https://api.adsbdb.com"
 
 func (adsb AdsbDbCom) GetFlightRoute(flightNumber string, config *flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 
 	// Create the URL with the flight number parameter
-	url := fmt.Sprintf("https://api.adsbdb.com/v0/callsign/%s", flightNumber)
+	url := fmt.Sprintf("%s/v0/callsign/%s", flights.BaseURL(adsb.BaseURL, DefaultBaseURL), flightNumber)
 
-	// Create a new HTTP client and make the request
-	client := &http.Client{}
+	client := flights.Client(adsb.Client)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, err

@@ -7,6 +7,7 @@ package testutil
 
 import (
 	"backend/app"
+	"backend/cache"
 	_ "backend/migrations"
 	"os"
 	"sync"
@@ -85,6 +86,10 @@ func newApp(dataDir string) (*tests.TestApp, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	// main() initialises the shared cache before serving; a fresh one per test
+	// app also keeps cached values from leaking between tests
+	cache.InitCache()
 
 	surmai := NewSurmaiApp()
 	surmai.RegisterRoutes(testApp)
