@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { countNights, travelMinutes } from '../../../src/lib/time';
+import { countNights, startDateInYearFilter, travelMinutes } from '../../../src/lib/time';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,5 +33,18 @@ describe('travelMinutes', () => {
 
   it('uses the local times when a timezone is missing', () => {
     expect(travelMinutes('2026-11-12T10:00:00', '2026-11-12T22:00:00', 'America/New_York')).toBe(720);
+  });
+});
+
+describe('startDateInYearFilter', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('starts and ends the year at midnight in the browser timezone', () => {
+    vi.stubEnv('TZ', 'Asia/Dhaka');
+    expect(startDateInYearFilter('startDate', '2027')).toBe(
+      'startDate >= "2026-12-31 18:00:00.000Z" && startDate < "2027-12-31 18:00:00.000Z"'
+    );
   });
 });
