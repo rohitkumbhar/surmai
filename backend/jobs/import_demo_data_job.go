@@ -8,8 +8,12 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 )
 
+// DefaultDemoTripPath is where the image keeps the bundled demo archive.
+const DefaultDemoTripPath = "/datasets/demo_trip.zip"
+
 type ImportDemoDataJob struct {
 	App          core.App
+	DemoTripPath string
 	AdminEmail   string
 	DemoEmail    string
 	DemoPassword string
@@ -38,7 +42,7 @@ func (job *ImportDemoDataJob) deleteAllTravellerProfiles() {
 
 		err := pbApp.Delete(profile)
 		if err != nil {
-			logger.Error("Could not delete traveller profile with id: %s => %v", profile.Id, err)
+			logger.Error("Could not delete traveller profile", "id", profile.Id, "error", err)
 		}
 	}
 }
@@ -59,7 +63,7 @@ func (job *ImportDemoDataJob) deleteAllTrips() {
 
 		err := pbApp.Delete(trip)
 		if err != nil {
-			logger.Error("Could not delete trip with id: %s => %v", trip.Id, err)
+			logger.Error("Could not delete trip", "id", trip.Id, "error", err)
 		}
 	}
 }
@@ -81,7 +85,7 @@ func (job *ImportDemoDataJob) deleteAllUsersExceptAdmin() {
 
 		err := pbApp.Delete(user)
 		if err != nil {
-			logger.Error("Could not delete User with id: %s => %v", user.Id, err)
+			logger.Error("Could not delete user", "id", user.Id, "error", err)
 		}
 	}
 }
@@ -106,11 +110,30 @@ func (job *ImportDemoDataJob) createDemoUser() {
 
 func (job *ImportDemoDataJob) importDemoTrip() {
 	pbApp := job.App
-	demoUser, noDemoUserError := pbApp.FindAuthRecordByEmail("users", job.DemoEmail)
+	logger := pbApp.Logger()
 
-	open, err := os.Open("/datasets/demo_trip.zip")
-	defer open.Close()
-	if err == nil && noDemoUserError == nil {
-		_, _ = _import.Import(pbApp, open, demoUser.Id)
+	demoUser, err := pbApp.FindAuthRecordByEmail("users", job.DemoEmail)
+	if err != nil {
+		logger.Error("Could not find the demo user", "email", job.DemoEmail, "error", err)
+		return
+	}
+
+	path := job.DemoTripPath
+	if path == "" {
+		path = DefaultDemoTripPath
+	}
+
+	// The deferred close has to come after the error check: os.Open returns a
+	// nil file on failure, and this job runs from the cron, where a panic in
+	// the goroutine would take the process down.
+	archive, err := os.Open(path)
+	if err != nil {
+		logger.Error("Could not open the demo trip archive", "path", path, "error", err)
+		return
+	}
+	defer archive.Close()
+
+	if _, err := _import.Import(pbApp, archive, demoUser.Id); err != nil {
+		logger.Error("Could not import the demo trip", "error", err)
 	}
 }
