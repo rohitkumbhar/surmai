@@ -160,14 +160,23 @@ Go coverage reached 74%, with `flights` at 96%, `middleware` 95%, `settings` 88%
 The pure logic modules are at or near 100% of statements. Page components are
 left to the Playwright suite.
 
-### PR 7: TypeScript API layer and forms
+### PR 7: TypeScript API layer — done
 
-- `lib/api/pocketbase/*`: the filters, expands and payloads sent to a mocked PocketBase client.
-- Forms: transportation forms, expense form and splits, lodging and activity forms,
-  settings forms (SMTP, OpenAI, OAuth2), `useCurrentUser`.
-- Page composition is left to the e2e suite.
+`tests/unit/helpers/pocketbase.ts` stands in for the SDK client, recording every
+collection call and standing in for the batch used to upload attachments. The api
+modules take their collection handles at import time, so it is installed with
+`vi.mock` before the module under test is imported.
 
-Target after PR 7: 55–60% overall.
+Covered: trips, expenses, transportations, attachments and the reference data
+lists — the filters, sort orders, paging and payloads each one sends, plus the
+conversion of stored timestamps back to browser time. Also `useTripExpenses`.
+
+### Still to do
+
+- Form components: the transportation forms, the expense form and its splits, the
+  lodging and activity forms, and the settings forms (SMTP, OpenAI, OAuth2).
+- `pdfGenerator` data assembly.
+- The Playwright work below.
 
 ### PR 8: Playwright foundation
 
