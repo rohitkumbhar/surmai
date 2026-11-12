@@ -14,9 +14,9 @@ import { GenericActivityForm } from './GenericActivityForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { getMapsLink } from '../../../lib/places.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
-import { formatCost } from '../expenses/helper.ts';
 
 export const GenericActivityData = ({
   trip,

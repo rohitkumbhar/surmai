@@ -54,6 +54,8 @@ jobs:
         uses: jdx/mise-action@v5
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
       - name: Type check
         run: pnpm exec tsc -b
       - name: Run tests with coverage

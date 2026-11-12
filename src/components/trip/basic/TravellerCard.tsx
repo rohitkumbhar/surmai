@@ -4,10 +4,11 @@ import { notifications } from '@mantine/notifications';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 
-import { TravellerProfileForm } from '../../traveller/TravellerProfileForm.tsx';
-import { TravellerProfileModal } from '../../traveller/TravellerProfileModal.tsx';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { updateTravellerProfile, uploadTravellerAttachments } from '../../../lib/api/index.ts';
+import { TravellerProfileForm } from '../../traveller/TravellerProfileForm.tsx';
+import { TravellerProfileModal } from '../../traveller/TravellerProfileModal.tsx';
+
 import type { NewTravellerProfile, TravellerProfile } from '../../../types/trips.ts';
 
 const getInitials = (name: string) => {

@@ -1,4 +1,5 @@
 import { Card, Group, Switch, Text } from '@mantine/core';
+import { openConfirmModal } from '@mantine/modals';
 import { useTranslation } from 'react-i18next';
 
 import { disablePasswordAuth, enablePasswordAuth } from '../../lib/api';
@@ -6,7 +7,6 @@ import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
 import classes from '../../pages/Settings/Settings.module.css';
 
 import type { UserModel } from '../../types/auth.ts';
-import { openConfirmModal } from '@mantine/modals';
 
 export const PasswordAuthLogin = ({ userModel, refetch }: { userModel?: UserModel; refetch: () => void }) => {
   const { t } = useTranslation();

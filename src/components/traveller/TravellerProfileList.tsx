@@ -7,6 +7,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 import { useState } from 'react';
 
+import { TravellerProfileForm } from './TravellerProfileForm.tsx';
+import { TravellerProfileModal } from './TravellerProfileModal.tsx';
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
 import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import {
@@ -17,8 +19,6 @@ import {
   updateTravellerProfile,
   uploadTravellerAttachments,
 } from '../../lib/api/index.ts';
-import { TravellerProfileForm } from './TravellerProfileForm.tsx';
-import { TravellerProfileModal } from './TravellerProfileModal.tsx';
 
 import type { NewTravellerProfile, TravellerProfile } from '../../types/trips.ts';
 

@@ -1,9 +1,11 @@
 import { Accordion, Badge, Box, Group, Stack, Text } from '@mantine/core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
-import { listNotifications, markNotificationAsRead } from '../../lib/api';
-import type { Notification } from '../../types/notifications';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+
+import { listNotifications, markNotificationAsRead } from '../../lib/api';
+
+import type { Notification } from '../../types/notifications';
 
 export const UserNotifications = () => {
   const { t } = useTranslation();

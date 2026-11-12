@@ -41,16 +41,28 @@ export const OpenAIEndpointConfiguration = () => {
   });
 
   useEffect(() => {
-    if (openAiEndpointConfig?.enabled) {
-      form.setValues({
-        enabled: openAiEndpointConfig?.enabled,
-        endpoint: openAiEndpointConfig?.endpoint,
-        apiKey: openAiEndpointConfig?.apiKey,
-        model: openAiEndpointConfig?.model,
-      });
-      openForm();
+    if (!openAiEndpointConfig) {
+      return;
     }
-  }, [openAiEndpointConfig]);
+
+    // Fill the form in whether or not the endpoint is enabled: the values are
+    // still stored, and saving a form that was never filled in would write
+    // blanks over them.
+    form.setValues({
+      enabled: !!openAiEndpointConfig.enabled,
+      endpoint: openAiEndpointConfig.endpoint,
+      apiKey: openAiEndpointConfig.apiKey,
+      model: openAiEndpointConfig.model,
+    });
+
+    if (openAiEndpointConfig.enabled) {
+      openForm();
+    } else {
+      closeForm();
+    }
+    // `form` is rebuilt on every render, so depending on it would loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openAiEndpointConfig, openForm, closeForm]);
 
   form.watch('enabled', ({ value }) => {
     if (value) {

@@ -12,6 +12,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceFloppy, IconMail } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
@@ -21,7 +22,6 @@ import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib/ap
 import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
 
 import type { SmtpSettings } from '../../types/settings.ts';
-import { useDisclosure } from '@mantine/hooks';
 
 export const SmtpSettingsForm = () => {
   const { data: settings, refetch } = useQuery<SmtpSettings | undefined>({
@@ -80,8 +80,16 @@ export const SmtpSettingsForm = () => {
   };
 
   useEffect(() => {
-    form.setValues({ ...(settings as SmtpSettings), tlsValue: initialValues?.tls ? 'true' : 'false' });
+    if (!settings) {
+      return;
+    }
+
+    // Reading tls from the settings rather than from initialValues, which is
+    // rebuilt on every render. form.watch('enabled') reveals the section.
+    form.setValues({ ...settings, tlsValue: settings.tls ? 'true' : 'false' });
     form.resetDirty(settings);
+    // `form` is rebuilt on every render, so depending on it would loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings]);
 
   return (

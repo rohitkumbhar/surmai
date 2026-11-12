@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
 
+import { ViewTripPage } from './ViewTripPage';
 import { storedDay } from '../../fixtures/api';
 import { expect, test } from '../../fixtures/test';
 
-import { ViewTripPage } from './ViewTripPage';
 
 test.describe('View Trip Page', () => {
   const startDate = dayjs().startOf('month');

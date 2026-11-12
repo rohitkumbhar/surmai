@@ -37,15 +37,27 @@ export const FlightInfoProviderSettings = () => {
   });
 
   useEffect(() => {
-    if (flightInfo?.enabled) {
-      form.setValues({
-        enabled: !!flightInfo?.enabled,
-        provider: flightInfo?.provider,
-        apiKey: flightInfo?.apiKey,
-      });
-      openForm();
+    if (!flightInfo) {
+      return;
     }
-  }, [flightInfo]);
+
+    // Fill the form in whether or not the integration is enabled: the values
+    // are still stored, and saving a form that was never filled in would
+    // write blanks over them.
+    form.setValues({
+      enabled: !!flightInfo.enabled,
+      provider: flightInfo.provider,
+      apiKey: flightInfo.apiKey,
+    });
+
+    if (flightInfo.enabled) {
+      openForm();
+    } else {
+      closeForm();
+    }
+    // `form` is rebuilt on every render, so depending on it would loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flightInfo, openForm, closeForm]);
 
   form.watch('enabled', ({ value }) => {
     if (value) {

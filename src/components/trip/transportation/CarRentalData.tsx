@@ -4,6 +4,7 @@ import { IconArticle } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
@@ -12,7 +13,6 @@ import { CarRentalForm } from './CarRentalForm.tsx';
 import { formatDate, formatTime } from '../../../lib/time.ts';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const CarRentalData = ({
   trip,

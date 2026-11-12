@@ -4,12 +4,12 @@ import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
 import { compareItineraryLine } from './helper.ts';
-
-import type { Activity, Lodging, Transportation, Trip, ItineraryLine, TravellerProfile } from '../../../types/trips.ts';
 import { formatDateTime } from '../../../lib/time.ts';
-import type { TDocumentDefinitions, Content } from 'pdfmake/interfaces';
-import { User } from '../../../types/auth.ts';
 import { formatCost } from '../expenses/helper.ts';
+
+import type { User } from '../../../types/auth.ts';
+import type { Activity, Lodging, Transportation, Trip, ItineraryLine, TravellerProfile } from '../../../types/trips.ts';
+import type { TDocumentDefinitions, Content } from 'pdfmake/interfaces';
 
 // @ts-expect-error pdfmake fonts
 pdfMake.vfs = pdfFonts.pdfMake ? pdfFonts.pdfMake.vfs : (pdfFonts as any).vfs;

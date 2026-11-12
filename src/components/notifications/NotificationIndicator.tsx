@@ -1,9 +1,11 @@
 import { ActionIcon, Indicator } from '@mantine/core';
-import { useQuery } from '@tanstack/react-query';
 import { IconBell } from '@tabler/icons-react';
+import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { listNotifications } from '../../lib/api';
+
 import { useCurrentUser } from '../../auth/useCurrentUser';
+import { listNotifications } from '../../lib/api';
+
 import type { Notification } from '../../types/notifications';
 
 export const NotificationIndicator = () => {

@@ -26,6 +26,7 @@ import { NotificationIndicator } from './components/notifications/NotificationIn
 import { UserInfo } from './components/user/UserInfo.tsx';
 import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
 import { updateDayJsLanguage } from './lib/i18n.ts';
+
 import type { MantineColorScheme } from '@mantine/core';
 
 function App() {
@@ -63,6 +64,10 @@ function App() {
     if (renderRequired) {
       reloadUser?.(false);
     }
+    // This reacts to the signed-in user's preferences changing. The context
+    // setters are not stable between renders, so depending on them would run
+    // this on every render and reload the user in a loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

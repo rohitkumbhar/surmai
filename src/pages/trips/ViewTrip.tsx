@@ -2,26 +2,26 @@ import { Alert, Container, Group, LoadingOverlay, Tabs, Text } from '@mantine/co
 import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import { IconRefresh, IconWifiOff } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 
 import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import { Header } from '../../components/nav/Header.tsx';
 import { TripAttachments } from '../../components/trip/attachments/TripAttachments.tsx';
 import { ExpensesPanel } from '../../components/trip/expenses/ExpensesPanel.tsx';
 import { ItineraryView } from '../../components/trip/itinerary/ItineraryView.tsx';
 import { TripNotes } from '../../components/trip/notes/TripNotes.tsx';
 import { OrganizationTab } from '../../components/trip/OrganizationTab.tsx';
+import { TabsList } from '../../components/util/TabsList.tsx';
 import { getTrip, getTripAttachments, listExpenses, listTripTravellerProfiles } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
 import { formatDate, formatDateTime } from '../../lib/time.ts';
 
 import type { Attachment, Expense, TravellerProfile, Trip } from '../../types/trips.ts';
 
-import { TabsList } from '../../components/util/TabsList.tsx';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
 import './ViewTrip.module.css';
 
 export const ViewTrip = () => {

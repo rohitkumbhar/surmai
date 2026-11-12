@@ -6,13 +6,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { Header } from '../../components/nav/Header.tsx';
 import { Announcements } from '../../components/settings/Announcements.tsx';
+import { AssistantConfiguration } from '../../components/settings/AssistantConfiguration.tsx';
 import { Configuration } from '../../components/settings/Configuration.tsx';
 import { Datasets } from '../../components/settings/Datasets.tsx';
 import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
 import { UserList } from '../../components/settings/UserList.tsx';
 import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
 import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
-import { AssistantConfiguration } from '../../components/settings/AssistantConfiguration.tsx';
 
 const Settings = () => {
   const { t } = useTranslation();

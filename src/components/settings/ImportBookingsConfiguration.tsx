@@ -54,18 +54,30 @@ export const ImportBookingsConfiguration = () => {
   });
 
   useEffect(() => {
-    if (emailSyncConfig?.enabled) {
-      form.setValues({
-        enabled: emailSyncConfig?.enabled,
-        imapHost: emailSyncConfig?.imapHost,
-        imapPort: emailSyncConfig?.imapPort,
-        imapUser: emailSyncConfig?.imapUser,
-        imapPassword: emailSyncConfig?.imapPassword,
-        filterEmailAddress: emailSyncConfig?.filterEmailAddress,
-      });
-      openForm();
+    if (!emailSyncConfig) {
+      return;
     }
-  }, [emailSyncConfig]);
+
+    // Fill the form in whether or not the import is enabled: the values are
+    // still stored, and saving a form that was never filled in would write
+    // blanks over them.
+    form.setValues({
+      enabled: !!emailSyncConfig.enabled,
+      imapHost: emailSyncConfig.imapHost,
+      imapPort: emailSyncConfig.imapPort,
+      imapUser: emailSyncConfig.imapUser,
+      imapPassword: emailSyncConfig.imapPassword,
+      filterEmailAddress: emailSyncConfig.filterEmailAddress,
+    });
+
+    if (emailSyncConfig.enabled) {
+      openForm();
+    } else {
+      closeForm();
+    }
+    // `form` is rebuilt on every render, so depending on it would loop.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [emailSyncConfig, openForm, closeForm]);
 
   form.watch('enabled', ({ value }) => {
     if (value) {

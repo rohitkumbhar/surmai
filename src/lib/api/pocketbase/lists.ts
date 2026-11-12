@@ -1,5 +1,6 @@
-import { ConversionRate } from '../../../types/expenses.ts';
 import { pb, pbAdmin } from './pocketbase.ts';
+
+import type { ConversionRate } from '../../../types/expenses.ts';
 
 export const loadDataset = (name: string) => {
   return pbAdmin.send('/api/surmai/settings/datasets', {
