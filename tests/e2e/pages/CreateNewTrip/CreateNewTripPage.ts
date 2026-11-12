@@ -9,7 +9,12 @@ export interface TripFormData {
   startDate: string;
   endDate: string;
   destinations: string[];
-  participants: string[];
+  /**
+   * Traveller profiles to attach, by the label the select shows. They have to
+   * exist already: the field offers the current user's profiles rather than
+   * taking free text.
+   */
+  travellers?: string[];
 }
 
 export class CreateNewTripPage {
@@ -66,12 +71,23 @@ export class CreateNewTripPage {
       await this.searchAndSelectDestination(destination);
     }
 
-    // Add participants
-    for (const participant of data.participants) {
-      await this.page.getByRole('textbox', { name: 'Travelers' }).click();
-      await this.page.getByRole('textbox', { name: 'Travelers' }).fill(participant);
-      await this.page.keyboard.press('Enter');
+    for (const traveller of data.travellers ?? []) {
+      await this.selectTraveller(traveller);
     }
+  }
+
+  /**
+   * Picks a traveller profile. The field is a select over the profiles the user
+   * owns or manages, so the profile has to have been seeded first.
+   */
+  async selectTraveller(name: string) {
+    const field = this.page.getByRole('combobox', { name: 'Travelers' });
+    await field.click();
+    await field.fill(name);
+
+    const option = this.page.getByRole('option', { name });
+    await expect(option).toBeVisible();
+    await option.click();
   }
 
   /**
@@ -84,17 +100,20 @@ export class CreateNewTripPage {
     // Type the destination name
     await this.page.getByLabel('Destinations').fill(destinationName);
 
-    // Wait for the search results to appear
-    await this.page.waitForTimeout(500); // Small delay to allow search to complete
-
-    // Click on the first search result
-    await this.page.getByRole('option').first().click();
+    // The options arrive from a search request, so wait for one rather than
+    // sleeping and hoping.
+    const option = this.page.getByRole('option').first();
+    await expect(option).toBeVisible();
+    await option.click();
   }
 
   /**
-   * Click the Create Trip button
+   * Submits the form and returns the id of the trip that was created, taken
+   * from the url the app navigates to.
    */
-  async clickCreateTripButton() {
+  async clickCreateTripButton(): Promise<string> {
     await this.page.getByRole('button', { name: 'Create Trip' }).click();
+    await this.page.waitForURL(/\/trips\/[^/]+$/);
+    return this.page.url().split('/').pop() || '';
   }
 }

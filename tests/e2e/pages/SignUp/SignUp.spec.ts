@@ -124,9 +124,10 @@ test.describe('SignUp Page', () => {
     await page.getByLabel('Name').fill('Test User');
     await page.getByLabel('Email').fill('test@surmai.app');
     await page.getByRole('textbox', { name: 'Password' }).fill('Password123!');
+    // start waiting before the click: the mocked response can arrive first
+    const created = page.waitForResponse(/create-user/);
     await page.getByRole('button', { name: 'Create An Account' }).click();
-
-    await page.waitForResponse(/create-user/);
+    await created;
     // Check that the invitation code was included in the request
     expect(requestPayload).toHaveProperty('invitationCode', 'test-invitation-code');
   });

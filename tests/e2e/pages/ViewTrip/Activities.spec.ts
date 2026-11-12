@@ -1,65 +1,39 @@
-import { expect, test } from '@playwright/test';
 import dayjs from 'dayjs';
+
+import { storedDay } from '../../fixtures/api';
+import { expect, test } from '../../fixtures/test';
 
 import { getEndDate, getStartDate } from './helper.ts';
 import { ViewTripPage } from './ViewTripPage';
-import { CreateNewTripPage } from '../CreateNewTrip/CreateNewTripPage';
 
-import type { TripFormData } from '../CreateNewTrip/CreateNewTripPage';
 
 test.describe('Trip Activities', () => {
   let viewTripPage: ViewTripPage;
-  let createNewTripPage: CreateNewTripPage;
-  let tripId: string;
-  let tripData: TripFormData;
+  let tripStart: string;
 
-  test.beforeAll(async ({ browser }) => {
-    // Create a new context and page for trip creation
-    const context = await browser.newContext({
-      storageState: 'tests/playwright/.auth/user.json',
+  // The trip is seeded through the API: these tests are about the panel, not
+  // about creating a trip, and seeding keeps them independent of each other.
+  test.beforeEach(async ({ page, user, createTrip, signIn }) => {
+    tripStart = dayjs().startOf('month').format('YYYY-MM-DD');
+    const trip = await createTrip({
+      name: 'Activities Test Trip',
+      description: 'Seeded for the panel tests',
+      startDate: storedDay(tripStart),
+      endDate: storedDay(dayjs().endOf('month').format('YYYY-MM-DD')),
+      destinations: [
+        { id: 'nyc', name: 'New York', stateName: 'New York', countryName: 'United States', latitude: '40.71427', longitude: '-74.00597', timezone: 'America/New_York' },
+        { id: 'la', name: 'Los Angeles', stateName: 'California', countryName: 'United States', latitude: '34.05223', longitude: '-118.24368', timezone: 'America/Los_Angeles' },
+      ],
     });
-    const page = await context.newPage();
 
-    // Initialize the CreateNewTripPage
-    createNewTripPage = new CreateNewTripPage(page);
-
-    // Navigate to the create new trip page
-    await createNewTripPage.goto();
-
-    // Create a new trip
-    tripData = {
-      name: `Activities Test Trip ${Date.now()}`,
-      description: 'Test Description for Activities tests',
-      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
-      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
-      destinations: ['Paris, France', 'Rome, Italy'],
-      participants: ['Test User'],
-    };
-
-    await createNewTripPage.fillTripForm(tripData);
-    await createNewTripPage.clickCreateTripButton();
-
-    // Wait for navigation and extract the trip ID from the URL
-    await page.waitForTimeout(1000);
-    await page.waitForURL(/\/trips\/[^/]+$/);
-    const url = page.url();
-    tripId = url.split('/').pop() || '';
-
-    // Close the context
-    await context.close();
-  });
-
-  test.beforeEach(async ({ page }) => {
-    // Initialize the ViewTripPage
+    await signIn(page, user);
     viewTripPage = new ViewTripPage(page);
-
-    // Navigate to the trip page
-    await viewTripPage.goto(tripId);
+    await viewTripPage.goto(trip.id);
   });
 
   test('should add a museum visit activity', async ({ page }) => {
     const activityName = 'Visit the Louvre';
-    const startDate = getStartDate(tripData.startDate);
+    const startDate = getStartDate(tripStart);
     const endDate = getEndDate(startDate, 0.1);
     await viewTripPage.addActivity({
       name: activityName,
@@ -76,7 +50,7 @@ test.describe('Trip Activities', () => {
 
   test('should add a restaurant reservation activity', async ({ page }) => {
     const activityName = 'Dinner at Le Jules Verne';
-    const startDate = getStartDate(tripData.startDate);
+    const startDate = getStartDate(tripStart);
     const endDate = getEndDate(startDate, 0.1);
 
     await viewTripPage.addActivity({
@@ -94,7 +68,7 @@ test.describe('Trip Activities', () => {
 
   test('should add a guided tour activity', async ({ page }) => {
     const activityName = 'Colosseum Guided Tour';
-    const startDate = getStartDate(tripData.startDate);
+    const startDate = getStartDate(tripStart);
     const endDate = getEndDate(startDate, 0.1);
 
     await viewTripPage.addActivity({
@@ -112,7 +86,7 @@ test.describe('Trip Activities', () => {
 
   test('should add a free time activity', async ({ page }) => {
     const activityName = 'Shopping at Via del Corso';
-    const startDate = getStartDate(tripData.startDate);
+    const startDate = getStartDate(tripStart);
     const endDate = getEndDate(startDate, 0.1);
     await viewTripPage.addActivity({
       name: activityName,

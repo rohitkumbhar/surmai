@@ -100,6 +100,8 @@ test.describe('SignIn Page', () => {
       });
     });
 
+    await page.reload();
+
     // Check that OAuth buttons are visible
     await expect(page.getByRole('button', { name: 'Sign In With Google' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign In With GitHub' })).toBeVisible();
