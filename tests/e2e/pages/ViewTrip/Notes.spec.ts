@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 
-import { ViewTripPage } from './ViewTripPage';
-import { storedDay } from '../../fixtures/api';
-import { expect, test } from '../../fixtures/test';
+import { storedDay } from '@tests/e2e/fixtures/api';
+import { expect, test } from '@tests/e2e/fixtures/test';
+import { ViewTripPage } from '@tests/e2e/pages/ViewTrip/ViewTripPage';
 
 
 

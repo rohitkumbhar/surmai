@@ -49,7 +49,7 @@ Everything else is seeded per test through the REST API, using the fixtures in
 `tests/e2e/fixtures/test.ts`:
 
 ```ts
-import { expect, test } from '../../fixtures/test';
+import { expect, test } from '@tests/e2e/fixtures/test';
 
 test('a trip belongs to its owner', async ({ page, user, createTrip, signIn }) => {
   const trip = await createTrip({ name: 'Paris in June' });

@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-import { getSelectorString } from './helper.ts';
+import { getSelectorString } from '@tests/e2e/pages/ViewTrip/helper.ts';
 
 import type { Page } from '@playwright/test';
 

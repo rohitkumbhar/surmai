@@ -94,9 +94,10 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
-        // Imports inside src/ and the tests that reach into it are written
-        // '@src/...' rather than walking up with '../../..'.
+        // Imports of our own code are written '@src/...' and '@tests/...'
+        // rather than walking up with '../../..'.
         '@src': fileURLToPath(new URL('./src', import.meta.url)),
+        '@tests': fileURLToPath(new URL('./tests', import.meta.url)),
         ...(mode === 'development' && {
           // See https://github.com/mantinedev/ui.mantine.dev/issues/113
           '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',

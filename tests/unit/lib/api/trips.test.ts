@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { bodyOf, createMockPocketBase, fullListCall } from '../../helpers/pocketbase';
+import { bodyOf, createMockPocketBase, fullListCall } from '@tests/unit/helpers/pocketbase';
 
 const client = createMockPocketBase();
 vi.mock('@src/lib/api/pocketbase/pocketbase', () => ({

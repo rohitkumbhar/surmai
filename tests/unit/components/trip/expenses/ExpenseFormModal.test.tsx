@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createTestQueryClient } from '../../../helpers/queryClient';
+import { createTestQueryClient } from '@tests/unit/helpers/queryClient';
 
 import type { Expense, TravellerProfile, Trip } from '@src/types/trips';
 import type { ReactElement } from 'react';

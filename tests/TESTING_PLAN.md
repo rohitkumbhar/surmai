@@ -247,6 +247,14 @@ html-to-pdfmake conversion for tags the notes editor does not produce.
 
 Frontend coverage is now 28% of statements and 26% of branches.
 
+### PR 12: @tests alias — done
+
+The companion to the `@src` alias. The 43 imports that tests made of their own
+fixtures, page objects and helpers are now `@tests/...`, so nothing in the
+repository imports by walking up directories. Playwright resolves it from the
+tsconfig paths, the same as vitest resolves it from the vite alias, and
+`no-restricted-imports` now covers `tests/` as well as `src/`.
+
 ### Still to do
 
 - The remaining Playwright areas in the table below.

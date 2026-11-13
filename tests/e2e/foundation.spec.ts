@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures/test';
+import { expect, test } from '@tests/e2e/fixtures/test';
 
 /**
  * Checks the test foundation itself: seeding through the API, a page adopting a
