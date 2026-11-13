@@ -274,6 +274,26 @@ Two things the tests had to be written around. The download controls are
 anchors, so they answer to the link role, not the button role; and a Mantine
 dropdown renders in a portal, outside the dialog that owns the field.
 
+### PR 14: Expenses in Playwright — done
+
+`tests/e2e/pages/Expenses`. Adding, editing and deleting an expense through
+the screens, the empty state, and the csv download.
+
+The conversion is pinned by the seeded rates, USD at 1 and EUR at 0.9: a trip
+with a 500 USD budget, a 100 USD expense and a 90 EUR one shows 200 used, 500
+budgeted, 300 remaining and 40%, which exercises both the conversion and the
+Budget Overview card. A trip with no budget says so.
+
+Splitting: the switch appears only once the trip has travellers, seeds an even
+share each, and the saved record carries the splits. Changing one share so the
+splits no longer add up keeps the form open with the mismatch message.
+
+Three things to know when writing more of these. The expenses collection is
+`trip_expenses`, not `expenses`. The delete confirmation opens on top of the
+expense form, which has a Delete button of its own, so the click has to be
+scoped to the confirmation. And trip travellers come back in the API's order,
+not the order they were seeded in.
+
 ### Still to do
 
 - The remaining Playwright areas in the table below.
@@ -323,7 +343,7 @@ it. Those specs now seed their trip instead of creating it through that form.
 | Attachments           | upload, view and delete from the Attachments tab                                           |
 | Notes                 | add (exists), edit                                                                         |
 | Itinerary             | ordering across days and time zones, PDF download                                          |
-| Expenses              | add, split between participants, mixed currencies, stat cards                              |
+| Expenses              | ✅ add, edit, delete, split between travellers, mixed currencies, stat cards, csv download  |
 | Collaboration         | ✅ invite, accept, reject, unrelated user denied; still to do: edit as collaborator, remove |
 | Invitations           | trip invitations (exists), account invitation → sign up                                   |
 | Traveller profiles    | create, manage, add as trip traveller                                                      |
