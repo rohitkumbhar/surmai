@@ -1,6 +1,14 @@
 allowBuilds:
   sharp: false
   unrs-resolver: false
+# A transitive package with an advisory whose own dependents have not picked up
+# the fix yet. Reachable only from dev tooling.
+overrides:
+  # CVE-2026-126345, a crash parsing an MLSD directory listing. Comes in
+  # through release-it -> proxy-agent, which only reaches it when an ftp proxy
+  # is configured.
+  basic-ftp: '^6.2.4'
+
 minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - pdfmake@0.3.14

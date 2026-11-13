@@ -111,7 +111,7 @@
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.8.3",
-    "release-it": "^20.2.1",
+    "release-it": "21.1.2",
     "typescript": "^6.0.3",
     "vite": "8.3.3",
     "vite-plugin-pwa": "^2.0.0",
