@@ -12,6 +12,12 @@ on:
 permissions:
   contents: read
 
+# A pull request build that has been superseded is not worth a runner. Tagged
+# builds publish, so they are left to finish.
+concurrency:
+  group: docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,3 +50,8 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+        # The dependency layers, pnpm install and go mod download, change only
+        # when a lockfile does, so most of this build can come from the cache
+        # that the previous run left behind.
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
