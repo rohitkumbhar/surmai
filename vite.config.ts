@@ -143,10 +143,10 @@ export default defineConfig(({ mode }) => {
         reportsDirectory: 'coverage',
         // Minimum coverage. Raise these as coverage improves, never lower them.
         thresholds: {
-          statements: 20,
-          branches: 18,
-          functions: 14,
-          lines: 20,
+          statements: 24,
+          branches: 22,
+          functions: 16,
+          lines: 24,
         },
       },
     },
