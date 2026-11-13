@@ -317,6 +317,25 @@ Four things to know for the next spec:
 - Playwright's process does not run `vitest.setup.ts`, so a spec that formats
   with `LL` has to extend dayjs with `localizedFormat.js` itself.
 
+### PR 16: The board, profiles and the account in Playwright — done
+
+Travel Board: the trips, destinations, stays and nights counted for a year,
+and a trip in another year left out of it. Traveller profiles: created,
+viewed, renamed through the view's own Edit, deleted after the confirmation,
+and assigned to a trip. The account: the name changed and read back from the
+record, a mismatched password pair refused, the password changed with the old
+one then rejected by the API, notifications listed, and signing out.
+
+Two more things to know:
+
+- `signIn` writes the session it captured into localStorage on **every**
+  navigation, through `page.addInitScript`. A page therefore cannot be signed
+  out, and a reload restores the user record as it was when the test started.
+  Anything about signing out, or about a change surviving a reload, has to go
+  through the project's stored session or be checked against the API instead.
+- A user may not list the users collection, so reading a user back is done
+  with the superuser fixture.
+
 ### Still to do
 
 - The remaining Playwright areas in the table below.
@@ -359,7 +378,7 @@ it. Those specs now seed their trip instead of creating it through that form.
 
 | Area                  | Specs                                                                                      |
 |-----------------------|--------------------------------------------------------------------------------------------|
-| Auth                  | sign in/up (exists), sign out, change password, sign up blocked when disabled              |
+| Auth                  | ✅ sign in/up, sign out, change password, sign up blocked when disabled                     |
 | Trips                 | ✅ create, edit basics and destinations, delete, My Trips list, export → import, calendar download, itinerary pdf; still to do: cover image |
 | Transportation        | ✅ add flight/train/car, delete; still to do: flight lookup through the UI                  |
 | Lodging, activities   | ✅ add, edit, delete                                                                        |
@@ -369,8 +388,8 @@ it. Those specs now seed their trip instead of creating it through that form.
 | Expenses              | ✅ add, edit, delete, split between travellers, mixed currencies, stat cards, csv download  |
 | Collaboration         | ✅ invite, accept, reject, unrelated user denied; still to do: edit as collaborator, remove |
 | Invitations           | trip invitations (exists), account invitation → sign up                                   |
-| Traveller profiles    | create, manage, add as trip traveller                                                      |
-| Travel Board          | statistics for seeded trips                                                                |
+| Traveller profiles    | ✅ create, view, rename, delete, assign to a trip                                           |
+| Travel Board          | ✅ trips, destinations, stays and nights for a year, and the year filter                    |
 | Admin settings        | invite user, user list, impersonate, announcements, datasets, SMTP/OpenAI test buttons     |
 | Assistant             | booking import with a stubbed LLM; IMAP path optional (needs Docker)                       |
-| Profile, notifications | edit profile, read/dismiss notifications, change language                                 |
+| Profile, notifications | ✅ edit profile, change password, sign out, notifications; still to do: change language    |
