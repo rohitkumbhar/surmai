@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import {
   deleteTrip,
   listActivities,
@@ -27,7 +28,6 @@ import {
   uploadTripCoverImage,
 } from '../../../lib/api';
 import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 
 const loadPdfGenerator = () => import('../itinerary/pdfGenerator.ts');

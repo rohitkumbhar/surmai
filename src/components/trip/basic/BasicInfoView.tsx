@@ -8,11 +8,11 @@ import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
 import { DestinationCard } from './DestinationCard.tsx';
 import { TravellerCard } from './TravellerCard.tsx';
 import { listCollaborators, listTravellerProfiles } from '../../../lib/api';
+import { formatCost } from '../expenses/helper.ts';
 import { useTripExpenses } from '../expenses/useTripExpenses.ts';
 
 import type { User } from '../../../types/auth.ts';
 import type { Trip } from '../../../types/trips.ts';
-import { formatCost } from '../expenses/helper.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();

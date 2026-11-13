@@ -133,6 +133,38 @@ export class SurmaiApi {
     return this.createRecord('invitations', { trip: tripId, recipientEmail, message });
   }
 
+  /** Reads PocketBase's own settings, which hold the mail configuration. */
+  async readInstanceSettings(): Promise<Record<string, unknown>> {
+    const response = await this.request.get('/api/settings', { headers: this.headers });
+    if (!response.ok()) {
+      throw new Error(`could not read the instance settings: ${response.status()}`);
+    }
+    return (await response.json()) as Record<string, unknown>;
+  }
+
+  /** Updates PocketBase's own settings. */
+  async writeInstanceSettings(data: Record<string, unknown>) {
+    const response = await this.request.patch('/api/settings', { headers: this.headers, data });
+    if (!response.ok()) {
+      throw new Error(`could not update the instance settings: ${response.status()} ${await response.text()}`);
+    }
+    return (await response.json()) as Record<string, unknown>;
+  }
+
+  /** Reads a settings record's value. */
+  async readSetting(id: string): Promise<Record<string, unknown>> {
+    const response = await this.request.get(`/api/collections/surmai_settings/records/${id}`, {
+      headers: this.headers,
+    });
+    if (!response.ok()) {
+      throw new Error(`could not read the ${id} setting: ${response.status()}`);
+    }
+    const record = (await response.json()) as { value: unknown };
+    return typeof record.value === 'string'
+      ? (JSON.parse(record.value || '{}') as Record<string, unknown>)
+      : ((record.value ?? {}) as Record<string, unknown>);
+  }
+
   /** Points a settings record at a value, as the admin screens do. */
   async writeSetting(id: string, value: Record<string, unknown>) {
     return this.updateRecord('surmai_settings', id, { value: JSON.stringify(value) });

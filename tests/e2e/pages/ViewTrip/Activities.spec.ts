@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 
+import { getEndDate, getStartDate } from './helper.ts';
+import { ViewTripPage } from './ViewTripPage';
 import { storedDay } from '../../fixtures/api';
 import { expect, test } from '../../fixtures/test';
 
-import { getEndDate, getStartDate } from './helper.ts';
-import { ViewTripPage } from './ViewTripPage';
 
 
 test.describe('Trip Activities', () => {

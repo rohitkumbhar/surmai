@@ -38,6 +38,10 @@ export function PlaceMultiSelect({ propName, form }: { propName: string; form: U
         combobox.openDropdown();
       });
     }
+    // The combobox store from useCombobox() is rebuilt on every render, so
+    // declaring it here would re-run this effect in a loop and the dropdown
+    // would never settle long enough to be clicked.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, page]);
 
   const options = searchResults.map((item) => (

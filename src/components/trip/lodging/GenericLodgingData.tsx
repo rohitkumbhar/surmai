@@ -15,9 +15,9 @@ import { DataLine } from '../DataLine.tsx';
 import { TravellerBadges } from '../TravellerBadges.tsx';
 import { GenericLodgingForm } from './GenericLodgingForm.tsx';
 import { typeIcons } from './typeIcons.ts';
+import { formatCost } from '../expenses/helper.ts';
 
 import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '../../../types/trips.ts';
-import { formatCost } from '../expenses/helper.ts';
 
 export const GenericLodgingData = ({
   trip,

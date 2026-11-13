@@ -13,9 +13,9 @@ import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
 import { TravellerBadges } from '../TravellerBadges.tsx';
 import { BikeForm } from './BikeForm.tsx';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 
 export const BikeData = ({
   trip,

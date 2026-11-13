@@ -19,9 +19,11 @@ import { notifications } from '@mantine/notifications';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import { createAnnouncement, listAnnouncements } from '../../lib/api';
-import type { Announcement } from '../../types/notifications';
+
 import { useCurrentUser } from '../../auth/useCurrentUser';
+import { createAnnouncement, listAnnouncements } from '../../lib/api';
+
+import type { Announcement } from '../../types/notifications';
 
 export const Announcements = () => {
   const { t } = useTranslation();

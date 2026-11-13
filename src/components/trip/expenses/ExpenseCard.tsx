@@ -4,11 +4,11 @@ import { IconEdit } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import { formatCost } from './helper.ts';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
 import { getAttachmentUrl } from '../../../lib/api';
 
 import type { Attachment, ConvertedExpense } from '../../../types/trips.ts';
-import { formatCost } from './helper.ts';
 
 export const ExpenseCard = ({
   expense,

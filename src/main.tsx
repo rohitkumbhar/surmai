@@ -12,13 +12,13 @@ import utc from 'dayjs/plugin/utc';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { SurmaiApp } from './app/Surmai.tsx';
 import './index.css';
-import { apiUrl } from './lib/api';
 import './lib/i18n';
+import { SurmaiApp } from './app/Surmai.tsx';
+import { apiUrl } from './lib/api';
+import { configureI18next } from './lib/i18n.ts';
 
 import type { SiteSettings } from './types/settings.ts';
-import { configureI18next } from './lib/i18n.ts';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

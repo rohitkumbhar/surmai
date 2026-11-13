@@ -15,10 +15,10 @@ import { TravellerBadges } from '../TravellerBadges.tsx';
 import { FlightForm } from './FlightForm.tsx';
 import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
 import { typeIcons } from './typeIcons.ts';
-
-import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { formatCost } from '../expenses/helper.ts';
+
+import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
 
 export const GenericTransportationData = ({
   trip,

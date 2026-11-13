@@ -1,4 +1,4 @@
-import { Entity } from "./trips";
+import type { Entity } from "./trips";
 
 export type InvitationMetadata = {
   trip: {

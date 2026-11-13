@@ -6,17 +6,17 @@ import { useTranslation } from 'react-i18next';
 
 import { FlightForm } from './FlightForm.tsx';
 import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
 import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
 import { showDeleteNotification } from '../../../lib/notifications.tsx';
 import { formatDateTime } from '../../../lib/time.ts';
 import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
 import { Attachments } from '../attachments/Attachments.tsx';
 import { DataLine } from '../DataLine.tsx';
+import { formatCost } from '../expenses/helper.ts';
 import { TravellerBadges } from '../TravellerBadges.tsx';
 
 import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { formatCost } from '../expenses/helper.ts';
 
 export const FlightData = ({
   trip,

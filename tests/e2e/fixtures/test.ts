@@ -1,6 +1,6 @@
 import { test as base, expect, request as playwrightRequest } from '@playwright/test';
 
-import { isoDay, SurmaiApi, unique } from './api';
+import { authenticate, isoDay, SurmaiApi, unique } from './api';
 
 import type { SeededUser, TripInput } from './api';
 import type { APIRequestContext, Page } from '@playwright/test';
@@ -20,6 +20,9 @@ export const storageStatePath = 'tests/playwright/.auth/user.json';
 /** The session file the SDK reads, so a page starts already signed in. */
 export const authStoreKey = 'pb_user';
 
+/** The admin screens use a second client, with its own session. */
+export const adminAuthStoreKey = 'pb_admin';
+
 export type Fixtures = {
   /** The REST API as the superuser, for seeding. */
   api: SurmaiApi;
@@ -33,6 +36,12 @@ export type Fixtures = {
   signIn: (page: Page, user: SeededUser) => Promise<void>;
   /** The REST API as a particular user, for the things only they may do. */
   apiAs: (user: SeededUser) => SurmaiApi;
+  /**
+   * Signs a page in as the superuser as well as a normal user, which is what
+   * the admin settings screens need: they talk to PocketBase through a second
+   * client with its own session.
+   */
+  signInAsSuperuser: (page: Page, user: SeededUser) => Promise<void>;
 };
 
 export const test = base.extend<Fixtures>({
@@ -72,14 +81,20 @@ export const test = base.extend<Fixtures>({
 
   signIn: async ({}, use) => {
     await use(async (page, user) => {
-      const session = JSON.stringify({ token: user.token, record: user.record });
-      await page.addInitScript(
-        ([key, value]) => {
-          window.localStorage.setItem(key, value);
-        },
-        [authStoreKey, session]
-      );
+      await setSession(page, authStoreKey, user.token, user.record);
     });
+  },
+
+  signInAsSuperuser: async ({ baseURL }, use) => {
+    const context = await newApiContext(baseURL);
+    const auth = await authenticate(context, '_superusers', superuser.email, superuser.password);
+
+    await use(async (page, user) => {
+      await setSession(page, authStoreKey, user.token, user.record);
+      await setSession(page, adminAuthStoreKey, auth.token, auth.record);
+    });
+
+    await context.dispose();
   },
 });
 
@@ -88,6 +103,16 @@ export { expect };
 /** A page already signed in as the given user, ready to navigate. */
 export async function newApiContext(baseURL: string | undefined): Promise<APIRequestContext> {
   return playwrightRequest.newContext({ baseURL: baseURL || 'http://localhost:6173' });
+}
+
+/** Writes a session the way the SDK's local auth store does. */
+async function setSession(page: Page, key: string, token: string, record: Record<string, unknown>) {
+  await page.addInitScript(
+    ([storageKey, value]) => {
+      window.localStorage.setItem(storageKey, value);
+    },
+    [key, JSON.stringify({ token, record })]
+  );
 }
 
 function emailFor(workerIndex: number, label = 'user'): string {

@@ -1,3 +1,6 @@
+/* This file is the route table rather than a component module, so the fast
+   refresh rule about exporting only components does not apply. */
+/* eslint-disable react-refresh/only-export-components */
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 

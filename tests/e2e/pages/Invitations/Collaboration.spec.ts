@@ -27,6 +27,10 @@ test.describe('Trip collaboration', () => {
     await expect(page.getByText('Shared Trip', { exact: false })).toBeVisible();
     await page.getByRole('button', { name: 'Accept' }).first().click();
 
+    // the collaborator is only added once the accept has been written, so
+    // wait for the list to empty before asking for the trip
+    await expect(page.getByText('You do not have any pending invitations.')).toBeVisible();
+
     await page.goto(`/trips/${trip.id}`);
     await expect(page.locator('#app-header').getByText('Shared Trip')).toBeVisible();
   });
@@ -41,6 +45,7 @@ test.describe('Trip collaboration', () => {
     await page.goto('/invitations');
     await expect(page.getByText('Declined Trip', { exact: false })).toBeVisible();
     await page.getByRole('button', { name: 'Reject' }).first().click();
+    await expect(page.getByText('You do not have any pending invitations.')).toBeVisible();
 
     await page.goto(`/trips/${trip.id}`);
     await expect(page.getByText('Declined Trip')).toBeHidden();

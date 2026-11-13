@@ -171,12 +171,43 @@ Covered: trips, expenses, transportations, attachments and the reference data
 lists — the filters, sort orders, paging and payloads each one sends, plus the
 conversion of stored timestamps back to browser time. Also `useTripExpenses`.
 
+### PR 9: Lint, and the settings forms — done
+
+`pnpm lint` passes with `--max-warnings 0` and runs in CI. It was reporting 78
+warnings, none of which were being looked at:
+
+- 78 `import/order` were fixed with `eslint --fix`, along with 3
+  `consistent-type-imports`.
+- 6 `react-hooks/rules-of-hooks` were false positives: Playwright's fixtures
+  take a callback named `use`, which the rule mistook for the `use` hook. The
+  rule is now off for `tests/e2e`, where nothing is a React component.
+- The generated `coverage/` directory was being linted, which accounted for 6
+  more.
+- Where a dependency genuinely cannot be declared there is now a scoped disable
+  with the reason. Mantine's `useForm` and `useCombobox` both return a new
+  object on every render, so declaring either re-runs the effect in a loop.
+  Declaring the combobox store was tried first and made the destination and
+  airport dropdowns re-render continuously, so they never accepted a click;
+  the e2e suite caught it.
+
+The `react-hooks/exhaustive-deps` warnings on the settings forms led to a real
+bug: the flight provider, assistant and booking import forms only filled
+themselves in when the setting was *enabled*. A setting saved as disabled
+showed blank fields, and saving that form wrote the blanks over the stored
+endpoint, key and credentials. Covered twice, since both levels are cheap here:
+`tests/e2e/pages/Settings/Settings.spec.ts` drives the real screens, and
+`tests/unit/components/settings/SettingsForms.test.tsx` asserts the payload each
+form submits for a stored-but-disabled setting.
+
+A stray `console.log` in the flight provider form, which printed the submitted
+values including the provider API key to the browser console, is gone.
+
 ### Still to do
 
-- Form components: the transportation forms, the expense form and its splits, the
-  lodging and activity forms, and the settings forms (SMTP, OpenAI, OAuth2).
+- Form components in Vitest: the transportation forms, the expense form and its
+  splits, the lodging and activity forms. The settings forms are done.
 - `pdfGenerator` data assembly.
-- The Playwright work below.
+- The remaining Playwright areas in the table below.
 
 ### PR 8: Playwright foundation — done
 

@@ -1,11 +1,11 @@
 import { MultiSelect, Stack, Textarea, TextInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
+import { listTravellerProfiles } from '../../../lib/api/pocketbase/traveller_profiles.ts';
 import { PlaceMultiSelect } from '../../places/PlaceMultiSelect.tsx';
 import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { listTravellerProfiles } from '../../../lib/api/pocketbase/traveller_profiles.ts';
 
 import type { CreateTripForm } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
