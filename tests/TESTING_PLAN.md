@@ -144,12 +144,21 @@ Fixed while writing these tests:
 Go coverage reached 74%, with `flights` at 96%, `middleware` 95%, `settings` 88%,
 `hooks` 84%, `jobs` 78%, `trips` 77%, `assistant` 74% and `routes` 73%.
 
-### PR 6: TypeScript logic
+### PR 6: TypeScript logic — done
 
-- `renderWithProviders()` test helper (Mantine, router, i18n, Surmai context).
-- Pure logic, target 90%: `useTravelBoardStatistics` (with regression tests for #363, #368, #369),
-  expense helpers and `useTripExpenses`, itinerary helpers, `lib/time`, `lib/places`, `lib/image`,
-  and the data assembly in `pdfGenerator`.
+- `useTravelBoardStatistics` against a mocked API layer, including regression
+  tests for #363 (expense conversion), #368 (nights by calendar day) and #369
+  (travel time across time zones).
+- The expense helpers (currency conversion, totals by currency, colours,
+  formatting), the itinerary day indexes and ordering, `lib/places`, and the
+  rest of `lib/time`.
+- `vitest.setup.ts` extends dayjs with the same plugins as `main.tsx`, since
+  anything using `dayjs.tz` fails without them.
+- `tests/unit/helpers/queryClient.tsx` wraps hooks under test in a query client
+  that does not retry or cache.
+
+The pure logic modules are at or near 100% of statements. Page components are
+left to the Playwright suite.
 
 ### PR 7: TypeScript API layer and forms
 
