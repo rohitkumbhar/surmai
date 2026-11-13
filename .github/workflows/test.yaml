@@ -1,0 +1,46 @@
+name: Tests
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  backend:
+    name: Go tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Install tools from mise.toml
+        uses: jdx/mise-action@v5
+      - name: Run tests with coverage
+        # The argument is the minimum total coverage. Raise it as coverage improves.
+        run: backend/scripts/coverage.sh 4
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: go-coverage
+          path: backend/coverage.out
+
+  frontend:
+    name: Frontend unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Install tools from mise.toml
+        uses: jdx/mise-action@v5
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Type check
+        run: pnpm exec tsc -b
+      - name: Run tests with coverage
+        # Minimum coverage is enforced by coverage.thresholds in vite.config.ts
+        run: pnpm test:coverage
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: frontend-coverage
+          path: coverage

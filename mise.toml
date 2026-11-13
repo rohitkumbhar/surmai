@@ -1,7 +1,12 @@
 [tools]
 node = "26"
 go = "1.27"
-pnpm = "12"
+# Keep this at the exact version package.json's packageManager field names, and
+# keep that at a release older than minimumReleaseAge in pnpm-workspace.yaml.
+# A floating "12" resolves to whatever 12.x is newest, and when that differs
+# from the packageManager field pnpm installs the pinned version from the
+# registry, where the release age policy applies to pnpm like any other package.
+pnpm = "12.18.0"
 
 [shell_alias]
 ll = "ls -lahrt"

@@ -24,8 +24,14 @@ type SurmaiApp struct {
 }
 
 func (surmai *SurmaiApp) BindRoutes() {
+	surmai.RegisterRoutes(surmai.Pb)
+}
 
-	surmai.Pb.OnServe().BindFunc(func(se *core.ServeEvent) error {
+// RegisterRoutes binds all Surmai routes to the given app. It is separate from
+// BindRoutes so tests can register the routes on a PocketBase test app.
+func (surmai *SurmaiApp) RegisterRoutes(app core.App) {
+
+	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
 
 		se.Router.POST("/impersonate", R.ImpersonateAction).Bind(apis.RequireSuperuserAuth())
 
@@ -107,26 +113,32 @@ func (surmai *SurmaiApp) BuildTimezoneFinder() {
 }
 
 func (surmai *SurmaiApp) BindEventHooks() {
-	surmai.Pb.OnRecordCreate("trips").BindFunc(func(e *core.RecordEvent) error {
+	surmai.RegisterEventHooks(surmai.Pb)
+}
+
+// RegisterEventHooks binds all Surmai record hooks to the given app. It is
+// separate from BindEventHooks so tests can register the hooks on a PocketBase test app.
+func (surmai *SurmaiApp) RegisterEventHooks(app core.App) {
+	app.OnRecordCreate("trips").BindFunc(func(e *core.RecordEvent) error {
 		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
 	})
 
-	surmai.Pb.OnRecordUpdate("trips").BindFunc(func(e *core.RecordEvent) error {
+	app.OnRecordUpdate("trips").BindFunc(func(e *core.RecordEvent) error {
 		return hooks.AddTimezoneToDestinations(e, surmai.TimezoneFinder)
 	})
 
-	surmai.Pb.OnRecordEnrich("trips").BindFunc(hooks.AddTripAccessAttribute)
+	app.OnRecordEnrich("trips").BindFunc(hooks.AddTripAccessAttribute)
 
-	surmai.Pb.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateTripCollaborationInvitation)
-	surmai.Pb.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
+	app.OnRecordCreateRequest("invitations").BindFunc(hooks.CreateTripCollaborationInvitation)
+	app.OnRecordUpdateRequest("invitations").BindFunc(hooks.UpdateTripCollaborationInvitation)
 
-	surmai.Pb.OnRecordCreate("users").BindFunc(hooks.AssignTravellerProfileOnUserCreate)
-	surmai.Pb.OnRecordCreate("users").BindFunc(hooks.CreateNotificationsForNewUser)
+	app.OnRecordCreate("users").BindFunc(hooks.AssignTravellerProfileOnUserCreate)
+	app.OnRecordCreate("users").BindFunc(hooks.CreateNotificationsForNewUser)
 
-	surmai.Pb.OnRecordCreate("announcements").BindFunc(hooks.CreateNotificationsForAnnouncement)
+	app.OnRecordCreate("announcements").BindFunc(hooks.CreateNotificationsForAnnouncement)
 
-	surmai.Pb.OnRecordUpdateRequest("traveller_profiles").BindFunc(hooks.RestrictManagersUpdate)
-	surmai.Pb.OnRecordEnrich("traveller_profiles").BindFunc(hooks.EnrichTravellerProfileManagers)
+	app.OnRecordUpdateRequest("traveller_profiles").BindFunc(hooks.RestrictManagersUpdate)
+	app.OnRecordEnrich("traveller_profiles").BindFunc(hooks.EnrichTravellerProfileManagers)
 }
 
 func (surmai *SurmaiApp) StartJobs() {
