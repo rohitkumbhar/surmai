@@ -56,7 +56,7 @@ Tests that use `testutil` must be in an external test package (`package routes_t
 - A `Tests` GitHub workflow running Go and frontend unit tests with coverage on every PR.
 - Smoke tests for `/site-settings.json` and the destination time zone hook.
 
-### PR 2: Go access control
+### PR 2: Go access control — done
 
 Users must only see their own data. `tests.ApiScenario` tables cover every collection
 (trips, transportations, lodgings, activities, trip_expenses, trip_attachments,
@@ -65,12 +65,27 @@ owner, collaborator, linked traveller, unrelated user, anonymous and superuser.
 Also covers `middleware.RequireTripAccess`, `hooks.AddTripAccessAttribute`,
 `hooks.RestrictManagersUpdate` and the superuser-only routes.
 
-### PR 3: Go trip export, import and calendar
+### PR 3: Go trip export, import and calendar — done
 
-- Export → import round trip through `trips/export.go` and `trips/import/zip`,
-  including attachments and traveller profiles. Also the JSON importer.
-- `routes/generate_ics_data.go`: time zones, all-day trip events, missing dates.
-  Its `export*` helpers duplicate `trips/export.go` and are consolidated first.
+- The per-collection readers that `routes/generate_ics_data.go` kept its own
+  copies of now live once in `trips/records.go`, used by both the archive export
+  and the calendar route.
+- Export → import round trip, including attachments, cover image, expense links
+  and traveller profiles, both within one instance and between two.
+- Malformed archives, and `routes/generate_ics_data.go`: all-day trip events,
+  entry time zones, missing end dates and the `allTimezonesAvailable` flag.
+
+Fixed while writing these tests:
+
+- `getParticipants`/`getDestinations` called `log.Fatal` when a trip's JSON field
+  held an unexpected shape, which exits the server process. A client can store a
+  string in `participants`, so any user could stop the backend by exporting their
+  own trip. The shared readers log and skip the field instead.
+- `ImportZip` ignored the error from opening `trip.json` and then dereferenced
+  nil, so uploading any zip without that file panicked the request.
+- The calendar reported `allTimezonesAvailable` backwards for activities: a trip
+  whose activities all had time zones warned that some were missing, and one
+  with activities missing them did not.
 
 ### PR 4: Go routes, hooks and jobs
 

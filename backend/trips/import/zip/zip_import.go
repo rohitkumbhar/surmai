@@ -13,11 +13,14 @@ import (
 
 func ImportZip(e core.App, zipReader *zip.Reader, ownerId string) (string, error) {
 
-	tripFileContents, _ := zipReader.Open("trip.json")
+	tripFileContents, err := zipReader.Open("trip.json")
+	if err != nil {
+		return "", fmt.Errorf("the archive does not contain trip.json: %w", err)
+	}
 	defer tripFileContents.Close()
 
 	var fileBuffer bytes.Buffer
-	_, err := fileBuffer.ReadFrom(tripFileContents)
+	_, err = fileBuffer.ReadFrom(tripFileContents)
 	if err != nil {
 		return "", err
 	}
@@ -26,6 +29,10 @@ func ImportZip(e core.App, zipReader *zip.Reader, ownerId string) (string, error
 	err = json.Unmarshal(fileBuffer.Bytes(), &data)
 	if err != nil {
 		return "", err
+	}
+
+	if data.Trip == nil {
+		return "", fmt.Errorf("trip.json does not describe a trip")
 	}
 
 	// create trip basic info
@@ -75,7 +82,7 @@ func importActivities(app core.App, mapping map[string]string, expenseMapping ma
 			record.Set("expenseId", getOrLinkExpense(app, a.ExpenseId, expenseMapping, tripData, tripId, mapping))
 
 			if a.Travellers != nil {
-				updatedTravellers := make([]string, len(a.Travellers))
+				updatedTravellers := make([]string, 0, len(a.Travellers))
 				for _, traveller := range a.Travellers {
 					updatedTravellers = append(updatedTravellers, travellerMapping[traveller])
 				}
@@ -171,7 +178,7 @@ func importLodgings(app core.App, mapping map[string]string, expenseMapping map[
 			record.Set("expenseId", getOrLinkExpense(app, l.ExpenseId, expenseMapping, tripData, tripId, mapping))
 
 			if l.Travellers != nil {
-				updatedTravellers := make([]string, len(l.Travellers))
+				updatedTravellers := make([]string, 0, len(l.Travellers))
 				for _, traveller := range l.Travellers {
 					updatedTravellers = append(updatedTravellers, travellerMapping[traveller])
 				}
@@ -219,7 +226,7 @@ func importTransportations(e core.App, attachmentReferenceMapping map[string]str
 			record.Set("expenseId", getOrLinkExpense(e, tr.ExpenseId, expenseMapping, tripData, tripId, attachmentReferenceMapping))
 
 			if tr.Travellers != nil {
-				updatedTravellers := make([]string, len(tr.Travellers))
+				updatedTravellers := make([]string, 0, len(tr.Travellers))
 				for _, traveller := range tr.Travellers {
 					updatedTravellers = append(updatedTravellers, travellerMapping[traveller])
 				}

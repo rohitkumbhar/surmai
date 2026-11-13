@@ -1,16 +1,15 @@
 package routes
 
 import (
+	"backend/trips"
 	bt "backend/types"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
 	"time"
 
 	ics "github.com/arran4/golang-ical"
-	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/samber/lo"
 )
@@ -26,13 +25,13 @@ func GenerateIcsData(e *core.RequestEvent) error {
 		Description:  tripRecord.GetString("description"),
 		StartDate:    tripRecord.GetDateTime("startDate"),
 		EndDate:      tripRecord.GetDateTime("endDate"),
-		Destinations: getDestinations(tripRecord),
+		Destinations: trips.Destinations(e.App, tripRecord),
 	}
 
 	// Get transportations, lodgings, and activities
-	transportations := exportTransportations(e.App, tripRecord)
-	lodgings := exportLodgings(e.App, tripRecord)
-	activities := exportActivities(e.App, tripRecord)
+	transportations := trips.Transportations(e.App, tripRecord)
+	lodgings := trips.Lodgings(e.App, tripRecord)
+	activities := trips.Activities(e.App, tripRecord)
 
 	allTimezonesAvailable := true
 
@@ -97,7 +96,7 @@ func createActivityEvent(cal *ics.Calendar, activity *bt.Activity, trip *bt.Trip
 	metadata := activity.Metadata
 	placeTz := getTimezoneValue(metadata, "place")
 
-	if placeTz != "" {
+	if placeTz == "" {
 		timezoneAvailable = false
 	}
 
@@ -291,88 +290,6 @@ func addFullDatTripEvent(e *core.RequestEvent, cal *ics.Calendar, trip *bt.Trip)
 
 	tripEvent.SetURL(e.App.Settings().Meta.AppURL + "/trips/" + trip.Id)
 	tripEvent.SetTimeTransparency(ics.TransparencyTransparent) // Not busy
-}
-
-// Helper functions to extract data from trip record
-func getDestinations(trip *core.Record) []bt.Destination {
-	var destinations []bt.Destination
-	destinationsString := trip.GetString("destinations")
-	_ = json.Unmarshal([]byte(destinationsString), &destinations)
-	return destinations
-}
-
-func exportActivities(e core.App, trip *core.Record) []*bt.Activity {
-	activities, _ := e.FindAllRecords("activities",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Activity
-	for _, l := range activities {
-		ct := bt.Activity{
-			Id:               l.Id,
-			Name:             l.GetString("name"),
-			Description:      l.GetString("description"),
-			Address:          l.GetString("address"),
-			StartDate:        l.GetDateTime("startDate"),
-			EndDate:          l.GetDateTime("endDate"),
-			ConfirmationCode: l.GetString("confirmationCode"),
-			Link:             l.GetString("link"),
-			Travellers:       l.GetStringSlice("travellers"),
-		}
-		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
-		_ = l.UnmarshalJSONField("cost", &ct.Cost)
-		payload = append(payload, &ct)
-	}
-
-	return payload
-}
-
-func exportLodgings(e core.App, trip *core.Record) []*bt.Lodging {
-	lodgings, _ := e.FindAllRecords("lodgings",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Lodging
-	for _, l := range lodgings {
-		ct := bt.Lodging{
-			Id:               l.Id,
-			Name:             l.GetString("name"),
-			Address:          l.GetString("address"),
-			StartDate:        l.GetDateTime("startDate"),
-			EndDate:          l.GetDateTime("endDate"),
-			ConfirmationCode: l.GetString("confirmationCode"),
-			Type:             l.GetString("type"),
-			Link:             l.GetString("link"),
-			Travellers:       l.GetStringSlice("travellers"),
-		}
-		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
-		_ = l.UnmarshalJSONField("cost", &ct.Cost)
-		payload = append(payload, &ct)
-	}
-
-	return payload
-}
-
-func exportTransportations(e core.App, trip *core.Record) []*bt.Transportation {
-	transportations, _ := e.FindAllRecords("transportations",
-		dbx.NewExp("trip = {:tripId}", dbx.Params{"tripId": trip.Id}))
-
-	var payload []*bt.Transportation
-	for _, l := range transportations {
-		ct := bt.Transportation{
-			Id:          l.Id,
-			Type:        l.GetString("type"),
-			Origin:      l.GetString("origin"),
-			Destination: l.GetString("destination"),
-			Departure:   l.GetDateTime("departureTime"),
-			Arrival:     l.GetDateTime("arrivalTime"),
-			Link:        l.GetString("link"),
-			Travellers:  l.GetStringSlice("travellers"),
-		}
-		_ = l.UnmarshalJSONField("metadata", &ct.Metadata)
-		_ = l.UnmarshalJSONField("cost", &ct.Cost)
-		payload = append(payload, &ct)
-	}
-
-	return payload
 }
 
 func getTravellerNames(app core.App, travellerIds []string) []string {
