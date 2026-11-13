@@ -69,20 +69,13 @@ jobs:
           key: go-e2e-${{ runner.os }}-${{ hashFiles('backend/go.sum') }}
           restore-keys: |
             go-e2e-${{ runner.os }}-
-      - name: Cache the Playwright browsers
-        id: browsers
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
-      # The browsers live in the cache; their system libraries do not, since
-      # the runner is new each time. On a hit only the libraries are needed.
+      # The browsers are deliberately not cached. Measured over six runs the
+      # install takes 23 to 32 seconds, and a cache hit still has to put the
+      # system libraries on a fresh runner, which is 18 of those seconds, so
+      # restoring 400MB saved about two seconds while competing with the Go
+      # caches for the repository's cache budget.
       - name: Install browsers
-        if: steps.browsers.outputs.cache-hit != 'true'
         run: pnpm exec playwright install --with-deps chromium firefox
-      - name: Install the browsers' system libraries
-        if: steps.browsers.outputs.cache-hit == 'true'
-        run: pnpm exec playwright install-deps chromium firefox
       - name: Run the suite
         run: pnpm test:e2e
       - name: Upload the report

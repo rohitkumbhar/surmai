@@ -50,8 +50,12 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-        # The dependency layers, pnpm install and go mod download, change only
-        # when a lockfile does, so most of this build can come from the cache
-        # that the previous run left behind.
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+        # Deliberately no cache-to: type=gha. One build of this two platform
+        # image exported 2.3GB across 82 entries, and the export put the build
+        # up from 173s to 273s. The repository's cache was already at 7.6GB of
+        # its 10GB, so a few of those would evict the Go caches, which save
+        # far more: 199s to 36s on the Go tests.
+        #
+        # If this build needs to be faster, a registry cache
+        # (type=registry,ref=ghcr.io/rohitkumbhar/surmai:buildcache) keeps the
+        # layers out of the Actions cache budget entirely.
