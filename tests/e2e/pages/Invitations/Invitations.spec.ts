@@ -1,258 +1,102 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../../fixtures/test';
 
-// Use the authenticated project for all tests in this file
-// test.use({ project: 'authenticated' });
-
+/**
+ * The invitations page, against real invitations rather than mocked responses.
+ *
+ * The page used to be tested by intercepting the list request. Those mocks
+ * interfered with each other once several of them ran in the same file, and a
+ * seeded invitation exercises the hook that fills in the sender and trip
+ * details as well, which a canned response cannot.
+ */
 test.describe('Invitations Page', () => {
-  test.beforeEach(async ({ page }) => {
-    // page.on('console', (msg) => console.log(msg.text()));
-
-    // Navigate to the invitations page before each test
+  test('shows the page header', async ({ page, user, signIn }) => {
+    await signIn(page, user);
     await page.goto('/invitations');
-  });
 
-  test('should display the invitations page with header', async ({ page }) => {
-    // Check that the page header is correct
     await expect(page.locator('#app-header').getByText('Invitations')).toBeVisible();
   });
 
-  test('should show empty state when there are no invitations', async ({ page }) => {
-    // Mock the API to return an empty array of invitations
-    await page.route('**/api/collections/invitations/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          page: 1,
-          perPage: 50,
-          totalItems: 0,
-          totalPages: 1,
-          items: [],
-        }),
-      });
-    });
+  test('shows the empty state when there is nothing pending', async ({ page, user, signIn }) => {
+    await signIn(page, user);
+    await page.goto('/invitations');
 
-    // Check that the empty state message is shown
     await expect(page.getByText('You do not have any pending invitations.')).toBeVisible();
-
-    // Check that the "View All Trips" button is visible
     await expect(page.getByRole('button', { name: 'View All Trips' })).toBeVisible();
   });
 
-  test('should navigate to all trips when clicking the "View All Trips" button', async ({ page }) => {
-    // Mock the API to return an empty array of invitations
-    await page.route('**/api/collections/invitations/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          page: 1,
-          perPage: 50,
-          totalItems: 0,
-          totalPages: 1,
-          items: [],
-        }),
-      });
-    });
+  test('the empty state leads back to the trip list', async ({ page, user, signIn }) => {
+    await signIn(page, user);
+    await page.goto('/invitations');
 
-    // Click on the "View All Trips" button
     await page.getByRole('button', { name: 'View All Trips' }).click();
 
-    // Check that we've navigated to the home page
-    await expect(page.url()).toContain('/');
+    // the button goes to the home page, which is where trips are listed
+    await page.waitForURL((url) => url.pathname === '/');
   });
 
-  test('should render invitation cards when invitations are available', async ({ page }) => {
-    // Mock the API to return a list of invitations
-    await page.route('**/api/collections/invitations/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          page: 1,
-          perPage: 50,
-          totalItems: 2,
-          totalPages: 1,
-          items: [
-            {
-              id: 'invitation1',
-              message: 'Please join my trip!',
-              from: 'user1',
-              trip: 'trip1',
-              metadata: {
-                trip: {
-                  name: 'Summer Vacation',
-                  description: 'A fun trip to the beach',
-                  startDate: new Date().toISOString(),
-                  endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-                },
-                sender: {
-                  name: 'John Doe',
-                },
-              },
-              status: 'open',
-              created: new Date().toISOString(),
-            },
-            {
-              id: 'invitation2',
-              message: 'Join our business trip',
-              from: 'user2',
-              trip: 'trip2',
-              metadata: {
-                trip: {
-                  name: 'Business Conference',
-                  description: 'Annual industry conference',
-                  startDate: new Date().toISOString(),
-                  endDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-                },
-                sender: {
-                  name: 'Jane Smith',
-                },
-              },
-              status: 'open',
-              created: new Date().toISOString(),
-            },
-          ],
-        }),
-      });
-    });
+  test('renders a card for each invitation', async ({ page, user, createUser, createTrip, signIn, apiAs }) => {
+    const invitee = await createUser('invitee');
+    const first = await createTrip({ name: 'Summer Vacation', description: 'A fun trip to the beach' });
+    const second = await createTrip({ name: 'Business Conference' });
 
-    // Check that the invitation cards are rendered
+    await apiAs(user).inviteCollaborator(first.id, invitee.email, 'Please join my trip!');
+    await apiAs(user).inviteCollaborator(second.id, invitee.email, 'Come along');
+
+    await signIn(page, invitee);
+    await page.goto('/invitations');
+
     await expect(page.getByText('Summer Vacation')).toBeVisible();
     await expect(page.getByText('A fun trip to the beach')).toBeVisible();
-    await expect(page.getByText('Please join my trip!')).toBeVisible();
-    await expect(page.getByText('John Doe')).toBeVisible();
-
     await expect(page.getByText('Business Conference')).toBeVisible();
-    await expect(page.getByText('Annual industry conference')).toBeVisible();
-    await expect(page.getByText('Join our business trip')).toBeVisible();
-    await expect(page.getByText('Jane Smith')).toBeVisible();
-
-    // Check that the Accept and Reject buttons are visible for each invitation
-    const acceptButtons = await page.getByRole('button', { name: 'Accept' }).all();
-    expect(acceptButtons.length).toBe(2);
-
-    const rejectButtons = await page.getByRole('button', { name: 'Reject' }).all();
-    expect(rejectButtons.length).toBe(2);
+    // the hook fills in who sent it
+    await expect(page.getByText(user.name, { exact: false }).first()).toBeVisible();
   });
 
-  test('should handle accepting an invitation', async ({ page }) => {
-    // Mock the API to return a list with one invitation
-    await page.route('**/api/collections/invitations/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          page: 1,
-          perPage: 50,
-          totalItems: 1,
-          totalPages: 1,
-          items: [
-            {
-              id: 'invitation1',
-              message: 'Please join my trip!',
-              from: 'user1',
-              trip: 'trip1',
-              metadata: {
-                trip: {
-                  name: 'Summer Vacation',
-                  description: 'A fun trip to the beach',
-                  startDate: new Date().toISOString(),
-                  endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-                },
-                sender: {
-                  name: 'John Doe',
-                },
-              },
-              status: 'open',
-              created: new Date().toISOString(),
-            },
-          ],
-        }),
-      });
-    });
+  test('accepting an invitation clears it from the list', async ({
+    page,
+    user,
+    createUser,
+    createTrip,
+    signIn,
+    apiAs,
+  }) => {
+    const invitee = await createUser('invitee');
+    const trip = await createTrip({ name: 'Accepted Trip' });
+    await apiAs(user).inviteCollaborator(trip.id, invitee.email);
 
-    // Mock the update API call for accepting the invitation
-    let updatePayload;
-    await page.route('**/api/collections/invitations/records/invitation1', async (route) => {
-      updatePayload = route.request().postDataJSON();
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          id: 'invitation1',
-          status: 'accepted',
-        }),
-      });
-    });
+    await signIn(page, invitee);
+    await page.goto('/invitations');
+    await expect(page.getByText('Accepted Trip')).toBeVisible();
 
-    // Click the Accept button
     await page.getByRole('button', { name: 'Accept' }).click();
-    await page.waitForResponse(/invitation1/);
-    // Check that the update API was called with the correct payload
-    expect(updatePayload).toHaveProperty('status', 'accepted');
 
-    // Check that a success notification is shown
-    await expect(page.getByText('Invitation updated')).toBeVisible();
+    await expect(page.getByText('You do not have any pending invitations.')).toBeVisible();
+
+    const invitations = await apiAs(invitee).listRecords('invitations');
+    expect(invitations.items[0].status).toBe('accepted');
   });
 
-  test('should handle rejecting an invitation', async ({ page }) => {
-    // Mock the API to return a list with one invitation
-    await page.route('**/api/collections/invitations/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          page: 1,
-          perPage: 50,
-          totalItems: 1,
-          totalPages: 1,
-          items: [
-            {
-              id: 'invitation1',
-              message: 'Please join my trip!',
-              from: 'user1',
-              trip: 'trip1',
-              metadata: {
-                trip: {
-                  name: 'Summer Vacation',
-                  description: 'A fun trip to the beach',
-                  startDate: new Date().toISOString(),
-                  endDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-                },
-                sender: {
-                  name: 'John Doe',
-                },
-              },
-              status: 'open',
-              created: new Date().toISOString(),
-            },
-          ],
-        }),
-      });
-    });
+  test('rejecting an invitation clears it from the list', async ({
+    page,
+    user,
+    createUser,
+    createTrip,
+    signIn,
+    apiAs,
+  }) => {
+    const invitee = await createUser('invitee');
+    const trip = await createTrip({ name: 'Rejected Trip' });
+    await apiAs(user).inviteCollaborator(trip.id, invitee.email);
 
-    // Mock the update API call for rejecting the invitation
-    let updatePayload;
-    await page.route('**/api/collections/invitations/records/invitation1', async (route) => {
-      updatePayload = route.request().postDataJSON();
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({
-          id: 'invitation1',
-          status: 'rejected',
-        }),
-      });
-    });
+    await signIn(page, invitee);
+    await page.goto('/invitations');
+    await expect(page.getByText('Rejected Trip')).toBeVisible();
 
-    // Click the Reject button
     await page.getByRole('button', { name: 'Reject' }).click();
-    await page.waitForResponse(/invitation1/);
-    // Check that the update API was called with the correct payload
-    expect(updatePayload).toHaveProperty('status', 'rejected');
 
-    // Check that a success notification is shown
-    await expect(page.getByText('Invitation updated')).toBeVisible();
+    await expect(page.getByText('You do not have any pending invitations.')).toBeVisible();
+
+    const invitations = await apiAs(invitee).listRecords('invitations');
+    expect(invitations.items[0].status).toBe('rejected');
   });
 });

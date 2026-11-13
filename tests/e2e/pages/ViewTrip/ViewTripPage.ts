@@ -35,9 +35,22 @@ export class ViewTripPage {
   /** Utility function to select a date in Mantine DatePicker  */
   async selectDatePickerValue(testId: string, value: string) {
     const dateSelector = getSelectorString(value);
+    const submit = this.page.getByRole('button', { name: 'Submit Date' });
+
     await this.page.click(`[data-testid="${testId}"]`);
     await this.page.click(dateSelector);
-    await this.page.click(`button[aria-label="Submit Date"]`);
+    await submit.click();
+    // the next field cannot be reached until the picker has closed
+    await expect(submit).toBeHidden();
+  }
+
+  /**
+   * Saves the open form and waits for it to close, which is what tells us the
+   * record was written. A fixed wait here was the main source of flakiness.
+   */
+  async saveAndWaitForClose() {
+    await this.page.getByRole('button', { name: 'Save' }).click();
+    await expect(this.page.getByRole('button', { name: 'Save' })).toBeHidden();
   }
 
   async selectAirlineEntry(value: string) {
@@ -100,8 +113,7 @@ export class ViewTripPage {
     await this.page.getByRole('textbox', { name: 'Destination' }).click()
     await this.page.getByRole('option').first().click()
 
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.page.waitForTimeout(1000);
+    await this.saveAndWaitForClose();
   }
 
   /**
@@ -115,7 +127,7 @@ export class ViewTripPage {
     endLocation: string;
     confirmationCode?: string;
     provider?: string;
-    attachment?: string;
+    attachment?: string | { name: string; mimeType: string; buffer: Buffer };
   }) {
     // Open the transportation section
     await this.openAccordionSection('Transportation');
@@ -146,7 +158,6 @@ export class ViewTripPage {
 
     // Fill in the dates
     await this.selectDatePickerValue('departure-time', transportationData.startDate);
-    await this.page.waitForTimeout(100);
     await this.selectDatePickerValue('arrival-time', transportationData.endDate);
 
     if (transportationData.provider) {
@@ -163,15 +174,18 @@ export class ViewTripPage {
     }
 
     if (transportationData.attachment) {
-      const fileChooserPromise = this.page.waitForEvent('filechooser');
-      await this.page.getByRole('button', { name: 'Upload' }).click();
-      const fileChooser = await fileChooserPromise;
-      await fileChooser.setFiles(transportationData.attachment);
+      // The field is a dropzone, so set its file input rather than going
+      // through a file chooser. Clicking "Upload" reached the button on the
+      // Attachments tab behind the open form.
+      await this.page
+        .getByRole('dialog')
+        .locator('input[type="file"]')
+        .first()
+        .setInputFiles(transportationData.attachment);
     }
 
     // Save the transportation
-    await this.page.getByRole('button', { name: 'Save' }).click();
-    await this.page.waitForTimeout(1000);
+    await this.saveAndWaitForClose();
   }
 
   /**
@@ -205,7 +219,6 @@ export class ViewTripPage {
 
     // Fill in the dates
     await this.selectDatePickerValue('lodging-start-date', lodgingData.startDate);
-    await this.page.waitForTimeout(100);
     await this.selectDatePickerValue('lodging-end-date', lodgingData.endDate);
 
     await this.page.getByRole('textbox', { name: 'Destination' }).click();

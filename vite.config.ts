@@ -111,6 +111,20 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    // The e2e suite serves a build rather than the dev server, so that the
+    // browsers are not waiting on modules being compiled on demand.
+    preview: {
+      proxy: {
+        '/api': {
+          target: process.env.PLAYWRIGHT_TEST_BACKEND || 'http://localhost:9090',
+          changeOrigin: false,
+        },
+        '/site-settings.json': {
+          target: process.env.PLAYWRIGHT_TEST_BACKEND || 'http://localhost:9090',
+          changeOrigin: false,
+        },
+      },
+    },
     test: {
       globals: true,
       environment: 'jsdom',

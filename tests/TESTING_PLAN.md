@@ -178,17 +178,36 @@ conversion of stored timestamps back to browser time. Also `useTripExpenses`.
 - `pdfGenerator` data assembly.
 - The Playwright work below.
 
-### PR 8: Playwright foundation
+### PR 8: Playwright foundation — done
 
-- Every run starts with an empty, temporary PocketBase data directory.
-- Seed data through the REST API with a superuser token rather than through the UI.
-  Load a small fixture places dataset instead of the full one.
-- Fixtures: `adminApi`, a `user` factory (unique user per test), a `trip` factory, and
-  `asUser(page, user)` to sign a page in as a given user, so tests can use several users.
-- A mock HTTP server, started by Playwright, stands in for FlightAware, adsbdb, currency rates
-  and the OpenAI endpoint, whose base URLs become configurable.
-- Web-first assertions instead of `waitForTimeout`.
-- `reuseExistingServer` locally, Chromium and Firefox projects, and an updated `tests/e2e/README.md`.
+- Tests seed through the REST API with `tests/e2e/fixtures/`, not by driving the
+  UI. Each test makes its own user, so nothing is shared and the suite runs
+  fully parallel.
+- Fixtures: `user`, `createUser`, `createTrip`, `signIn(page, user)`, `api` as
+  the superuser and `apiAs(user)`. `signIn` writes the session the SDK reads, so
+  a page starts signed in without going through the form.
+- A small set of places, airports, airlines and currency rates replaces loading
+  the real datasets, which took minutes and was waited out with a fixed sleep.
+- `tests/e2e/mock-services/server.mjs` stands in for the flight lookup, the
+  assistant's model endpoint and the exchange rate API, and the setup project
+  points the backend's stored settings at it, so nothing reaches the internet.
+- Every `waitForTimeout` is gone, replaced with web-first assertions.
+- The frontend is served as a production build rather than by the dev server:
+  with several browser workers at once, on-demand compilation made assertions
+  time out and a different test failed on each run.
+- Servers are reused locally and started fresh in CI. Projects: `setup`,
+  `chromium`, `firefox`, and `anonymous` for the screens that must start signed
+  out. The suite runs in CI on every pull request.
+- 85 tests, three consecutive clean runs at about 50 seconds each.
+- `tests/e2e/README.md` rewritten, including the two traps worth knowing: trip
+  dates are stored as the picked day's *local* midnight, and traveller profile
+  emails are unique instance-wide.
+
+This also fixed the seven specs that were failing before any of this work. The
+cause was the Travelers field: the suite looked for a textbox, but it became a
+`combobox` over traveller profiles when profiles were introduced, so the old
+`beforeAll` hung for 30 seconds and took the first test of each file down with
+it. Those specs now seed their trip instead of creating it through that form.
 
 ### PR 9 onward: Playwright specs
 
@@ -202,7 +221,7 @@ conversion of stored timestamps back to browser time. Also `useTripExpenses`.
 | Notes                 | add (exists), edit                                                                         |
 | Itinerary             | ordering across days and time zones, PDF download                                          |
 | Expenses              | add, split between participants, mixed currencies, stat cards                              |
-| Collaboration         | invite, accept as a second user, edit as collaborator, remove; unrelated user is denied    |
+| Collaboration         | ✅ invite, accept, reject, unrelated user denied; still to do: edit as collaborator, remove |
 | Invitations           | trip invitations (exists), account invitation → sign up                                   |
 | Traveller profiles    | create, manage, add as trip traveller                                                      |
 | Travel Board          | statistics for seeded trips                                                                |

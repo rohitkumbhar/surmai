@@ -1,83 +1,61 @@
-import { expect, test } from '@playwright/test';
 import dayjs from 'dayjs';
 
-import { ViewTripPage } from './ViewTripPage';
-import { CreateNewTripPage } from '../CreateNewTrip/CreateNewTripPage';
+import { storedDay } from '../../fixtures/api';
+import { expect, test } from '../../fixtures/test';
 
-import type { TripFormData } from '../CreateNewTrip/CreateNewTripPage';
+import { ViewTripPage } from './ViewTripPage';
 
 test.describe('View Trip Page', () => {
-  let viewTripPage: ViewTripPage;
-  let createNewTripPage: CreateNewTripPage;
-  let tripId: string;
-  let tripData: TripFormData;
+  const startDate = dayjs().startOf('month');
+  const endDate = dayjs().endOf('month');
 
-  test.beforeAll(async ({ browser }) => {
-    // Create a new context and page for trip creation
-    const context = await browser.newContext({
-      storageState: 'tests/playwright/.auth/user.json',
+  test('should display the trip details', async ({ page, user, createTrip, signIn }) => {
+    const trip = await createTrip({
+      name: 'View Trip Test',
+      description: 'A seeded trip to view',
+      startDate: storedDay(startDate.format('YYYY-MM-DD')),
+      endDate: storedDay(endDate.format('YYYY-MM-DD')),
+      destinations: [
+        {
+          id: 'nyc',
+          name: 'New York',
+          stateName: 'New York',
+          countryName: 'United States',
+          latitude: '40.71427',
+          longitude: '-74.00597',
+          timezone: 'America/New_York',
+        },
+      ],
     });
-    const page = await context.newPage();
-    await page.setViewportSize({
-      width: 1280,
-      height: 900,
-    });
 
-    // Initialize the CreateNewTripPage
-    createNewTripPage = new CreateNewTripPage(page);
+    await signIn(page, user);
+    const viewTripPage = new ViewTripPage(page);
+    await viewTripPage.goto(trip.id);
 
-    // Navigate to the create new trip page
-    await createNewTripPage.goto();
+    await viewTripPage.expectTripDetailsVisible('View Trip Test');
 
-    // Create a new trip
-    tripData = {
-      name: `Test Trip ${Date.now()}`,
-      description: 'Test Description for ViewTrip tests',
-      startDate: dayjs().startOf('month').format('YYYY-MM-DD'),
-      endDate: dayjs().endOf('month').format('YYYY-MM-DD'),
-      destinations: ['New York, NY, USA'],
-      participants: ['Test User'],
-    };
-
-    await createNewTripPage.fillTripForm(tripData);
-    await createNewTripPage.clickCreateTripButton();
-
-    // Wait for navigation and extract the trip ID from the URL
-    await page.waitForTimeout(1000);
-    const url = page.url();
-    tripId = url.split('/').pop() || '';
-
-    // Close the context
-    await context.close();
-  });
-
-  test.beforeEach(async ({ page }) => {
-    // Initialize the ViewTripPage
-    viewTripPage = new ViewTripPage(page);
-
-    // Navigate to the trip page
-    await viewTripPage.goto(tripId);
-  });
-
-  test('should display the trip details', async ({ page }) => {
-    // Check that the trip name is visible in the header
-    await viewTripPage.expectTripDetailsVisible(tripData.name);
-
-    // Check that the trip dates are visible
-    const startDateStr = dayjs(tripData.startDate).format('MMM D, YYYY');
-    const endDateStr = dayjs(tripData.endDate).format('MMM D, YYYY');
     await expect(
-      page.locator('#app-header').getByText(`${startDateStr} - ${endDateStr}`, { exact: false })
+      page
+        .locator('#app-header')
+        .getByText(`${startDate.format('MMM D, YYYY')} - ${endDate.format('MMM D, YYYY')}`, { exact: false })
     ).toBeVisible();
 
-    // Check that the Organization tab is selected by default
+    // Organization is the tab the page opens on
     await expect(page.getByRole('tab', { name: 'Organization', selected: true })).toBeVisible();
 
-    // Check that the Basic Information accordion is visible
     await viewTripPage.openAccordionSection('Basic Information');
-    await expect(page.getByText(tripData.description)).toBeVisible();
+    await expect(page.getByText('A seeded trip to view')).toBeVisible();
+    await expect(page.getByText('New York', { exact: false }).first()).toBeVisible();
+  });
 
-    // Check that the destination is visible
-    await expect(page.getByText(tripData.destinations[0], { exact: false })).toBeVisible();
+  test('should show the tabs for a trip', async ({ page, user, createTrip, signIn }) => {
+    const trip = await createTrip({ name: 'Tabs Test' });
+
+    await signIn(page, user);
+    await new ViewTripPage(page).goto(trip.id);
+
+    for (const tab of ['Organization', 'Itinerary', 'Attachments', 'Expenses', 'Notes']) {
+      await expect(page.getByRole('tab', { name: tab })).toBeVisible();
+    }
   });
 });
