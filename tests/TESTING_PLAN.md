@@ -294,6 +294,29 @@ expense form, which has a Delete button of its own, so the click has to be
 scoped to the confirmation. And trip travellers come back in the API's order,
 not the order they were seeded in.
 
+### PR 15: Entries and the itinerary in Playwright — done
+
+Editing and deleting through each entry's own menu, for a lodging, an activity
+and a transportation, including the confirmation and what a cancellation
+leaves behind. Attachments are uploaded and deleted from the Attachments tab,
+and a note is rewritten.
+
+The itinerary: entries grouped under the day they fall on and ordered within
+it, the message when the window holds nothing, Show Next Day reaching a later
+entry, and a stay appearing on both the day it starts and the day it ends.
+
+Four things to know for the next spec:
+
+- The menu on an entry is an icon button whose only accessible name is on the
+  svg inside it, so it answers to `getByRole('img', { name: 'Menu' })`.
+- A deletion notification repeats the name of what was deleted, so asserting
+  that something is gone has to be scoped to the panel.
+- Destination is a required field on the lodging and activity forms, so an
+  entry seeded without `metadata.place` cannot be saved from the edit form at
+  all. Seeded entries carry one.
+- Playwright's process does not run `vitest.setup.ts`, so a spec that formats
+  with `LL` has to extend dayjs with `localizedFormat.js` itself.
+
 ### Still to do
 
 - The remaining Playwright areas in the table below.
@@ -338,11 +361,11 @@ it. Those specs now seed their trip instead of creating it through that form.
 |-----------------------|--------------------------------------------------------------------------------------------|
 | Auth                  | sign in/up (exists), sign out, change password, sign up blocked when disabled              |
 | Trips                 | ✅ create, edit basics and destinations, delete, My Trips list, export → import, calendar download, itinerary pdf; still to do: cover image |
-| Transportation        | add flight/train/car (exists), edit, delete, flight lookup (stubbed)                       |
-| Lodging, activities   | add (exists), edit, delete                                                                 |
-| Attachments           | upload, view and delete from the Attachments tab                                           |
-| Notes                 | add (exists), edit                                                                         |
-| Itinerary             | ordering across days and time zones, PDF download                                          |
+| Transportation        | ✅ add flight/train/car, delete; still to do: flight lookup through the UI                  |
+| Lodging, activities   | ✅ add, edit, delete                                                                        |
+| Attachments           | ✅ upload and delete from the Attachments tab; still to do: the viewer                      |
+| Notes                 | ✅ add, edit                                                                                 |
+| Itinerary             | ✅ grouping by day, ordering within a day, the day window, a stay across days, PDF download |
 | Expenses              | ✅ add, edit, delete, split between travellers, mixed currencies, stat cards, csv download  |
 | Collaboration         | ✅ invite, accept, reject, unrelated user denied; still to do: edit as collaborator, remove |
 | Invitations           | trip invitations (exists), account invitation → sign up                                   |
