@@ -336,12 +336,59 @@ Two more things to know:
 - A user may not list the users collection, so reading a user back is done
   with the superuser fixture.
 
+### PR 17: Admin, the assistant and sharing — done
+
+Admin: the user list with its per-row actions, inviting a user and getting the
+registration link back, deleting a user after the confirmation, creating an
+announcement and watching the hook turn it into a notification for a user, and
+a test prompt answered by the stubbed model.
+
+Sharing: a collaborator renaming a shared trip, and the owner taking a
+collaborator off it. The collaborators are chips in the Basic Information
+panel; the Collaborators item on the Actions menu only opens the invitation
+form.
+
+Left out on purpose. Loading a dataset pulls in the real places, airports and
+airlines files, which takes minutes and would bury the handful of rows the
+suite seeds. Impersonation has no UI, only `pbAdmin.send('/impersonate')`,
+and the route is covered in Go.
+
+Three more notes for whoever writes the next one. The user list is 25 to a
+page sorted by name, and the test backend keeps its users between runs, so a
+user that has to be on screen is given a name that sorts ahead of everything
+and removed afterwards. The invitation form requires a message as well as an
+address.
+
+And two specs here reach past their own data, which only showed up in a full
+parallel run:
+
+- An announcement becomes a notification for **every** user, so a test about
+  an empty notification list has to clear its user's notifications first.
+- The assistant's endpoint is an instance-wide setting that `Settings.spec.ts`
+  rewrites, so the test prompt lives in that file, inside its serial block,
+  and points the setting back at the mock before using it.
+
 ### Still to do
 
-- The remaining Playwright areas in the table below.
+Every row of the table below is now covered at least once. What is left:
+
+- The trip cover image, which goes through an image cropper.
+- The attachment viewer, and the PDF viewer inside it.
+- Looking a flight up by number through the UI. The route is covered in Go and
+  the form's handling of the reply is covered in Vitest.
+- Changing the interface language.
+- Loading a dataset, and impersonation, both left out above.
+
+Observations from writing these, none of them changed here:
+
 - A trip's budget is only stored when both the amount and the currency are
   set, and the currency select starts empty on a trip that has no budget, so
   typing an amount alone and saving silently keeps no budget.
+- Destination is required on the lodging and activity forms, and the control
+  that fails validation is a combobox input, so a record without one cannot be
+  saved from the edit form and the browser gives no visible reason.
+- A transportation record is read through `metadata` without guarding, so one
+  stored without that object does not render.
 
 ### PR 8: Playwright foundation — done
 
@@ -386,10 +433,10 @@ it. Those specs now seed their trip instead of creating it through that form.
 | Notes                 | ✅ add, edit                                                                                 |
 | Itinerary             | ✅ grouping by day, ordering within a day, the day window, a stay across days, PDF download |
 | Expenses              | ✅ add, edit, delete, split between travellers, mixed currencies, stat cards, csv download  |
-| Collaboration         | ✅ invite, accept, reject, unrelated user denied; still to do: edit as collaborator, remove |
-| Invitations           | trip invitations (exists), account invitation → sign up                                   |
+| Collaboration         | ✅ invite, accept, reject, unrelated user denied, edit as collaborator, remove              |
+| Invitations           | ✅ trip invitations, account invitation issued with its registration link                  |
 | Traveller profiles    | ✅ create, view, rename, delete, assign to a trip                                           |
 | Travel Board          | ✅ trips, destinations, stays and nights for a year, and the year filter                    |
-| Admin settings        | invite user, user list, impersonate, announcements, datasets, SMTP/OpenAI test buttons     |
-| Assistant             | booking import with a stubbed LLM; IMAP path optional (needs Docker)                       |
+| Admin settings        | ✅ user list, invite user, delete user, announcements, assistant test prompt, saved settings; left out: datasets and impersonation |
+| Assistant             | ✅ a test prompt answered by the stub; the import itself is covered in Go, and IMAP needs Docker |
 | Profile, notifications | ✅ edit profile, change password, sign out, notifications; still to do: change language    |

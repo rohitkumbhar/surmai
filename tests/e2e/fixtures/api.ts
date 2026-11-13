@@ -72,6 +72,15 @@ export class SurmaiApi {
     return (await response.json()) as Record<string, unknown>;
   }
 
+  async deleteRecord(collection: string, id: string) {
+    const response = await this.request.delete(`/api/collections/${collection}/records/${id}`, {
+      headers: this.headers,
+    });
+    if (!response.ok()) {
+      throw new Error(`could not delete ${collection}/${id}: ${response.status()} ${await response.text()}`);
+    }
+  }
+
   async listRecords(collection: string, query: Record<string, string> = {}) {
     const response = await this.request.get(`/api/collections/${collection}/records`, {
       headers: this.headers,

@@ -123,4 +123,35 @@ test.describe('Settings', () => {
 
     await expect(page.getByLabel('Endpoint')).toHaveValue('https://ai.example.com/v1');
   });
+
+  test('sends a test prompt to the configured model and shows the reply', async ({
+    page,
+    user,
+    api,
+    signInAsSuperuser,
+  }) => {
+    // The tests above leave the endpoint pointing at a made up host, so put
+    // it back on the mock before asking it anything.
+    await api.writeSetting('openai_endpoint_config', {
+      enabled: true,
+      endpoint: `${process.env.MOCK_SERVICES_URL || 'http://127.0.0.1:8099'}/openai`,
+      apiKey: 'mock-key',
+      model: 'mock-model',
+    });
+
+    await signInAsSuperuser(page, user);
+    await page.goto('/settings');
+    await page.getByRole('tab', { name: 'Assistant' }).click();
+
+    await page.getByRole('button', { name: 'Test Prompt' }).click();
+
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('textbox', { name: 'Test Prompt' }).fill('Are you there?');
+    await dialog.getByRole('button', { name: 'Submit' }).click();
+
+    // The stub stands in for the model; nothing leaves the machine. This test
+    // lives here rather than with the other admin specs because the endpoint
+    // it uses is an instance-wide setting that this file rewrites.
+    await expect(dialog.getByText('The assistant is reachable.')).toBeVisible();
+  });
 });
