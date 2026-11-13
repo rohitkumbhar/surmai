@@ -122,14 +122,27 @@ Fixed while writing these tests:
   install would take the backend down. They return the error, and the dataset
   directory is a variable so tests can point at the bundled files.
 
-### PR 5: Go assistant
+### PR 5: Go assistant — done
 
-- Each booking importer (flight, hotel, car rental, activity, parking, transportation)
-  against fixture LLM responses.
-- `ai_client` against a stub OpenAI compatible server, `email_processor` with fixture emails.
-- `imap_client` stays behind an `integration` build tag.
+- Every booking importer (flight, hotel, car rental, activity, parking,
+  transportation) against fixture model output, including bookings that fall
+  outside any trip, belong to another user, or carry dates the model could not read.
+- `FuzzyMatchDestination`, which attaches a booking to a trip destination.
+- `ai_client` and `email_processor` against a stub Responses API: the structured
+  schema it asks for, HTML-only emails, and the failure paths.
+- The IMAP client's unconfigured and unreachable paths, which run on a schedule.
+- The demo data job.
 
-Target after PR 5: at least 60% overall, 80% for `trips`, `routes`, `hooks` and `middleware`.
+Fixed while writing these tests:
+
+- The demo data job ran `defer open.Close()` before checking the error from
+  `os.Open`, so a missing archive dereferenced nil. It runs from the cron, where
+  an unrecovered panic in the goroutine would take the process down.
+- Several `slog` calls passed printf placeholders and positional arguments, which
+  slog never expands, so the values were logged as malformed key-value pairs.
+
+Go coverage reached 74%, with `flights` at 96%, `middleware` 95%, `settings` 88%,
+`hooks` 84%, `jobs` 78%, `trips` 77%, `assistant` 74% and `routes` 73%.
 
 ### PR 6: TypeScript logic
 

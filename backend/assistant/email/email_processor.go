@@ -61,7 +61,7 @@ func getMessageBody(app core.App, msg *bt.Email) (string, error) {
 	if msg.HTMLBody != "" {
 		text, err := html2text.FromString(msg.HTMLBody, html2text.Options{PrettyTables: true})
 		if err != nil {
-			app.Logger().Warn("Failed to convert HTML to text for message %s: %v", msg.Subject, err)
+			app.Logger().Warn("Failed to convert HTML to text", "subject", msg.Subject, "error", err)
 			return msg.HTMLBody, err
 		}
 		return text, nil
