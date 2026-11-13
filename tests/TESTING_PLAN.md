@@ -224,9 +224,31 @@ it. The e2e suite already covers filling the forms in by hand.
 Frontend coverage is now 25% of statements and 22% of branches, up from 17%
 and 11%.
 
+### PR 11: The itinerary pdf — done
+
+`pdfGenerator` builds a pdfmake document by hand from the trip and its
+entries. The tests mock `pdfmake` and assert the document definition and the
+file name it is handed, which is the data assembly rather than the rendering.
+
+- The full itinerary opens with the trip, its destinations and its travellers,
+  leaves those sections out when there are none, orders the entries
+  chronologically whatever order they arrive in, and appends the notes on a new
+  page converted from their html.
+- The daily itinerary gives a header only to days that have something on them,
+  starts every day after the first on a new page, repeats a stay on each day it
+  covers including the nights with neither end on them, shows an activity only
+  on its start day, and shows an overnight journey on both ends.
+- A car rental is laid out by pickup and drop off rather than departure and
+  arrival, other journeys are headed with their own type, and an entry names
+  only the travellers it is for.
+
+`pdfGenerator` is at 65% of statements and 58% of branches; the rest is the
+html-to-pdfmake conversion for tags the notes editor does not produce.
+
+Frontend coverage is now 28% of statements and 26% of branches.
+
 ### Still to do
 
-- `pdfGenerator` data assembly.
 - The remaining Playwright areas in the table below.
 
 ### PR 8: Playwright foundation — done
