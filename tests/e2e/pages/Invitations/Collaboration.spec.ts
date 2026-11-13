@@ -1,5 +1,8 @@
 import { expect, test } from '@tests/e2e/fixtures/test';
 
+import type { Page } from '@playwright/test';
+import type { SeededUser, SurmaiApi } from '@tests/e2e/fixtures/api';
+
 /**
  * The whole sharing flow across two users: the owner invites, the invitee
  * accepts, and only then can they open the trip. A third user never can.
@@ -75,5 +78,77 @@ test.describe('Trip collaboration', () => {
     await signIn(page, user);
     await page.goto(`/trips/${trip.id}`);
     await expect(page.locator('#app-header').getByText('Listed Trip')).toBeVisible();
+  });
+});
+
+test.describe('Working on a shared trip', () => {
+  /** Invites someone and accepts on their behalf, leaving them signed in. */
+  const share = async (
+    page: Page,
+    tripId: string,
+    owner: SeededUser,
+    invitee: SeededUser,
+    apiAs: (user: SeededUser) => SurmaiApi,
+    signIn: (page: Page, user: SeededUser) => Promise<void>
+  ) => {
+    await apiAs(owner).inviteCollaborator(tripId, invitee.email);
+    await signIn(page, invitee);
+    await page.goto('/invitations');
+    await page.getByRole('button', { name: 'Accept' }).first().click();
+    await expect(page.getByText('You do not have any pending invitations.')).toBeVisible();
+  };
+
+  test('a collaborator can change the trip', async ({ page, user, createUser, createTrip, signIn, apiAs }) => {
+    const trip = await createTrip({ name: 'Jointly planned' });
+    const invitee = await createUser('editor');
+    await share(page, trip.id, user, invitee, apiAs, signIn);
+
+    await page.goto(`/trips/${trip.id}`);
+    await page.getByRole('button', { name: /Basic Information/i }).click();
+    await page.getByRole('button', { name: 'Actions' }).click();
+    await page.getByRole('menuitem', { name: 'Edit' }).click();
+
+    const dialog = page.getByRole('dialog');
+    await dialog.getByRole('textbox', { name: 'Name' }).fill('Renamed by the collaborator');
+
+    const saved = page.waitForResponse(
+      (response) => response.url().includes(`/api/collections/trips/records/${trip.id}`) && response.ok()
+    );
+    await dialog.getByRole('button', { name: 'Save' }).click();
+    await saved;
+
+    await expect(page.locator('#app-header').getByText('Renamed by the collaborator')).toBeVisible();
+  });
+
+  test('the owner can take a collaborator off the trip', async ({
+    page,
+    user,
+    createUser,
+    createTrip,
+    signIn,
+    apiAs,
+  }) => {
+    const trip = await createTrip({ name: 'Shared then not' });
+    const invitee = await createUser('removed');
+    await share(page, trip.id, user, invitee, apiAs, signIn);
+
+    // Back to the owner, who opens the collaborator list and removes them.
+    await signIn(page, user);
+    await page.goto(`/trips/${trip.id}`);
+    await page.getByRole('button', { name: /Basic Information/i }).click();
+
+    // The collaborators are chips in the panel itself; the Collaborators item
+    // on the Actions menu only opens the invitation form.
+    await expect(page.getByText(invitee.email)).toBeVisible();
+    await page.getByRole('button', { name: 'Delete Collaborator' }).first().click();
+    const confirmation = page.getByRole('dialog').filter({ hasText: 'This action cannot be undone' });
+    await confirmation.getByRole('button', { name: 'Delete' }).click();
+
+    await expect
+      .poll(async () => {
+        const trips = await apiAs(user).listRecords('trips', { filter: `id="${trip.id}"` });
+        return ((trips.items[0] as { collaborators?: string[] }).collaborators || []).length;
+      })
+      .toBe(0);
   });
 });

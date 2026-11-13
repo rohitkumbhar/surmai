@@ -92,7 +92,15 @@ test.describe('User profile', () => {
     await expect(page.getByText('No notifications')).toBeHidden();
   });
 
-  test('says when there are no notifications', async ({ page, user, signIn }) => {
+  test('says when there are no notifications', async ({ page, user, signIn, apiAs }) => {
+    // Announcements become a notification for every user, and the admin spec
+    // may have created one in parallel, so start from an empty list.
+    const mine = apiAs(user);
+    const existing = await mine.listRecords('notifications', { filter: `userId="${user.id}"` });
+    for (const notification of existing.items) {
+      await mine.deleteRecord('notifications', notification.id as string);
+    }
+
     await signIn(page, user);
     await page.goto('/');
 
