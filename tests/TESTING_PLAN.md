@@ -87,13 +87,40 @@ Fixed while writing these tests:
   whose activities all had time zones warned that some were missing, and one
   with activities missing them did not.
 
-### PR 4: Go routes, hooks and jobs
+### PR 4: Go routes, hooks and jobs — done
 
-- Make outbound HTTP injectable (FlightAware, adsbdb, currency rates, OpenAI) so tests use `httptest`.
-- Routes: `save_entity`, account invitations and invited user creation, collaborators,
-  flight route lookup, dataset loading, impersonation.
-- Hooks: trip collaboration invitations, traveller profile assignment, notifications.
-- Jobs: invitation and expired content cleanup, currency sync, demo data import.
+- The flight providers and the currency job take an optional base URL and HTTP
+  client, so nothing reaches the internet in a test. The flight provider address
+  can also be set in the stored config, which is how the route test redirects it.
+- The jobs take a `core.App` instead of a `*pocketbase.PocketBase`, so they run
+  against a test app.
+- Routes: `save_entity` for all three kinds, account invitations and invited user
+  creation, collaborators, flight lookup and its caching, dataset loading,
+  impersonation, export.
+- Hooks: collaboration invitations end to end (create, accept, reject, who may
+  answer), traveller profile takeover on signup, announcement notifications.
+- Jobs: invitation and expired content cleanup, currency sync.
+
+Fixed while writing these tests:
+
+- The `/save-transportation`, `/save-lodging` and `/save-activity` routes took
+  `entityId`, `existingExpenseId` and `existingAttachmentIds` from the request
+  and never checked they belonged to the trip being saved. Because these routes
+  save through the app rather than the collection rules, a signed-in user who
+  knew a record id could move another user's record into their own trip, or
+  overwrite their expense. All three are now scoped to the trip.
+- Both cleanup jobs compared dates by binding a `time.Time`, which formats with
+  Go's `String()` rather than the stored layout, so the comparison only worked
+  while the server ran in UTC. Expired invitations were never marked and expired
+  content was never deleted. An empty expiry also sorted below every date, so
+  announcements and notifications that never expire were deleted instead.
+- `create_invited_user` and `create_account_invitation` type asserted body
+  fields, so a request with, say, a numeric `invitationCode` panicked the
+  handler. `create-user` is public. They now validate and return 400.
+- The three dataset loaders called `log.Fatal` on a missing or corrupt file,
+  which exits the server process; a superuser loading a dataset on a broken
+  install would take the backend down. They return the error, and the dataset
+  directory is a variable so tests can point at the bundled files.
 
 ### PR 5: Go assistant
 

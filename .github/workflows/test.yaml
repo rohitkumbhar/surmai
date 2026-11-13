@@ -15,7 +15,7 @@ jobs:
         uses: jdx/mise-action@v5
       - name: Run tests with coverage
         # The argument is the minimum total coverage. Raise it as coverage improves.
-        run: backend/scripts/coverage.sh 28
+        run: backend/scripts/coverage.sh 50
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v7

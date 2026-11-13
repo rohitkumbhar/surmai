@@ -1,25 +1,30 @@
 package jobs
 
 import (
+	"github.com/pocketbase/pocketbase/core"
 	"time"
 
+	"github.com/pocketbase/pocketbase/tools/types"
+
 	"github.com/pocketbase/dbx"
-	"github.com/pocketbase/pocketbase"
 )
 
 type CleanupInvitationsJob struct {
-	Pb *pocketbase.PocketBase
+	App core.App
 }
 
 func (job *CleanupInvitationsJob) Execute() {
-	app := job.Pb.App
+	app := job.App
 	logger := app.Logger().WithGroup("CleanupInvitationsJob")
-	now := time.Now()
+
+	// See CleanupExpiredContentJob: the threshold has to be a types.DateTime
+	// and invitations without an expiry must be left alone.
+	now := types.NowDateTime()
 
 	// get all invitations past expiry date
 	// mark them expired if still open
 	expiredInvitations, err := app.FindAllRecords("invitations",
-		dbx.NewExp("expiresOn < {:currentTime} and status = {:status}",
+		dbx.NewExp("expiresOn != '' AND expiresOn < {:currentTime} AND status = {:status}",
 			dbx.Params{"currentTime": now, "status": "open"}))
 
 	if err != nil {
@@ -36,9 +41,13 @@ func (job *CleanupInvitationsJob) Execute() {
 
 	// get all non-open invitations 1 week past the expiry date
 	// delete these records
-	deletionThreshold := now.Add(-7 * 24 * time.Hour)
+	deletionThreshold, err := types.ParseDateTime(now.Time().Add(-7 * 24 * time.Hour))
+	if err != nil {
+		logger.Error("Could not build the deletion threshold", "error", err)
+		return
+	}
 	deletionCandidates, err := app.FindAllRecords("invitations",
-		dbx.NewExp("expiresOn < {:deletionThreshold}",
+		dbx.NewExp("expiresOn != '' AND expiresOn < {:deletionThreshold}",
 			dbx.Params{"deletionThreshold": deletionThreshold}))
 
 	if err != nil {

@@ -152,7 +152,7 @@ func (surmai *SurmaiApp) StartJobs() {
 func (surmai *SurmaiApp) startSyncCurrencyConversionRatesJob() {
 
 	job := &jobs.SyncCurrencyDataJob{
-		Pb: surmai.Pb,
+		App: surmai.Pb.App,
 	}
 
 	// run job every hour
@@ -164,7 +164,7 @@ func (surmai *SurmaiApp) startSyncCurrencyConversionRatesJob() {
 func (surmai *SurmaiApp) startInvitationCleanupJob() {
 
 	job := &jobs.CleanupInvitationsJob{
-		Pb: surmai.Pb,
+		App: surmai.Pb.App,
 	}
 
 	surmai.Pb.Cron().MustAdd("CleanupInvitationsJob", "0 * * * *", func() {
@@ -181,7 +181,7 @@ func (surmai *SurmaiApp) startDemoModeSetupJob() {
 		}
 
 		job := &jobs.ImportDemoDataJob{
-			Pb:           surmai.Pb,
+			App:          surmai.Pb.App,
 			AdminEmail:   surmai.AdminEmail,
 			DemoEmail:    "demo@surmai.app",
 			DemoPassword: password,
@@ -209,7 +209,7 @@ func (surmai *SurmaiApp) startEmailSyncJob() {
 
 func (surmai *SurmaiApp) startCleanupExpiredContentJob() {
 	job := &jobs.CleanupExpiredContentJob{
-		Pb: surmai.Pb,
+		App: surmai.Pb.App,
 	}
 
 	// Run daily at 3am

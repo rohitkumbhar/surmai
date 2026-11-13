@@ -23,4 +23,8 @@ type FlightInfoProviderConfig struct {
 	Enabled  bool   `json:"enabled"`
 	Provider string `json:"provider"`
 	ApiKey   string `json:"apiKey"`
+
+	// BaseUrl points the provider at a different address, for a proxy or a
+	// test server. Empty means the provider's own public API.
+	BaseUrl string `json:"baseUrl"`
 }

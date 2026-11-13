@@ -91,14 +91,22 @@ type Airport struct {
 	AirportInfoUrl string `json:"airport_info_url"`
 }
 
-type FlightAware struct{}
+// FlightAware reads flight routes from the FlightAware AeroAPI.
+//
+// The zero value calls the public API. BaseURL and Client are set by tests.
+type FlightAware struct {
+	BaseURL string
+	Client  *http.Client
+}
+
+// DefaultBaseURL is the public AeroAPI.
+const DefaultBaseURL = "https://aeroapi.flightaware.com/aeroapi"
 
 func (fa FlightAware) GetFlightRoute(flightNumber string, config *flights.FlightInfoProviderConfig, tzf tzf.F) (*flights.FlightRoute, error) {
 	// Construct the API URL with the flight number
-	url := fmt.Sprintf("https://aeroapi.flightaware.com/aeroapi/flights/%s?ident_type=designator", flightNumber)
+	url := fmt.Sprintf("%s/flights/%s?ident_type=designator", flights.BaseURL(fa.BaseURL, DefaultBaseURL), flightNumber)
 
-	// Create a new HTTP client and make the request
-	client := &http.Client{}
+	client := flights.Client(fa.Client)
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %v", err)

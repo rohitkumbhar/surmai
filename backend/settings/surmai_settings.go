@@ -66,9 +66,9 @@ func FetchFlightInfoProvider(app core.App) (*flights.FlightInfoProviderConfig, f
 	var flightsDataProvider flights.DataProvider
 
 	if config.Provider == "flightaware" {
-		flightsDataProvider = flightaware.FlightAware{}
+		flightsDataProvider = flightaware.FlightAware{BaseURL: config.BaseUrl}
 	} else if config.Provider == "adsbdb" {
-		flightsDataProvider = adsdb.AdsbDbCom{}
+		flightsDataProvider = adsdb.AdsbDbCom{BaseURL: config.BaseUrl}
 	} else {
 		return nil, nil, fmt.Errorf("unknown provider %s", config.Provider)
 	}

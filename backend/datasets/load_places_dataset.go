@@ -4,6 +4,7 @@ import (
 	"compress/gzip"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -33,29 +34,28 @@ func LoadPlacesDataset(app core.App, finder tzf.F) (int64, error) {
 		return -1, errors.New("collection `places` does not exists")
 	}
 
-	compressedDatasetsFile, err := os.Open("./datasets/places-2026-02.json.gz")
+	compressedDatasetsFile, err := os.Open(datasetPath("places-2026-02.json.gz"))
 	if err != nil {
-		log.Fatal("Error when opening file: ", err)
+		return 0, fmt.Errorf("could not read the places dataset: %w", err)
 	}
 	defer compressedDatasetsFile.Close()
 
 	dataset, err := gzip.NewReader(compressedDatasetsFile)
 	if err != nil {
-		log.Fatal("Error creating gzip reader: ", err)
+		return 0, fmt.Errorf("could not read the places dataset: %w", err)
 	}
 	defer dataset.Close()
 
 	content, err := io.ReadAll(dataset)
 	if err != nil {
-		log.Fatal("Error reading gzip content: ", err)
+		return 0, fmt.Errorf("could not read the places dataset: %w", err)
 	}
 
 	// Now let's unmarshall the data into `payload`
 	var payload []Place
 	err = json.Unmarshal(content, &payload)
 	if err != nil {
-		log.Fatal("Error during Unmarshal(): ", err)
-		return -1, err
+		return 0, fmt.Errorf("could not read the places dataset: %w", err)
 	}
 
 	err = app.RunInTransaction(func(txApp core.App) error {
