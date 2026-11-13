@@ -18,10 +18,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '../../lib/api';
-import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { getSmtpSettings, sendTestEmail, updateSmtpSettings } from '@src/lib/api';
+import { showErrorNotification, showInfoNotification, showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
-import type { SmtpSettings } from '../../types/settings.ts';
+import type { SmtpSettings } from '@src/types/settings.ts';
 
 export const SmtpSettingsForm = () => {
   const { data: settings, refetch } = useQuery<SmtpSettings | undefined>({

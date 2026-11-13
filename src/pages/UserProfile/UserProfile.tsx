@@ -3,13 +3,13 @@ import { IconBell, IconEPassport, IconInfoCircle, IconKey } from '@tabler/icons-
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ChangePasswordForm } from '../../components/account/ChangePasswordForm.tsx';
-import { UserAvatarForm } from '../../components/account/UserAvatarForm.tsx';
-import { UserSettingsForm } from '../../components/account/UserSettingsForm.tsx';
-import { Header } from '../../components/nav/Header.tsx';
-import { UserNotifications } from '../../components/notifications/UserNotifications.tsx';
-import { MyTravelProfile } from '../../components/traveller/MyTravelProfile.tsx';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { ChangePasswordForm } from '@src/components/account/ChangePasswordForm.tsx';
+import { UserAvatarForm } from '@src/components/account/UserAvatarForm.tsx';
+import { UserSettingsForm } from '@src/components/account/UserSettingsForm.tsx';
+import { Header } from '@src/components/nav/Header.tsx';
+import { UserNotifications } from '@src/components/notifications/UserNotifications.tsx';
+import { MyTravelProfile } from '@src/components/traveller/MyTravelProfile.tsx';
+import { usePageTitle } from '@src/lib/hooks/usePageTitle.ts';
 
 export const UserProfile = () => {
   const { t } = useTranslation();

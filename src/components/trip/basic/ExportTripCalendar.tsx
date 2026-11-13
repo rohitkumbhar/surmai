@@ -3,11 +3,11 @@ import { IconClockExclamation } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { exportCalendar } from '../../../lib/api';
-import { showErrorNotification } from '../../../lib/notifications.tsx';
+import { exportCalendar } from '@src/lib/api';
+import { showErrorNotification } from '@src/lib/notifications.tsx';
 
-import type { Trip } from '../../../types/trips.ts';
 import type { ContextModalProps } from '@mantine/modals';
+import type { Trip } from '@src/types/trips.ts';
 
 export const ExportTripCalendarModal = ({
   innerProps,

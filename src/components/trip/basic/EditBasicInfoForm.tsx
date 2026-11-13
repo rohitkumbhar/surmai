@@ -5,13 +5,13 @@ import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { EditTripBasicForm } from './EditTripBasicForm.tsx';
-import { basicInfoFormValidation } from './validation.ts';
-import { updateTrip } from '../../../lib/api';
-import { showErrorNotification } from '../../../lib/notifications.tsx';
+import { EditTripBasicForm } from '@src/components/trip/basic/EditTripBasicForm.tsx';
+import { basicInfoFormValidation } from '@src/components/trip/basic/validation.ts';
+import { updateTrip } from '@src/lib/api';
+import { showErrorNotification } from '@src/lib/notifications.tsx';
 
-import type { CreateTripForm, Trip } from '../../../types/trips.ts';
 import type { ContextModalProps } from '@mantine/modals';
+import type { CreateTripForm, Trip } from '@src/types/trips.ts';
 
 export const EditBasicInfoForm = ({
   context,

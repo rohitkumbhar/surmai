@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { importTripData } from '../../lib/api';
-import { showErrorNotification } from '../../lib/notifications.tsx';
+import { importTripData } from '@src/lib/api';
+import { showErrorNotification } from '@src/lib/notifications.tsx';
 
 export const ImportTripAction = () => {
   const [tripDataFile, setTripDataFile] = useState<File | null>(null);

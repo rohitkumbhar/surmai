@@ -2,11 +2,11 @@ import { Blockquote, Button, Card, Group, Text } from '@mantine/core';
 import { IconMail } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import classes from './TripCollaborationInvitationCard.module.css';
-import { invitationAction } from '../../lib/api';
-import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import classes from '@src/components/invitations/TripCollaborationInvitationCard.module.css';
+import { invitationAction } from '@src/lib/api';
+import { showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
-import type { Invitation } from '../../types/invitations.ts';
+import type { Invitation } from '@src/types/invitations.ts';
 
 export const TripCollaborationInvitationCard = ({
   invitation,

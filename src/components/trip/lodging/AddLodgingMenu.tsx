@@ -2,7 +2,7 @@ import { Button, Menu, rem } from '@mantine/core';
 import { IconBedFlat, IconBuildingEstate, IconChevronDown, IconHome, IconTent } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { LodgingType } from '../../../types/trips.ts';
+import { LodgingType } from '@src/types/trips.ts';
 
 export const AddLodgingMenu = ({ onClick }: { onClick: (type: string) => void }) => {
   const { t } = useTranslation();

@@ -3,9 +3,9 @@ import { useMediaQuery } from '@mantine/hooks';
 import { IconEdit, IconFile } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { getAttachmentUrl } from '../../lib/api/index.ts';
+import { getAttachmentUrl } from '@src/lib/api/index.ts';
 
-import type { TravellerProfile } from '../../types/trips.ts';
+import type { TravellerProfile } from '@src/types/trips.ts';
 
 interface Props {
   profile: TravellerProfile | null;

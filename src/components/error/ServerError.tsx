@@ -1,6 +1,6 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
 
-import classes from './ServerError.module.css';
+import classes from '@src/components/error/ServerError.module.css';
 
 export function ServerError() {
   return (

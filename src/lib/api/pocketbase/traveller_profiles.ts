@@ -1,6 +1,6 @@
-import { pb } from './pocketbase.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
 
-import type { NewTravellerProfile, TravellerProfile, TravellerProfileManager } from '../../../types/trips.ts';
+import type { NewTravellerProfile, TravellerProfile, TravellerProfileManager } from '@src/types/trips.ts';
 
 const collection = pb.collection('traveller_profiles');
 

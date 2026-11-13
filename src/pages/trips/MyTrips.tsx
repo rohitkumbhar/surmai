@@ -17,15 +17,15 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import classes from './MyTrips.module.css';
-import { Header } from '../../components/nav/Header.tsx';
-import { ImportTripAction } from '../../components/trip/ImportTripAction.tsx';
-import { TripCard } from '../../components/trip/TripCard.tsx';
-import { listPastTrips, listUpcomingTrips } from '../../lib/api';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
-import { showErrorNotification } from '../../lib/notifications.tsx';
+import { Header } from '@src/components/nav/Header.tsx';
+import { ImportTripAction } from '@src/components/trip/ImportTripAction.tsx';
+import { TripCard } from '@src/components/trip/TripCard.tsx';
+import { listPastTrips, listUpcomingTrips } from '@src/lib/api';
+import { usePageTitle } from '@src/lib/hooks/usePageTitle.ts';
+import { showErrorNotification } from '@src/lib/notifications.tsx';
+import classes from '@src/pages/trips/MyTrips.module.css';
 
-import type { Trip } from '../../types/trips.ts';
+import type { Trip } from '@src/types/trips.ts';
 
 export const MyTrips = () => {
   const navigate = useNavigate();

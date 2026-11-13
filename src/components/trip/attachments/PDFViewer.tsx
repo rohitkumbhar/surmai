@@ -3,7 +3,7 @@ import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import { useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 
-import styles from './PDFViewer.module.css';
+import styles from '@src/components/trip/attachments/PDFViewer.module.css';
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
 

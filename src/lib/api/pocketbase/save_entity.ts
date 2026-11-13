@@ -1,4 +1,4 @@
-import { pb } from './pocketbase.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
 
 export type SaveEntityExpense = {
   name: string;

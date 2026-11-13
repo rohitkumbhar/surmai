@@ -3,8 +3,8 @@ import { modals } from '@mantine/modals';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { countAirlines, countAirports, countPlaces, loadAirlines, loadAirports, loadCities } from '../../lib/api';
-import { clearLoadingNotification, showLoadingNotification } from '../../lib/notifications.tsx';
+import { countAirlines, countAirports, countPlaces, loadAirlines, loadAirports, loadCities } from '@src/lib/api';
+import { clearLoadingNotification, showLoadingNotification } from '@src/lib/notifications.tsx';
 
 export const Datasets = () => {
   const [cityCount, setCityCount] = useState<number>(0);

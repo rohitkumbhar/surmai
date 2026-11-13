@@ -2,8 +2,8 @@ import { PasswordInput, Popover, Progress } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PasswordRequirement } from './PasswordRequirement.tsx';
-import { getStrength, passwordRequirements } from './passwordRequirements.ts';
+import { PasswordRequirement } from '@src/components/account/PasswordRequirement.tsx';
+import { getStrength, passwordRequirements } from '@src/components/account/passwordRequirements.ts';
 
 import type { UseFormReturnType } from '@mantine/form';
 

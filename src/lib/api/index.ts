@@ -13,7 +13,7 @@ export {
   startOAuthFlow,
   sendResetPasswordRequest,
   watchUserChanges,
-} from './pocketbase/auth.ts';
+} from '@src/lib/api/pocketbase/auth.ts';
 
 export {
   getTrip,
@@ -34,7 +34,7 @@ export {
   listTripsByYear,
   saveTripNotes,
   exportCalendar,
-} from './pocketbase/trips.ts';
+} from '@src/lib/api/pocketbase/trips.ts';
 
 export {
   listActivities,
@@ -44,7 +44,7 @@ export {
   deleteActivity,
   saveActivityAttachments,
   deleteActivityAttachments,
-} from './pocketbase/activities.ts';
+} from '@src/lib/api/pocketbase/activities.ts';
 
 export {
   loadCities,
@@ -57,7 +57,7 @@ export {
   searchAirports,
   searchAirlines,
   getCurrencyConversionRates,
-} from './pocketbase/lists.ts';
+} from '@src/lib/api/pocketbase/lists.ts';
 
 export {
   getSmtpSettings,
@@ -78,11 +78,11 @@ export {
   sendUserAccountInvitation,
   getSettingsForKey,
   setSettingsForKey,
-} from './pocketbase/settings.ts';
+} from '@src/lib/api/pocketbase/settings.ts';
 
-export { sendCollaborationInvitation, listInvitations, invitationAction } from './pocketbase/invitations.ts';
+export { sendCollaborationInvitation, listInvitations, invitationAction } from '@src/lib/api/pocketbase/invitations.ts';
 
-export { pocketBaseUrl as apiUrl } from './pocketbase/pocketbase.ts';
+export { pocketBaseUrl as apiUrl } from '@src/lib/api/pocketbase/pocketbase.ts';
 export {
   listTransportations,
   listTransportationsByYear,
@@ -90,7 +90,7 @@ export {
   saveTransportationAttachments,
   deleteTransportation,
   deleteTransportationAttachment,
-} from './pocketbase/transportations.ts';
+} from '@src/lib/api/pocketbase/transportations.ts';
 
 export {
   deleteLodging,
@@ -100,9 +100,9 @@ export {
   listLodgings,
   listLodgingsByYear,
   deleteLodgingAttachments,
-} from './pocketbase/lodgings.ts';
+} from '@src/lib/api/pocketbase/lodgings.ts';
 
-export { getTripAttachments, deleteAttachment, uploadAttachments, getHtmlFile } from './pocketbase/attachments.ts';
+export { getTripAttachments, deleteAttachment, uploadAttachments, getHtmlFile } from '@src/lib/api/pocketbase/attachments.ts';
 
 export {
   listExpenses,
@@ -111,9 +111,9 @@ export {
   updateExpense,
   deleteExpense,
   addAttachmentsToExpense,
-} from './pocketbase/expenses.ts';
+} from '@src/lib/api/pocketbase/expenses.ts';
 
-export { getFlightRoute, type FlightRoute } from './pocketbase/flights.ts';
+export { getFlightRoute, type FlightRoute } from '@src/lib/api/pocketbase/flights.ts';
 
 export {
   saveTransportation,
@@ -121,7 +121,7 @@ export {
   saveActivity,
   type SaveEntityPayload,
   type SaveEntityExpense,
-} from './pocketbase/save_entity.ts';
+} from '@src/lib/api/pocketbase/save_entity.ts';
 
 export {
   createTravellerProfile,
@@ -134,13 +134,13 @@ export {
   updateTravellerProfile,
   deleteTravellerProfile,
   uploadTravellerAttachments,
-} from './pocketbase/traveller_profiles.ts';
+} from '@src/lib/api/pocketbase/traveller_profiles.ts';
 
 export {
   listNotifications,
   markNotificationAsRead,
   createAnnouncement,
   listAnnouncements,
-} from './pocketbase/notifications.ts';
+} from '@src/lib/api/pocketbase/notifications.ts';
 
-export * from './pocketbase/assistant.ts';
+export * from '@src/lib/api/pocketbase/assistant.ts';

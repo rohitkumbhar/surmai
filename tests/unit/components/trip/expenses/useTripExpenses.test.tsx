@@ -3,22 +3,22 @@ import { beforeEach, expect, it, vi } from 'vitest';
 
 import { withQueryClient } from '../../../helpers/queryClient';
 
-import type { Expense, Trip } from '../../../../../src/types/trips';
+import type { Expense, Trip } from '@src/types/trips';
 
 const listExpenses = vi.fn();
 const getCurrencyConversionRates = vi.fn();
 
-vi.mock('../../../../../src/lib/api', () => ({
+vi.mock('@src/lib/api', () => ({
   listExpenses: (...args: unknown[]) => listExpenses(...args),
   getCurrencyConversionRates: (...args: unknown[]) => getCurrencyConversionRates(...args),
 }));
 
 const currentUser: { user: { currencyCode?: string } | undefined } = { user: { currencyCode: 'USD' } };
-vi.mock('../../../../../src/auth/useCurrentUser', () => ({
+vi.mock('@src/auth/useCurrentUser', () => ({
   useCurrentUser: () => currentUser,
 }));
 
-const { useTripExpenses } = await import('../../../../../src/components/trip/expenses/useTripExpenses');
+const { useTripExpenses } = await import('@src/components/trip/expenses/useTripExpenses');
 
 const trip = (budgetCurrency = 'EUR') =>
   ({

@@ -1,6 +1,6 @@
-import { type User } from '../../../types/auth';
-import { type ConversionRate } from '../../../types/expenses';
-import { type ConvertedExpense, type Expense, type Trip, type Cost } from '../../../types/trips';
+import { type User } from '@src/types/auth';
+import { type ConversionRate } from '@src/types/expenses';
+import { type ConvertedExpense, type Expense, type Trip, type Cost } from '@src/types/trips';
 
 export const getTargetCurrency = (user: User | undefined, trip: Trip) =>
   trip.budget?.currency || user?.currencyCode || 'USD';

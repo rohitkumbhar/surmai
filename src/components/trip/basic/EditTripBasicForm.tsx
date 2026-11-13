@@ -3,12 +3,12 @@ import { DatePickerInput } from '@mantine/dates';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { listTravellerProfiles } from '../../../lib/api/pocketbase/traveller_profiles.ts';
-import { PlaceMultiSelect } from '../../places/PlaceMultiSelect.tsx';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
+import { PlaceMultiSelect } from '@src/components/places/PlaceMultiSelect.tsx';
+import { CurrencyInput } from '@src/components/util/CurrencyInput.tsx';
+import { listTravellerProfiles } from '@src/lib/api/pocketbase/traveller_profiles.ts';
 
-import type { CreateTripForm } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
+import type { CreateTripForm } from '@src/types/trips.ts';
 
 interface EditTripBasicFormProps {
   form: UseFormReturnType<CreateTripForm>;

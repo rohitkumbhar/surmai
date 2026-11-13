@@ -3,16 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { BasicInfoMenu } from './BasicInfoMenu.tsx';
-import { CollaboratorButton } from './collaborators/CollaboratorCard.tsx';
-import { DestinationCard } from './DestinationCard.tsx';
-import { TravellerCard } from './TravellerCard.tsx';
-import { listCollaborators, listTravellerProfiles } from '../../../lib/api';
-import { formatCost } from '../expenses/helper.ts';
-import { useTripExpenses } from '../expenses/useTripExpenses.ts';
+import { BasicInfoMenu } from '@src/components/trip/basic/BasicInfoMenu.tsx';
+import { CollaboratorButton } from '@src/components/trip/basic/collaborators/CollaboratorCard.tsx';
+import { DestinationCard } from '@src/components/trip/basic/DestinationCard.tsx';
+import { TravellerCard } from '@src/components/trip/basic/TravellerCard.tsx';
+import { formatCost } from '@src/components/trip/expenses/helper.ts';
+import { useTripExpenses } from '@src/components/trip/expenses/useTripExpenses.ts';
+import { listCollaborators, listTravellerProfiles } from '@src/lib/api';
 
-import type { User } from '../../../types/auth.ts';
-import type { Trip } from '../../../types/trips.ts';
+import type { User } from '@src/types/auth.ts';
+import type { Trip } from '@src/types/trips.ts';
 
 export const BasicInfoView = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();

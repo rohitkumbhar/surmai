@@ -13,9 +13,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import classes from './Navbar.module.css';
-import { isAdmin, logoutCurrentUser } from '../../lib/api';
-import { FishOne } from '../logo/FishOne.tsx';
+import { FishOne } from '@src/components/logo/FishOne.tsx';
+import classes from '@src/components/nav/Navbar.module.css';
+import { isAdmin, logoutCurrentUser } from '@src/lib/api';
 
 interface NavbarLinkProps {
   icon: typeof IconHome2;

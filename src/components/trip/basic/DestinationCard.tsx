@@ -1,11 +1,11 @@
 import { Anchor, Card, Group, Text } from '@mantine/core';
 import { IconMapPin } from '@tabler/icons-react';
 
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { getMapsUrl } from '../../../lib/places.ts';
-import { TimezoneInfo } from '../../util/TimezoneInfo.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { TimezoneInfo } from '@src/components/util/TimezoneInfo.tsx';
+import { getMapsUrl } from '@src/lib/places.ts';
 
-import type { Place, Trip } from '../../../types/trips.ts';
+import type { Place, Trip } from '@src/types/trips.ts';
 
 export const DestinationCard = ({ destination }: { destination: Place; trip: Trip }) => {
   const { user } = useCurrentUser();

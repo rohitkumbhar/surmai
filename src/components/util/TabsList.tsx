@@ -1,7 +1,7 @@
 import { ActionIcon, Divider, Group, Menu, Tabs, Text } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
 
-import { useSurmaiContext } from '../../app/useSurmaiContext';
+import { useSurmaiContext } from '@src/app/useSurmaiContext';
 
 export interface TabData {
   key: string;

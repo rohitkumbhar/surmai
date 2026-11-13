@@ -4,7 +4,7 @@ import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import classes from './UploadImageForm.module.css';
+import classes from '@src/components/upload/UploadImageForm.module.css';
 
 export const ImageDropZone = ({ setUploadedFile }: { setUploadedFile: (val: File) => void }) => {
   const theme = useMantineTheme();

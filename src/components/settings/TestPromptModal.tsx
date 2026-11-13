@@ -2,7 +2,7 @@ import { Button, Card, Group, Skeleton, Stack, Textarea } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { sendTestPrompt } from '../../lib/api';
+import { sendTestPrompt } from '@src/lib/api';
 
 export const TestPromptModal = () => {
   const [promptText, setPromptText] = useState<string>();

@@ -6,14 +6,14 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { Header } from '../../components/nav/Header.tsx';
-import { EditTripBasicForm } from '../../components/trip/basic/EditTripBasicForm.tsx';
-import { basicInfoFormValidation } from '../../components/trip/basic/validation.ts';
-import { createTrip } from '../../lib/api';
-import { showErrorNotification } from '../../lib/notifications.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { Header } from '@src/components/nav/Header.tsx';
+import { EditTripBasicForm } from '@src/components/trip/basic/EditTripBasicForm.tsx';
+import { basicInfoFormValidation } from '@src/components/trip/basic/validation.ts';
+import { createTrip } from '@src/lib/api';
+import { showErrorNotification } from '@src/lib/notifications.tsx';
 
-import type { CreateTripForm, NewTrip } from '../../types/trips.ts';
+import type { CreateTripForm, NewTrip } from '@src/types/trips.ts';
 
 export const CreateNewTrip = () => {
   const navigate = useNavigate();

@@ -19,10 +19,10 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest, startOAuthFlow } from '../../lib/api';
-import { useDefaultPageTitle } from '../../lib/hooks/usePageTitle.ts';
-import { showErrorNotification, showInfoNotification } from '../../lib/notifications.tsx';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { authWithUsernameAndPassword, listAuthMethods, sendResetPasswordRequest, startOAuthFlow } from '@src/lib/api';
+import { useDefaultPageTitle } from '@src/lib/hooks/usePageTitle.ts';
+import { showErrorNotification, showInfoNotification } from '@src/lib/notifications.tsx';
 
 const oauthIcons: { [key: string]: React.ReactNode } = {
   google: <IconBrandGoogle size={16} stroke={1} />,

@@ -1,6 +1,6 @@
-import { pb } from './pocketbase.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
 
-import type { Attachment } from '../../../types/trips.ts';
+import type { Attachment } from '@src/types/trips.ts';
 
 export const uploadAttachments = (tripId: string, files: File[]): Promise<Attachment[]> => {
   if (files.length === 0) {

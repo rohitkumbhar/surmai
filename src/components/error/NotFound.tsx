@@ -1,7 +1,7 @@
 import { Button, Container, Group, Text, Title } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
-import classes from './NotFound.module.css';
+import classes from '@src/components/error/NotFound.module.css';
 
 interface NotFoundProps {
   resetErrorBoundary: () => void;

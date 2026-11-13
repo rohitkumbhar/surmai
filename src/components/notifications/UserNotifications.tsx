@@ -3,9 +3,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { listNotifications, markNotificationAsRead } from '../../lib/api';
+import { listNotifications, markNotificationAsRead } from '@src/lib/api';
 
-import type { Notification } from '../../types/notifications';
+import type { Notification } from '@src/types/notifications';
 
 export const UserNotifications = () => {
   const { t } = useTranslation();

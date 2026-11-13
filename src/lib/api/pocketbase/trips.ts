@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
 
-import { listActivities } from './activities.ts';
-import { getTripAttachments } from './attachments.ts';
-import { listLodgings } from './lodgings.ts';
-import { pb } from './pocketbase.ts';
-import { listTransportations } from './transportations.ts';
-import { startDateInYearFilter } from '../../time.ts';
+import { listActivities } from '@src/lib/api/pocketbase/activities.ts';
+import { getTripAttachments } from '@src/lib/api/pocketbase/attachments.ts';
+import { listLodgings } from '@src/lib/api/pocketbase/lodgings.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
+import { listTransportations } from '@src/lib/api/pocketbase/transportations.ts';
+import { startDateInYearFilter } from '@src/lib/time.ts';
 
-import type { User } from '../../../types/auth.ts';
+import type { User } from '@src/types/auth.ts';
 import type {
   Activity,
   Attachment,
@@ -17,7 +17,7 @@ import type {
   Transportation,
   TravellerProfile,
   Trip,
-} from '../../../types/trips.ts';
+} from '@src/types/trips.ts';
 
 const trips = pb.collection('trips');
 

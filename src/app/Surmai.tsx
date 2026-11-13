@@ -6,13 +6,13 @@ import { Notifications } from '@mantine/notifications';
 import { useState } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
-import { modals } from './modals.ts';
-import { buildRouter } from './routes.tsx';
-import { SurmaiContext } from './SurmaiContext.tsx';
-import { buildTheme } from './theme.ts';
-import i18n from '../lib/i18n.ts';
+import { modals } from '@src/app/modals.ts';
+import { buildRouter } from '@src/app/routes.tsx';
+import { SurmaiContext } from '@src/app/SurmaiContext.tsx';
+import { buildTheme } from '@src/app/theme.ts';
+import i18n from '@src/lib/i18n.ts';
 
-import type { SiteSettings } from '../types/settings.ts';
+import type { SiteSettings } from '@src/types/settings.ts';
 
 export const SurmaiApp = ({ settings }: { settings: SiteSettings }) => {
   const [primaryColor, setPrimaryColor] = useState<string>('blueGray');

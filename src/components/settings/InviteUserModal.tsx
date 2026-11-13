@@ -4,9 +4,9 @@ import { IconCheck, IconCopy, IconMacroOff } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { sendUserAccountInvitation } from '../../lib/api';
-import { InvitationForm } from '../invitations/InvitationForm.tsx';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { InvitationForm } from '@src/components/invitations/InvitationForm.tsx';
+import { sendUserAccountInvitation } from '@src/lib/api';
 
 import type { ContextModalProps } from '@mantine/modals';
 

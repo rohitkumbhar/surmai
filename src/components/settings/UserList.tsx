@@ -19,13 +19,13 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ChangeUserPasswordForm } from './ChangeUserPasswordForm.tsx';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { deleteUserAdminAction, getAttachmentUrl, listAllUsers } from '../../lib/api';
-import { showDeleteNotification } from '../../lib/notifications.tsx';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { ChangeUserPasswordForm } from '@src/components/settings/ChangeUserPasswordForm.tsx';
+import { deleteUserAdminAction, getAttachmentUrl, listAllUsers } from '@src/lib/api';
+import { showDeleteNotification } from '@src/lib/notifications.tsx';
 
-import type { User } from '../../types/auth.ts';
+import type { User } from '@src/types/auth.ts';
 
 export const UserList = () => {
   const { user: currentUser } = useCurrentUser();

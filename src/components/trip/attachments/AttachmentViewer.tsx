@@ -1,9 +1,9 @@
 import { Button, Container, Group, Space } from '@mantine/core';
 import { IconDownload } from '@tabler/icons-react';
 
-import { HtmlViewer } from './HtmlViewer.tsx';
-import { ImageViewer } from './ImageViewer.tsx';
-import { PDFViewer } from './PDFViewer.tsx';
+import { HtmlViewer } from '@src/components/trip/attachments/HtmlViewer.tsx';
+import { ImageViewer } from '@src/components/trip/attachments/ImageViewer.tsx';
+import { PDFViewer } from '@src/components/trip/attachments/PDFViewer.tsx';
 
 import type { ContextModalProps } from '@mantine/modals';
 

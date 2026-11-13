@@ -3,12 +3,12 @@ import i18n from 'i18next';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
 
-import { compareItineraryLine } from './helper.ts';
-import { formatDateTime } from '../../../lib/time.ts';
-import { formatCost } from '../expenses/helper.ts';
+import { formatCost } from '@src/components/trip/expenses/helper.ts';
+import { compareItineraryLine } from '@src/components/trip/itinerary/helper.ts';
+import { formatDateTime } from '@src/lib/time.ts';
 
-import type { User } from '../../../types/auth.ts';
-import type { Activity, Lodging, Transportation, Trip, ItineraryLine, TravellerProfile } from '../../../types/trips.ts';
+import type { User } from '@src/types/auth.ts';
+import type { Activity, Lodging, Transportation, Trip, ItineraryLine, TravellerProfile } from '@src/types/trips.ts';
 import type { TDocumentDefinitions, Content } from 'pdfmake/interfaces';
 
 // @ts-expect-error pdfmake fonts

@@ -7,17 +7,18 @@ import dayjs from 'dayjs';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AirlineSelect } from './AirlineSelect.tsx';
-import { AirportSelect } from './AirportSelect.tsx';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { getFlightRoute, saveTransportation } from '../../../lib/api';
-import { showErrorNotification } from '../../../lib/notifications.tsx';
-import { fakeAsUtcString, getFormatTimeString, getTimePickerFormat } from '../../../lib/time.ts';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
-import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { AttachmentsUploadField } from '@src/components/trip/attachments/AttachmentsUploadField.tsx';
+import { AirlineSelect } from '@src/components/trip/transportation/AirlineSelect.tsx';
+import { AirportSelect } from '@src/components/trip/transportation/AirportSelect.tsx';
+import { TravellerMultiSelect } from '@src/components/trip/TravellerMultiSelect.tsx';
+import { CurrencyInput } from '@src/components/util/CurrencyInput.tsx';
+import { getFlightRoute, saveTransportation } from '@src/lib/api';
+import { showErrorNotification } from '@src/lib/notifications.tsx';
+import { fakeAsUtcString, getFormatTimeString, getTimePickerFormat } from '@src/lib/time.ts';
 
-import type { SaveEntityPayload } from '../../../lib/api';
+import type { UseFormReturnType } from '@mantine/form';
+import type { SaveEntityPayload } from '@src/lib/api';
 import type {
   Airline,
   Airport,
@@ -27,8 +28,7 @@ import type {
   Transportation,
   TravellerProfile,
   Trip,
-} from '../../../types/trips.ts';
-import type { UseFormReturnType } from '@mantine/form';
+} from '@src/types/trips.ts';
 
 export const FlightForm = ({
   trip,

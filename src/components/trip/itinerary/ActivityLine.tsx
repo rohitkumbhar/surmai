@@ -2,12 +2,12 @@ import { Anchor, Badge, Box, Group, rem, Stack, Text } from '@mantine/core';
 import { IconActivity, IconMap2 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { getMapsLink } from '../../../lib/places.ts';
-import { formatTime } from '../../../lib/time.ts';
-import { TravellerBadges } from '../TravellerBadges.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { TravellerBadges } from '@src/components/trip/TravellerBadges.tsx';
+import { getMapsLink } from '@src/lib/places.ts';
+import { formatTime } from '@src/lib/time.ts';
 
-import type { Activity, TravellerProfile } from '../../../types/trips.ts';
+import type { Activity, TravellerProfile } from '@src/types/trips.ts';
 import type { Dayjs } from 'dayjs';
 
 export const ActivityLine = ({

@@ -4,10 +4,10 @@ import { IconPlane } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { searchAirlines } from '../../../lib/api';
+import { searchAirlines } from '@src/lib/api';
 
-import type { Airline } from '../../../types/trips';
 import type { UseFormReturnType } from '@mantine/form';
+import type { Airline } from '@src/types/trips';
 import type { MutableRefObject } from 'react';
 
 export const AirlineSelect = ({

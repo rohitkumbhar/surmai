@@ -1,8 +1,8 @@
-import { uploadAttachments } from './attachments.ts';
-import { pb } from './pocketbase.ts';
-import { convertSavedToBrowserDate, startDateInYearFilter } from '../../time.ts';
+import { uploadAttachments } from '@src/lib/api/pocketbase/attachments.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
+import { convertSavedToBrowserDate, startDateInYearFilter } from '@src/lib/time.ts';
 
-import type { Attachment, CreateExpense, Expense } from '../../../types/trips.ts';
+import type { Attachment, CreateExpense, Expense } from '@src/types/trips.ts';
 
 const expenses = pb.collection('trip_expenses');
 

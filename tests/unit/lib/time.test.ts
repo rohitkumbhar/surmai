@@ -3,7 +3,7 @@ import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { countNights, startDateInYearFilter, travelMinutes } from '../../../src/lib/time';
+import { countNights, startDateInYearFilter, travelMinutes } from '@src/lib/time';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

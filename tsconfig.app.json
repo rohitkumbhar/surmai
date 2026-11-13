@@ -1,6 +1,13 @@
 {
   "compilerOptions": {
     "composite": true,
+    // No baseUrl: it is deprecated in TypeScript 6, and without it these are
+    // resolved relative to this file.
+    "paths": {
+      "@src/*": [
+        "./src/*"
+      ]
+    },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2024",
     "useDefineForClassFields": true,

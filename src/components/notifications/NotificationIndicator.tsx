@@ -3,10 +3,10 @@ import { IconBell } from '@tabler/icons-react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { useCurrentUser } from '../../auth/useCurrentUser';
-import { listNotifications } from '../../lib/api';
+import { useCurrentUser } from '@src/auth/useCurrentUser';
+import { listNotifications } from '@src/lib/api';
 
-import type { Notification } from '../../types/notifications';
+import type { Notification } from '@src/types/notifications';
 
 export const NotificationIndicator = () => {
   const { user } = useCurrentUser();

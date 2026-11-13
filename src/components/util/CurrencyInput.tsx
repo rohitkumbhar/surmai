@@ -1,6 +1,6 @@
 import { NumberInput, rem, Select } from '@mantine/core';
 
-import { currencyCodes } from './currencyCodes.ts';
+import { currencyCodes } from '@src/components/util/currencyCodes.ts';
 
 export const CurrencyInput = ({
   currencyCodeKey,

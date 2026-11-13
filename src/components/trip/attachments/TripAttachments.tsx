@@ -3,11 +3,11 @@ import { openConfirmModal, openContextModal } from '@mantine/modals';
 import { IconTrash, IconUpload } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { deleteAttachment, getAttachmentUrl, uploadAttachments } from '../../../lib/api';
-import { showDeleteNotification, showErrorNotification } from '../../../lib/notifications.tsx';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { deleteAttachment, getAttachmentUrl, uploadAttachments } from '@src/lib/api';
+import { showDeleteNotification, showErrorNotification } from '@src/lib/notifications.tsx';
 
-import type { Attachment, Trip } from '../../../types/trips.ts';
+import type { Attachment, Trip } from '@src/types/trips.ts';
 
 export const TripAttachments = ({
   trip,

@@ -1,6 +1,6 @@
-import { pb } from './pocketbase.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
 
-import type { Airline, Airport } from '../../../types/trips.ts';
+import type { Airline, Airport } from '@src/types/trips.ts';
 
 export type FlightRoute = {
   callsign: string;

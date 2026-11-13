@@ -3,13 +3,13 @@ import { IconPencil } from '@tabler/icons-react';
 import { lazy, Suspense, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import styles from './TripNotes.module.css';
-import { saveTripNotes } from '../../../lib/api';
-import { showSaveSuccessNotification } from '../../../lib/notifications.tsx';
+import styles from '@src/components/trip/notes/TripNotes.module.css';
+import { saveTripNotes } from '@src/lib/api';
+import { showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
-import type { Trip } from '../../../types/trips.ts';
+import type { Trip } from '@src/types/trips.ts';
 
-const NotesEditor = lazy(() => import('./NotesEditor.tsx'));
+const NotesEditor = lazy(() => import('@src/components/trip/notes/NotesEditor.tsx'));
 
 export const TripNotes = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();

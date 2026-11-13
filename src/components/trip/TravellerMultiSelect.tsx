@@ -1,7 +1,7 @@
 import { MultiSelect } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import type { TravellerProfile } from '../../types/trips.ts';
+import type { TravellerProfile } from '@src/types/trips.ts';
 
 export const TravellerMultiSelect = ({
   tripTravellers,

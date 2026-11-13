@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { withQueryClient } from '../../helpers/queryClient';
 
-import type { Activity, Expense, Lodging, Transportation, Trip } from '../../../../src/types/trips';
+import type { Activity, Expense, Lodging, Transportation, Trip } from '@src/types/trips';
 
 const listTripsByYear = vi.fn();
 const listTransportationsByYear = vi.fn();
@@ -12,7 +12,7 @@ const listExpensesByYear = vi.fn();
 const listActivitiesByYear = vi.fn();
 const getCurrencyConversionRates = vi.fn();
 
-vi.mock('../../../../src/lib/api', () => ({
+vi.mock('@src/lib/api', () => ({
   listTripsByYear: (...args: unknown[]) => listTripsByYear(...args),
   listTransportationsByYear: (...args: unknown[]) => listTransportationsByYear(...args),
   listLodgingsByYear: (...args: unknown[]) => listLodgingsByYear(...args),
@@ -22,11 +22,11 @@ vi.mock('../../../../src/lib/api', () => ({
 }));
 
 const currentUser: { user: { currencyCode?: string } | undefined } = { user: { currencyCode: 'USD' } };
-vi.mock('../../../../src/auth/useCurrentUser', () => ({
+vi.mock('@src/auth/useCurrentUser', () => ({
   useCurrentUser: () => currentUser,
 }));
 
-const { useTravelBoardStatistics } = await import('../../../../src/pages/TravelBoard/useTravelBoardStatistics');
+const { useTravelBoardStatistics } = await import('@src/pages/TravelBoard/useTravelBoardStatistics');
 
 const paris = { id: 'paris', name: 'Paris', latitude: '48.85', longitude: '2.35' };
 const tokyo = { id: 'tokyo', name: 'Tokyo', latitude: '35.68', longitude: '139.65' };

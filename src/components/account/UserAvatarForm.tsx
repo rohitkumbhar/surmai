@@ -3,9 +3,9 @@ import { openContextModal } from '@mantine/modals';
 import { IconUserHexagon } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { getAttachmentUrl, updateUserAvatar } from '../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { getAttachmentUrl, updateUserAvatar } from '@src/lib/api';
 
 export const UserAvatarForm = () => {
   const { user, reloadUser } = useCurrentUser();

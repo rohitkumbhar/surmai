@@ -1,6 +1,7 @@
 /// <reference types="vitest" />
 
 import react from '@vitejs/plugin-react';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { configDefaults } from 'vitest/config';
@@ -93,6 +94,9 @@ export default defineConfig(({ mode }) => {
     ],
     resolve: {
       alias: {
+        // Imports inside src/ and the tests that reach into it are written
+        // '@src/...' rather than walking up with '../../..'.
+        '@src': fileURLToPath(new URL('./src', import.meta.url)),
         ...(mode === 'development' && {
           // See https://github.com/mantinedev/ui.mantine.dev/issues/113
           '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',

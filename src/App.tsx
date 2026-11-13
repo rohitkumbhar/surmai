@@ -18,14 +18,14 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
-import { useSurmaiContext } from './app/useSurmaiContext.ts';
-import { useCurrentUser } from './auth/useCurrentUser.ts';
-import { Error } from './components/error/Error.tsx';
-import { Navbar } from './components/nav/Navbar.tsx';
-import { NotificationIndicator } from './components/notifications/NotificationIndicator.tsx';
-import { UserInfo } from './components/user/UserInfo.tsx';
-import { useDefaultPageTitle } from './lib/hooks/usePageTitle.ts';
-import { updateDayJsLanguage } from './lib/i18n.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { Error } from '@src/components/error/Error.tsx';
+import { Navbar } from '@src/components/nav/Navbar.tsx';
+import { NotificationIndicator } from '@src/components/notifications/NotificationIndicator.tsx';
+import { UserInfo } from '@src/components/user/UserInfo.tsx';
+import { useDefaultPageTitle } from '@src/lib/hooks/usePageTitle.ts';
+import { updateDayJsLanguage } from '@src/lib/i18n.ts';
 
 import type { MantineColorScheme } from '@mantine/core';
 

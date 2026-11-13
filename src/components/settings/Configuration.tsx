@@ -1,11 +1,11 @@
 import { LoadingOverlay, Stack } from '@mantine/core';
 import { useQuery } from '@tanstack/react-query';
 
-import { NewUserSignups } from './NewUserSignups.tsx';
-import { OAuth2SettingsForm } from './OAuth2SettingsForm.tsx';
-import { PasswordAuthLogin } from './PasswordAuthLogin.tsx';
-import { SmtpSettingsForm } from './SmtpSettingsForm.tsx';
-import { getUsersMetadata } from '../../lib/api';
+import { NewUserSignups } from '@src/components/settings/NewUserSignups.tsx';
+import { OAuth2SettingsForm } from '@src/components/settings/OAuth2SettingsForm.tsx';
+import { PasswordAuthLogin } from '@src/components/settings/PasswordAuthLogin.tsx';
+import { SmtpSettingsForm } from '@src/components/settings/SmtpSettingsForm.tsx';
+import { getUsersMetadata } from '@src/lib/api';
 
 export const Configuration = () => {
   const {

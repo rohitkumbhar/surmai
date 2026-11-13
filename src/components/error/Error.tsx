@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
-import { NotFound } from './NotFound.tsx';
-import { ServerError } from './ServerError.tsx';
+import { NotFound } from '@src/components/error/NotFound.tsx';
+import { ServerError } from '@src/components/error/ServerError.tsx';
 
 import type { FallbackProps } from 'react-error-boundary';
 

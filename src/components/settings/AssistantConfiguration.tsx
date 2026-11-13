@@ -2,8 +2,8 @@ import { Alert, Card, Stack, Text, Title } from '@mantine/core';
 import { IconAi } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { ImportBookingsConfiguration } from './ImportBookingsConfiguration.tsx';
-import { OpenAIEndpointConfiguration } from './OpenAIEndpointConfiguration.tsx';
+import { ImportBookingsConfiguration } from '@src/components/settings/ImportBookingsConfiguration.tsx';
+import { OpenAIEndpointConfiguration } from '@src/components/settings/OpenAIEndpointConfiguration.tsx';
 
 export const AssistantConfiguration = () => {
   const { t } = useTranslation();

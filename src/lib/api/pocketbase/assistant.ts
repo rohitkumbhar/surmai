@@ -1,4 +1,4 @@
-import { pbAdmin } from './pocketbase.ts';
+import { pbAdmin } from '@src/lib/api/pocketbase/pocketbase.ts';
 
 export const sendTestPrompt = (prompt: string) => {
   return pbAdmin

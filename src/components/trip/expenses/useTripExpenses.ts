@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { convertExpenses, getExpenseTotalsByCurrency, getTargetCurrency } from './helper';
-import { useCurrentUser } from '../../../auth/useCurrentUser';
-import { getCurrencyConversionRates, listExpenses } from '../../../lib/api';
+import { useCurrentUser } from '@src/auth/useCurrentUser';
+import { convertExpenses, getExpenseTotalsByCurrency, getTargetCurrency } from '@src/components/trip/expenses/helper';
+import { getCurrencyConversionRates, listExpenses } from '@src/lib/api';
 
-import type { ConversionRate } from '../../../types/expenses';
-import type { Expense, Trip } from '../../../types/trips';
+import type { ConversionRate } from '@src/types/expenses';
+import type { Expense, Trip } from '@src/types/trips';
 
 export const useTripExpenses = ({ trip }: { trip: Trip }) => {
   const { user } = useCurrentUser();

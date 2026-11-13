@@ -3,14 +3,14 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PlaceMultiSelect } from '../../../../src/components/places/PlaceMultiSelect.tsx';
-import * as api from '../../../../src/lib/api';
+import { PlaceMultiSelect } from '@src/components/places/PlaceMultiSelect.tsx';
+import * as api from '@src/lib/api';
 
-import type { Place } from '../../../../src/types/trips';
+import type { Place } from '@src/types/trips';
 
 
 // Mock the API module
-vi.mock('../../../../src/lib/api', () => ({
+vi.mock('@src/lib/api', () => ({
   searchPlaces: vi.fn(),
 }));
 

@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { getAttachmentUrl, logoutCurrentUser } from '../../lib/api';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { getAttachmentUrl, logoutCurrentUser } from '@src/lib/api';
 
 export function UserButton() {
   const [, setUserMenuOpened] = useState(false);

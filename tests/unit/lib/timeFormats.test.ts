@@ -10,9 +10,9 @@ import {
   getFormatDateTimeString,
   getFormatTimeString,
   getTimePickerFormat,
-} from '../../../src/lib/time';
+} from '@src/lib/time';
 
-import type { User } from '../../../src/types/auth';
+import type { User } from '@src/types/auth';
 
 const withFormat = (timeFormat?: string) => ({ timeFormat }) as User;
 

@@ -5,13 +5,13 @@ import dayjs from 'dayjs';
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ActivityLine } from './ActivityLine.tsx';
-import { buildActivitiesIndex, buildLodgingIndex, buildTransportationIndex, compareItineraryLine } from './helper.ts';
-import { LodgingLine } from './LodgingLine.tsx';
-import { TransportationLine } from './TransportationLine.tsx';
-import { listActivities, listLodgings, listTransportations } from '../../../lib/api';
+import { ActivityLine } from '@src/components/trip/itinerary/ActivityLine.tsx';
+import { buildActivitiesIndex, buildLodgingIndex, buildTransportationIndex, compareItineraryLine } from '@src/components/trip/itinerary/helper.ts';
+import { LodgingLine } from '@src/components/trip/itinerary/LodgingLine.tsx';
+import { TransportationLine } from '@src/components/trip/itinerary/TransportationLine.tsx';
+import { listActivities, listLodgings, listTransportations } from '@src/lib/api';
 
-import type { Activity, ItineraryLine, Lodging, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Activity, ItineraryLine, Lodging, Transportation, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 const getDailyItinerary = (
   day: string,

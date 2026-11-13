@@ -17,8 +17,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { getSettingsForKey, setSettingsForKey, testImapConnectivity, triggerImportBookingsJob } from '../../lib/api';
-import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { getSettingsForKey, setSettingsForKey, testImapConnectivity, triggerImportBookingsJob } from '@src/lib/api';
+import { showErrorNotification, showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
 export type ImportBookingsConfiguration = {
   enabled?: boolean;

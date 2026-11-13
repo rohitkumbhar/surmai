@@ -3,14 +3,14 @@ import { render, screen, waitFor, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AirportSelect } from '../../../../../src/components/trip/transportation/AirportSelect';
-import * as api from '../../../../../src/lib/api';
+import { AirportSelect } from '@src/components/trip/transportation/AirportSelect';
+import * as api from '@src/lib/api';
 
-import type { Airport } from '../../../../../src/types/trips';
+import type { Airport } from '@src/types/trips';
 
 
 // Mock the API module
-vi.mock('../../../../../src/lib/api', () => ({
+vi.mock('@src/lib/api', () => ({
   searchAirports: vi.fn(),
 }));
 

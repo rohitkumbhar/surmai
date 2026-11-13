@@ -1,6 +1,6 @@
-import { pb, pbAdmin } from './pocketbase';
+import { pb, pbAdmin } from '@src/lib/api/pocketbase/pocketbase';
 
-import type { Notification, Announcement } from '../../../types/notifications';
+import type { Notification, Announcement } from '@src/types/notifications';
 
 export const listNotifications = async () => {
   return await pb.collection('notifications').getFullList<Notification>({

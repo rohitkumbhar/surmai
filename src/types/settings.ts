@@ -1,4 +1,4 @@
-import type { VersionInfo } from '../app/versionInfo.ts';
+import type { VersionInfo } from '@src/app/versionInfo.ts';
 
 export type SmtpSettings = {
   enabled?: boolean;

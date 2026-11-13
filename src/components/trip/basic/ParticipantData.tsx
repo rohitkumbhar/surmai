@@ -3,9 +3,9 @@ import { useForm } from '@mantine/form';
 import { IconChevronDown } from '@tabler/icons-react';
 import { forwardRef, useState } from 'react';
 
-import { updateTrip } from '../../../lib/api';
+import { updateTrip } from '@src/lib/api';
 
-import type { Participant, Trip } from '../../../types/trips.ts';
+import type { Participant, Trip } from '@src/types/trips.ts';
 
 const ParticipantButton = forwardRef<HTMLDivElement, { name: string; email?: string }>((props, ref) => {
   const { name, email } = props;

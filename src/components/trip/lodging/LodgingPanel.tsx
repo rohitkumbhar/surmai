@@ -4,13 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AddLodgingMenu } from './AddLodgingMenu.tsx';
-import { GenericLodgingData } from './GenericLodgingData.tsx';
-import { GenericLodgingForm } from './GenericLodgingForm.tsx';
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { listLodgings } from '../../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { AddLodgingMenu } from '@src/components/trip/lodging/AddLodgingMenu.tsx';
+import { GenericLodgingData } from '@src/components/trip/lodging/GenericLodgingData.tsx';
+import { GenericLodgingForm } from '@src/components/trip/lodging/GenericLodgingForm.tsx';
+import { listLodgings } from '@src/lib/api';
 
-import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const LodgingPanel = ({
   trip,
