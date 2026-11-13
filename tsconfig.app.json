@@ -6,6 +6,9 @@
     "paths": {
       "@src/*": [
         "./src/*"
+      ],
+      "@tests/*": [
+        "./tests/*"
       ]
     },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",

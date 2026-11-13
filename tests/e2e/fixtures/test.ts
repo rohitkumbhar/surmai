@@ -1,9 +1,9 @@
 import { test as base, expect, request as playwrightRequest } from '@playwright/test';
 
-import { authenticate, isoDay, SurmaiApi, unique } from './api';
+import { authenticate, isoDay, SurmaiApi, unique } from '@tests/e2e/fixtures/api';
 
-import type { SeededUser, TripInput } from './api';
 import type { APIRequestContext, Page } from '@playwright/test';
+import type { SeededUser, TripInput } from '@tests/e2e/fixtures/api';
 
 export const superuser = {
   email: process.env.SURMAI_ADMIN_EMAIL || 'admin@test.surmai.app',

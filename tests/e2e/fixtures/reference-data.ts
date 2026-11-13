@@ -1,4 +1,4 @@
-import type { SurmaiApi } from './api';
+import type { SurmaiApi } from '@tests/e2e/fixtures/api';
 
 /**
  * A handful of places, airports and airlines for the tests to search.

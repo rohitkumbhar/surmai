@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/test';
+import { expect, test } from '@tests/e2e/fixtures/test';
 
 /**
  * The whole sharing flow across two users: the owner invites, the invitee

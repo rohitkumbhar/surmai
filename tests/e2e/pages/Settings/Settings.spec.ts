@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/test';
+import { expect, test } from '@tests/e2e/fixtures/test';
 
 /**
  * The admin settings forms are populated from a query inside an effect, and
@@ -28,8 +28,8 @@ test.describe('Settings', () => {
     // Put the suite's settings back, since other specs rely on them pointing
     // at the mock services.
     const context = await playwright.request.newContext({ baseURL });
-    const { SurmaiApi } = await import('../../fixtures/api');
-    const { superuser } = await import('../../fixtures/test');
+    const { SurmaiApi } = await import('@tests/e2e/fixtures/api');
+    const { superuser } = await import('@tests/e2e/fixtures/test');
     const api = await SurmaiApi.asSuperuser(context, superuser.email, superuser.password);
     for (const [key, value] of Object.entries(original)) {
       await api.writeSetting(key, value);

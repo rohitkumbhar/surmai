@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, expect, it, vi } from 'vitest';
 
-import { withQueryClient } from '../../../helpers/queryClient';
+import { withQueryClient } from '@tests/unit/helpers/queryClient';
 
 import type { Expense, Trip } from '@src/types/trips';
 

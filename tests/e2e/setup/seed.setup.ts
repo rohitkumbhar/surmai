@@ -2,9 +2,9 @@ import { test as setup, expect } from '@playwright/test';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
-import { authenticate, SurmaiApi } from '../fixtures/api';
-import { seedReferenceData } from '../fixtures/reference-data';
-import { defaultUser, authStoreKey, storageStatePath, superuser } from '../fixtures/test';
+import { authenticate, SurmaiApi } from '@tests/e2e/fixtures/api';
+import { seedReferenceData } from '@tests/e2e/fixtures/reference-data';
+import { defaultUser, authStoreKey, storageStatePath, superuser } from '@tests/e2e/fixtures/test';
 
 const mockServices = process.env.MOCK_SERVICES_URL || 'http://127.0.0.1:8099';
 

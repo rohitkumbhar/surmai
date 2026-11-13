@@ -62,7 +62,10 @@ export default defineConfig([
           ],
           // '@src/...' is first-party. Without this it is unresolvable here,
           // so it would be sorted in with the npm packages.
-          pathGroups: [{ pattern: '@src/**', group: 'internal', position: 'before' }],
+          pathGroups: [
+            { pattern: '@src/**', group: 'internal', position: 'before' },
+            { pattern: '@tests/**', group: 'internal', position: 'before' },
+          ],
           pathGroupsExcludedImportTypes: ['builtin', 'type'],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
@@ -73,12 +76,11 @@ export default defineConfig([
     },
   },
 
-  // Nothing under src/ reaches for a sibling or a parent: every import of our
-  // own code is written '@src/...', which is resolved by the alias in
-  // vite.config.ts and the path in tsconfig.app.json. Tests still import
-  // their own fixtures and helpers relatively.
+  // Nothing reaches for a sibling or a parent: every import of our own code is
+  // written '@src/...' or '@tests/...', resolved by the aliases in
+  // vite.config.ts and the paths in tsconfig.app.json and tsconfig.node.json.
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}', 'tests/**/*.{ts,tsx}'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -86,7 +88,7 @@ export default defineConfig([
           patterns: [
             {
               group: ['./*', '../*'],
-              message: "Import our own code as '@src/...' rather than a relative path.",
+              message: "Import our own code as '@src/...' or '@tests/...' rather than a relative path.",
             },
           ],
         },

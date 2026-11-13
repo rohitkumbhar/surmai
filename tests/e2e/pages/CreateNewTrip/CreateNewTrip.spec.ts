@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 
-import { CreateNewTripPage } from './CreateNewTripPage';
-import { unique } from '../../fixtures/api';
-import { expect, test } from '../../fixtures/test';
+import { unique } from '@tests/e2e/fixtures/api';
+import { expect, test } from '@tests/e2e/fixtures/test';
+import { CreateNewTripPage } from '@tests/e2e/pages/CreateNewTrip/CreateNewTripPage';
 
 
 test.describe('Create New Trip Page', () => {

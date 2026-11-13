@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/test';
+import { expect, test } from '@tests/e2e/fixtures/test';
 
 /**
  * The invitations page, against real invitations rather than mocked responses.
