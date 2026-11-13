@@ -72,8 +72,6 @@ export const FlightInfoProviderSettings = () => {
   });
 
   const handleSubmission = async (values: FlightInfoProviderSettings) => {
-    console.log('values', values);
-
     const payload = {
       enabled: values.enabled,
       provider: values.provider,

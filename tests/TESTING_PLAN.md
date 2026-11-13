@@ -183,21 +183,29 @@ warnings, none of which were being looked at:
   rule is now off for `tests/e2e`, where nothing is a React component.
 - The generated `coverage/` directory was being linted, which accounted for 6
   more.
-- The three `useCombobox` effects simply declare the store, which is stable.
-- Where a dependency genuinely cannot be declared — Mantine's `useForm` returns
-  a new object on every render, so depending on it loops — there is now a scoped
-  disable with the reason.
+- Where a dependency genuinely cannot be declared there is now a scoped disable
+  with the reason. Mantine's `useForm` and `useCombobox` both return a new
+  object on every render, so declaring either re-runs the effect in a loop.
+  Declaring the combobox store was tried first and made the destination and
+  airport dropdowns re-render continuously, so they never accepted a click;
+  the e2e suite caught it.
 
 The `react-hooks/exhaustive-deps` warnings on the settings forms led to a real
-bug, which `tests/e2e/pages/Settings/Settings.spec.ts` now covers: the flight
-provider, assistant and booking import forms only filled themselves in when the
-setting was *enabled*. A setting saved as disabled showed blank fields, and
-saving that form wrote the blanks over the stored endpoint, key and credentials.
+bug: the flight provider, assistant and booking import forms only filled
+themselves in when the setting was *enabled*. A setting saved as disabled
+showed blank fields, and saving that form wrote the blanks over the stored
+endpoint, key and credentials. Covered twice, since both levels are cheap here:
+`tests/e2e/pages/Settings/Settings.spec.ts` drives the real screens, and
+`tests/unit/components/settings/SettingsForms.test.tsx` asserts the payload each
+form submits for a stored-but-disabled setting.
+
+A stray `console.log` in the flight provider form, which printed the submitted
+values including the provider API key to the browser console, is gone.
 
 ### Still to do
 
 - Form components in Vitest: the transportation forms, the expense form and its
-  splits, the lodging and activity forms.
+  splits, the lodging and activity forms. The settings forms are done.
 - `pdfGenerator` data assembly.
 - The remaining Playwright areas in the table below.
 
