@@ -255,9 +255,31 @@ repository imports by walking up directories. Playwright resolves it from the
 tsconfig paths, the same as vitest resolves it from the vite alias, and
 `no-restricted-imports` now covers `tests/` as well as `src/`.
 
+### PR 13: The trip lifecycle in Playwright — done
+
+`tests/e2e/pages/MyTrips` and `tests/e2e/pages/ViewTrip/TripActions.spec.ts`.
+
+- My Trips lists a trip and opens it, keeps upcoming trips apart from trips in
+  the past, shows nothing belonging to anybody else, and offers to start one
+  when there are none.
+- The Actions menu, which lives in the collapsed Basic Information panel:
+  renaming a trip, adding a destination, refusing a trip with no name,
+  deleting one after a confirmation and keeping it after a cancellation,
+  exporting a zip, generating an ics file, and downloading the itinerary pdf.
+- The export and the import meet: a trip is exported through the UI,
+  the downloaded archive is handed to the Import Trip button, and the copy
+  that comes back carries the name and the lodging.
+
+Two things the tests had to be written around. The download controls are
+anchors, so they answer to the link role, not the button role; and a Mantine
+dropdown renders in a portal, outside the dialog that owns the field.
+
 ### Still to do
 
 - The remaining Playwright areas in the table below.
+- A trip's budget is only stored when both the amount and the currency are
+  set, and the currency select starts empty on a trip that has no budget, so
+  typing an amount alone and saving silently keeps no budget.
 
 ### PR 8: Playwright foundation — done
 
@@ -295,7 +317,7 @@ it. Those specs now seed their trip instead of creating it through that form.
 | Area                  | Specs                                                                                      |
 |-----------------------|--------------------------------------------------------------------------------------------|
 | Auth                  | sign in/up (exists), sign out, change password, sign up blocked when disabled              |
-| Trips                 | create (exists), edit basics and destinations, cover image, delete, My Trips list, export → import, calendar download |
+| Trips                 | ✅ create, edit basics and destinations, delete, My Trips list, export → import, calendar download, itinerary pdf; still to do: cover image |
 | Transportation        | add flight/train/car (exists), edit, delete, flight lookup (stubbed)                       |
 | Lodging, activities   | add (exists), edit, delete                                                                 |
 | Attachments           | upload, view and delete from the Attachments tab                                           |
