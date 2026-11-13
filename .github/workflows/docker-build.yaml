@@ -7,12 +7,17 @@ on:
   pull_request:
     branches: [ "main" ]
 
+# The registry login below uses a PAT, so the workflow token only needs to read
+# the repository.
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v7
       with:
         fetch-depth: 0
     - name: Git Describe
