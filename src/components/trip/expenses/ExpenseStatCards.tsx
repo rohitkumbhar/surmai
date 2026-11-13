@@ -1,9 +1,9 @@
 import { Anchor, Card, Group, RingProgress, SimpleGrid, Stack, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { formatCost, getRandomColor } from './helper.ts';
+import { formatCost, getRandomColor } from '@src/components/trip/expenses/helper.ts';
 
-import type { ConvertedExpense, Trip } from '../../../types/trips.ts';
+import type { ConvertedExpense, Trip } from '@src/types/trips.ts';
 
 type CurrencyTotal = {
   total: number;

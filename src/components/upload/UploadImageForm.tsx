@@ -2,12 +2,12 @@ import { Button, Center, Stack, Stepper, Text } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { CropModal } from './CropModal.tsx';
-import { ImageDropZone } from './ImageDropZone.tsx';
-import { getCroppedImg } from '../../lib/image.ts';
+import { CropModal } from '@src/components/upload/CropModal.tsx';
+import { ImageDropZone } from '@src/components/upload/ImageDropZone.tsx';
+import { getCroppedImg } from '@src/lib/image.ts';
 
-import type { CroppedImage } from '../../types/trips.ts';
 import type { ContextModalProps } from '@mantine/modals';
+import type { CroppedImage } from '@src/types/trips.ts';
 
 export const UploadImageForm = ({
   context,

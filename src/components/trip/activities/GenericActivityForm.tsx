@@ -4,18 +4,18 @@ import { useForm } from '@mantine/form';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { saveActivity } from '../../../lib/api';
-import i18n from '../../../lib/i18n.ts';
-import { fakeAsUtcString, getFormatDateTimeString, getTimePickerFormat } from '../../../lib/time.ts';
-import { PlaceSelect } from '../../places/PlaceSelect.tsx';
-import { CurrencyInput } from '../../util/CurrencyInput.tsx';
-import { AttachmentsUploadField } from '../attachments/AttachmentsUploadField.tsx';
-import { TravellerMultiSelect } from '../TravellerMultiSelect.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { PlaceSelect } from '@src/components/places/PlaceSelect.tsx';
+import { AttachmentsUploadField } from '@src/components/trip/attachments/AttachmentsUploadField.tsx';
+import { TravellerMultiSelect } from '@src/components/trip/TravellerMultiSelect.tsx';
+import { CurrencyInput } from '@src/components/util/CurrencyInput.tsx';
+import { saveActivity } from '@src/lib/api';
+import i18n from '@src/lib/i18n.ts';
+import { fakeAsUtcString, getFormatDateTimeString, getTimePickerFormat } from '@src/lib/time.ts';
 
-import type { SaveEntityPayload } from '../../../lib/api';
-import type { Activity, ActivityFormSchema, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
+import type { SaveEntityPayload } from '@src/lib/api';
+import type { Activity, ActivityFormSchema, Attachment, Expense, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const GenericActivityForm = ({
   trip,

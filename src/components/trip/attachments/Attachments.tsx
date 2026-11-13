@@ -11,10 +11,10 @@ import {
 } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { getAttachmentUrl } from '../../../lib/api';
-import { showDeleteNotification } from '../../../lib/notifications.tsx';
+import { getAttachmentUrl } from '@src/lib/api';
+import { showDeleteNotification } from '@src/lib/notifications.tsx';
 
-import type { Attachment } from '../../../types/trips.ts';
+import type { Attachment } from '@src/types/trips.ts';
 
 export const Attachments = ({
   attachments,

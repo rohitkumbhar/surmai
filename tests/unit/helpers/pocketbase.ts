@@ -9,7 +9,7 @@ import type { Mock } from 'vitest';
  * to mock `lib/api/pocketbase/pocketbase.ts` with this before importing them:
  *
  *   const client = createMockPocketBase();
- *   vi.mock('../../../src/lib/api/pocketbase/pocketbase', () => ({
+ *   vi.mock('@src/lib/api/pocketbase/pocketbase', () => ({
  *     pb: client.pb, pbAdmin: client.pbAdmin, pocketBaseUrl: 'http://localhost',
  *   }));
  */

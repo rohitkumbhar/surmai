@@ -4,10 +4,10 @@ import { IconTrash } from '@tabler/icons-react';
 import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { deleteCollaborator, getAttachmentUrl } from '../../../../lib/api';
+import { deleteCollaborator, getAttachmentUrl } from '@src/lib/api';
 
-import type { User } from '../../../../types/auth.ts';
-import type { Trip } from '../../../../types/trips.ts';
+import type { User } from '@src/types/auth.ts';
+import type { Trip } from '@src/types/trips.ts';
 
 export const CollaboratorButton = forwardRef<
   HTMLDivElement,

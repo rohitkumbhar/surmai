@@ -6,11 +6,11 @@ import {
   getExpenseTotalsByCurrency,
   getRandomColor,
   getTargetCurrency,
-} from '../../../../../src/components/trip/expenses/helper';
+} from '@src/components/trip/expenses/helper';
 
-import type { User } from '../../../../../src/types/auth';
-import type { ConversionRate } from '../../../../../src/types/expenses';
-import type { Expense, Trip } from '../../../../../src/types/trips';
+import type { User } from '@src/types/auth';
+import type { ConversionRate } from '@src/types/expenses';
+import type { Expense, Trip } from '@src/types/trips';
 
 // Rates are stored against USD: one USD buys this many of the currency.
 const rates: ConversionRate[] = [

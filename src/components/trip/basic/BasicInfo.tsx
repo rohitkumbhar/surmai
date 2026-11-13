@@ -1,8 +1,8 @@
 import { Container } from '@mantine/core';
 
-import { BasicInfoView } from './BasicInfoView.tsx';
+import { BasicInfoView } from '@src/components/trip/basic/BasicInfoView.tsx';
 
-import type { Attachment, Trip } from '../../../types/trips.ts';
+import type { Attachment, Trip } from '@src/types/trips.ts';
 
 export const BasicInfo = ({ trip, refetch }: { trip: Trip; refetch: () => void; tripAttachments?: Attachment[] }) => {
   return (

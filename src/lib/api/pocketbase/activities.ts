@@ -1,8 +1,8 @@
-import { deleteAttachment } from './attachments.ts';
-import { pb } from './pocketbase.ts';
-import { convertSavedToBrowserDate, startDateInYearFilter } from '../../time.ts';
+import { deleteAttachment } from '@src/lib/api/pocketbase/attachments.ts';
+import { pb } from '@src/lib/api/pocketbase/pocketbase.ts';
+import { convertSavedToBrowserDate, startDateInYearFilter } from '@src/lib/time.ts';
 
-import type { Activity, CreateActivity } from '../../../types/trips.ts';
+import type { Activity, CreateActivity } from '@src/types/trips.ts';
 
 const activities = pb.collection('activities');
 export const listActivities = async (tripId?: string): Promise<Activity[]> => {

@@ -16,8 +16,8 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
 import {
   deleteTrip,
   listActivities,
@@ -26,13 +26,13 @@ import {
   listTripTravellerProfiles,
   loadEverything,
   uploadTripCoverImage,
-} from '../../../lib/api';
-import { showDeleteNotification, showErrorNotification, showInfoNotification } from '../../../lib/notifications.tsx';
+} from '@src/lib/api';
+import { showDeleteNotification, showErrorNotification, showInfoNotification } from '@src/lib/notifications.tsx';
 
 
-const loadPdfGenerator = () => import('../itinerary/pdfGenerator.ts');
+const loadPdfGenerator = () => import('@src/components/trip/itinerary/pdfGenerator.ts');
 
-import type { Trip } from '../../../types/trips.ts';
+import type { Trip } from '@src/types/trips.ts';
 
 export const BasicInfoMenu = ({ trip, refetch }: { trip: Trip; refetch: () => void }) => {
   const { t } = useTranslation();

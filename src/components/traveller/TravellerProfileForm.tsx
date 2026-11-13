@@ -22,7 +22,7 @@ import type {
   TravellerAdditionalField,
   TravellerProfile,
   TravellerProfileManager,
-} from '../../types/trips.ts';
+} from '@src/types/trips.ts';
 
 interface TravellerProfileFormProps {
   initialValues?: TravellerProfile;

@@ -4,15 +4,15 @@ import { IconDeviceFloppy } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ColorSchemeSelect } from './ColorSchemeSelect.tsx';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { updateUser } from '../../lib/api';
-import { supportedLanguages } from '../../lib/i18n.ts';
-import { showSaveSuccessNotification } from '../../lib/notifications.tsx';
-import { currencyCodes } from '../util/currencyCodes.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { ColorSchemeSelect } from '@src/components/account/ColorSchemeSelect.tsx';
+import { currencyCodes } from '@src/components/util/currencyCodes.ts';
+import { updateUser } from '@src/lib/api';
+import { supportedLanguages } from '@src/lib/i18n.ts';
+import { showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
-import type { UserSettingsFormType } from '../../types/auth.ts';
+import type { UserSettingsFormType } from '@src/types/auth.ts';
 
 export const UserSettingsForm = () => {
   const { user, reloadUser } = useCurrentUser();

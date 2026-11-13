@@ -3,16 +3,16 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconParking } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { deleteTransportation, deleteTransportationAttachment } from '../../../lib/api';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { DataLine } from '../DataLine.tsx';
-import { TravellerBadges } from '../TravellerBadges.tsx';
-import { ParkingForm } from './ParkingForm.tsx';
-import { formatDate, formatTime } from '../../../lib/time.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { Attachments } from '@src/components/trip/attachments/Attachments.tsx';
+import { DataLine } from '@src/components/trip/DataLine.tsx';
+import { ParkingForm } from '@src/components/trip/transportation/ParkingForm.tsx';
+import { TravellerBadges } from '@src/components/trip/TravellerBadges.tsx';
+import { deleteTransportation, deleteTransportationAttachment } from '@src/lib/api';
+import { formatDate, formatTime } from '@src/lib/time.ts';
 
-import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const ParkingData = ({
   trip,

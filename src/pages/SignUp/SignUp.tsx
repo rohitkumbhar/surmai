@@ -4,12 +4,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { FancyPasswordInput } from '../../components/account/FancyPasswordInput.tsx';
-import { createUserWithPassword } from '../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { FancyPasswordInput } from '@src/components/account/FancyPasswordInput.tsx';
+import { createUserWithPassword } from '@src/lib/api';
 
-import type { SignUpForm } from '../../types/auth.ts';
 import type { UseFormReturnType } from '@mantine/form';
+import type { SignUpForm } from '@src/types/auth.ts';
 
 export const SignUp = () => {
   const [apiError, setApiError] = useState<string>();

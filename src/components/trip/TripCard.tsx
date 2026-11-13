@@ -8,11 +8,11 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import classes from './TripCard.module.css';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { getAttachmentUrl, uploadTripCoverImage } from '../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import classes from '@src/components/trip/TripCard.module.css';
+import { getAttachmentUrl, uploadTripCoverImage } from '@src/lib/api';
 
-import type { Trip } from '../../types/trips.ts';
+import type { Trip } from '@src/types/trips.ts';
 
 export const TripCoverImage = ({ trip, onSave }: { trip: Trip; onSave: () => void }) => {
   const { hovered, ref } = useHover();

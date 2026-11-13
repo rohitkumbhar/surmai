@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import type { Trip } from '../../types/trips.ts';
+import type { Trip } from '@src/types/trips.ts';
 
 export const DataLine = ({
   children,

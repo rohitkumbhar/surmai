@@ -2,8 +2,8 @@ import { Grid, NumberInput, Switch, Text } from '@mantine/core';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import type { ExpenseFormSchema, ExpenseSplit, TravellerProfile } from '../../../types/trips.ts';
 import type { UseFormReturnType } from '@mantine/form';
+import type { ExpenseFormSchema, ExpenseSplit, TravellerProfile } from '@src/types/trips.ts';
 
 export const ExpenseSplitSection = ({
   form,

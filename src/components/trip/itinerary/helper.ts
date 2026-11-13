@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import type { Activity, ItineraryLine, Lodging, Transportation } from '../../../types/trips.ts';
+import type { Activity, ItineraryLine, Lodging, Transportation } from '@src/types/trips.ts';
 
 export const buildTransportationIndex = (transportations: Transportation[]) => {
   const transportationIndex: { [key: string]: Array<Transportation> } = {};

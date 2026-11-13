@@ -7,10 +7,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 import { useState } from 'react';
 
-import { TravellerProfileForm } from './TravellerProfileForm.tsx';
-import { TravellerProfileModal } from './TravellerProfileModal.tsx';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { TravellerProfileForm } from '@src/components/traveller/TravellerProfileForm.tsx';
+import { TravellerProfileModal } from '@src/components/traveller/TravellerProfileModal.tsx';
 import {
   createTravellerProfile,
   deleteTravellerProfile,
@@ -18,9 +18,9 @@ import {
   listTravellerProfiles,
   updateTravellerProfile,
   uploadTravellerAttachments,
-} from '../../lib/api/index.ts';
+} from '@src/lib/api/index.ts';
 
-import type { NewTravellerProfile, TravellerProfile } from '../../types/trips.ts';
+import type { NewTravellerProfile, TravellerProfile } from '@src/types/trips.ts';
 
 export const TravellerProfileList = ({ excludeEmail }: { excludeEmail?: string } = {}) => {
   const queryClient = useQueryClient();

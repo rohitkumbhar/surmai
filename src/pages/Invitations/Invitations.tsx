@@ -3,12 +3,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { TripCollaborationInvitationCard } from '../../components/invitations/TripCollaborationInvitationCard.tsx';
-import { Header } from '../../components/nav/Header.tsx';
-import { listInvitations } from '../../lib/api';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { TripCollaborationInvitationCard } from '@src/components/invitations/TripCollaborationInvitationCard.tsx';
+import { Header } from '@src/components/nav/Header.tsx';
+import { listInvitations } from '@src/lib/api';
+import { usePageTitle } from '@src/lib/hooks/usePageTitle.ts';
 
-import type { Invitation } from '../../types/invitations.ts';
+import type { Invitation } from '@src/types/invitations.ts';
 
 const Invitations = () => {
   const { data: invitations, refetch: refetchInvitations } = useQuery<Invitation[]>({

@@ -1,4 +1,4 @@
-import type { Entity } from "./trips";
+import type { Entity } from "@src/types/trips";
 
 export type InvitationMetadata = {
   trip: {

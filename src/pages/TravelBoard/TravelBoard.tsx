@@ -25,14 +25,14 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import 'leaflet/dist/leaflet.css';
-import { useTravelBoardStatistics } from './useTravelBoardStatistics';
-import { Header } from '../../components/nav/Header';
-import { formatCost } from '../../components/trip/expenses/helper';
-import { listAllTrips } from '../../lib/api';
-import { usePageTitle } from '../../lib/hooks/usePageTitle';
+import { Header } from '@src/components/nav/Header';
+import { formatCost } from '@src/components/trip/expenses/helper';
+import { listAllTrips } from '@src/lib/api';
+import { usePageTitle } from '@src/lib/hooks/usePageTitle';
+import { useTravelBoardStatistics } from '@src/pages/TravelBoard/useTravelBoardStatistics';
 
 
-import type { Trip } from '../../types/trips';
+import type { Trip } from '@src/types/trips';
 
 // Fix for default marker icons in Leaflet with Webpack/Vite
 

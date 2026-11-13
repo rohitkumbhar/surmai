@@ -6,9 +6,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { TestPromptModal } from './TestPromptModal.tsx';
-import { getSettingsForKey, setSettingsForKey } from '../../lib/api';
-import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { TestPromptModal } from '@src/components/settings/TestPromptModal.tsx';
+import { getSettingsForKey, setSettingsForKey } from '@src/lib/api';
+import { showErrorNotification, showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
 export type OpenAIEndpointConfig = {
   enabled?: boolean;

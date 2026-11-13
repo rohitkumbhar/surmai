@@ -3,10 +3,10 @@ import { useForm } from '@mantine/form';
 import { IconRefreshDot } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { FancyPasswordInput } from './FancyPasswordInput.tsx';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { isAdmin, updateAdminUser, updateUser } from '../../lib/api';
-import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { FancyPasswordInput } from '@src/components/account/FancyPasswordInput.tsx';
+import { isAdmin, updateAdminUser, updateUser } from '@src/lib/api';
+import { showErrorNotification, showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
 import type { UseFormReturnType } from '@mantine/form';
 

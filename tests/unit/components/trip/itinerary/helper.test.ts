@@ -7,9 +7,9 @@ import {
   buildTransportationIndex,
   chunk,
   compareItineraryLine,
-} from '../../../../../src/components/trip/itinerary/helper';
+} from '@src/components/trip/itinerary/helper';
 
-import type { Activity, ItineraryLine, Lodging, Transportation } from '../../../../../src/types/trips';
+import type { Activity, ItineraryLine, Lodging, Transportation } from '@src/types/trips';
 
 const dayKey = (date: string) => dayjs(date).startOf('day').toISOString();
 

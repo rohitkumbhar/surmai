@@ -4,10 +4,10 @@ import { nanoid } from 'nanoid';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { searchPlaces } from '../../lib/api';
+import { searchPlaces } from '@src/lib/api';
 
-import type { Place } from '../../types/trips';
 import type { UseFormReturnType } from '@mantine/form';
+import type { Place } from '@src/types/trips';
 
 export function PlaceSelect({
   propName,

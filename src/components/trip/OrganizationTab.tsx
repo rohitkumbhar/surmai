@@ -2,12 +2,12 @@ import { Accordion, Group, rem, Text } from '@mantine/core';
 import { IconBed, IconCalendar, IconInfoSquare, IconPlane } from '@tabler/icons-react';
 import { t } from 'i18next';
 
-import { ActivitiesPanel } from './activities/ActivitiesPanel';
-import { BasicInfo } from './basic/BasicInfo';
-import { LodgingPanel } from './lodging/LodgingPanel';
-import { TransportationPanel } from './transportation/TransportationPanel';
+import { ActivitiesPanel } from '@src/components/trip/activities/ActivitiesPanel';
+import { BasicInfo } from '@src/components/trip/basic/BasicInfo';
+import { LodgingPanel } from '@src/components/trip/lodging/LodgingPanel';
+import { TransportationPanel } from '@src/components/trip/transportation/TransportationPanel';
 
-import type { Attachment, Expense, TravellerProfile, Trip } from '../../types/trips';
+import type { Attachment, Expense, TravellerProfile, Trip } from '@src/types/trips';
 
 export const OrganizationTab = ({
   trip,

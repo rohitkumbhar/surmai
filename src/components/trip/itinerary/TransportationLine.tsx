@@ -3,13 +3,13 @@ import { IconCar, IconMap2 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { getMapsLink } from '../../../lib/places.ts';
-import { formatTime } from '../../../lib/time.ts';
-import { typeIcons } from '../transportation/typeIcons.ts';
-import { TravellerBadges } from '../TravellerBadges.tsx';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { typeIcons } from '@src/components/trip/transportation/typeIcons.ts';
+import { TravellerBadges } from '@src/components/trip/TravellerBadges.tsx';
+import { getMapsLink } from '@src/lib/places.ts';
+import { formatTime } from '@src/lib/time.ts';
 
-import type { Transportation, TravellerProfile } from '../../../types/trips.ts';
+import type { Transportation, TravellerProfile } from '@src/types/trips.ts';
 import type { Dayjs } from 'dayjs';
 
 export const TransportationLine = ({

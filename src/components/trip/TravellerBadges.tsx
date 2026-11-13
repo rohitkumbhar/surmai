@@ -2,9 +2,9 @@ import { Badge, Divider, Group } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useState } from 'react';
 
-import { TravellerProfileModal } from '../traveller/TravellerProfileModal.tsx';
+import { TravellerProfileModal } from '@src/components/traveller/TravellerProfileModal.tsx';
 
-import type { TravellerProfile } from '../../types/trips.ts';
+import type { TravellerProfile } from '@src/types/trips.ts';
 
 export const TravellerBadges = ({
   travellerIds,

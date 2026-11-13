@@ -4,12 +4,12 @@ import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
-import classes from './UserInfo.module.css';
-import { useSurmaiContext } from '../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { getAttachmentUrl, listInvitations, logoutCurrentUser } from '../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import classes from '@src/components/user/UserInfo.module.css';
+import { getAttachmentUrl, listInvitations, logoutCurrentUser } from '@src/lib/api';
 
-import type { Invitation } from '../../types/invitations.ts';
+import type { Invitation } from '@src/types/invitations.ts';
 
 export const UserInfo = () => {
   const navigate = useNavigate();

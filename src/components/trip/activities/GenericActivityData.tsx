@@ -4,19 +4,19 @@ import { openConfirmModal } from '@mantine/modals';
 import { IconActivity } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { deleteActivity, deleteActivityAttachments } from '../../../lib/api';
-import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import { formatDate, formatTime } from '../../../lib/time.ts';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { DataLine } from '../DataLine.tsx';
-import { TravellerBadges } from '../TravellerBadges.tsx';
-import { GenericActivityForm } from './GenericActivityForm.tsx';
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { getMapsLink } from '../../../lib/places.ts';
-import { formatCost } from '../expenses/helper.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { GenericActivityForm } from '@src/components/trip/activities/GenericActivityForm.tsx';
+import { Attachments } from '@src/components/trip/attachments/Attachments.tsx';
+import { DataLine } from '@src/components/trip/DataLine.tsx';
+import { formatCost } from '@src/components/trip/expenses/helper.ts';
+import { TravellerBadges } from '@src/components/trip/TravellerBadges.tsx';
+import { deleteActivity, deleteActivityAttachments } from '@src/lib/api';
+import { showDeleteNotification } from '@src/lib/notifications.tsx';
+import { getMapsLink } from '@src/lib/places.ts';
+import { formatDate, formatTime } from '@src/lib/time.ts';
 
-import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const GenericActivityData = ({
   trip,

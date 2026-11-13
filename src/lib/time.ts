@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import type { User } from '../types/auth.ts';
+import type { User } from '@src/types/auth.ts';
 import type { Dayjs } from 'dayjs';
 
 export const calculateTimezoneDifference = (user: User | undefined, timezone: string) => {

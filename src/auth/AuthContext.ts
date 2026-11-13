@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 
-import type { User } from '../types/auth.ts';
+import type { User } from '@src/types/auth.ts';
 
 export const AuthContext = createContext<{
   user?: User;

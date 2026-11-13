@@ -1,4 +1,4 @@
-import i18n from '../../../lib/i18n.ts';
+import i18n from '@src/lib/i18n.ts';
 
 export const transportationConfig: { [key: string]: any } = {
   default: {

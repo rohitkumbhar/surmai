@@ -18,8 +18,8 @@ import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useTranslation } from 'react-i18next';
 
-import { InsertTableControl } from './InsertTableControl.tsx';
-import styles from './TripNotes.module.css';
+import { InsertTableControl } from '@src/components/trip/notes/InsertTableControl.tsx';
+import styles from '@src/components/trip/notes/TripNotes.module.css';
 
 const NotesEditor = ({ notes, onSave }: { notes: string; onSave: (content: string) => void }) => {
   const { t } = useTranslation();

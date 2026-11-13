@@ -3,14 +3,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { bodyOf, createMockPocketBase, listCall } from '../../helpers/pocketbase';
 
 const client = createMockPocketBase();
-vi.mock('../../../../src/lib/api/pocketbase/pocketbase', () => ({
+vi.mock('@src/lib/api/pocketbase/pocketbase', () => ({
   pb: client.pb,
   pbAdmin: client.pbAdmin,
   pocketBaseUrl: 'http://localhost',
   pocketBaseClients: { user: client.pb, admin: client.pbAdmin },
 }));
 
-const api = await import('../../../../src/lib/api/pocketbase/attachments');
+const api = await import('@src/lib/api/pocketbase/attachments');
 
 const attachments = () => client.collection('trip_attachments');
 

@@ -4,20 +4,20 @@ import { openConfirmModal } from '@mantine/modals';
 import { IconHome } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { useCurrentUser } from '../../../auth/useCurrentUser.ts';
-import { deleteLodging, deleteLodgingAttachments } from '../../../lib/api';
-import { showDeleteNotification } from '../../../lib/notifications.tsx';
-import { getMapsLink } from '../../../lib/places.ts';
-import { formatDate, formatTime } from '../../../lib/time.ts';
-import { Attachments } from '../attachments/Attachments.tsx';
-import { DataLine } from '../DataLine.tsx';
-import { TravellerBadges } from '../TravellerBadges.tsx';
-import { GenericLodgingForm } from './GenericLodgingForm.tsx';
-import { typeIcons } from './typeIcons.ts';
-import { formatCost } from '../expenses/helper.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { Attachments } from '@src/components/trip/attachments/Attachments.tsx';
+import { DataLine } from '@src/components/trip/DataLine.tsx';
+import { formatCost } from '@src/components/trip/expenses/helper.ts';
+import { GenericLodgingForm } from '@src/components/trip/lodging/GenericLodgingForm.tsx';
+import { typeIcons } from '@src/components/trip/lodging/typeIcons.ts';
+import { TravellerBadges } from '@src/components/trip/TravellerBadges.tsx';
+import { deleteLodging, deleteLodgingAttachments } from '@src/lib/api';
+import { showDeleteNotification } from '@src/lib/notifications.tsx';
+import { getMapsLink } from '@src/lib/places.ts';
+import { formatDate, formatTime } from '@src/lib/time.ts';
 
-import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Lodging, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const GenericLodgingData = ({
   trip,

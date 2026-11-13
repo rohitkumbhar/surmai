@@ -4,15 +4,15 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { Header } from '../../components/nav/Header.tsx';
-import { Announcements } from '../../components/settings/Announcements.tsx';
-import { AssistantConfiguration } from '../../components/settings/AssistantConfiguration.tsx';
-import { Configuration } from '../../components/settings/Configuration.tsx';
-import { Datasets } from '../../components/settings/Datasets.tsx';
-import { ThirdPartyIntegrations } from '../../components/settings/ThirdPartyIntegrations.tsx';
-import { UserList } from '../../components/settings/UserList.tsx';
-import { adminAuthRefresh, logoutCurrentUser } from '../../lib/api';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { Header } from '@src/components/nav/Header.tsx';
+import { Announcements } from '@src/components/settings/Announcements.tsx';
+import { AssistantConfiguration } from '@src/components/settings/AssistantConfiguration.tsx';
+import { Configuration } from '@src/components/settings/Configuration.tsx';
+import { Datasets } from '@src/components/settings/Datasets.tsx';
+import { ThirdPartyIntegrations } from '@src/components/settings/ThirdPartyIntegrations.tsx';
+import { UserList } from '@src/components/settings/UserList.tsx';
+import { adminAuthRefresh, logoutCurrentUser } from '@src/lib/api';
+import { usePageTitle } from '@src/lib/hooks/usePageTitle.ts';
 
 const Settings = () => {
   const { t } = useTranslation();

@@ -17,10 +17,10 @@ import { useDisclosure } from '@mantine/hooks';
 import { IconDeviceFloppy, IconWebhook } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 
-import { apiUrl, setOAuth2Provider } from '../../lib/api';
-import { showErrorNotification, showSaveSuccessNotification } from '../../lib/notifications.tsx';
+import { apiUrl, setOAuth2Provider } from '@src/lib/api';
+import { showErrorNotification, showSaveSuccessNotification } from '@src/lib/notifications.tsx';
 
-import type { OAuthSettings, OAuthSettingsFormType } from '../../types/auth.ts';
+import type { OAuthSettings, OAuthSettingsFormType } from '@src/types/auth.ts';
 
 interface OAuth2SettingsFormProps {
   oauthConfig?: OAuthSettings;

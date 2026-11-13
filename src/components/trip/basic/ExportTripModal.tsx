@@ -2,10 +2,10 @@ import { Button, Center, Container, Text } from '@mantine/core';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { exportTripData } from '../../../lib/api';
+import { exportTripData } from '@src/lib/api';
 
-import type { Trip } from '../../../types/trips.ts';
 import type { ContextModalProps } from '@mantine/modals';
+import type { Trip } from '@src/types/trips.ts';
 
 export const ExportTripModal = ({
   innerProps,

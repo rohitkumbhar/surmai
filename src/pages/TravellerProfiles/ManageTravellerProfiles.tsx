@@ -1,10 +1,10 @@
 import { Container, Text } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { Header } from '../../components/nav/Header.tsx';
-import { TravellerProfileList } from '../../components/traveller/TravellerProfileList.tsx';
-import { usePageTitle } from '../../lib/hooks/usePageTitle.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { Header } from '@src/components/nav/Header.tsx';
+import { TravellerProfileList } from '@src/components/traveller/TravellerProfileList.tsx';
+import { usePageTitle } from '@src/lib/hooks/usePageTitle.ts';
 
 const ManageTravellerProfiles = () => {
   const { t } = useTranslation();

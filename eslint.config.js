@@ -60,12 +60,37 @@ export default defineConfig([
             ['internal', 'parent', 'sibling', 'index', 'object'],
             'type',
           ],
+          // '@src/...' is first-party. Without this it is unresolvable here,
+          // so it would be sorted in with the npm packages.
+          pathGroups: [{ pattern: '@src/**', group: 'internal', position: 'before' }],
+          pathGroupsExcludedImportTypes: ['builtin', 'type'],
           'newlines-between': 'always',
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
       'import/no-duplicates': 'warn',
       'import/newline-after-import': 'warn',
+    },
+  },
+
+  // Nothing under src/ reaches for a sibling or a parent: every import of our
+  // own code is written '@src/...', which is resolved by the alias in
+  // vite.config.ts and the path in tsconfig.app.json. Tests still import
+  // their own fixtures and helpers relatively.
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['./*', '../*'],
+              message: "Import our own code as '@src/...' rather than a relative path.",
+            },
+          ],
+        },
+      ],
     },
   },
 

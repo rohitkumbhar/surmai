@@ -8,7 +8,7 @@ import { createTestQueryClient } from '../../helpers/queryClient.tsx';
 
 import type { ReactElement } from 'react';
 
-vi.mock('../../../../src/lib/api', () => ({
+vi.mock('@src/lib/api', () => ({
   getSettingsForKey: vi.fn(),
   setSettingsForKey: vi.fn(),
   sendTestPrompt: vi.fn(),
@@ -16,7 +16,7 @@ vi.mock('../../../../src/lib/api', () => ({
   triggerImportBookingsJob: vi.fn(),
 }));
 
-vi.mock('../../../../src/lib/notifications.tsx', () => ({
+vi.mock('@src/lib/notifications.tsx', () => ({
   showErrorNotification: vi.fn(),
   showSaveSuccessNotification: vi.fn(),
 }));
@@ -25,15 +25,15 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (_: string, fallback: string) => fallback }),
 }));
 
-const api = await import('../../../../src/lib/api');
+const api = await import('@src/lib/api');
 const { FlightInfoProviderSettings } = await import(
-  '../../../../src/components/settings/FlightInfoProviderSettings.tsx'
+  '@src/components/settings/FlightInfoProviderSettings.tsx'
 );
 const { OpenAIEndpointConfiguration } = await import(
-  '../../../../src/components/settings/OpenAIEndpointConfiguration.tsx'
+  '@src/components/settings/OpenAIEndpointConfiguration.tsx'
 );
 const { ImportBookingsConfiguration } = await import(
-  '../../../../src/components/settings/ImportBookingsConfiguration.tsx'
+  '@src/components/settings/ImportBookingsConfiguration.tsx'
 );
 
 const renderSetting = (ui: ReactElement) =>

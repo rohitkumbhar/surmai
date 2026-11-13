@@ -4,13 +4,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AddActivitiesMenu } from './AddActivitiesMenu.tsx';
-import { GenericActivityData } from './GenericActivityData.tsx';
-import { GenericActivityForm } from './GenericActivityForm.tsx';
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { listActivities } from '../../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { AddActivitiesMenu } from '@src/components/trip/activities/AddActivitiesMenu.tsx';
+import { GenericActivityData } from '@src/components/trip/activities/GenericActivityData.tsx';
+import { GenericActivityForm } from '@src/components/trip/activities/GenericActivityForm.tsx';
+import { listActivities } from '@src/lib/api';
 
-import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Activity, Attachment, Expense, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const ActivitiesPanel = ({
   trip,

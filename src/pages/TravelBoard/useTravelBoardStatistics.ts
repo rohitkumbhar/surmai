@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useMemo } from 'react';
 
-import { useCurrentUser } from '../../auth/useCurrentUser';
-import { convertExpenses } from '../../components/trip/expenses/helper';
+import { useCurrentUser } from '@src/auth/useCurrentUser';
+import { convertExpenses } from '@src/components/trip/expenses/helper';
 import {
   listTripsByYear,
   listTransportationsByYear,
@@ -11,11 +11,11 @@ import {
   listExpensesByYear,
   listActivitiesByYear,
   getCurrencyConversionRates,
-} from '../../lib/api';
-import { countNights, travelMinutes } from '../../lib/time';
+} from '@src/lib/api';
+import { countNights, travelMinutes } from '@src/lib/time';
 
-import type { ConversionRate } from '../../types/expenses';
-import type { Trip, Transportation, Lodging, Expense, Activity, Place } from '../../types/trips';
+import type { ConversionRate } from '@src/types/expenses';
+import type { Trip, Transportation, Lodging, Expense, Activity, Place } from '@src/types/trips';
 
 export const useTravelBoardStatistics = (year: string | null) => {
   const { user } = useCurrentUser();

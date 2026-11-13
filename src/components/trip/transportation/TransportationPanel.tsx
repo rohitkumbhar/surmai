@@ -4,21 +4,21 @@ import { useQuery } from '@tanstack/react-query';
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AddTransportationMenu } from './AddTransportationMenu.tsx';
-import { BikeData } from './BikeData.tsx';
-import { BikeForm } from './BikeForm.tsx';
-import { CarRentalData } from './CarRentalData.tsx';
-import { CarRentalForm } from './CarRentalForm.tsx';
-import { FlightData } from './FlightData.tsx';
-import { FlightForm } from './FlightForm.tsx';
-import { GenericTransportationData } from './GenericTransportationData.tsx';
-import { GenericTransportationModeForm } from './GenericTransportationModeForm.tsx';
-import { ParkingData } from './ParkingData.tsx';
-import { ParkingForm } from './ParkingForm.tsx';
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
-import { listTransportations } from '../../../lib/api';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { AddTransportationMenu } from '@src/components/trip/transportation/AddTransportationMenu.tsx';
+import { BikeData } from '@src/components/trip/transportation/BikeData.tsx';
+import { BikeForm } from '@src/components/trip/transportation/BikeForm.tsx';
+import { CarRentalData } from '@src/components/trip/transportation/CarRentalData.tsx';
+import { CarRentalForm } from '@src/components/trip/transportation/CarRentalForm.tsx';
+import { FlightData } from '@src/components/trip/transportation/FlightData.tsx';
+import { FlightForm } from '@src/components/trip/transportation/FlightForm.tsx';
+import { GenericTransportationData } from '@src/components/trip/transportation/GenericTransportationData.tsx';
+import { GenericTransportationModeForm } from '@src/components/trip/transportation/GenericTransportationModeForm.tsx';
+import { ParkingData } from '@src/components/trip/transportation/ParkingData.tsx';
+import { ParkingForm } from '@src/components/trip/transportation/ParkingForm.tsx';
+import { listTransportations } from '@src/lib/api';
 
-import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, Transportation, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const TransportationPanel = ({
   trip,

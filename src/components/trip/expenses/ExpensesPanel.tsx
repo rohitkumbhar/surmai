@@ -3,13 +3,13 @@ import { IconDownload, IconPlus } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ExpenseCard } from './ExpenseCard.tsx';
-import { ExpenseFormModal } from './ExpenseFormModal.tsx';
-import { ExpenseStatCards } from './ExpenseStatCards.tsx';
-import { useTripExpenses } from './useTripExpenses.ts';
-import { useSurmaiContext } from '../../../app/useSurmaiContext.ts';
+import { useSurmaiContext } from '@src/app/useSurmaiContext.ts';
+import { ExpenseCard } from '@src/components/trip/expenses/ExpenseCard.tsx';
+import { ExpenseFormModal } from '@src/components/trip/expenses/ExpenseFormModal.tsx';
+import { ExpenseStatCards } from '@src/components/trip/expenses/ExpenseStatCards.tsx';
+import { useTripExpenses } from '@src/components/trip/expenses/useTripExpenses.ts';
 
-import type { Attachment, Expense, TravellerProfile, Trip } from '../../../types/trips.ts';
+import type { Attachment, Expense, TravellerProfile, Trip } from '@src/types/trips.ts';
 
 export const ExpensesPanel = ({
   trip,

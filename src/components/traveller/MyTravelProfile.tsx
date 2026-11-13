@@ -3,11 +3,11 @@ import { notifications } from '@mantine/notifications';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { t } from 'i18next';
 
-import { TravellerProfileForm } from './TravellerProfileForm.tsx';
-import { useCurrentUser } from '../../auth/useCurrentUser.ts';
-import { getMyTravellerProfile, upsertMyTravellerProfile } from '../../lib/api/index.ts';
+import { useCurrentUser } from '@src/auth/useCurrentUser.ts';
+import { TravellerProfileForm } from '@src/components/traveller/TravellerProfileForm.tsx';
+import { getMyTravellerProfile, upsertMyTravellerProfile } from '@src/lib/api/index.ts';
 
-import type { NewTravellerProfile } from '../../types/trips.ts';
+import type { NewTravellerProfile } from '@src/types/trips.ts';
 
 export const MyTravelProfile = () => {
   const { user: currentUser } = useCurrentUser();

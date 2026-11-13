@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import { getMapsLink, getMapsUrl } from '../../../src/lib/places';
+import { getMapsLink, getMapsUrl } from '@src/lib/places';
 
-import type { User } from '../../../src/types/auth';
-import type { Place } from '../../../src/types/trips';
+import type { User } from '@src/types/auth';
+import type { Place } from '@src/types/trips';
 
 const googleUser = { mapsProvider: 'google' } as User;
 const paris = { id: 'paris', name: 'Paris', stateName: 'Île-de-France', countryName: 'France' } as Place;
