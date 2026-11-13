@@ -112,5 +112,5 @@
     "vite-plugin-pwa": "^2.0.0",
     "vitest": "^4.1.12"
   },
-  "packageManager": "pnpm@12.19.0"
+  "packageManager": "pnpm@12.18.0"
 }
