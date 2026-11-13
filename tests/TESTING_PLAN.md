@@ -202,10 +202,30 @@ form submits for a stored-but-disabled setting.
 A stray `console.log` in the flight provider form, which printed the submitted
 values including the provider API key to the browser console, is gone.
 
+### PR 10: What the entity forms submit — done
+
+The flight, generic transportation, lodging, activity and expense forms all
+assemble a payload by hand before saving, and all five share the same traps:
+
+- `fakeAsUtcString` has to turn the picker's local value into an instant, or an
+  entry lands a day out for anyone east or west of UTC.
+- An expense is only attached when the cost is greater than zero, and its name
+  is derived from the entry ("Flight: SFO to LHR", "Lodging: Hotel Bristol").
+- `existingExpenseId` has to be dropped when the id is no longer among the
+  trip's expenses, or saving writes against an expense that is gone.
+- The expense form's splits seed evenly with the rounding remainder on the
+  first traveller, and will not save unless they add up to the total.
+
+These are asserted against the mocked `saveTransportation`, `saveLodging`,
+`saveActivity`, `createExpense` and `updateExpense`, mostly by opening a form
+on an existing record and submitting it, which keeps the date pickers out of
+it. The e2e suite already covers filling the forms in by hand.
+
+Frontend coverage is now 25% of statements and 22% of branches, up from 17%
+and 11%.
+
 ### Still to do
 
-- Form components in Vitest: the transportation forms, the expense form and its
-  splits, the lodging and activity forms. The settings forms are done.
 - `pdfGenerator` data assembly.
 - The remaining Playwright areas in the table below.
 
