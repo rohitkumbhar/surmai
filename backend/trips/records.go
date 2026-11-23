@@ -138,6 +138,7 @@ func Expenses(app core.App, trip *core.Record) []*bt.Expense {
 			AttachmentReferences: r.GetStringSlice("attachmentReferences"),
 		}
 		_ = r.UnmarshalJSONField("cost", &item.Cost)
+		_ = r.UnmarshalJSONField("splits", &item.Splits)
 		payload = append(payload, &item)
 	}
 

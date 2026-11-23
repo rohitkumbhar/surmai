@@ -48,7 +48,7 @@ func ImportZip(e core.App, zipReader *zip.Reader, ownerId string) (string, error
 	attachmentReferenceMapping := importAttachments(e, zipReader, data, tripId)
 
 	// create expenses and return the old id - new id mapping
-	expenseMapping := importExpenses(e, attachmentReferenceMapping, data, tripId)
+	expenseMapping := importExpenses(e, attachmentReferenceMapping, data, tripId, travellerIdMappings)
 
 	// create transportations
 	importTransportations(e, attachmentReferenceMapping, expenseMapping, data, tripId, travellerIdMappings)
@@ -79,7 +79,7 @@ func importActivities(app core.App, mapping map[string]string, expenseMapping ma
 			record.Set("metadata", a.Metadata)
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, a.AttachmentReferences))
-			record.Set("expenseId", getOrLinkExpense(app, a.ExpenseId, expenseMapping, tripData, tripId, mapping))
+			record.Set("expenseId", getOrLinkExpense(app, a.ExpenseId, expenseMapping, tripData, tripId, mapping, travellerMapping))
 
 			if a.Travellers != nil {
 				updatedTravellers := make([]string, 0, len(a.Travellers))
@@ -94,7 +94,7 @@ func importActivities(app core.App, mapping map[string]string, expenseMapping ma
 	}
 }
 
-func importExpenses(app core.App, mapping map[string]string, tripData bt.ExportedTrip, tripId string) map[string]string {
+func importExpenses(app core.App, mapping map[string]string, tripData bt.ExportedTrip, tripId string, travellerMapping map[string]string) map[string]string {
 	expenseMapping := make(map[string]string)
 	collection, _ := app.FindCollectionByNameOrId("trip_expenses")
 	if tripData.Expenses != nil {
@@ -107,6 +107,7 @@ func importExpenses(app core.App, mapping map[string]string, tripData bt.Exporte
 			record.Set("category", e.Category)
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, e.AttachmentReferences))
+			record.Set("splits", getMappedSplits(travellerMapping, e.Splits))
 			_ = app.Save(record)
 			expenseMapping[e.Id] = record.Id
 		}
@@ -114,7 +115,7 @@ func importExpenses(app core.App, mapping map[string]string, tripData bt.Exporte
 	return expenseMapping
 }
 
-func getOrLinkExpense(app core.App, oldExpenseId string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string, mapping map[string]string) string {
+func getOrLinkExpense(app core.App, oldExpenseId string, expenseMapping map[string]string, tripData bt.ExportedTrip, tripId string, mapping map[string]string, travellerMapping map[string]string) string {
 	if oldExpenseId == "" {
 		return ""
 	}
@@ -135,6 +136,7 @@ func getOrLinkExpense(app core.App, oldExpenseId string, expenseMapping map[stri
 			record.Set("category", e.Category)
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, e.AttachmentReferences))
+			record.Set("splits", getMappedSplits(travellerMapping, e.Splits))
 			err := app.Save(record)
 			if err == nil {
 				expenseMapping[oldExpenseId] = record.Id
@@ -175,7 +177,7 @@ func importLodgings(app core.App, mapping map[string]string, expenseMapping map[
 			record.Set("metadata", l.Metadata)
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(mapping, l.AttachmentReferences))
-			record.Set("expenseId", getOrLinkExpense(app, l.ExpenseId, expenseMapping, tripData, tripId, mapping))
+			record.Set("expenseId", getOrLinkExpense(app, l.ExpenseId, expenseMapping, tripData, tripId, mapping, travellerMapping))
 
 			if l.Travellers != nil {
 				updatedTravellers := make([]string, 0, len(l.Travellers))
@@ -223,7 +225,7 @@ func importTransportations(e core.App, attachmentReferenceMapping map[string]str
 			record.Set("metadata", tr.Metadata)
 			record.Set("trip", tripId)
 			record.Set("attachmentReferences", getMappedAttachments(attachmentReferenceMapping, tr.AttachmentReferences))
-			record.Set("expenseId", getOrLinkExpense(e, tr.ExpenseId, expenseMapping, tripData, tripId, attachmentReferenceMapping))
+			record.Set("expenseId", getOrLinkExpense(e, tr.ExpenseId, expenseMapping, tripData, tripId, attachmentReferenceMapping, travellerMapping))
 
 			if tr.Travellers != nil {
 				updatedTravellers := make([]string, 0, len(tr.Travellers))
@@ -355,4 +357,16 @@ func importBasicTripInfo(app core.App, trip *bt.Trip, ownerId string, zipReader 
 
 	return record.Id, nil
 
+}
+
+// getMappedSplits points each split at the traveller profile it was imported as.
+func getMappedSplits(travellerMapping map[string]string, splits []bt.ExpenseSplit) []bt.ExpenseSplit {
+	mapped := make([]bt.ExpenseSplit, 0, len(splits))
+	for _, split := range splits {
+		if id, ok := travellerMapping[split.TravellerId]; ok {
+			split.TravellerId = id
+		}
+		mapped = append(mapped, split)
+	}
+	return mapped
 }
