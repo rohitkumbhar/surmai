@@ -107,6 +107,7 @@ func seedFullTrip(t testing.TB, app core.App, owner *core.Record) *core.Record {
 		"category":             "transportation",
 		"notes":                "Booked early",
 		"attachmentReferences": []string{attachment.Id},
+		"splits":               []map[string]any{{"travellerId": profile.Id, "amount": 420.0}},
 	})
 
 	testutil.CreateRecord(t, app, "transportations", map[string]any{
@@ -254,6 +255,15 @@ func TestExportImportRoundTrip(t *testing.T) {
 		if got := expenses[0].GetStringSlice("attachmentReferences"); len(got) != 1 || got[0] != attachments[0].Id {
 			t.Errorf("expense attachmentReferences = %v, want [%s]", got, attachments[0].Id)
 		}
+
+		var splits []struct {
+			TravellerId string  `json:"travellerId"`
+			Amount      float64 `json:"amount"`
+		}
+		_ = expenses[0].UnmarshalJSONField("splits", &splits)
+		if len(splits) != 1 || splits[0].Amount != 420 || splits[0].TravellerId != trip.GetStringSlice("travellers")[0] {
+			t.Errorf("expense splits = %+v, want one split of 420 for the trip's traveller", splits)
+		}
 	})
 
 	t.Run("traveller profiles", func(t *testing.T) {
@@ -347,6 +357,16 @@ func TestImportIntoAnotherInstance(t *testing.T) {
 		if got := records[0].GetStringSlice("travellers"); len(got) != 1 || got[0] != profile.Id {
 			t.Errorf("%s travellers = %v, want [%s]", collection, got, profile.Id)
 		}
+	}
+
+	// and so must the expense splits
+	expenses := findByTrip(t, target, "trip_expenses", newTripId)
+	var splits []struct {
+		TravellerId string `json:"travellerId"`
+	}
+	_ = expenses[0].UnmarshalJSONField("splits", &splits)
+	if len(splits) != 1 || splits[0].TravellerId != profile.Id {
+		t.Errorf("expense splits = %+v, want one split for %s", splits, profile.Id)
 	}
 }
 

@@ -97,6 +97,13 @@ type Expense struct {
 	Notes                string         `json:"notes"`
 	Category             string         `json:"category"`
 	AttachmentReferences []string       `json:"attachmentReferences"`
+	Splits               []ExpenseSplit `json:"splits"`
+}
+
+// ExpenseSplit is one traveller's share of an expense.
+type ExpenseSplit struct {
+	TravellerId string  `json:"travellerId"`
+	Amount      float64 `json:"amount"`
 }
 
 type Trip struct {
